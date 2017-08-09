@@ -39,7 +39,7 @@ If the bot crashes or does other nasty things, please bear with me while I make 
 # Developer Install / Compile Instructions (Windows)
 
 * Download and install [Visual Studio 2017](https://www.visualstudio.com/downloads/)
-* Download and install the [StarCraft II AI API](https://github.com/Blizzard/s2client-api). The easiest way to do this is to download the Precompiled Libraries at the bottom of the page, and simply extract them to a folder on your PC. If you are getting the SC2API via cloning the Blizzard github repo, you may need to point VS to different directories for include and lib than the ones described below.
+* Download and install the [StarCraft II AI API](https://github.com/Blizzard/s2client-api). The easiest way to do this is to download the Precompiled Libraries at the bottom of the page, and simply extract them to a folder on your PC. If you are getting the SC2API via cloning the Blizzard github repo and compiling it from scratch, you may need to point VS to different directories for include and lib than the ones described below.
 * Clone this git repository to a folder on your PC
 * Open "CommandCenter/vs/CommandCenter.sln" in VS2017
 * Set the VS Project include and lib folders to point to the SC2API directories
