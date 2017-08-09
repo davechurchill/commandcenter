@@ -32,7 +32,7 @@ The bot comes with a configuration file named [BotConfig.txt](https://github.com
 
 Please note that this config file is in JSON format, and the bot will not run unless it is well-formatted JSON. The configuration file must be in the same directory as CommandCenter.exe in order for the bot to run correctly.
 
-By default when you run CommandCenter.exe, it will play as Random race vs. a Random race built-in SC2 Easy AI. You can modify which races are played in the configuration file via the "BotRace" and "EnemyRace" options. You can also modify which map to be played by specifying the "MapFile" option. Please note that the MapFile option is relative to your StarCraft II maps directory, which by default is located in your StarCraft_Install_Directory/maps/ 
+By default when you run CommandCenter.exe, it will play as Random race vs. a Random race built-in SC2 Easy AI. You can modify which races are played in the configuration file via the "BotRace" and "EnemyRace" options. You can also modify which map to be played by specifying the "MapFile" option. Please note that the MapFile option is relative to your StarCraft II maps directory, which by default is located in your StarCraft_Install_Directory/maps/, and the bot will not run without specifying a valid map file.
 
 If the bot crashes or does other nasty things, please bear with me while I make it more stable :)
 
