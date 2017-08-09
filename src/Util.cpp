@@ -347,19 +347,26 @@ std::string Util::GetStringFromRace(const sc2::Race & race)
     }
 }
 
-sc2::Race Util::GetRaceFromString(const std::string & race)
+sc2::Race Util::GetRaceFromString(const std::string & raceIn)
 {
-    if (race == "Terran")
+    std::string race(raceIn);
+    std::transform(race.begin(), race.end(), race.begin(), ::tolower);
+
+    if (race == "terran")
     {
         return sc2::Race::Terran;
     }
-    else if (race == "Protoss")
+    else if (race == "protoss")
     {
         return sc2::Race::Protoss;
     }
-    else if (race == "Zerg")
+    else if (race == "zerg")
     {
         return sc2::Race::Zerg;
+    }
+    else if (race == "random")
+    {
+        return sc2::Race::Random;
     }
 
     BOT_ASSERT(false, "Unknown Race: ", race.c_str());

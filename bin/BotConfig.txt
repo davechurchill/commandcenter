@@ -5,6 +5,13 @@
         "Authors"                   : "David Churchill",
         "PrintInfoOnStart"          : false
     },
+
+    "Game Info" :
+    {
+        "BotRace"                   : "Random",
+        "EnemyRace"                 : "Random",
+        "MapName"                   : "InterloperLE.SC2Map"
+    },
         
     "Micro" :
     {

@@ -1,5 +1,8 @@
 #include "sc2api/sc2_api.h"
 #include "sc2utils/sc2_manage_process.h"
+#include "rapidjson\document.h"
+#include "JSONTools.h"
+#include "Util.h"
 
 #include <iostream>
 #include <string>
@@ -24,36 +27,52 @@ int main(int argc, char* argv[])
     //          The bot may crash or do unexpected things if its logic is not called every frame
     coordinator.SetStepSize(1);
 
+    rapidjson::Document doc;
+    std::string config = JSONTools::ReadFile("BotConfig.txt");
+    if (config.length() == 0)
+    {
+        std::cerr << "Config file could not be found, and is required for starting the bot\n";
+        std::cerr << "Please read the instructions and try again\n";
+        exit(-1);
+    }
+
+    bool parsingFailed = doc.Parse(config.c_str()).HasParseError();
+    if (parsingFailed)
+    {
+        std::cerr << "Config file could not be parsed, and is required for starting the bot\n";
+        std::cerr << "Please read the instructions and try again\n";
+        exit(-1);
+    }
+
+    std::string botRaceString;
+    std::string enemyRaceString;
+    std::string mapString;
+
+    if (doc.HasMember("Game Info") && doc["Game Info"].IsObject())
+    {
+        const rapidjson::Value & info = doc["Game Info"];
+        JSONTools::ReadString("BotRace", info, botRaceString);
+        JSONTools::ReadString("EnemyRace", info, enemyRaceString);
+        JSONTools::ReadString("MapName", info, mapString);
+    }
+    else
+    {
+        std::cerr << "Config file has no 'Game Info' object, required for starting the bot\n";
+        std::cerr << "Please read the instructions and try again\n";
+        exit(-1);
+    }
+
     // Add the custom bot, it will control the players.
     CCBot bot;
 
-    sc2::Race botRace = sc2::Race::Random;
-    sc2::Race enemyRace = sc2::Race::Random;
-
-    if (argc > 1)
-    {
-        if (std::string(argv[1]) == "Protoss")      { botRace = sc2::Race::Protoss; }
-        else if (std::string(argv[1]) == "Zerg")    { botRace = sc2::Race::Zerg;    }
-        else if (std::string(argv[1]) == "Terran")  { botRace = sc2::Race::Terran;  }
-        else if (std::string(argv[1]) == "Random")  { botRace = sc2::Race::Random;  }
-    }
-
-    if (argc > 2)
-    {
-        if (std::string(argv[2]) == "Protoss")      { enemyRace = sc2::Race::Protoss; }
-        else if (std::string(argv[2]) == "Zerg")    { enemyRace = sc2::Race::Zerg;    }
-        else if (std::string(argv[2]) == "Terran")  { enemyRace = sc2::Race::Terran;  }
-        else if (std::string(argv[2]) == "Random")  { enemyRace = sc2::Race::Random;  }
-    }
-
     coordinator.SetParticipants({
-        CreateParticipant(botRace, &bot),
-        CreateComputer(enemyRace)
+        CreateParticipant(Util::GetRaceFromString(botRaceString), &bot),
+        CreateComputer(Util::GetRaceFromString(enemyRaceString))
     });
 
     // Start the game.
     coordinator.LaunchStarcraft();
-    coordinator.StartGame(sc2::kMapBelShirVestigeLE);
+    coordinator.StartGame(mapString);
 
     // Step forward the game simulation.
     while (true) 
