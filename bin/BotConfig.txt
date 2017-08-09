@@ -10,7 +10,7 @@
     {
         "BotRace"                   : "Random",
         "EnemyRace"                 : "Random",
-        "MapName"                   : "InterloperLE.SC2Map"
+        "MapFile"                   : "InterloperLE.SC2Map"
     },
         
     "Micro" :
