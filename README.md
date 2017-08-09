@@ -45,7 +45,7 @@ If the bot crashes or does other nasty things, please bear with me while I make 
 * Set the VS Project include and lib folders to point to the SC2API directories
   * Right click the CommandCenter project in VS2017
   * Select "Properties"
-  * Select the correct configuration that you want to build in the top left (or "All")
+  * Select the correct configuration that you want to build in the top left ("Release" or "Debug")
   * Select "VC++ Directories" on the left
   * Select the "Include Directories" option in the table on the right
   * Click the dropdown arrow on the right and click Edit...
