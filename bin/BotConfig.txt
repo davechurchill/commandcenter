@@ -1,0 +1,62 @@
+{
+    "Bot Info" :
+    {
+        "BotName"                   : "CommandCenter",
+        "Authors"                   : "David Churchill",
+        "PrintInfoOnStart"          : false
+    },
+        
+    "Micro" :
+    {
+        "KiteWithRangedUnits"       : false,
+        "ScoutHarassEnemy"          : true,
+        "CombatUnitsForAttack"      : 12
+    },
+    
+    "Macro" :
+    {
+        "WorkersPerRefinery"        : 3,
+        "BuildingSpacing"           : 0,
+        "PylonSpacing"              : 3
+    },
+
+    "Debug" :
+    {
+        "DrawGameInfo"              : true, 
+        "DrawProductionInfo"        : true, 
+        "DrawBaseLocationInfo"      : false,
+        "DrawTileInfo"              : false,
+        "DrawWalkableSectors"       : false,
+        "DrawScoutInfo"             : false,
+        "DrawEnemyUnitInfo"         : false,
+        "DrawResourceInfo"          : false,
+        "DrawUnitTargetInfo"        : false,
+        "DrawLastSeenTileInfo"      : false,
+        "DrawSquadInfo"             : false,
+        "DrawWorkerInfo"            : false,
+        "DrawBuildingInfo"          : false,
+        "DrawReservedBuildingTiles" : false
+    },
+    
+    "Modules" :
+    {
+        "UseAutoObserver"           : false
+    },
+    
+    "Strategy" :
+    {
+        "Protoss"                   : "Protoss_ZealotRush",
+        "Terran"                    : "Terran_MarineRush",
+        "Zerg"                      : "Zerg_2HatchRoach",
+        
+        "ScoutHarassEnemy"          : true,
+        
+        "Strategies" :
+        {
+            "Protoss_ZealotRush"    : { "Race" : "Protoss", "OpeningBuildOrder" : ["Probe", "Probe", "Pylon", "Probe", "Probe", "Gateway", "Pylon", "Probe", "Gateway", "Probe", "Gateway", "Pylon", "Probe", "Zealot", "Zealot", "Pylon", "Zealot", "Zealot", "Pylon", "Zealot", "Zealot", "Zealot", "Zealot", "Zealot", "Zealot", "Zealot", "Zealot", "Zealot", "Zealot"]},
+            "Terran_MarineRush"     : { "Race" : "Terran",  "OpeningBuildOrder" : ["SCV", "SCV", "SupplyDepot", "SCV", "SCV", "Barracks", "Barracks", "Barracks", "Barracks", "SupplyDepot", "SupplyDepot", "Marine", "Marine", "Marine", "Marine", "Marine", "Marine", "Marine", "Marine", "Marine", "Marine", "Marine", "Marine", "Marine", "Marine", "Marine", "Marine", "Marine", "Marine", "Marine", "Marine"] },
+            "Zerg_ZerglingRush"     : { "Race" : "Zerg",    "OpeningBuildOrder" : ["SpawningPool", "Drone", "Overlord", "Drone", "Zergling", "Zergling", "Zergling", "Zergling", "Zergling", "Zergling", "Zergling", "Zergling"] },
+            "Zerg_2HatchRoach"      : { "Race" : "Zerg",    "OpeningBuildOrder" : ["Drone", "Drone", "SpawningPool", "Drone", "Drone", "Overlord", "Drone", "Extractor", "Drone", "Drone", "Hatchery", "Drone", "Overlord", "Drone", "RoachWarren", "Drone", "Drone", "Overlord", "Drone", "Drone", "Roach", "Overlord", "Roach", "Roach", "Roach", "Roach", "Overlord", "Roach", "Roach", "Roach", "Roach", "Roach", "Roach", "Roach"] }
+        }
+    }
+}

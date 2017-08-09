@@ -1,0 +1,209 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\src\main.cpp" />
+    <ClCompile Include="..\src\BaseLocationManager.cpp">
+      <Filter>global</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\UnitInfoManager.cpp">
+      <Filter>global</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\MapTools.cpp">
+      <Filter>global</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\BotConfig.cpp">
+      <Filter>global</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\StrategyManager.cpp">
+      <Filter>global</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\BuildOrder.cpp">
+      <Filter>macro</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\BuildOrderQueue.cpp">
+      <Filter>macro</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\WorkerManager.cpp">
+      <Filter>global</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\WorkerData.cpp">
+      <Filter>macro</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Building.cpp">
+      <Filter>macro</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\JSONTools.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Util.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\BaseLocation.cpp">
+      <Filter>macro</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\BotAssert.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Micro.cpp">
+      <Filter>micro</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\DistanceMap.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\UnitData.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\GameCommander.cpp" />
+    <ClCompile Include="..\src\BuildingPlacer.cpp">
+      <Filter>macro</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\BuildingData.cpp">
+      <Filter>macro</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\BuildingManager.cpp">
+      <Filter>macro</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ProductionManager.cpp">
+      <Filter>macro</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ScoutManager.cpp">
+      <Filter>micro</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Squad.cpp">
+      <Filter>micro</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\SquadData.cpp">
+      <Filter>micro</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\MeleeManager.cpp">
+      <Filter>micro</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\MicroManager.cpp">
+      <Filter>micro</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\RangedManager.cpp">
+      <Filter>micro</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\SquadOrder.cpp">
+      <Filter>micro</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CCBot.cpp" />
+    <ClCompile Include="..\src\CombatCommander.cpp">
+      <Filter>micro</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\BaseLocationManager.h">
+      <Filter>global</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\UnitInfoManager.h">
+      <Filter>global</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\MapTools.h">
+      <Filter>global</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\BotConfig.h">
+      <Filter>global</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\StrategyManager.h">
+      <Filter>global</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\BuildOrder.h">
+      <Filter>macro</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\BuildOrderQueue.h">
+      <Filter>macro</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\WorkerManager.h">
+      <Filter>global</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\WorkerData.h">
+      <Filter>macro</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Building.h">
+      <Filter>macro</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\JSONTools.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Util.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\BaseLocation.h">
+      <Filter>macro</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\BotAssert.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Common.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Micro.h">
+      <Filter>micro</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\DistanceMap.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\UnitData.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\GameCommander.h" />
+    <ClInclude Include="..\src\Timer.hpp">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\BuildingPlacer.h">
+      <Filter>macro</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\BuildingData.h">
+      <Filter>macro</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\BuildingManager.h">
+      <Filter>macro</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ProductionManager.h">
+      <Filter>macro</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ScoutManager.h">
+      <Filter>micro</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Squad.h">
+      <Filter>micro</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\SquadData.h">
+      <Filter>micro</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\SquadOrder.h">
+      <Filter>micro</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\MeleeManager.h">
+      <Filter>micro</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\MicroManager.h">
+      <Filter>micro</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\RangedManager.h">
+      <Filter>micro</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\CCBot.h" />
+    <ClInclude Include="..\src\CombatCommander.h">
+      <Filter>micro</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="global">
+      <UniqueIdentifier>{ab87a61f-a2db-49f6-bf22-c5ec113965b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="macro">
+      <UniqueIdentifier>{fb64eecf-b7bb-4ce5-ba5a-62a0d45b2d30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="util">
+      <UniqueIdentifier>{64c41955-1af5-48ab-8112-a76378485f76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common">
+      <UniqueIdentifier>{1cc43733-1dd7-4b34-b6e6-e60f0567751e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micro">
+      <UniqueIdentifier>{9829f5c0-728d-4121-8884-bf1fddd88a87}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
