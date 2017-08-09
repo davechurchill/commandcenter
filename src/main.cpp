@@ -53,7 +53,7 @@ int main(int argc, char* argv[])
         const rapidjson::Value & info = doc["Game Info"];
         JSONTools::ReadString("BotRace", info, botRaceString);
         JSONTools::ReadString("EnemyRace", info, enemyRaceString);
-        JSONTools::ReadString("MapName", info, mapString);
+        JSONTools::ReadString("MapFile", info, mapString);
     }
     else
     {
