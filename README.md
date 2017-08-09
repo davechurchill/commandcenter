@@ -26,7 +26,7 @@ CommandCenter should eventually have all of the functionality of UAlbertaBot, ho
 
 If you just want to download and run the bot to see it play against the built-in SC2 AI, you can download a pre-compiled version in the release section here: https://github.com/davechurchill/commandcenter/tree/master/release
 
-You must have an up-to-date retail version of StarCraft II installed to run the bot. You must also download and install some maps to use with the bot, which you can find here: https://github.com/Blizzard/s2client-proto#downloads. Please note that to download those maps, you must accept the eula by typing in the password provided.
+You must have an up-to-date retail version of StarCraft II installed to run the bot. You must also download and install some maps to use with the bot, which you can find here: https://github.com/Blizzard/s2client-proto#downloads. Please note that there is a password provided on that page to extract the maps from the zip files.
 
 The bot comes with a configuration file named [BotConfig.txt](https://github.com/davechurchill/commandcenter/blob/master/bin/BotConfig.txt) in which you can modify build orders, print various debug information to the screen, and set some bot parameters. You can define multiple builds orders in the 'Strategies' section of the file, and choose which named strategy to implement when the bot plays a specific race. Unit names in the build-order are case sensitive, and must be exactly how they appear in-game with no spaces. Some of the options in the configuration file are currently not implemented, such as the KiteWithRangedUnits option.
 
