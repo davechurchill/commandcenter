@@ -58,7 +58,7 @@ If the bot crashes or does other nasty things, please bear with me while I make 
 * Run the CommandCenter bot by either:
   * Double clicking the executable in the CommandCenter/bin/ directory
   * Running the program from the console
-  * Click "Local Windows Debugger" in VS to launch the program from within VS
+  * Click "Local Windows Debugger" in VS to launch the program from within VS. To do this, you need to set the "Working Directory" option under "Debugging" to "$(ProjectDir)/../bin/" (I don't know why this option won't save)
 * The CommandCenter/bin/BotConfig.txt file must be in the same directory as the .exe to run properly
 
 # Developer Install / Compile Instructions (Linux)
