@@ -26,13 +26,13 @@ CommandCenter should eventually have all of the functionality of UAlbertaBot, ho
 
 If you just want to download and run the bot to see it play against the built-in SC2 AI, you can download a pre-compiled version in the release section here: https://github.com/davechurchill/commandcenter/tree/master/release
 
-You must have an up-to-date retail version of StarCraft II installed to run the bot.
+You must have an up-to-date retail version of StarCraft II installed to run the bot. You must also download and install some maps to use with the bot, which you can find here: https://github.com/Blizzard/s2client-proto#downloads. Please note that to download those maps, you must accept the eula by typing in the password provided.
 
 The bot comes with a configuration file named [BotConfig.txt](https://github.com/davechurchill/commandcenter/blob/master/bin/BotConfig.txt) in which you can modify build orders, print various debug information to the screen, and set some bot parameters. You can define multiple builds orders in the 'Strategies' section of the file, and choose which named strategy to implement when the bot plays a specific race. Unit names in the build-order are case sensitive, and must be exactly how they appear in-game with no spaces. Some of the options in the configuration file are currently not implemented, such as the KiteWithRangedUnits option.
 
 Please note that this config file is in JSON format, and the bot will not run unless it is well-formatted JSON. The configuration file must be in the same directory as CommandCenter.exe in order for the bot to run correctly.
 
-By default when you run CommandCenter.exe, it will play as Random race vs. a Random race built-in SC2 Easy AI. You can modify which races are played by the bot and the computer via the command line. 'CommandCenter.exe Protoss' will play the bot as Protoss vs. a random opponent, while 'CommandCenter.exe Zerg Terran' will play the bot as Zerg vs. a Terran opponent. The races are case sensitive.
+By default when you run CommandCenter.exe, it will play as Random race vs. a Random race built-in SC2 Easy AI. You can modify which races are played in the configuration file via the "BotRace" and "EnemyRace" options. You can also modify which map to be played by specifying the "MapFile" option. Please note that the MapFile option is relative to your StarCraft II maps directory, which by default is located in your StarCraft_Install_Directory/maps/ 
 
 If the bot crashes or does other nasty things, please bear with me while I make it more stable :)
 
