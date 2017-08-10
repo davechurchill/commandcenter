@@ -432,6 +432,7 @@ sc2::UnitTypeID Util::WhatBuilds(const sc2::UnitTypeID & type)
         case sc2::UNIT_TYPEID::TERRAN_GHOST:                return sc2::UNIT_TYPEID::TERRAN_BARRACKS; 
         case sc2::UNIT_TYPEID::TERRAN_MARAUDER:             return sc2::UNIT_TYPEID::TERRAN_BARRACKS; 
         case sc2::UNIT_TYPEID::TERRAN_MARINE:               return sc2::UNIT_TYPEID::TERRAN_BARRACKS;
+		case sc2::UNIT_TYPEID::TERRAN_REAPER:               return sc2::UNIT_TYPEID::TERRAN_BARRACKS;
         case sc2::UNIT_TYPEID::TERRAN_FACTORYREACTOR:       return sc2::UNIT_TYPEID::TERRAN_FACTORY; 
         case sc2::UNIT_TYPEID::TERRAN_FACTORYTECHLAB:       return sc2::UNIT_TYPEID::TERRAN_FACTORY; 
         case sc2::UNIT_TYPEID::TERRAN_HELLION:              return sc2::UNIT_TYPEID::TERRAN_FACTORY; 
@@ -823,7 +824,7 @@ sc2::UnitTypeID Util::AbilityIDToUnitTypeID(const sc2::AbilityID & ability)
         case sc2::ABILITY_ID::TRAIN_PROBE: return sc2::UNIT_TYPEID::PROTOSS_PROBE;
         case sc2::ABILITY_ID::TRAIN_QUEEN: return sc2::UNIT_TYPEID::ZERG_QUEEN;
         case sc2::ABILITY_ID::TRAIN_RAVEN: return sc2::UNIT_TYPEID::TERRAN_RAVEN;
-        //case sc2::ABILITY_ID::TRAIN_REAPER: return sc2::UNIT_TYPEID::REA;
+        case sc2::ABILITY_ID::TRAIN_REAPER: return sc2::UNIT_TYPEID::TERRAN_REAPER;
         case sc2::ABILITY_ID::TRAIN_ROACH: return sc2::UNIT_TYPEID::ZERG_ROACH;
         case sc2::ABILITY_ID::TRAIN_SCV: return sc2::UNIT_TYPEID::TERRAN_SCV;
         case sc2::ABILITY_ID::TRAIN_SENTRY: return sc2::UNIT_TYPEID::PROTOSS_SENTRY;
@@ -1064,7 +1065,7 @@ sc2::AbilityID Util::UnitTypeIDToAbilityID(const sc2::UnitTypeID & id)
         case sc2::UNIT_TYPEID::PROTOSS_PROBE: return sc2::ABILITY_ID::TRAIN_PROBE; 
         case sc2::UNIT_TYPEID::ZERG_QUEEN: return sc2::ABILITY_ID::TRAIN_QUEEN; 
         case sc2::UNIT_TYPEID::TERRAN_RAVEN: return sc2::ABILITY_ID::TRAIN_RAVEN; 
-        //return sc2::ABILITY_ID::TRAIN_REAPER; case sc2::UNIT_TYPEID::REA: 
+		case sc2::UNIT_TYPEID::TERRAN_REAPER: return sc2::ABILITY_ID::TRAIN_REAPER;
         case sc2::UNIT_TYPEID::ZERG_ROACH: return sc2::ABILITY_ID::TRAIN_ROACH; 
         case sc2::UNIT_TYPEID::TERRAN_SCV: return sc2::ABILITY_ID::TRAIN_SCV; 
         case sc2::UNIT_TYPEID::PROTOSS_SENTRY: return sc2::ABILITY_ID::TRAIN_SENTRY; 
