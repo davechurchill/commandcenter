@@ -56,7 +56,7 @@ const bool StrategyManager::shouldExpandNow() const
     return false;
 }
 
-void StrategyManager::addStrategy(const std::string & name, Strategy & strategy)
+void StrategyManager::addStrategy(const std::string & name, const Strategy & strategy)
 {
     m_strategies[name] = strategy;
 }

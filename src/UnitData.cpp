@@ -13,7 +13,7 @@ UnitData::UnitData()
 void UnitData::updateUnit(const sc2::Unit & unit)
 {
     bool firstSeen = false;
-    auto & it = m_unitMap.find((int)unit.tag);
+    const auto & it = m_unitMap.find((int)unit.tag);
     if (it == m_unitMap.end())
     {
         firstSeen = true;
