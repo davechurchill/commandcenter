@@ -1,4 +1,4 @@
-#pragma once;
+#pragma once
 
 #include "Common.h"
 #include "MicroManager.h"
