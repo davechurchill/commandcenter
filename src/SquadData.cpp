@@ -38,7 +38,7 @@ void SquadData::clearSquadData()
 
 void SquadData::removeSquad(const std::string & squadName)
 {
-    auto & squadPtr = m_squads.find(squadName);
+    const auto & squadPtr = m_squads.find(squadName);
 
     BOT_ASSERT(squadPtr != m_squads.end(), "Trying to clear a squad that didn't exist: %s", squadName.c_str());
     if (squadPtr == m_squads.end())

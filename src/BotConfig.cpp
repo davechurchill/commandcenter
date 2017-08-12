@@ -1,5 +1,5 @@
 #include "BotConfig.h"
-#include "rapidjson\document.h"
+#include "rapidjson/document.h"
 #include "JSONTools.h"
 #include <iostream>
 

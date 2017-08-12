@@ -1,6 +1,6 @@
 #include "sc2api/sc2_api.h"
 #include "sc2utils/sc2_manage_process.h"
-#include "rapidjson\document.h"
+#include "rapidjson/document.h"
 #include "JSONTools.h"
 #include "Util.h"
 
