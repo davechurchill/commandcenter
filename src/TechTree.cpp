@@ -1,11 +1,13 @@
 #include "TechTree.h"
 #include "Util.h"
 #include "CCBot.h"
+#include "BuildType.h"
 
 TechTree::TechTree(CCBot & bot)
     : m_bot(bot)
 {
-
+    initUnitTypeData();
+    initUpgradeData();
 }
 
 void TechTree::initUnitTypeData()
@@ -122,12 +124,12 @@ void TechTree::initUnitTypeData()
     m_unitTypeData[sc2::UNIT_TYPEID::ZERG_HYDRALISK] =                  { sc2::Race::Zerg, { sc2::UNIT_TYPEID::ZERG_LARVA }, false, { sc2::UNIT_TYPEID::ZERG_HYDRALISKDEN, sc2::UNIT_TYPEID::ZERG_LURKERDENMP }, {} };
     m_unitTypeData[sc2::UNIT_TYPEID::ZERG_INFESTOR] =                   { sc2::Race::Zerg, { sc2::UNIT_TYPEID::ZERG_LARVA }, false, { sc2::UNIT_TYPEID::ZERG_INFESTATIONPIT }, {} };
     m_unitTypeData[sc2::UNIT_TYPEID::ZERG_MUTALISK] =                   { sc2::Race::Zerg, { sc2::UNIT_TYPEID::ZERG_LARVA }, false, { sc2::UNIT_TYPEID::ZERG_SPIRE, sc2::UNIT_TYPEID::ZERG_GREATERSPIRE }, {} };
-    m_unitTypeData[sc2::UNIT_TYPEID::ZERG_QUEEN] =                      { sc2::Race::Zerg, { sc2::UNIT_TYPEID::ZERG_LARVA }, false, { sc2::UNIT_TYPEID::ZERG_SPAWNINGPOOL }, {} };
     m_unitTypeData[sc2::UNIT_TYPEID::ZERG_ROACH] =                      { sc2::Race::Zerg, { sc2::UNIT_TYPEID::ZERG_LARVA }, false, { sc2::UNIT_TYPEID::ZERG_ROACHWARREN }, {} };
     m_unitTypeData[sc2::UNIT_TYPEID::ZERG_SWARMHOSTMP] =                { sc2::Race::Zerg, { sc2::UNIT_TYPEID::ZERG_LARVA }, false, { sc2::UNIT_TYPEID::ZERG_INFESTATIONPIT }, {} };
     m_unitTypeData[sc2::UNIT_TYPEID::ZERG_ULTRALISK] =                  { sc2::Race::Zerg, { sc2::UNIT_TYPEID::ZERG_LARVA }, false, { sc2::UNIT_TYPEID::ZERG_ULTRALISKCAVERN }, {} };
     m_unitTypeData[sc2::UNIT_TYPEID::ZERG_VIPER] =                      { sc2::Race::Zerg, { sc2::UNIT_TYPEID::ZERG_LARVA }, false, { sc2::UNIT_TYPEID::ZERG_HIVE }, {} };
     m_unitTypeData[sc2::UNIT_TYPEID::ZERG_ZERGLING] =                   { sc2::Race::Zerg, { sc2::UNIT_TYPEID::ZERG_LARVA }, false, { sc2::UNIT_TYPEID::ZERG_SPAWNINGPOOL }, {} };
+    m_unitTypeData[sc2::UNIT_TYPEID::ZERG_QUEEN] =                      { sc2::Race::Zerg, { sc2::UNIT_TYPEID::ZERG_HATCHERY }, false, { sc2::UNIT_TYPEID::ZERG_SPAWNINGPOOL }, {} };
     m_unitTypeData[sc2::UNIT_TYPEID::ZERG_LAIR] =                       { sc2::Race::Zerg, { sc2::UNIT_TYPEID::ZERG_HATCHERY }, false, {}, {} };
     m_unitTypeData[sc2::UNIT_TYPEID::ZERG_HIVE] =                       { sc2::Race::Zerg, { sc2::UNIT_TYPEID::ZERG_LAIR }, false, {}, {} };  
     m_unitTypeData[sc2::UNIT_TYPEID::ZERG_GREATERSPIRE] =               { sc2::Race::Zerg, { sc2::UNIT_TYPEID::ZERG_SPIRE }, false, {}, {} }; 
@@ -259,4 +261,52 @@ const std::vector<sc2::UnitTypeID> & TechTree::getRequiredUnits(const sc2::Upgra
 const std::vector<sc2::UpgradeID> &  TechTree::getRequiredUpgrades(const sc2::UpgradeID & type) const
 {
     return m_upgradeData.at(type).m_requiredUpgrades;
+}
+
+const std::vector<sc2::UnitTypeID> & TechTree::getWhatBuilds(const BuildType & type) const
+{
+    if (type.getBuildType() == BuildTypes::Unit)
+    {
+        return getWhatBuilds(type.getUnitTypeID());
+    }
+    else if (type.getBuildType() == BuildTypes::Upgrade)
+    {
+        return getWhatBuilds(type.getUpgradeID());
+    }
+    
+    BOT_ASSERT(false, "Can't getWhatBuilds this type: %s", type.getName());
+
+    return getWhatBuilds(type.getUnitTypeID());
+}
+
+const std::vector<sc2::UnitTypeID> & TechTree::getRequiredUnits(const BuildType & type) const
+{
+    if (type.getBuildType() == BuildTypes::Unit)
+    {
+        return getRequiredUnits(type.getUnitTypeID());
+    }
+    else if (type.getBuildType() == BuildTypes::Upgrade)
+    {
+        return getRequiredUnits(type.getUpgradeID());
+    }
+    
+    BOT_ASSERT(false, "Can't getRequiredUnits this type: %s", type.getName());
+
+    return getRequiredUnits(type.getUnitTypeID());
+}
+
+const std::vector<sc2::UpgradeID> &  TechTree::getRequiredUpgrades(const BuildType & type) const
+{
+        if (type.getBuildType() == BuildTypes::Unit)
+    {
+        return getRequiredUpgrades(type.getUnitTypeID());
+    }
+    else if (type.getBuildType() == BuildTypes::Upgrade)
+    {
+        return getRequiredUpgrades(type.getUpgradeID());
+    }
+    
+    BOT_ASSERT(false, "Can't getRequiredUpgrades this type: %s", type.getName());
+
+    return getRequiredUpgrades(type.getUnitTypeID());
 }

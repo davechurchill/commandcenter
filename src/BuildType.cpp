@@ -8,7 +8,6 @@ BuildType::BuildType()
     , m_race        (sc2::Race::Random)
     , m_unitType    (0)
     , m_upgrade     (0)
-    , m_ability     (0)
     , m_whatBuilds  (0)
     , m_mineralCost (0)
     , m_gasCost     (0)
@@ -35,13 +34,6 @@ BuildType::BuildType(const std::string & name, CCBot & bot)
         return;
     }
 
-    m_ability = Util::GetAbilityIDFromName(m_name, bot);
-    if (m_ability)
-    {
-        *this = BuildType(m_ability, bot);
-        return;
-    }
-
     BOT_ASSERT(false, "Could not find BuildType with name: %s", name.c_str());
 }
 
@@ -56,17 +48,11 @@ BuildType::BuildType(const sc2::UnitTypeID & unitType, CCBot & bot)
 
 BuildType::BuildType(const sc2::UpgradeID & upgradeType, CCBot & bot)
 {
-
-}
-
-BuildType::BuildType(const sc2::BuffID & buffType, CCBot & bot)
-{
-
-}
-
-BuildType::BuildType(const sc2::AbilityID & abilityType, CCBot & bot)
-{
-
+    m_type          = BuildTypes::Upgrade;
+    m_upgrade       = upgradeType;
+    // m_mineralCost   = bot.Observation()->GetUpgradeData()[upgradeType];
+    // m_gasCost       = bot.Observation()->GetUpgradeData()[upgradeType].vespene_cost;
+    // m_supplyCost    = bot.Observation()->GetUpgradeData()[upgradeType].cargo_size;
 }
 
 const size_t & BuildType::getBuildType() const
@@ -79,20 +65,11 @@ bool BuildType::isUnit() const
     return m_type == BuildTypes::Unit;
 }
 
-bool BuildType::isBuff() const
-{
-    return m_type == BuildTypes::Buff;
-}
-
 bool BuildType::isUpgrade() const
 {
     return m_type == BuildTypes::Upgrade;
 }
 
-bool BuildType::isAbility() const
-{
-    return m_type == BuildTypes::Ability;
-}
 
 const sc2::Race & BuildType::getRace() const
 {
@@ -106,12 +83,27 @@ bool BuildType::isBuilding() const
 
 bool BuildType::isRefinery() const
 {
-    return isBuilding() && Util::IsRefineryType(m_unitType);
+    return isUnit() && Util::IsRefineryType(m_unitType);
+}
+
+bool BuildType::isWorker() const
+{
+    return isUnit() && Util::IsWorkerType(m_unitType);
+}
+
+bool BuildType::isTownHall() const
+{
+    return isUnit() && Util::IsTownHallType(m_unitType);
 }
 
 const sc2::UnitTypeID & BuildType::getUnitTypeID() const
 {
     return m_unitType;
+}
+
+const sc2::UpgradeID & BuildType::getUpgradeID() const
+{
+    return m_upgrade;
 }
 
 const std::string & BuildType::getName() const

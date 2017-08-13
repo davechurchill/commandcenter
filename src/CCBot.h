@@ -10,6 +10,7 @@
 #include "GameCommander.h"
 #include "BuildingManager.h"
 #include "StrategyManager.h"
+#include "TechTree.h"
 
 class CCBot : public sc2::Agent 
 {
@@ -21,6 +22,7 @@ class CCBot : public sc2::Agent
     WorkerManager           m_workers;
     StrategyManager         m_strategy;
     BotConfig               m_config;
+    TechTree                m_techTree;
 
     GameCommander           m_gameCommander;
 
@@ -39,6 +41,7 @@ public:
     const MapTools & Map() const;
     const UnitInfoManager & UnitInfo() const;
     const StrategyManager & Strategy() const;
+    const TechTree & TechTree() const;
     const sc2::Race & GetPlayerRace(int player) const;
     sc2::Point2D GetStartLocation() const;
     const sc2::Unit * GetUnit(const UnitTag & tag) const;

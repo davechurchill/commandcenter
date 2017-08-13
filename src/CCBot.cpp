@@ -10,6 +10,7 @@ CCBot::CCBot()
     , m_workers(*this)
     , m_gameCommander(*this)
     , m_strategy(*this)
+    , m_techTree(*this)
 {
     
 }
@@ -86,6 +87,11 @@ const BaseLocationManager & CCBot::Bases() const
 const UnitInfoManager & CCBot::UnitInfo() const
 {
     return m_unitInfo;
+}
+
+const TechTree & CCBot::TechTree() const
+{
+    return m_techTree;
 }
 
 WorkerManager & CCBot::Workers()

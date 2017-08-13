@@ -94,7 +94,10 @@ void CombatCommander::updateAttackSquads()
         BOT_ASSERT(unit, "null unit in combat units");
 
         // get every unit of a lower priority and put it into the attack squad
-        if (!Util::IsWorker(*unit) && !(unit->unit_type == sc2::UNIT_TYPEID::ZERG_OVERLORD) && m_squadData.canAssignUnitToSquad(unitTag, mainAttackSquad))
+        if (!Util::IsWorker(*unit) 
+            && !(unit->unit_type == sc2::UNIT_TYPEID::ZERG_OVERLORD) 
+            && !(unit->unit_type == sc2::UNIT_TYPEID::ZERG_QUEEN) 
+            && m_squadData.canAssignUnitToSquad(unitTag, mainAttackSquad))
         {
             m_squadData.assignUnitToSquad(unitTag, mainAttackSquad);
         }

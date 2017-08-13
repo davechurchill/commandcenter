@@ -3,6 +3,7 @@
 #include "Common.h"
 
 class CCBot;
+class BuildType;
 
 struct TechTreeItem
 {
@@ -35,4 +36,7 @@ public:
     const std::vector<sc2::UnitTypeID> & getRequiredUnits(const sc2::UpgradeID & type) const;
     const std::vector<sc2::UpgradeID> &  getRequiredUpgrades(const sc2::UpgradeID & type) const;
 
+    const std::vector<sc2::UnitTypeID> & getWhatBuilds(const BuildType & type) const;
+    const std::vector<sc2::UnitTypeID> & getRequiredUnits(const BuildType & type) const;
+    const std::vector<sc2::UpgradeID> &  getRequiredUpgrades(const BuildType & type) const;
 };
