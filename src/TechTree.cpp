@@ -79,7 +79,7 @@ void TechTree::initUnitTypeData()
     m_unitTypeData[sc2::UNIT_TYPEID::TERRAN_GHOST] =                    { sc2::Race::Terran, { sc2::UNIT_TYPEID::TERRAN_BARRACKS }, false, {}, {} }; 
     m_unitTypeData[sc2::UNIT_TYPEID::TERRAN_MARAUDER] =                 { sc2::Race::Terran, { sc2::UNIT_TYPEID::TERRAN_BARRACKS }, true, { sc2::UNIT_TYPEID::TERRAN_TECHLAB, sc2::UNIT_TYPEID::TERRAN_BARRACKSTECHLAB, sc2::UNIT_TYPEID::TERRAN_FACTORYTECHLAB, sc2::UNIT_TYPEID::TERRAN_STARPORTTECHLAB }, {} };
     m_unitTypeData[sc2::UNIT_TYPEID::TERRAN_MARINE] =                   { sc2::Race::Terran, { sc2::UNIT_TYPEID::TERRAN_BARRACKS }, false, {}, {} };
-	m_unitTypeData[sc2::UNIT_TYPEID::TERRAN_REAPER] =                   { sc2::Race::Terran, { sc2::UNIT_TYPEID::TERRAN_BARRACKS }, false, {}, {} };
+    m_unitTypeData[sc2::UNIT_TYPEID::TERRAN_REAPER] =                   { sc2::Race::Terran, { sc2::UNIT_TYPEID::TERRAN_BARRACKS }, false, {}, {} };
     m_unitTypeData[sc2::UNIT_TYPEID::TERRAN_FACTORYREACTOR] =           { sc2::Race::Terran, { sc2::UNIT_TYPEID::TERRAN_FACTORY }, false, {}, {} }; 
     m_unitTypeData[sc2::UNIT_TYPEID::TERRAN_FACTORYTECHLAB] =           { sc2::Race::Terran, { sc2::UNIT_TYPEID::TERRAN_FACTORY }, false, {}, {} }; 
     m_unitTypeData[sc2::UNIT_TYPEID::TERRAN_HELLION] =                  { sc2::Race::Terran, { sc2::UNIT_TYPEID::TERRAN_FACTORY }, false, {}, {} }; 
