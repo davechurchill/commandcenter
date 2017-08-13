@@ -296,6 +296,7 @@
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\MapTools.cpp" />
     <ClCompile Include="..\src\MeleeManager.cpp" />
+    <ClCompile Include="..\src\BuildType.cpp" />
     <ClCompile Include="..\src\Micro.cpp" />
     <ClCompile Include="..\src\MicroManager.cpp" />
     <ClCompile Include="..\src\ProductionManager.cpp" />
@@ -305,6 +306,7 @@
     <ClCompile Include="..\src\SquadData.cpp" />
     <ClCompile Include="..\src\SquadOrder.cpp" />
     <ClCompile Include="..\src\StrategyManager.cpp" />
+    <ClCompile Include="..\src\TechTree.cpp" />
     <ClCompile Include="..\src\UnitData.cpp" />
     <ClCompile Include="..\src\UnitInfoManager.cpp" />
     <ClCompile Include="..\src\Util.cpp" />
@@ -330,6 +332,7 @@
     <ClInclude Include="..\src\JSONTools.h" />
     <ClInclude Include="..\src\MapTools.h" />
     <ClInclude Include="..\src\MeleeManager.h" />
+    <ClInclude Include="..\src\BuildType.h" />
     <ClInclude Include="..\src\Micro.h" />
     <ClInclude Include="..\src\MicroManager.h" />
     <ClInclude Include="..\src\ProductionManager.h" />
@@ -339,6 +342,7 @@
     <ClInclude Include="..\src\SquadData.h" />
     <ClInclude Include="..\src\SquadOrder.h" />
     <ClInclude Include="..\src\StrategyManager.h" />
+    <ClInclude Include="..\src\TechTree.h" />
     <ClInclude Include="..\src\Timer.hpp" />
     <ClInclude Include="..\src\UnitData.h" />
     <ClInclude Include="..\src\UnitInfoManager.h" />

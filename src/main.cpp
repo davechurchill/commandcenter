@@ -11,6 +11,7 @@
 
 #include "CCBot.h"
 
+
 int main(int argc, char* argv[]) 
 {
     sc2::Coordinator coordinator;
@@ -19,7 +20,7 @@ int main(int argc, char* argv[])
         std::cout << "Unable to find or parse settings." << std::endl;
         return 1;
     }
-
+    
     coordinator.SetRealtime(false);
 
     // WARNING: Bot logic has not been thorougly tested on step sizes > 1

@@ -373,7 +373,7 @@ sc2::Race Util::GetRaceFromString(const std::string & raceIn)
     return sc2::Race::Terran;
 }
 
-sc2::UnitTypeID Util::WhatBuilds(const sc2::UnitTypeID & type)
+sc2::UnitTypeID Util::WhatBuildsUnitType(const sc2::UnitTypeID & type)
 {
     switch (type.ToType()) 
     {
@@ -484,9 +484,60 @@ sc2::UnitTypeID Util::WhatBuilds(const sc2::UnitTypeID & type)
     }
 }
 
-sc2::UnitTypeID Util::GetUnitTypeIDFromName(const sc2::ObservationInterface * obs, const std::string & name)
+sc2::UnitTypeID Util::WhatBuildsUpgrade(const sc2::UpgradeID & type)
 {
-    for (const sc2::UnitTypeData & data : obs->GetUnitTypeData())
+    switch (type.ToType()) 
+    {
+        case sc2::UPGRADE_ID::ADEPTPIERCINGATTACK: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::BANSHEECLOAK: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::BANSHEESPEED: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::BATTLECRUISERENABLESPECIALIZATIONS: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::BLINKTECH: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::BURROW: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::CARRIERLAUNCHSPEEDUPGRADE: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::CENTRIFICALHOOKS: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::CHARGE: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::CHITINOUSPLATING: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::DARKTEMPLARBLINKUPGRADE: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::DRILLCLAWS: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::EVOLVEGROOVEDSPINES: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::EVOLVEMUSCULARAUGMENTS: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::EXTENDEDTHERMALLANCE: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::GLIALRECONSTITUTION: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::GRAVITICDRIVE: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::HIGHCAPACITYBARRELS: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::HISECAUTOTRACKING: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::INFESTORENERGYUPGRADE: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::LIBERATORAGRANGEUPGRADE: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::MAGFIELDLAUNCHERS: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::MEDIVACINCREASESPEEDBOOST: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::NEOSTEELFRAME: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::NEURALPARASITE: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::OBSERVERGRAVITICBOOSTER: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::OVERLORDSPEED: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::PERSONALCLOAKING: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::PHOENIXRANGEUPGRADE: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::PROTOSSAIRARMORSLEVEL1: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::PROTOSSAIRARMORSLEVEL2: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::PROTOSSAIRARMORSLEVEL3: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::PROTOSSAIRWEAPONSLEVEL1: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::PROTOSSAIRWEAPONSLEVEL2: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::PROTOSSAIRWEAPONSLEVEL3: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::PROTOSSGROUNDARMORSLEVEL1: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::PROTOSSGROUNDARMORSLEVEL2: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::PROTOSSGROUNDARMORSLEVEL3: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::PROTOSSGROUNDWEAPONSLEVEL1: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::PROTOSSGROUNDWEAPONSLEVEL2: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::PROTOSSGROUNDWEAPONSLEVEL3: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::PROTOSSSHIELDSLEVEL1: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::PROTOSSSHIELDSLEVEL2: return sc2::UNIT_TYPEID::TERRAN_SCV;
+        case sc2::UPGRADE_ID::PROTOSSSHIELDSLEVEL3: return sc2::UNIT_TYPEID::TERRAN_SCV;
+    }
+}
+
+sc2::UnitTypeID Util::GetUnitTypeIDFromName(const std::string & name, CCBot & bot)
+{
+    for (const sc2::UnitTypeData & data : bot.Observation()->GetUnitTypeData())
     {
         if (name == data.name)
         {
@@ -494,7 +545,45 @@ sc2::UnitTypeID Util::GetUnitTypeIDFromName(const sc2::ObservationInterface * ob
         }
     }
 
-    std::cerr << "Unit Type Not Found: " << name << "\n";
+    return 0;
+}
+
+sc2::UpgradeID Util::GetUpgradeIDFromName(const std::string & name, CCBot & bot)
+{
+    for (const sc2::UpgradeData & data : bot.Observation()->GetUpgradeData())
+    {
+        if (name == data.name)
+        {
+            return data.upgrade_id;
+        }
+    }
+
+    return 0;
+}
+
+sc2::BuffID Util::GetBuffIDFromName(const std::string & name, CCBot & bot)
+{
+    for (const sc2::BuffData & data : bot.Observation()->GetBuffData())
+    {
+        if (name == data.name)
+        {
+            return data.buff_id;
+        }
+    }
+
+    return 0;
+}
+
+sc2::AbilityID Util::GetAbilityIDFromName(const std::string & name, CCBot & bot)
+{
+    for (const sc2::AbilityData & data : bot.Observation()->GetAbilityData())
+    {
+        if (name == data.link_name)
+        {
+            return data.ability_id;
+        }
+    }
+
     return 0;
 }
 

@@ -99,7 +99,7 @@ void ProductionManager::manageBuildOrderQueue()
 UnitTag ProductionManager::getProducer(sc2::UnitTypeID t, sc2::Point2D closestTo)
 {
     // TODO: get the type of unit that builds this
-    sc2::UnitTypeID producerType = Util::WhatBuilds(t);
+    sc2::UnitTypeID producerType = Util::WhatBuildsUnitType(t);
 
     // make a set of all candidate producers
     std::vector<UnitTag> candidateProducers;

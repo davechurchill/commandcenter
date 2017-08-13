@@ -91,6 +91,12 @@
     <ClCompile Include="..\src\CombatCommander.cpp">
       <Filter>micro</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\BuildType.cpp">
+      <Filter>macro</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TechTree.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\BaseLocationManager.h">
@@ -187,6 +193,12 @@
     <ClInclude Include="..\src\CCBot.h" />
     <ClInclude Include="..\src\CombatCommander.h">
       <Filter>micro</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\BuildType.h">
+      <Filter>macro</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\TechTree.h">
+      <Filter>util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

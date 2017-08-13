@@ -35,18 +35,25 @@ namespace Util
     float GetAttackRange(const sc2::UnitTypeID & type, CCBot & bot);
     
     bool UnitCanBuildTypeNow(const sc2::Unit & unit, const sc2::UnitTypeID & type, CCBot & m_bot);
-    sc2::UnitTypeID WhatBuilds(const sc2::UnitTypeID & type);
     int GetUnitTypeWidth(const sc2::UnitTypeID type, const CCBot & bot);
     int GetUnitTypeHeight(const sc2::UnitTypeID type, const CCBot & bot);
     int GetUnitTypeMineralPrice(const sc2::UnitTypeID type, const CCBot & bot);
     int GetUnitTypeGasPrice(const sc2::UnitTypeID type, const CCBot & bot);
     sc2::UnitTypeID GetTownHall(const sc2::Race & race);
     sc2::UnitTypeID GetSupplyProvider(const sc2::Race & race);
-    std::string GetStringFromRace(const sc2::Race & race);
-    sc2::Race GetRaceFromString(const std::string & race);
-    sc2::Point2D CalcCenter(const std::vector<sc2::Unit> & units);
-    sc2::UnitTypeID GetUnitTypeIDFromName(const sc2::ObservationInterface * obs, const std::string & name);
-    const sc2::Unit & GetClosestEnemyUnitTo(const sc2::Unit & ourUnit, const sc2::ObservationInterface * obs);
+    std::string     GetStringFromRace(const sc2::Race & race);
+    sc2::Race       GetRaceFromString(const std::string & race);
+    sc2::Point2D    CalcCenter(const std::vector<sc2::Unit> & units);
+
+    sc2::UnitTypeID GetUnitTypeIDFromName(const std::string & name, CCBot & bot);
+    sc2::UpgradeID  GetUpgradeIDFromName(const std::string & name, CCBot & bot);
+    sc2::BuffID     GetBuffIDFromName(const std::string & name, CCBot & bot);
+    sc2::AbilityID  GetAbilityIDFromName(const std::string & name, CCBot & bot);
+
+    
+    sc2::UnitTypeID WhatBuildsUnitType(const sc2::UnitTypeID & type);
+    sc2::UnitTypeID WhatBuildsUpgrade(const sc2::UpgradeID & type);
+    sc2::UnitTypeID WhatBuildsBuff(const sc2::BuffID & type);
 
     float Dist(const sc2::Point2D & p1, const sc2::Point2D & p2);
     float DistSq(const sc2::Point2D & p1, const sc2::Point2D & p2);
@@ -61,6 +68,7 @@ namespace Util
     bool    IsBuildCommand(const sc2::ABILITY_ID & ability);
     bool    IsBuilding(const sc2::UnitTypeID & type);
     bool    IsMorphCommand(const sc2::AbilityID & ability);
+
     sc2::UnitTypeID AbilityIDToUnitTypeID(const sc2::AbilityID & ability);
     sc2::UpgradeID  AbilityIDToUpgradeID(const sc2::AbilityID & ability);
     sc2::UnitTypeID GetEquivalentUnitTypeID(const sc2::UnitTypeID & id);

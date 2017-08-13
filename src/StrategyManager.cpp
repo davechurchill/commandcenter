@@ -167,7 +167,7 @@ void StrategyManager::readStrategyFile(const std::string & filename)
                     {
                         if (build[b].IsString())
                         {
-                            sc2::UnitTypeID typeID = Util::GetUnitTypeIDFromName(m_bot.Observation(), build[b].GetString());
+                            sc2::UnitTypeID typeID = Util::GetUnitTypeIDFromName(build[b].GetString(), m_bot);
 
                             buildOrder.add(typeID);
                         }
