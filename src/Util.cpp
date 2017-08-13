@@ -470,7 +470,7 @@ sc2::UnitTypeID Util::WhatBuildsUnitType(const sc2::UnitTypeID & type)
         case sc2::UNIT_TYPEID::ZERG_HYDRALISK:              return sc2::UNIT_TYPEID::ZERG_LARVA; 
         case sc2::UNIT_TYPEID::ZERG_INFESTOR:               return sc2::UNIT_TYPEID::ZERG_LARVA; 
         case sc2::UNIT_TYPEID::ZERG_MUTALISK:               return sc2::UNIT_TYPEID::ZERG_LARVA; 
-        case sc2::UNIT_TYPEID::ZERG_QUEEN:                  return sc2::UNIT_TYPEID::ZERG_LARVA; 
+        case sc2::UNIT_TYPEID::ZERG_QUEEN:                  return sc2::UNIT_TYPEID::ZERG_HATCHERY;
         case sc2::UNIT_TYPEID::ZERG_ROACH:                  return sc2::UNIT_TYPEID::ZERG_LARVA; 
         case sc2::UNIT_TYPEID::ZERG_SWARMHOSTMP:            return sc2::UNIT_TYPEID::ZERG_LARVA;
         case sc2::UNIT_TYPEID::ZERG_ULTRALISK:              return sc2::UNIT_TYPEID::ZERG_LARVA; 
