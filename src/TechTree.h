@@ -8,6 +8,7 @@ class BuildType;
 struct TechTreeItem
 {
     sc2::Race                    m_race;            // the race of this item
+    sc2::AbilityID               m_buildAbility;    // the ability that creates this item, required to make
     std::vector<sc2::UnitTypeID> m_whatBuilds;      // any of these units can build the item
     bool                         m_prereqIsAddon;   // whether the prereq is an addon
     std::vector<sc2::UnitTypeID> m_requiredUnits;     // owning ONE of these is required to make
