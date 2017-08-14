@@ -7,14 +7,8 @@
 TechTree::TechTree(CCBot & bot)
     : m_bot(bot)
 {
-    Timer t;
-    t.start();
-
     initUnitTypeData();
     initUpgradeData();
-
-    double ms = t.getElapsedTimeInMilliSec();
-    std::cout << "Tech Tree constructed in " << ms << "ms\n";
 }
 
 void TechTree::initUnitTypeData()

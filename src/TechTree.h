@@ -20,7 +20,6 @@ class TechTree
     CCBot & m_bot;
     std::map<sc2::UnitTypeID, TechTreeItem> m_unitTypeData;
     std::map<sc2::UpgradeID, TechTreeItem>  m_upgradeData;
-    std::map<sc2::AbilityID, TechTreeItem>  m_abilityData;
 
     void initUnitTypeData();
     void initUpgradeData();
