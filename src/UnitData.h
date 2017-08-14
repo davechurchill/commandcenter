@@ -1,13 +1,13 @@
 #pragma once
 
-#include "sc2api/sc2_api.h"
+#include "Common.h"
 
 struct UnitInfo
 {
     // we need to store all of this data because if the unit is not visible, we
     // can't reference it from the unit pointer
 
-    int             tag;
+    UnitTag         tag;
     float           lastHealth;
     float           lastShields;
     int             player;
