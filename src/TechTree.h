@@ -7,12 +7,12 @@ class BuildType;
 
 struct TechTreeItem
 {
-    sc2::Race                    m_race;            // the race of this item
-    sc2::AbilityID               m_buildAbility;    // the ability that creates this item
-    sc2::AbilityID               m_warpAbility;    // the ability that creates this item via warp-in
-    std::vector<sc2::UnitTypeID> m_whatBuilds;      // any of these units can build the item
-    std::vector<sc2::UnitTypeID> m_requiredUnits;     // owning ONE of these is required to make
-    std::vector<sc2::UpgradeID>  m_requiredUpgrades;  // having ALL of these is required to make
+    sc2::Race                    m_race;                // the race of this item
+    sc2::AbilityID               m_buildAbility;        // the ability that creates this item
+    sc2::AbilityID               m_warpAbility;         // the ability that creates this item via warp-in
+    std::vector<sc2::UnitTypeID> m_whatBuilds;          // any of these units can build the item
+    std::vector<sc2::UnitTypeID> m_requiredUnits;       // owning ONE of these is required to make
+    std::vector<sc2::UpgradeID>  m_requiredUpgrades;    // having ALL of these is required to make
 };
 
 class TechTree
