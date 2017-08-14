@@ -105,14 +105,18 @@ void GameCommander::setScoutUnits()
 
 bool GameCommander::shouldSendInitialScout()
 {
-    return true;
+    const UnitInfoManager &info = m_bot.UnitInfo();
 
     switch (m_bot.GetPlayerRace(Players::Self))
     {
-        case sc2::Race::Terran:  return m_bot.UnitInfo().getUnitTypeCount(Players::Self, sc2::UNIT_TYPEID::TERRAN_SUPPLYDEPOT, true) > 0;
-        case sc2::Race::Protoss: return m_bot.UnitInfo().getUnitTypeCount(Players::Self, sc2::UNIT_TYPEID::PROTOSS_PYLON, true) > 0;
-        case sc2::Race::Zerg:    return m_bot.UnitInfo().getUnitTypeCount(Players::Self, sc2::UNIT_TYPEID::ZERG_SPAWNINGPOOL, true) > 0;
-        default: return false;
+        case sc2::Race::Terran:
+            return info.getUnitTypeCount(Players::Self, sc2::UNIT_TYPEID::TERRAN_SUPPLYDEPOT, true) > 0;
+        case sc2::Race::Protoss:
+            return info.getUnitTypeCount(Players::Self, sc2::UNIT_TYPEID::PROTOSS_PYLON, true) > 0;
+        case sc2::Race::Zerg:
+            return info.getUnitTypeCount(Players::Self, sc2::UNIT_TYPEID::ZERG_DRONE, true) > 13;
+        default:
+            return false;
     }
 }
 
