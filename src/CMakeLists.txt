@@ -1,7 +1,7 @@
 # All the source files for the bot.
 file(GLOB BOT_SOURCES "*.cpp" "*.h" "*.hpp")
 
-include_directories("${SC2Api_INCLUDE_DIRS}")
+include_directories(SYSTEM "${SC2Api_INCLUDE_DIRS}")
 
 # Show more warnings at compiletime.
 if (MSVC)
@@ -9,11 +9,6 @@ if (MSVC)
 else ()
     set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 endif()
-
-if (APPLE)
-    # Supress annoying 'deprecated' warnings caused by sc2api headers.
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated")
-endif ()
 
 # Create the executable.
 add_executable(CommandCenter ${BOT_SOURCES})
