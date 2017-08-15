@@ -413,7 +413,7 @@ sc2::Point2D CombatCommander::getMainAttackLocation()
     {
         const UnitInfo & ui = kv.second;
 
-        if (Util::IsBuilding(ui.type) && !(ui.lastPosition.x == 0.0f && ui.lastPosition.y == 0.0f))
+        if (m_bot.Data(ui.type).isBuilding && !(ui.lastPosition.x == 0.0f && ui.lastPosition.y == 0.0f))
         {
             return ui.lastPosition;
         }

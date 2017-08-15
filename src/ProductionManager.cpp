@@ -96,22 +96,22 @@ void ProductionManager::manageBuildOrderQueue()
     }
 }
 
-UnitTag ProductionManager::getProducer(sc2::UnitTypeID t, sc2::Point2D closestTo)
+UnitTag ProductionManager::getProducer(const BuildType & type, sc2::Point2D closestTo)
 {
-    // TODO: get the type of unit that builds this
-    sc2::UnitTypeID producerType = Util::WhatBuildsUnitType(t);
+    // get all the types of units that cna build this type
+    auto & producerTypes = m_bot.Data(type).whatBuilds;
 
     // make a set of all candidate producers
     std::vector<UnitTag> candidateProducers;
     for (auto & unit : m_bot.UnitInfo().getUnits(Players::Self))
     {
         // reasons a unit can not train the desired type
-        if (unit.unit_type != producerType) { continue; }
+        if (std::find(producerTypes.begin(), producerTypes.end(), unit.unit_type) == producerTypes.end()) { continue; }
         if (unit.build_progress < 1.0f) { continue; }
-        if (Util::IsBuilding(producerType) && unit.orders.size() > 0) { continue; }
-        // TODO: if unit is not powered continue
+        if (m_bot.Data(unit.unit_type).isBuilding && unit.orders.size() > 0) { continue; }
         if (unit.is_flying) { continue; }
 
+        // TODO: if unit is not powered continue
         // TODO: if the type is an addon, some special cases
         // TODO: if the type requires an addon and the producer doesn't have one
 
@@ -159,23 +159,25 @@ void ProductionManager::create(UnitTag producer, BuildOrderItem & item)
         return;
     }
 
-    sc2::UnitTypeID t = item.type;
-
     // if we're dealing with a building
     // TODO: deal with morphed buildings & addons
-    if (Util::IsBuilding(t))
+    if (m_bot.Data(item.type).isBuilding)
     {
         // send the building task to the building manager
-        m_buildingManager.addBuildingTask(t, m_bot.GetStartLocation());
+        m_buildingManager.addBuildingTask(item.type.getUnitTypeID(), m_bot.GetStartLocation());
     }
     // if we're dealing with a non-building unit
-    else
+    else if (item.type.isUnit())
     {
-        Micro::SmartTrain(producer, t, m_bot);
+        Micro::SmartTrain(producer, item.type.getUnitTypeID(), m_bot);
+    }
+    else if (item.type.isUpgrade())
+    {
+        Micro::SmartAbility(producer, m_bot.Data(item.type.getUpgradeID()).buildAbility, m_bot);
     }
 }
 
-bool ProductionManager::canMakeNow(UnitTag producerTag, sc2::UnitTypeID type)
+bool ProductionManager::canMakeNow(UnitTag producerTag, const BuildType & type)
 {
     if (!meetsReservedResources(type))
     {
@@ -192,7 +194,7 @@ bool ProductionManager::canMakeNow(UnitTag producerTag, sc2::UnitTypeID type)
     else
     {
         // check to see if one of the unit's available abilities matches the build ability type
-        sc2::AbilityID buildTypeAbility = Util::UnitTypeIDToAbilityID(type);
+        sc2::AbilityID buildTypeAbility = m_bot.Data(type).buildAbility;
         for (const sc2::AvailableAbility & available_ability : available_abilities.abilities)
         {
             if (available_ability.ability_id == buildTypeAbility)
@@ -222,10 +224,10 @@ int ProductionManager::getFreeGas()
 }
 
 // return whether or not we meet resources, including building reserves
-bool ProductionManager::meetsReservedResources(sc2::UnitTypeID type)
+bool ProductionManager::meetsReservedResources(const BuildType & type)
 {
     // return whether or not we meet the resources
-    return (Util::GetUnitTypeMineralPrice(type, m_bot) <= getFreeMinerals()) && (Util::GetUnitTypeGasPrice(type, m_bot) <= getFreeGas());
+    return (m_bot.Data(type).mineralCost <= getFreeMinerals()) && (m_bot.Data(type).gasCost <= getFreeGas());
 }
 
 void ProductionManager::drawProductionInformation()

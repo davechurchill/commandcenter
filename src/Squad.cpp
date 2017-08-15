@@ -125,7 +125,7 @@ void Squad::addUnitsToMicroManagers()
             tankUnits.push_back(unitTag);
         }
         // TODO: detectors
-        else if (Util::IsDetector(*unit) && !Util::IsBuilding(unit->unit_type))
+        else if (Util::IsDetector(*unit) && !m_bot.Data(unit->unit_type).isBuilding)
         {
             detectorUnits.push_back(unitTag);
         }

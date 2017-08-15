@@ -2,6 +2,7 @@
 #include "CCBot.h"
 #include "JSONTools.h"
 #include "Util.h"
+#include "BuildType.h"
 
 Strategy::Strategy()
 {
@@ -167,9 +168,8 @@ void StrategyManager::readStrategyFile(const std::string & filename)
                     {
                         if (build[b].IsString())
                         {
-                            sc2::UnitTypeID typeID = Util::GetUnitTypeIDFromName(build[b].GetString(), m_bot);
-
-                            buildOrder.add(typeID);
+                            BuildType buildType(build[b].GetString(), m_bot);
+                            buildOrder.add(buildType);
                         }
                         else
                         {

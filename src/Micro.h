@@ -17,4 +17,5 @@ namespace Micro
     void SmartBuild     (const UnitTag & builder,   const sc2::UnitTypeID & buildingType, sc2::Point2D pos, CCBot & bot);
     void SmartBuildTag  (const UnitTag & builder,   const sc2::UnitTypeID & buildingType, UnitTag targetTag, CCBot & bot);
     void SmartTrain     (const UnitTag & builder,   const sc2::UnitTypeID & buildingType, CCBot & bot);
+    void SmartAbility   (const UnitTag & builder,   const sc2::AbilityID & abilityID, CCBot & bot);
 };

@@ -149,7 +149,7 @@ void BaseLocationManager::onFrame()
     for (auto & unit : m_bot.Observation()->GetUnits(sc2::Unit::Alliance::Ally))
     {
         // we only care about buildings on the ground
-        if (!Util::IsBuilding(unit.unit_type) || unit.is_flying)
+        if (!m_bot.Data(unit.unit_type).isBuilding || unit.is_flying)
         {
             continue;
         }
@@ -167,7 +167,7 @@ void BaseLocationManager::onFrame()
     {
         const UnitInfo & ui = kv.second;
 
-        if (!Util::IsBuilding(ui.type))
+        if (!m_bot.Data(ui.type).isBuilding)
         {
             continue;
         }

@@ -125,7 +125,7 @@ void GameCommander::setCombatUnits()
 
         BOT_ASSERT(unit, "Have a null unit in our valid units\n");
 
-        if (!isAssigned(unitTag) && Util::IsCombatUnitType(unit->unit_type))
+        if (!isAssigned(unitTag) && Util::IsCombatUnitType(unit->unit_type, m_bot))
         {
             assignUnit(unitTag, m_combatUnits);
         }

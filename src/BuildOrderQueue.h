@@ -1,16 +1,17 @@
 #pragma once
 
 #include "Common.h"
+#include "BuildType.h"
 
 class CCBot;
 
 struct BuildOrderItem
 {
-    sc2::UnitTypeID type;		// the thing we want to 'build'
+    BuildType       type;		// the thing we want to 'build'
     int             priority;	// the priority at which to place it in the queue
     bool            blocking;	// whether or not we block further items
 
-    BuildOrderItem(sc2::UnitTypeID t, int p, bool b);
+    BuildOrderItem(const BuildType & t, int p, bool b);
     bool operator<(const BuildOrderItem & x) const;
 };
 
@@ -30,9 +31,9 @@ public:
 
     void clearAll();											// clears the entire build order queue
     void skipItem();											// increments skippedItems
-    void queueAsHighestPriority(sc2::UnitTypeID type, bool blocking);		// queues something at the highest priority
-    void queueAsLowestPriority(sc2::UnitTypeID type, bool blocking);		// queues something at the lowest priority
-    void queueItem(BuildOrderItem b);			// queues something with a given priority
+    void queueAsHighestPriority(const BuildType & type, bool blocking);		// queues something at the highest priority
+    void queueAsLowestPriority(const BuildType & type, bool blocking);		// queues something at the lowest priority
+    void queueItem(const BuildOrderItem & b);			// queues something with a given priority
     void removeHighestPriorityItem();								// removes the highest priority item
     void removeCurrentHighestPriorityItem();
 

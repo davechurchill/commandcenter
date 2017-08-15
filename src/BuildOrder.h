@@ -1,22 +1,23 @@
 #pragma once
 
 #include "Common.h"
+#include "BuildType.h"
 
 class BuildOrder
 {
     sc2::Race m_race;
-    std::vector<sc2::UnitTypeID> m_buildOrder;
+    std::vector<BuildType> m_buildOrder;
 
 public:
 
     BuildOrder();
     BuildOrder(const sc2::Race & race);
-    BuildOrder(const sc2::Race & race, const std::vector<sc2::UnitTypeID> & metaVector);
+    BuildOrder(const sc2::Race & race, const std::vector<BuildType> & buildVector);
 
-    void add(const sc2::UnitTypeID & type);
+    void add(const BuildType & type);
     const size_t size() const;
     const sc2::Race & getRace() const;
-    const sc2::UnitTypeID & operator [] (const size_t & index) const;
-    sc2::UnitTypeID & operator [] (const size_t & index);
+    const BuildType & operator [] (const size_t & index) const;
+    BuildType & operator [] (const size_t & index);
 };
 

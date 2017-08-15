@@ -41,15 +41,20 @@ void Micro::SmartKiteTarget(const UnitTag & rangedUnit, const UnitTag & target, 
 
 void Micro::SmartBuild(const UnitTag & builder, const sc2::UnitTypeID & buildingType, sc2::Point2D pos, CCBot & bot)
 {
-    bot.Actions()->UnitCommand(builder, Util::UnitTypeIDToAbilityID(buildingType), pos);
+    bot.Actions()->UnitCommand(builder, bot.Data(buildingType).buildAbility, pos);
 }
 
 void Micro::SmartBuildTag(const UnitTag & builder, const sc2::UnitTypeID & buildingType, UnitTag targetTag, CCBot & bot)
 {
-    bot.Actions()->UnitCommand(builder, Util::UnitTypeIDToAbilityID(buildingType), targetTag);
+    bot.Actions()->UnitCommand(builder, bot.Data(buildingType).buildAbility, targetTag);
 }
 
 void Micro::SmartTrain(const UnitTag & builder, const sc2::UnitTypeID & buildingType, CCBot & bot)
 {
-    bot.Actions()->UnitCommand(builder, Util::UnitTypeIDToAbilityID(buildingType));
+    bot.Actions()->UnitCommand(builder, bot.Data(buildingType).buildAbility);
+}
+
+void Micro::SmartAbility(const UnitTag & builder, const sc2::AbilityID & abilityID, CCBot & bot)
+{
+    bot.Actions()->UnitCommand(builder, abilityID);
 }

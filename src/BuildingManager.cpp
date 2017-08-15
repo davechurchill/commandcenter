@@ -25,7 +25,7 @@ void BuildingManager::onFrame()
     for (auto & unit : m_bot.UnitInfo().getUnits(Players::Self))
     {
         // filter out units which aren't buildings under construction
-        if (Util::IsBuilding(unit.unit_type))
+        if (m_bot.Data(unit.unit_type).isBuilding)
         {
             std::stringstream ss;
             ss << unit.tag;
@@ -134,7 +134,7 @@ void BuildingManager::constructAssignedBuildings()
         }
 
         // TODO: not sure if this is the correct way to tell if the building is constructing
-        sc2::AbilityID buildAbility = Util::UnitTypeIDToAbilityID(b.type);
+        sc2::AbilityID buildAbility = m_bot.Data(b.type).buildAbility;
         const sc2::Unit * builderUnit = m_bot.GetUnit(b.builderUnitTag);
 
         bool isConstructing = false;
@@ -213,7 +213,7 @@ void BuildingManager::checkForStartedConstruction()
     for (auto & buildingStarted : m_bot.UnitInfo().getUnits(Players::Self))
     {
         // filter out units which aren't buildings under construction
-        if (!Util::IsBuilding(buildingStarted.unit_type) || buildingStarted.build_progress == 0.0f || buildingStarted.build_progress == 1.0f)
+        if (!m_bot.Data(buildingStarted.unit_type).isBuilding || buildingStarted.build_progress == 0.0f || buildingStarted.build_progress == 1.0f)
         {
             continue;
         }

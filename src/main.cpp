@@ -21,13 +21,6 @@ int main(int argc, char* argv[])
         return 1;
     }
     
-    coordinator.SetRealtime(false);
-
-    // WARNING: Bot logic has not been thorougly tested on step sizes > 1
-    //          Setting this = N means the bot's onFrame gets called once every N frames
-    //          The bot may crash or do unexpected things if its logic is not called every frame
-    coordinator.SetStepSize(1);
-
     rapidjson::Document doc;
     std::string config = JSONTools::ReadFile("BotConfig.txt");
     if (config.length() == 0)
@@ -48,6 +41,7 @@ int main(int argc, char* argv[])
     std::string botRaceString;
     std::string enemyRaceString;
     std::string mapString;
+    int stepSize = 1;
 
     if (doc.HasMember("Game Info") && doc["Game Info"].IsObject())
     {
@@ -55,6 +49,7 @@ int main(int argc, char* argv[])
         JSONTools::ReadString("BotRace", info, botRaceString);
         JSONTools::ReadString("EnemyRace", info, enemyRaceString);
         JSONTools::ReadString("MapFile", info, mapString);
+        JSONTools::ReadInt("StepSize", info, stepSize);
     }
     else
     {
@@ -65,6 +60,13 @@ int main(int argc, char* argv[])
 
     // Add the custom bot, it will control the players.
     CCBot bot;
+
+    
+    // WARNING: Bot logic has not been thorougly tested on step sizes > 1
+    //          Setting this = N means the bot's onFrame gets called once every N frames
+    //          The bot may crash or do unexpected things if its logic is not called every frame
+    coordinator.SetStepSize(stepSize);
+    coordinator.SetRealtime(false);
 
     coordinator.SetParticipants({
         CreateParticipant(Util::GetRaceFromString(botRaceString), &bot),

@@ -112,7 +112,7 @@ int MeleeManager::getAttackPriority(const UnitTag & attacker, const UnitTag & un
     auto unit = m_bot.GetUnit(unitTag);
     BOT_ASSERT(unit, "null unit in getAttackPriority");
 
-    if (Util::IsCombatUnit(*unit))
+    if (Util::IsCombatUnit(*unit, m_bot))
     {
         return 10;
     }

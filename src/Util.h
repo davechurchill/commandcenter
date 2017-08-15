@@ -16,10 +16,10 @@ namespace Util
     };
 
     int GetPlayer(const sc2::Unit & unit);
-    bool IsCombatUnit(const sc2::Unit & unit);
-    bool IsCombatUnitType(const sc2::UnitTypeID type);
+    bool IsCombatUnit(const sc2::Unit & unit, CCBot & bot);
+    bool IsCombatUnitType(const sc2::UnitTypeID & type, CCBot & bot);
     bool IsSupplyProvider(const sc2::Unit & unit);
-    bool IsSupplyProviderType(const sc2::UnitTypeID type);
+    bool IsSupplyProviderType(const sc2::UnitTypeID & type);
     bool IsTownHall(const sc2::Unit & unit);
     bool IsTownHallType(const sc2::UnitTypeID & type);
     bool IsRefinery(const sc2::Unit & unit);
@@ -50,11 +50,6 @@ namespace Util
     sc2::BuffID     GetBuffIDFromName(const std::string & name, CCBot & bot);
     sc2::AbilityID  GetAbilityIDFromName(const std::string & name, CCBot & bot);
 
-    
-    sc2::UnitTypeID WhatBuildsUnitType(const sc2::UnitTypeID & type);
-    sc2::UnitTypeID WhatBuildsUpgrade(const sc2::UpgradeID & type);
-    sc2::UnitTypeID WhatBuildsBuff(const sc2::BuffID & type);
-
     float Dist(const sc2::Point2D & p1, const sc2::Point2D & p2);
     float DistSq(const sc2::Point2D & p1, const sc2::Point2D & p2);
     
@@ -64,13 +59,4 @@ namespace Util
     bool    Placement(const sc2::GameInfo& info, const sc2::Point2D& point);
     bool    Pathable(const sc2::GameInfo& info, const sc2::Point2D& point);
 
-    bool    IsResearchAbility(const sc2::ABILITY_ID & ability);
-    bool    IsBuildCommand(const sc2::ABILITY_ID & ability);
-    bool    IsBuilding(const sc2::UnitTypeID & type);
-    bool    IsMorphCommand(const sc2::AbilityID & ability);
-
-    sc2::UnitTypeID AbilityIDToUnitTypeID(const sc2::AbilityID & ability);
-    sc2::UpgradeID  AbilityIDToUpgradeID(const sc2::AbilityID & ability);
-    sc2::UnitTypeID GetEquivalentUnitTypeID(const sc2::UnitTypeID & id);
-    sc2::AbilityID  UnitTypeIDToAbilityID(const sc2::UnitTypeID & id);
 };

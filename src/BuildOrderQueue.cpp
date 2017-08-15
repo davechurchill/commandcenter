@@ -64,7 +64,7 @@ bool BuildOrderQueue::canSkipItem()
     return highestNotBlocking;
 }
 
-void BuildOrderQueue::queueItem(BuildOrderItem b)
+void BuildOrderQueue::queueItem(const BuildOrderItem & b)
 {
     // if the queue is empty, set the highest and lowest priorities
     if (m_queue.empty())
@@ -95,22 +95,22 @@ void BuildOrderQueue::queueItem(BuildOrderItem b)
     m_lowestPriority  = (b.priority < m_lowestPriority)  ? b.priority : m_lowestPriority;
 }
 
-void BuildOrderQueue::queueAsHighestPriority(sc2::UnitTypeID m, bool blocking)
+void BuildOrderQueue::queueAsHighestPriority(const BuildType & type, bool blocking)
 {
     // the new priority will be higher
     int newPriority = m_highestPriority + m_defaultPrioritySpacing;
 
     // queue the item
-    queueItem(BuildOrderItem(m, newPriority, blocking));
+    queueItem(BuildOrderItem(type, newPriority, blocking));
 }
 
-void BuildOrderQueue::queueAsLowestPriority(sc2::UnitTypeID m, bool blocking)
+void BuildOrderQueue::queueAsLowestPriority(const BuildType & type, bool blocking)
 {
     // the new priority will be higher
     int newPriority = m_lowestPriority - m_defaultPrioritySpacing;
 
     // queue the item
-    queueItem(BuildOrderItem(m, newPriority, blocking));
+    queueItem(BuildOrderItem(type, newPriority, blocking));
 }
 
 void BuildOrderQueue::removeHighestPriorityItem()
@@ -158,15 +158,15 @@ std::string BuildOrderQueue::getQueueInformation() const
     // for each unit in the queue
     for (size_t i(0); i<reps; i++)
     {
-        const sc2::UnitTypeID & type = m_queue[m_queue.size() - 1 - i].type;
-        ss << sc2::UnitTypeToName(type) << "\n";
+        const BuildType & type = m_queue[m_queue.size() - 1 - i].type;
+        ss << type.getName() << "\n";
     }
 
     return ss.str();
 }
 
 
-BuildOrderItem::BuildOrderItem(sc2::UnitTypeID t, int p, bool b)
+BuildOrderItem::BuildOrderItem(const BuildType & t, int p, bool b)
     : type(t)
     , priority(p)
     , blocking(b)
