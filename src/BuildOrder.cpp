@@ -29,7 +29,7 @@ const sc2::Race & BuildOrder::getRace() const
     return m_race;
 }
 
-const size_t BuildOrder::size() const
+size_t BuildOrder::size() const
 {
     return m_buildOrder.size();
 }

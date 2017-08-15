@@ -15,7 +15,7 @@ public:
     BuildOrder(const sc2::Race & race, const std::vector<BuildType> & buildVector);
 
     void add(const BuildType & type);
-    const size_t size() const;
+    size_t size() const;
     const sc2::Race & getRace() const;
     const BuildType & operator [] (const size_t & index) const;
     BuildType & operator [] (const size_t & index);
