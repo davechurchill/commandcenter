@@ -8,10 +8,10 @@
 
     "Game Info" :
     {
-        "BotRace"                   : "Zerg",
+        "BotRace"                   : "Random",
         "EnemyRace"                 : "Random",
         "MapFile"                   : "InterloperLE.SC2Map",
-        "StepSize"                  : 8
+        "StepSize"                  : 1
     },
         
     "Micro" :
