@@ -30,7 +30,7 @@ class StrategyManager
     int                             m_totalGamesPlayed;
     const BuildOrder                m_emptyBuildOrder;
 
-    const bool  shouldExpandNow() const;
+    bool  shouldExpandNow() const;
     const UnitPairVector getProtossBuildOrderGoal() const;
     const UnitPairVector getTerranBuildOrderGoal() const;
     const UnitPairVector getZergBuildOrderGoal() const;

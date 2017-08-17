@@ -191,7 +191,7 @@ bool SquadData::canAssignUnitToSquad(const UnitTag & unit, const Squad & squad) 
 
 Squad & SquadData::getSquad(const std::string & squadName)
 {
-    BOT_ASSERT(squadExists(squadName), "Trying to access squad that doesn't exist: %s", squadName);
+    BOT_ASSERT(squadExists(squadName), "Trying to access squad that doesn't exist: %s", squadName.c_str());
     if (!squadExists(squadName))
     {
         int a = 10;

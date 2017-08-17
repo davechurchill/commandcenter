@@ -290,7 +290,7 @@ const TypeData & TechTree::getData(const BuildType & type) const
         return getData(type.getUpgradeID());
     }
     
-    BOT_ASSERT(false, "Can't getData this type: %s", type.getName());
+    BOT_ASSERT(false, "Can't getData this type: %s", type.getName().c_str());
 
     return m_unitTypeData.at(0);
 }

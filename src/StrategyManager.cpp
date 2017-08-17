@@ -52,7 +52,7 @@ const BuildOrder & StrategyManager::getOpeningBookBuildOrder() const
     }
 }
 
-const bool StrategyManager::shouldExpandNow() const
+bool StrategyManager::shouldExpandNow() const
 {
     return false;
 }
