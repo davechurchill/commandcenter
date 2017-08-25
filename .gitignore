@@ -13,3 +13,4 @@ vs/*.user
 bin/CommandCenter
 bin/*.exe
 bin/*.ilk
+bin/TechTree.json

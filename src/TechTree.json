@@ -14,7 +14,6 @@ void TechTree::onStart()
 {
     initUnitTypeData();
     initUpgradeData();
-    outputJSON("TechTree.json");
 }
 
 void TechTree::initUnitTypeData()
@@ -145,7 +144,7 @@ void TechTree::initUnitTypeData()
     m_unitTypeData[sc2::UNIT_TYPEID::ZERG_ULTRALISK] =                  { sc2::Race::Zerg, 0, 0, 6, 0, true, false, false, false, false, false, false, sc2::ABILITY_ID::TRAIN_ULTRALISK, 0, { sc2::UNIT_TYPEID::ZERG_LARVA }, { sc2::UNIT_TYPEID::ZERG_ULTRALISKCAVERN }, {} };
     m_unitTypeData[sc2::UNIT_TYPEID::ZERG_VIPER] =                      { sc2::Race::Zerg, 0, 0, 3, 0, true, false, false, false, false, false, false, sc2::ABILITY_ID::TRAIN_VIPER, 0, { sc2::UNIT_TYPEID::ZERG_LARVA }, { sc2::UNIT_TYPEID::ZERG_HIVE }, {} };
     m_unitTypeData[sc2::UNIT_TYPEID::ZERG_ZERGLING] =                   { sc2::Race::Zerg, 0, 0, 1, 0, true, false, false, false, false, false, false, sc2::ABILITY_ID::TRAIN_ZERGLING, 0, { sc2::UNIT_TYPEID::ZERG_LARVA }, { sc2::UNIT_TYPEID::ZERG_SPAWNINGPOOL }, {} };
-    m_unitTypeData[sc2::UNIT_TYPEID::ZERG_QUEEN] =                      { sc2::Race::Zerg, 0, 0, 2, 0, true, false, false, false, false, false, false, sc2::ABILITY_ID::TRAIN_QUEEN, 0, { sc2::UNIT_TYPEID::ZERG_HATCHERY, sc2::UNIT_TYPEID::ZERG_LAIR, sc2::UNIT_TYPEID::ZERG_HIVE }, { sc2::UNIT_TYPEID::ZERG_SPAWNINGPOOL }, {} };
+    m_unitTypeData[sc2::UNIT_TYPEID::ZERG_QUEEN] =                      { sc2::Race::Zerg, 0, 0, 2, 0, true, false, false, false, false, false, false, sc2::ABILITY_ID::TRAIN_QUEEN, 0, { sc2::UNIT_TYPEID::ZERG_HATCHERY }, { sc2::UNIT_TYPEID::ZERG_SPAWNINGPOOL }, {} };
     m_unitTypeData[sc2::UNIT_TYPEID::ZERG_LARVA] =                      { sc2::Race::Zerg, 0, 0, 2, 0, true, false, false, false, false, false, false, 0, 0, { 0 }, { 0 }, {} };
     m_unitTypeData[sc2::UNIT_TYPEID::ZERG_EGG] =                        { sc2::Race::Zerg, 0, 0, 2, 0, true, false, false, false, false, false, false, 0, 0, { 0 }, { 0 }, {} };
 
@@ -294,60 +293,4 @@ const TypeData & TechTree::getData(const BuildType & type) const
     BOT_ASSERT(false, "Can't getData this type: %s", type.getName().c_str());
 
     return m_unitTypeData.at(0);
-}
-
-void TechTree::outputJSON(const std::string & filename) const
-{
-    std::ofstream out(filename);
-    out << "{\n";
-    std::string q = "\"";
-    std::string qcs = "\", ";
-
-    std::vector<std::pair<int, TypeData>> allData;
-    for (auto & kv : m_unitTypeData) { allData.push_back({kv.first, kv.second}); }
-    for (auto & kv : m_upgradeData) { allData.push_back({kv.first, kv.second}); }
-
-    for (auto & kv : allData)
-    {
-        std::string name( kv.second.isUnit ? m_bot.Observation()->GetUnitTypeData()[kv.first].name : m_bot.Observation()->GetUpgradeData()[kv.first].name);
-        if (name.find("Flying") != std::string::npos) { continue; }
-        if (name.find("Lowered") != std::string::npos) { continue; }
-
-        auto & data = kv.second;
-               
-        out << "    [";
-        out << q << name << qcs;
-        out << q << Util::GetStringFromRace(data.race) << qcs;
-        out << data.mineralCost << ", " << data.gasCost << ", " << data.supplyCost << ", " << data.buildTime << ", ";
-        out << data.isUnit << ", " << data.isBuilding << ", " << data.isWorker<< ", " << data.isSupplyDepot << ", " << data.isTownHall << ", " << data.isAddon << ", ";
-
-        out << "[";
-        for (size_t i(0); i < data.whatBuilds.size(); ++i) 
-        { 
-            out << q << m_bot.Observation()->GetUnitTypeData()[data.whatBuilds[i]].name << q;
-            if (i < data.whatBuilds.size() - 1) { out << ", "; }
-        }
-        out << "], ";
-
-        out << "[";
-        for (size_t i(0); i < data.requiredUnits.size(); ++i) 
-        { 
-            out << q << m_bot.Observation()->GetUnitTypeData()[data.requiredUnits[i]].name << q;
-            if (i < data.requiredUnits.size() - 1) { out << ", "; }
-        }
-        out << "], ";
-
-        out << "[";
-        for (size_t i(0); i < data.requiredUpgrades.size(); ++i) 
-        { 
-            out << q << m_bot.Observation()->GetUpgradeData()[data.requiredUpgrades[i]].name << q;
-            if (i < data.requiredUpgrades.size() - 1) { out << ", "; }
-        }
-        out << "] ";
-
-        out << "],\n";
-    }
-
-    out << "}";
-    out.close();
 }

@@ -35,6 +35,8 @@ class TechTree
     void initUnitTypeData();
     void initUpgradeData();
 
+    void outputJSON(const std::string & filename) const;
+
 public:
 
     TechTree(CCBot & bot);

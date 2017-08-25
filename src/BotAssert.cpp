@@ -7,19 +7,11 @@ namespace Assert
 
     const std::string CurrentDateTime() 
     {
-        time_t     now = time(0);
-        struct tm  tstruct;
-        char       buf[80];
-        //tstruct = *localtime(&now);
-		localtime_s(&tstruct, &now);
-        strftime(buf, sizeof(buf), "%Y-%m-%d_%X", &tstruct);
-
-        for (size_t i=0; i<80; ++i)
-        {
-            if (buf[i] == ':') buf[i] = '-';
-        }
-
-        return buf;
+        auto t = std::time(nullptr);
+        auto tm = *std::localtime(&t);
+        std::stringstream ss;
+        ss << std::put_time(&tm, "%d-%m-%Y %H-%M-%S");
+        return ss.str();
     }
 
     void ReportFailure(const char * condition, const char * file, int line, const char * msg, ...)
@@ -29,8 +21,7 @@ namespace Assert
         {
             va_list args;
             va_start(args, msg);
-            //vsprintf(messageBuffer, msg, args);
-			vsnprintf_s(messageBuffer, 1024, msg, args);
+            vsnprintf(messageBuffer, 1024, msg, args);
             va_end(args);
         }
 
