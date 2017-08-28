@@ -37,6 +37,7 @@ public:
     void OnStep() override;
 
           BotConfig & Config();
+		  void SetConfigFileLocation(std::string configFileLocation);
           WorkerManager & Workers();
     const BaseLocationManager & Bases() const;
     const MapTools & Map() const;
