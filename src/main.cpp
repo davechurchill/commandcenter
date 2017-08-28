@@ -56,6 +56,7 @@ int main(int argc, char* argv[])
     std::string botRaceString;
 	std::string bot2RaceString;
     std::string enemyRaceString;
+    sc2::Difficulty enemyDifficulty;
     std::string mapString;
     int stepSize = 1;
 
@@ -64,6 +65,7 @@ int main(int argc, char* argv[])
         const rapidjson::Value & info = doc["Game Info"];
         JSONTools::ReadString("BotRace", info, botRaceString);
         JSONTools::ReadString("EnemyRace", info, enemyRaceString);
+        JSONTools::ReadInt("EnemyDifficulty", info, enemyDifficulty);
         JSONTools::ReadString("MapFile", info, mapString);
         JSONTools::ReadInt("StepSize", info, stepSize);
 		if (config2.length() > 0) {
@@ -89,7 +91,7 @@ int main(int argc, char* argv[])
 	}
 	else
 	{
-		player2 = CreateComputer(Util::GetRaceFromString(enemyRaceString));
+		player2 = CreateComputer(Util::GetRaceFromString(enemyRaceString), enemyDifficulty);
 	}
 
     
