@@ -22,6 +22,7 @@ int main(int argc, char* argv[])
     }
     
     rapidjson::Document doc;
+	rapidjson::Document doc2;
     std::string config = JSONTools::ReadFile("BotConfig.txt");
     if (config.length() == 0)
     {
@@ -29,6 +30,11 @@ int main(int argc, char* argv[])
         std::cerr << "Please read the instructions and try again\n";
         exit(-1);
     }
+	std::string config2 = JSONTools::ReadFile("BotConfig2.txt");
+	if (config2.length() == 0)
+	{
+		std::cerr << "2nd Config file could not be found, and is required for battling bots\n";
+	}
 
     bool parsingFailed = doc.Parse(config.c_str()).HasParseError();
     if (parsingFailed)
@@ -37,9 +43,20 @@ int main(int argc, char* argv[])
         std::cerr << "Please read the instructions and try again\n";
         exit(-1);
     }
+	if (config2.length() > 0) {
+		parsingFailed = doc2.Parse(config2.c_str()).HasParseError();
+		if (parsingFailed)
+		{
+			std::cerr << "Config file 2 could not be parsed, and is required for starting the bot\n";
+			std::cerr << "Please read the instructions and try again\n";
+			exit(-1);
+		}
+	}
 
     std::string botRaceString;
+	std::string bot2RaceString;
     std::string enemyRaceString;
+    sc2::Difficulty enemyDifficulty;
     std::string mapString;
     int stepSize = 1;
 
@@ -48,8 +65,12 @@ int main(int argc, char* argv[])
         const rapidjson::Value & info = doc["Game Info"];
         JSONTools::ReadString("BotRace", info, botRaceString);
         JSONTools::ReadString("EnemyRace", info, enemyRaceString);
+        JSONTools::ReadInt("EnemyDifficulty", info, enemyDifficulty);
         JSONTools::ReadString("MapFile", info, mapString);
         JSONTools::ReadInt("StepSize", info, stepSize);
+		if (config2.length() > 0) {
+			JSONTools::ReadString("BotRace", doc2["Game Info"], bot2RaceString);
+		}
     }
     else
     {
@@ -60,6 +81,18 @@ int main(int argc, char* argv[])
 
     // Add the custom bot, it will control the players.
     CCBot bot;
+	CCBot bot2;
+
+	sc2::PlayerSetup player1 = CreateParticipant(Util::GetRaceFromString(botRaceString), &bot);
+	sc2::PlayerSetup player2;
+	if (config2.length() > 0) {
+		bot2.SetConfigFileLocation("BotConfig2.txt");
+		player2 = CreateParticipant(Util::GetRaceFromString(bot2RaceString), &bot2);
+	}
+	else
+	{
+		player2 = CreateComputer(Util::GetRaceFromString(enemyRaceString), enemyDifficulty);
+	}
 
     
     // WARNING: Bot logic has not been thorougly tested on step sizes > 1
@@ -69,8 +102,8 @@ int main(int argc, char* argv[])
     coordinator.SetRealtime(false);
 
     coordinator.SetParticipants({
-        CreateParticipant(Util::GetRaceFromString(botRaceString), &bot),
-        CreateComputer(Util::GetRaceFromString(enemyRaceString))
+        player1,
+        player2
     });
 
     // Start the game.

@@ -10,7 +10,6 @@
     {
         "BotRace"                   : "Random",
         "EnemyRace"                 : "Random",
-        “EnemyDifficulty”           : 2,
         "MapFile"                   : "InterloperLE.SC2Map",
         "StepSize"                  : 1
     },

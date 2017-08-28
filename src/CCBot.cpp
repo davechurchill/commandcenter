@@ -70,6 +70,10 @@ BotConfig & CCBot::Config()
      return m_config;
 }
 
+void CCBot::SetConfigFileLocation(std::string configFileLocation) {
+	m_config.ConfigFileLocation = configFileLocation;
+}
+
 const MapTools & CCBot::Map() const
 {
     return m_map;
