@@ -61,9 +61,47 @@ If the bot crashes or does other nasty things, please bear with me while I make 
   * Click "Local Windows Debugger" in VS to launch the program from within VS. To do this, you need to set the "Working Directory" option under "Debugging" to "$(ProjectDir)/../bin/" (I don't know why this option won't save)
 * The CommandCenter/bin/BotConfig.txt file must be in the same directory as the .exe to run properly
 
-# Developer Install / Compile Instructions (Linux)
+# Developer Install / Compile Instructions (Linux and OS X)
 
-I have not yet had time to build / test CommandCenter on Linux, or write a Makefile for it, but it should work out of the box. If you would like to test the bot in Linux and/or write a makefile for the project, please feel free submit a pull request. 
+* Build SC2 API project
+```bash
+$ git clone --recursive https://github.com/Blizzard/s2client-api && cd s2client-api
+$ mkdir build && cd build
+$ cmake ../
+$ make
+```
+
+* Install the SC2 API libraries and headers to your system
+```bash
+# Assumming that you are located in the 'build' directory
+# after finish of previous step
+$ cd ../
+$ sudo cp build/
+
+# Install SC2 API headers
+$ sudo cp -R include/sc2api /opt/local/include
+$ sudo cp -R include/sc2utils /opt/local/include
+$ sudo cp -R build/generated/s2clientprotocol /opt/local/include
+
+# Install protobuf headers
+$ sudo cp -R contrib/protobuf/src/google /opt/local/include/sc2api
+
+# Install SC2 API libraries
+$ sudo mkdir /opt/local/lib/sc2api
+$ sudo cp build/bin/libcivetweb.a /opt/local/lib/sc2api
+$ sudo cp build/bin/libprotobuf.a /opt/local/lib/sc2api
+$ sudo cp build/bin/libsc2api.a /opt/local/lib/sc2api
+$ sudo cp build/bin/libsc2lib.a /opt/local/lib/sc2api
+$ sudo cp build/bin/libsc2protocol.a /opt/local/lib/sc2api
+$ sudo cp build/bin/libsc2utils.a /opt/local/lib/sc2api
+```
+
+* Build the bot
+```bash
+$ git clone https://github.com/davechurchill/commandcenter.git && cd commandcenter
+$ cmake .
+$ make
+```
 
 # Bot Development
 
