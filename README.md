@@ -73,8 +73,8 @@ $ make
 
 * Install the SC2 API libraries and headers to your system
 ```bash
-# Assumming that you are located in the 'build' directory
-# after finish of previous step
+# Assuming that you are located in the 'build' directory
+# after you finished the previous step
 $ cd ../
 $ sudo cp build/
 
