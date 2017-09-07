@@ -11,6 +11,14 @@
 
 #include "CCBot.h"
 
+// If the user did not run the executable directly from the command line, (ie: visual studio debugger)
+// the console window will disappear before the user will get a chance to read it. 
+// A simple fix is to force the user to acknowledge the error message. 
+void waitForInput()
+{
+    std::cerr << "Press enter to continue\n";
+    getchar();
+}
 
 int main(int argc, char* argv[]) 
 {
@@ -18,6 +26,7 @@ int main(int argc, char* argv[])
     if (!coordinator.LoadSettings(argc, argv)) 
     {
         std::cout << "Unable to find or parse settings." << std::endl;
+        waitForInput();
         return 1;
     }
     
@@ -27,6 +36,7 @@ int main(int argc, char* argv[])
     {
         std::cerr << "Config file could not be found, and is required for starting the bot\n";
         std::cerr << "Please read the instructions and try again\n";
+        waitForInput();
         exit(-1);
     }
 
@@ -35,6 +45,7 @@ int main(int argc, char* argv[])
     {
         std::cerr << "Config file could not be parsed, and is required for starting the bot\n";
         std::cerr << "Please read the instructions and try again\n";
+        waitForInput();
         exit(-1);
     }
 
@@ -55,6 +66,8 @@ int main(int argc, char* argv[])
     {
         std::cerr << "Config file has no 'Game Info' object, required for starting the bot\n";
         std::cerr << "Please read the instructions and try again\n";
+
+        waitForInput();
         exit(-1);
     }
 
