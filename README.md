@@ -76,7 +76,6 @@ $ make
 # Assuming that you are located in the 'build' directory
 # after you finished the previous step
 $ cd ../
-$ sudo cp build/
 
 # Install SC2 API headers
 $ sudo cp -R include/sc2api /opt/local/include
