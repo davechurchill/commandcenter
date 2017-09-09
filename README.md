@@ -63,6 +63,12 @@ If the bot crashes or does other nasty things, please bear with me while I make 
 
 # Developer Install / Compile Instructions (Linux and OS X)
 
+With these steps you should be able to build and install the SC2 API and include it into CommandCenter from the API revisions made in [this commit](https://github.com/Blizzard/s2client-api/commit/c577c9c480ad430d86e736012a00cdf1db62dbf3). It has been tested successfully for [dd10176ab94cc078a2116ec790b63f0a93ac5527](https://github.com/Blizzard/s2client-api/commit/dd10176ab94cc078a2116ec790b63f0a93ac5527), so if the install instructions below don't work checkout that version of CommandCenter
+
+`$ git checkout dd10176ab94cc078a2116ec790b63f0a93ac5527`
+
+and repeat the instructions.
+
 * Build SC2 API project
 ```bash
 $ git clone --recursive https://github.com/Blizzard/s2client-api && cd s2client-api
