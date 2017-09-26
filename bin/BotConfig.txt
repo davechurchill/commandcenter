@@ -11,7 +11,8 @@
         "BotRace"                   : "Random",
         "EnemyRace"                 : "Random",
         "MapFile"                   : "InterloperLE.SC2Map",
-        "StepSize"                  : 1
+        "StepSize"                  : 1,
+        "EnemyDifficulty"           : 1,
     },
         
     "Micro" :
