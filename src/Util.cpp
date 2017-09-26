@@ -470,3 +470,37 @@ bool Util::UnitCanBuildTypeNow(const sc2::Unit & unit, const sc2::UnitTypeID & t
 
     return false;
 }
+
+std::string Util::GetStringFromDifficulty(const sc2::Difficulty difficulty)
+{
+    switch (difficulty)
+    {
+        case sc2::Difficulty::VeryEasy:
+            return "VeryEasy";
+        case sc2::Difficulty::Easy:
+            return "Easy";
+        case sc2::Difficulty::Medium:
+            return "Medium";
+        case sc2::Difficulty::MediumHard:
+            return "MediumHard";
+        case sc2::Difficulty::Hard:
+            return "Hard";
+        case sc2::Difficulty::VeryHard:
+            return "HardVeryHard";
+        case sc2::Difficulty::HardVeryHard:
+            return "HardVeryHard";
+        case sc2::Difficulty::CheatInsane:
+            return "CheastInsane";
+        case sc2::Difficulty::CheatMoney:
+            return "CheatMoney";
+        case sc2::Difficulty::CheatVision:
+            return "CheatVision";
+        default: 
+            return "Unknown";
+    }
+}
+
+sc2::Difficulty Util::GetDifficultyFromInt(const int difficulty)
+{
+    return static_cast<sc2::Difficulty>(difficulty);
+}
