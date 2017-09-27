@@ -432,11 +432,11 @@ UnitTag GetClosestEnemyUnitTo(const sc2::Unit & ourUnit, const sc2::ObservationI
 
 	for (auto & unit : obs->GetUnits())
 	{
-		double dist = Util::DistSq(unit.pos, ourUnit.pos);
+		double dist = Util::DistSq(unit->pos, ourUnit.pos);
 
 		if (!closestTag || (dist < closestDist))
 		{
-			closestTag = unit;
+			closestTag = unit->tag;
 			closestDist = dist;
 		}
 	}
@@ -448,7 +448,7 @@ UnitTag GetClosestEnemyUnitTo(const sc2::Unit & ourUnit, const sc2::ObservationI
 // this is done by iterating its legal abilities for the build command to make the unit
 bool Util::UnitCanBuildTypeNow(const sc2::Unit & unit, const sc2::UnitTypeID & type, CCBot & m_bot)
 {
-    sc2::AvailableAbilities available_abilities = m_bot.Query()->GetAbilitiesForUnit(unit.tag);
+    sc2::AvailableAbilities available_abilities = m_bot.Query()->GetAbilitiesForUnit(&unit);
     
     // quick check if the unit can't do anything it certainly can't build the thing we want
     if (available_abilities.abilities.empty()) 

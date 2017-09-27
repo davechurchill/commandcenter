@@ -77,7 +77,7 @@ BaseLocation::BaseLocation(CCBot & bot, int baseID, const std::vector<sc2::Unit>
     // if this base location position is near our own resource depot, it's our start location
     for (auto & unit : m_bot.Observation()->GetUnits())
     {
-        if (Util::GetPlayer(unit) == Players::Self && Util::IsTownHall(unit) && containsPosition(unit.pos))
+        if (Util::GetPlayer(*unit) == Players::Self && Util::IsTownHall(*unit) && containsPosition(unit->pos))
         {
             m_isPlayerStartLocation[Players::Self] = true;
             m_isStartLocation = true;

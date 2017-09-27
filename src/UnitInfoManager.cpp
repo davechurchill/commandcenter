@@ -29,10 +29,10 @@ void UnitInfoManager::updateUnitInfo()
 
     for (auto & unit : m_bot.Observation()->GetUnits())
     {
-        if (Util::GetPlayer(unit) == Players::Self || Util::GetPlayer(unit) == Players::Enemy)
+        if (Util::GetPlayer(*unit) == Players::Self || Util::GetPlayer(*unit) == Players::Enemy)
         {
-            updateUnit(unit);
-            m_units[Util::GetPlayer(unit)].push_back(unit);
+            updateUnit(*unit);
+            m_units[Util::GetPlayer(*unit)].push_back(*unit);
         }        
     }
 
@@ -65,10 +65,10 @@ static std::string GetAbilityText(sc2::AbilityID ability_id) {
 void UnitInfoManager::drawSelectedUnitDebugInfo()
 {
     const sc2::Unit * unit = nullptr;
-    for (const sc2::Unit & u : m_bot.Observation()->GetUnits()) 
+    for (const sc2::Unit * u : m_bot.Observation()->GetUnits()) 
     {
-        if (u.is_selected && u.alliance == sc2::Unit::Self) {
-            unit = &u;
+        if (u->is_selected && u->alliance == sc2::Unit::Self) {
+            unit = u;
             break;
         }
     }
@@ -88,7 +88,7 @@ void UnitInfoManager::drawSelectedUnitDebugInfo()
     }
     debug_txt += " (" + std::to_string(unit->unit_type) + ")";
         
-    sc2::AvailableAbilities available_abilities = query->GetAbilitiesForUnit(unit->tag);
+    sc2::AvailableAbilities available_abilities = query->GetAbilitiesForUnit(unit);
     if (available_abilities.abilities.size() < 1) 
     {
         std::cout << "No abilities available for this unit" << std::endl;

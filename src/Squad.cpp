@@ -186,7 +186,7 @@ bool Squad::isUnitNearEnemy(const UnitTag & unitTag) const
 
     for (auto & u : m_bot.Observation()->GetUnits())
     {
-        if ((Util::GetPlayer(u) == Players::Enemy) && (Util::Dist(unit->pos, u.pos) < 20))
+        if ((Util::GetPlayer(*u) == Players::Enemy) && (Util::Dist(unit->pos, u->pos) < 20))
         {
             return true;
         }

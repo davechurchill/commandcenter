@@ -241,12 +241,12 @@ sc2::Point2D BuildingPlacer::getRefineryPosition()
 
     for (auto & unit : m_bot.Observation()->GetUnits())
     {
-        if (!Util::IsGeyser(unit))
+        if (!Util::IsGeyser(*unit))
         {
             continue;
         }
 
-        sc2::Point2D geyserPos(unit.pos);
+        sc2::Point2D geyserPos(unit->pos);
 
         // check to see if it's next to one of our depots
         bool nearDepot = false;
@@ -260,12 +260,12 @@ sc2::Point2D BuildingPlacer::getRefineryPosition()
 
         if (nearDepot)
         {
-            double homeDistance = Util::Dist(unit.pos, homePosition);
+            double homeDistance = Util::Dist(unit->pos, homePosition);
 
             if (homeDistance < minGeyserDistanceFromHome)
             {
                 minGeyserDistanceFromHome = homeDistance;
-                closestGeyser = unit.pos;
+                closestGeyser = unit->pos;
             }
         }
     }
