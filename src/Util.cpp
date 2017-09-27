@@ -189,10 +189,18 @@ float Util::GetAttackRange(const sc2::UnitTypeID & type, CCBot & bot)
     return maxRange;
 }
 
-// TODO: implement
 bool Util::IsDetectorType(const sc2::UnitTypeID & type)
 {
-    return false;
+    switch (type.ToType())
+    {
+        case sc2::UNIT_TYPEID::PROTOSS_OBSERVER        : return true;
+        case sc2::UNIT_TYPEID::TERRAN_BANSHEE          : return true;
+        case sc2::UNIT_TYPEID::ZERG_OVERSEER           : return true;
+        case sc2::UNIT_TYPEID::TERRAN_MISSILETURRET    : return true;
+        case sc2::UNIT_TYPEID::ZERG_SPORECRAWLER       : return true;
+        case sc2::UNIT_TYPEID::PROTOSS_PHOTONCANNON    : return true;
+        default: return false;
+    }
 }
 
 int Util::GetPlayer(const sc2::Unit & unit)
