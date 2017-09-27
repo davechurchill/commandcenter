@@ -25,7 +25,7 @@ void BaseLocationManager::onStart()
     {
         // skip minerals that don't have more than 100 starting minerals
         // these are probably stupid map-blocking minerals to confuse us
-        if (!Util::IsMineral(mineral))
+        if (!Util::IsMineral(*mineral))
         {
             continue;
         }
@@ -33,7 +33,7 @@ void BaseLocationManager::onStart()
         bool foundCluster = false;
         for (auto & cluster : resourceClusters)
         {
-            float dist = Util::Dist(mineral.pos, Util::CalcCenter(cluster));
+            float dist = Util::Dist(mineral->pos, Util::CalcCenter(cluster));
             
             // quick initial air distance check to eliminate most resources
             if (dist < clusterDistance)
@@ -42,7 +42,7 @@ void BaseLocationManager::onStart()
                 float groundDist = dist; //m_bot.Map().getGroundDistance(mineral.pos, Util::CalcCenter(cluster));
                 if (groundDist >= 0 && groundDist < clusterDistance)
                 {
-                    cluster.push_back(mineral);
+                    cluster.push_back(*mineral);
                     foundCluster = true;
                     break;
                 }
@@ -52,14 +52,14 @@ void BaseLocationManager::onStart()
         if (!foundCluster)
         {
             resourceClusters.push_back(std::vector<sc2::Unit>());
-            resourceClusters.back().push_back(mineral);
+            resourceClusters.back().push_back(*mineral);
         }
     }
 
     // add geysers only to existing resource clusters
     for (auto & geyser : m_bot.Observation()->GetUnits(sc2::Unit::Alliance::Neutral))
     {
-        if (!Util::IsGeyser(geyser))
+        if (!Util::IsGeyser(*geyser))
         {
             continue;
         }
@@ -67,11 +67,11 @@ void BaseLocationManager::onStart()
         for (auto & cluster : resourceClusters)
         {
             //int groundDist = m_bot.Map().getGroundDistance(geyser.pos, Util::CalcCenter(cluster));
-            float groundDist = Util::Dist(geyser.pos, Util::CalcCenter(cluster));
+            float groundDist = Util::Dist(geyser->pos, Util::CalcCenter(cluster));
 
             if (groundDist >= 0 && groundDist < clusterDistance)
             {
-                cluster.push_back(geyser);
+                cluster.push_back(*geyser);
                 break;
             }
         }
@@ -149,16 +149,16 @@ void BaseLocationManager::onFrame()
     for (auto & unit : m_bot.Observation()->GetUnits(sc2::Unit::Alliance::Ally))
     {
         // we only care about buildings on the ground
-        if (!m_bot.Data(unit.unit_type).isBuilding || unit.is_flying)
+        if (!m_bot.Data(unit->unit_type).isBuilding || unit->is_flying)
         {
             continue;
         }
 
-        BaseLocation * baseLocation = getBaseLocation(unit.pos);
+        BaseLocation * baseLocation = getBaseLocation(unit->pos);
 
         if (baseLocation != nullptr)
         {
-            baseLocation->setPlayerOccupying(Util::GetPlayer(unit), true);
+            baseLocation->setPlayerOccupying(Util::GetPlayer(*unit), true);
         }
     }
 

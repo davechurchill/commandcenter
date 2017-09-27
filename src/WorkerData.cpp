@@ -21,7 +21,7 @@ void WorkerData::updateAllWorkerData()
     {
         if (Util::IsWorker(unit))
         {
-            updateWorker(unit);
+            updateWorker(unit.tag);
         }
     }
 
@@ -189,13 +189,13 @@ UnitTag WorkerData::getMineralToMine(const UnitTag & unit) const
 
     for (auto & mineral : m_bot.Observation()->GetUnits())
     {
-        if (!Util::IsMineral(mineral)) continue;
+        if (!Util::IsMineral(*mineral)) continue;
 
-        double dist = Util::Dist(mineral.pos, m_bot.GetUnit(unit)->pos);
+        double dist = Util::Dist(mineral->pos, m_bot.GetUnit(unit)->pos);
 
         if (dist < bestDist)
         {
-            bestMineral = mineral.tag;
+            bestMineral = mineral->tag;
             bestDist = dist;
         }
     }

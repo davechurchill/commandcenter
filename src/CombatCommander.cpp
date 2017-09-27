@@ -127,7 +127,7 @@ void CombatCommander::updateScoutDefenseSquad()
     {
         if (myBaseLocation->containsPosition(unit.pos))
         {
-            enemyUnitsInRegion.push_back(unit);
+            enemyUnitsInRegion.push_back(unit.tag);
         }
     }
 

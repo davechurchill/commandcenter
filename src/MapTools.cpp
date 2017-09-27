@@ -50,7 +50,7 @@ void MapTools::onStart()
 
     for (auto & unit : m_bot.Observation()->GetUnits(sc2::Unit::Alliance::Neutral))
     {
-        m_maxZ = std::max(unit.pos.z, m_maxZ);
+        m_maxZ = std::max(unit->pos.z, m_maxZ);
     }
 
     computeConnectivity();

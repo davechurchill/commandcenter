@@ -184,7 +184,10 @@ bool ProductionManager::canMakeNow(UnitTag producerTag, const BuildType & type)
         return false;
     }
 
-    sc2::AvailableAbilities available_abilities = m_bot.Query()->GetAbilitiesForUnit(producerTag);
+    if (producerTag == 0)
+        return false;
+
+    sc2::AvailableAbilities available_abilities = m_bot.Query()->GetAbilitiesForUnit(m_bot.GetUnit(producerTag));
 
     // quick check if the unit can't do anything it certainly can't build the thing we want
     if (available_abilities.abilities.empty())
