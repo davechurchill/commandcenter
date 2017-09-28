@@ -5,7 +5,7 @@
 
 ScoutManager::ScoutManager(CCBot & bot)
     : m_bot             (bot)
-    , m_scoutUnitTag    (0)
+    , m_scoutUnit       (nullptr)
     , m_numScouts       (0)
     , m_scoutUnderAttack(false)
     , m_scoutStatus     ("None")
@@ -24,16 +24,16 @@ void ScoutManager::onFrame()
     drawScoutInformation();
 }
 
-void ScoutManager::setWorkerScout(const UnitTag & tag)
+void ScoutManager::setWorkerScout(const sc2::Unit * tag)
 {
     // if we have a previous worker scout, release it back to the worker manager
-    if (m_scoutUnitTag)
+    if (m_scoutUnit)
     {
-        m_bot.Workers().finishedWithWorker(m_scoutUnitTag);
+        m_bot.Workers().finishedWithWorker(m_scoutUnit);
     }
 
-    m_scoutUnitTag = tag;
-    m_bot.Workers().setScoutWorker(m_scoutUnitTag);
+    m_scoutUnit = tag;
+    m_bot.Workers().setScoutWorker(m_scoutUnit);
 }
 
 void ScoutManager::drawScoutInformation()
@@ -51,8 +51,7 @@ void ScoutManager::drawScoutInformation()
 
 void ScoutManager::moveScouts()
 {
-    if (!m_scoutUnitTag) { return; }
-    const sc2::Unit * workerScout = m_bot.GetUnit(m_scoutUnitTag);
+    auto workerScout = m_scoutUnit;
     if (!workerScout || workerScout->health <= 0) { return; }
 
     float scoutHP = workerScout->health + workerScout->shield;
@@ -93,20 +92,20 @@ void ScoutManager::moveScouts()
                 if (m_bot.Config().ScoutHarassEnemy && closestEnemyWorkerUnit && (Util::Dist(workerScout->pos, closestEnemyWorkerUnit->pos) < 12))
                 {
                     m_scoutStatus = "Harass enemy worker";
-                    Micro::SmartAttackUnit(m_scoutUnitTag, closestEnemyWorkerUnit->tag, m_bot);
+                    Micro::SmartAttackUnit(m_scoutUnit, closestEnemyWorkerUnit, m_bot);
                 }
                 // otherwise keep moving to the enemy base location
                 else
                 {
                     m_scoutStatus = "Moving to enemy base location";
-                    Micro::SmartMove(m_scoutUnitTag, enemyBaseLocation->getPosition(), m_bot);
+                    Micro::SmartMove(m_scoutUnit, enemyBaseLocation->getPosition(), m_bot);
                 }
             }
             // if the worker scout is under attack
             else
             {
                 m_scoutStatus = "Under attack inside, fleeing";
-                Micro::SmartMove(m_scoutUnitTag, getFleePosition(), m_bot);
+                Micro::SmartMove(m_scoutUnit, getFleePosition(), m_bot);
             }
         }
         // if the scout is not in the enemy region
@@ -114,14 +113,14 @@ void ScoutManager::moveScouts()
         {
             m_scoutStatus = "Under attack outside, fleeing";
 
-            Micro::SmartMove(m_scoutUnitTag, getFleePosition(), m_bot);
+            Micro::SmartMove(m_scoutUnit, getFleePosition(), m_bot);
         }
         else
         {
             m_scoutStatus = "Enemy region known, going there";
 
             // move to the enemy region
-            Micro::SmartMove(m_scoutUnitTag, enemyBaseLocation->getPosition(), m_bot);
+            Micro::SmartMove(m_scoutUnit, enemyBaseLocation->getPosition(), m_bot);
         }
 
     }
@@ -137,7 +136,7 @@ void ScoutManager::moveScouts()
             // TODO: this is where we could change the order of the base scouting, since right now it's iterator order
             if (!m_bot.Map().isExplored(startLocation->getPosition()))
             {
-                Micro::SmartMove(m_scoutUnitTag, startLocation->getPosition(), m_bot);
+                Micro::SmartMove(m_scoutUnit, startLocation->getPosition(), m_bot);
                 return;
             }
         }
@@ -148,9 +147,7 @@ void ScoutManager::moveScouts()
 
 const sc2::Unit * ScoutManager::closestEnemyWorkerTo(const sc2::Point2D & pos) const
 {
-    const sc2::Unit * ourScout = m_bot.GetUnit(m_scoutUnitTag);
-
-    if (!ourScout) { return nullptr; }
+    if (!m_scoutUnit) { return nullptr; }
 
     UnitTag enemyWorkerTag = 0;
     float minDist = std::numeric_limits<float>::max();
@@ -160,12 +157,12 @@ const sc2::Unit * ScoutManager::closestEnemyWorkerTo(const sc2::Point2D & pos) c
     {
         if (Util::IsWorker(unit))
         {
-            float dist = Util::Dist(unit.pos, ourScout->pos);
+            float dist = Util::Dist(unit->pos, m_scoutUnit->pos);
 
             if (dist < minDist)
             {
                 minDist = dist;
-                enemyWorkerTag = unit.tag;
+                enemyWorkerTag = unit->tag;
             }
         }
     }
@@ -176,7 +173,7 @@ bool ScoutManager::enemyWorkerInRadiusOf(const sc2::Point2D & pos) const
 {
     for (auto & unit : m_bot.UnitInfo().getUnits(Players::Enemy))
     {
-        if (Util::IsWorker(unit) && Util::Dist(unit.pos, pos) < 10)
+        if (Util::IsWorker(unit) && Util::Dist(unit->pos, pos) < 10)
         {
             return true;
         }

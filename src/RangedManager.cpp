@@ -8,33 +8,30 @@ RangedManager::RangedManager(CCBot & bot)
 
 }
 
-void RangedManager::executeMicro(const std::vector<UnitTag> & targets)
+void RangedManager::executeMicro(const std::vector<const sc2::Unit *> & targets)
 {
     assignTargets(targets);
 }
 
-void RangedManager::assignTargets(const std::vector<UnitTag> & targets)
+void RangedManager::assignTargets(const std::vector<const sc2::Unit *> & targets)
 {
-    const std::vector<UnitTag> & rangedUnits = getUnits();
+    const std::vector<const sc2::Unit *> & rangedUnits = getUnits();
 
     // figure out targets
-    std::vector<UnitTag> rangedUnitTargets;
-    for (auto & targetTag : targets)
+    std::vector<const sc2::Unit *> rangedUnitTargets;
+    for (auto target : targets)
     {
-        auto target = m_bot.GetUnit(targetTag);
-
         if (!target) { continue; }
         if (target->unit_type == sc2::UNIT_TYPEID::ZERG_EGG) { continue; }
         if (target->unit_type == sc2::UNIT_TYPEID::ZERG_LARVA) { continue; }
 
-        rangedUnitTargets.push_back(targetTag);
+        rangedUnitTargets.push_back(target);
     }
 
     // for each meleeUnit
-    for (auto & rangedUnitTag : rangedUnits)
+    for (auto rangedUnit : rangedUnits)
     {
-        auto meleeUnit = m_bot.GetUnit(rangedUnitTag);
-        BOT_ASSERT(meleeUnit, "melee unit is null");
+        BOT_ASSERT(rangedUnit, "ranged unit is null");
 
         // if the order is to attack or defend
         if (order.getType() == SquadOrderTypes::Attack || order.getType() == SquadOrderTypes::Defend)
@@ -42,26 +39,26 @@ void RangedManager::assignTargets(const std::vector<UnitTag> & targets)
             if (!rangedUnitTargets.empty())
             {
                 // find the best target for this meleeUnit
-                UnitTag targetTag = getTarget(rangedUnitTag, rangedUnitTargets);
+                const sc2::Unit * target = getTarget(rangedUnit, rangedUnitTargets);
 
                 // attack it
                 if (m_bot.Config().KiteWithRangedUnits)
                 {
-                    Micro::SmartKiteTarget(rangedUnitTag, targetTag, m_bot);
+                    Micro::SmartKiteTarget(rangedUnit, target, m_bot);
                 }
                 else
                 {
-                    Micro::SmartAttackUnit(rangedUnitTag, targetTag, m_bot);
+                    Micro::SmartAttackUnit(rangedUnit, target, m_bot);
                 }
             }
             // if there are no targets
             else
             {
                 // if we're not near the order position
-                if (Util::Dist(meleeUnit->pos, order.getPosition()) > 4)
+                if (Util::Dist(rangedUnit->pos, order.getPosition()) > 4)
                 {
                     // move to it
-                    Micro::SmartMove(rangedUnitTag, order.getPosition(), m_bot);
+                    Micro::SmartMove(rangedUnit, order.getPosition(), m_bot);
                 }
             }
         }
@@ -75,30 +72,28 @@ void RangedManager::assignTargets(const std::vector<UnitTag> & targets)
 
 // get a target for the ranged unit to attack
 // TODO: this is the melee targeting code, replace it with something better for ranged units
-UnitTag RangedManager::getTarget(const UnitTag & meleeUnitTag, const std::vector<UnitTag> & targets)
+const sc2::Unit * RangedManager::getTarget(const sc2::Unit * rangedUnit, const std::vector<const sc2::Unit *> & targets)
 {
-    auto meleeUnit = m_bot.GetUnit(meleeUnitTag);
-    BOT_ASSERT(meleeUnit, "null melee unit in getTarget");
+    BOT_ASSERT(rangedUnit, "null melee unit in getTarget");
 
     int highPriority = 0;
     double closestDist = std::numeric_limits<double>::max();
-    UnitTag closestTarget = 0;
+    const sc2::Unit * closestTarget = nullptr;
 
     // for each target possiblity
-    for (auto & targetTag : targets)
+    for (auto targetUnit : targets)
     {
-        auto targetUnit = m_bot.GetUnit(targetTag);
         BOT_ASSERT(targetUnit, "null target unit in getTarget");
 
-        int priority = getAttackPriority(meleeUnitTag, targetTag);
-        float distance = Util::Dist(meleeUnit->pos, targetUnit->pos);
+        int priority = getAttackPriority(rangedUnit, targetUnit);
+        float distance = Util::Dist(rangedUnit->pos, targetUnit->pos);
 
         // if it's a higher priority, or it's closer, set it
         if (!closestTarget || (priority > highPriority) || (priority == highPriority && distance < closestDist))
         {
             closestDist = distance;
             highPriority = priority;
-            closestTarget = targetTag;
+            closestTarget = targetUnit;
         }
     }
 
@@ -106,17 +101,16 @@ UnitTag RangedManager::getTarget(const UnitTag & meleeUnitTag, const std::vector
 }
 
 // get the attack priority of a type in relation to a zergling
-int RangedManager::getAttackPriority(const UnitTag & attacker, const UnitTag & unitTag)
+int RangedManager::getAttackPriority(const sc2::Unit * attacker, const sc2::Unit * unit)
 {
-    auto unit = m_bot.GetUnit(unitTag);
     BOT_ASSERT(unit, "null unit in getAttackPriority");
 
-    if (Util::IsCombatUnit(*unit, m_bot))
+    if (Util::IsCombatUnit(unit, m_bot))
     {
         return 10;
     }
 
-    if (Util::IsWorker(*unit))
+    if (Util::IsWorker(unit))
     {
         return 9;
     }

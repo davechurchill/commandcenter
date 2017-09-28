@@ -21,14 +21,13 @@ void SquadData::clearSquadData()
     for (auto & kv : m_squads)
     {
         Squad & squad = kv.second;
-        for (auto & unitTag : squad.getUnits())
+        for (auto & unit : squad.getUnits())
         {
-            auto unit = m_bot.GetUnit(unitTag);
             BOT_ASSERT(unit, "null unit");
 
-            if (Util::IsWorker(*unit))
+            if (Util::IsWorker(unit))
             {
-                m_bot.Workers().finishedWithWorker(unitTag);
+                m_bot.Workers().finishedWithWorker(unit);
             }
         }
     }
@@ -46,14 +45,13 @@ void SquadData::removeSquad(const std::string & squadName)
         return;
     }
 
-    for (auto unitTag : squadPtr->second.getUnits())
+    for (auto unit : squadPtr->second.getUnits())
     {
-        auto unit = m_bot.GetUnit(unitTag);
         BOT_ASSERT(unit, "null unit");
 
-        if (Util::IsWorker(*unit))
+        if (Util::IsWorker(unit))
         {
-            m_bot.Workers().finishedWithWorker(unitTag);
+            m_bot.Workers().finishedWithWorker(unit);
         }
     }
 
@@ -106,9 +104,8 @@ void SquadData::drawSquadInformation()
         m_bot.Map().drawSphere(order.getPosition(), 5, sc2::Colors::Red);
         m_bot.Map().drawText(order.getPosition(), squad.getName(), sc2::Colors::Red);
 
-        for (auto unitTag : units)
+        for (auto unit : units)
         {
-            auto unit = m_bot.GetUnit(unitTag);
             BOT_ASSERT(unit, "null unit");
 
             m_bot.Map().drawText(unit->pos, squad.getName(), sc2::Colors::Green);
@@ -120,28 +117,28 @@ void SquadData::drawSquadInformation()
 
 void SquadData::verifySquadUniqueMembership()
 {
-    std::vector<UnitTag> assigned;
+    std::vector<const sc2::Unit *> assigned;
 
     for (const auto & kv : m_squads)
     {
-        for (auto & unitTag : kv.second.getUnits())
+        for (auto & unit : kv.second.getUnits())
         {
-            if (std::find(assigned.begin(), assigned.end(), unitTag) != assigned.end())
+            if (std::find(assigned.begin(), assigned.end(), unit) != assigned.end())
             {
-                std::cout << "Warning: Unit is in at least two squads: " << unitTag << "\n";
+                std::cout << "Warning: Unit is in at least two squads: " << unit->tag << "\n";
             }
 
-            assigned.push_back(unitTag);
+            assigned.push_back(unit);
         }
     }
 }
 
-bool SquadData::unitIsInSquad(const UnitTag & unit) const
+bool SquadData::unitIsInSquad(const sc2::Unit * unit) const
 {
     return getUnitSquad(unit) != nullptr;
 }
 
-const Squad * SquadData::getUnitSquad(const UnitTag & unit) const
+const Squad * SquadData::getUnitSquad(const sc2::Unit * unit) const
 {
     for (const auto & kv : m_squads)
     {
@@ -154,7 +151,7 @@ const Squad * SquadData::getUnitSquad(const UnitTag & unit) const
     return nullptr;
 }
 
-Squad * SquadData::getUnitSquad(const UnitTag & unit)
+Squad * SquadData::getUnitSquad(const sc2::Unit * unit)
 {
     for (auto & kv : m_squads)
     {
@@ -167,7 +164,7 @@ Squad * SquadData::getUnitSquad(const UnitTag & unit)
     return nullptr;
 }
 
-void SquadData::assignUnitToSquad(const UnitTag & unit, Squad & squad)
+void SquadData::assignUnitToSquad(const sc2::Unit * unit, Squad & squad)
 {
     BOT_ASSERT(canAssignUnitToSquad(unit, squad), "We shouldn't be re-assigning this unit!");
 
@@ -181,7 +178,7 @@ void SquadData::assignUnitToSquad(const UnitTag & unit, Squad & squad)
     squad.addUnit(unit);
 }
 
-bool SquadData::canAssignUnitToSquad(const UnitTag & unit, const Squad & squad) const
+bool SquadData::canAssignUnitToSquad(const sc2::Unit * unit, const Squad & squad) const
 {
     const Squad * unitSquad = getUnitSquad(unit);
 

@@ -7,15 +7,15 @@ class CCBot;
 
 namespace Micro
 {   
-    void SmartStop      (const UnitTag & attacker,  CCBot & bot);
-    void SmartAttackUnit(const UnitTag & attacker,  const UnitTag & target, CCBot & bot);
-    void SmartAttackMove(const UnitTag & attacker,  const sc2::Point2D & targetPosition, CCBot & bot);
-    void SmartMove      (const UnitTag & attacker,  const sc2::Point2D & targetPosition, CCBot & bot);
-    void SmartRightClick(const UnitTag & unit,      const UnitTag & target, CCBot & bot);
-    void SmartRepair    (const UnitTag & unit,      const UnitTag & target, CCBot & bot);
-    void SmartKiteTarget(const UnitTag & rangedUnit,const UnitTag & target, CCBot & bot);
-    void SmartBuild     (const UnitTag & builder,   const sc2::UnitTypeID & buildingType, sc2::Point2D pos, CCBot & bot);
-    void SmartBuildTag  (const UnitTag & builder,   const sc2::UnitTypeID & buildingType, UnitTag targetTag, CCBot & bot);
-    void SmartTrain     (const UnitTag & builder,   const sc2::UnitTypeID & buildingType, CCBot & bot);
-    void SmartAbility   (const UnitTag & builder,   const sc2::AbilityID & abilityID, CCBot & bot);
+    void SmartStop          (const sc2::Unit * attacker,  CCBot & bot);
+    void SmartAttackUnit    (const sc2::Unit * attacker,  const sc2::Unit * target, CCBot & bot);
+    void SmartAttackMove    (const sc2::Unit * attacker,  const sc2::Point2D & targetPosition, CCBot & bot);
+    void SmartMove          (const sc2::Unit * attacker,  const sc2::Point2D & targetPosition, CCBot & bot);
+    void SmartRightClick    (const sc2::Unit * unit,      const sc2::Unit * target, CCBot & bot);
+    void SmartRepair        (const sc2::Unit * unit,      const sc2::Unit * target, CCBot & bot);
+    void SmartKiteTarget    (const sc2::Unit * rangedUnit,const sc2::Unit * target, CCBot & bot);
+    void SmartBuild         (const sc2::Unit * builder,   const sc2::UnitTypeID & buildingType, sc2::Point2D pos, CCBot & bot);
+    void SmartBuildTarget   (const sc2::Unit * builder,   const sc2::UnitTypeID & buildingType, const sc2::Unit * target, CCBot & bot);
+    void SmartTrain         (const sc2::Unit * builder,   const sc2::UnitTypeID & buildingType, CCBot & bot);
+    void SmartAbility       (const sc2::Unit * builder,   const sc2::AbilityID & abilityID, CCBot & bot);
 };

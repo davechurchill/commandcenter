@@ -60,7 +60,7 @@ void GameCommander::handleUnitAssignments()
     setCombatUnits();
 }
 
-bool GameCommander::isAssigned(const UnitTag & unit) const
+bool GameCommander::isAssigned(const sc2::Unit * unit) const
 {
     return     (std::find(m_combatUnits.begin(), m_combatUnits.end(), unit) != m_combatUnits.end())
         || (std::find(m_scoutUnits.begin(), m_scoutUnits.end(), unit) != m_scoutUnits.end());
@@ -85,14 +85,13 @@ void GameCommander::setScoutUnits()
         if (shouldSendInitialScout())
         {
             // grab the closest worker to the supply provider to send to scout
-            UnitTag workerScoutTag = m_bot.Workers().getClosestMineralWorkerTo(m_bot.GetStartLocation());
-            const sc2::Unit * workerScout = m_bot.GetUnit(workerScoutTag);
+            const sc2::Unit * workerScout = m_bot.Workers().getClosestMineralWorkerTo(m_bot.GetStartLocation());
 
             // if we find a worker (which we should) add it to the scout units
             if (workerScout)
             {
-                m_scoutManager.setWorkerScout(workerScoutTag);
-                assignUnit(workerScoutTag, m_scoutUnits);
+                m_scoutManager.setWorkerScout(workerScout);
+                assignUnit(workerScout, m_scoutUnits);
                 m_initialScoutSet = true;
             }
             else
@@ -119,31 +118,29 @@ bool GameCommander::shouldSendInitialScout()
 // sets combat units to be passed to CombatCommander
 void GameCommander::setCombatUnits()
 {
-    for (auto & unitTag : m_validUnits)
+    for (auto & unit : m_validUnits)
     {
-        const sc2::Unit * unit = m_bot.GetUnit(unitTag);
-
         BOT_ASSERT(unit, "Have a null unit in our valid units\n");
 
-        if (!isAssigned(unitTag) && Util::IsCombatUnitType(unit->unit_type, m_bot))
+        if (!isAssigned(unit) && Util::IsCombatUnitType(unit->unit_type, m_bot))
         {
-            assignUnit(unitTag, m_combatUnits);
+            assignUnit(unit, m_combatUnits);
         }
     }
 }
 
-void GameCommander::onUnitCreate(const sc2::Unit & unit)
+void GameCommander::onUnitCreate(const sc2::Unit * unit)
 {
 
 }
 
-void GameCommander::onUnitDestroy(const sc2::Unit & unit)
+void GameCommander::onUnitDestroy(const sc2::Unit * unit)
 {
     //_productionManager.onUnitDestroy(unit);
 }
 
 
-void GameCommander::assignUnit(const UnitTag & unit, std::vector<UnitTag> & units)
+void GameCommander::assignUnit(const sc2::Unit * unit, std::vector<const sc2::Unit *> & units)
 {
     if (std::find(m_scoutUnits.begin(), m_scoutUnits.end(), unit) != m_scoutUnits.end())
     {

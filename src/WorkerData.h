@@ -12,32 +12,32 @@ class WorkerData
 {
     CCBot & m_bot;
 
-    std::set<UnitTag>           m_workers;
-    std::set<UnitTag>           m_depots;
-    std::map<int, int>          m_workerJobCount;
-    std::map<UnitTag, int>      m_workerJobMap;
-    std::map<UnitTag, int>      m_refineryWorkerCount;
-    std::map<UnitTag, int>      m_depotWorkerCount;
-    std::map<UnitTag, UnitTag>  m_workerRefineryMap;
-    std::map<UnitTag, UnitTag>  m_workerDepotMap;
+    std::set<const sc2::Unit *>         m_workers;
+    std::set<const sc2::Unit *>         m_depots;
+    std::map<int, int>                  m_workerJobCount;
+    std::map<const sc2::Unit *, int>    m_workerJobMap;
+    std::map<const sc2::Unit *, int>    m_refineryWorkerCount;
+    std::map<const sc2::Unit *, int>    m_depotWorkerCount;
+    std::map<const sc2::Unit *, const sc2::Unit *>  m_workerRefineryMap;
+    std::map<const sc2::Unit *, const sc2::Unit *>  m_workerDepotMap;
 
-    void clearPreviousJob(const UnitTag & unit);
+    void clearPreviousJob(const sc2::Unit * unit);
 
 public:
 
     WorkerData(CCBot & bot);
 
-    void    workerDestroyed(const UnitTag & unit);
+    void    workerDestroyed(const sc2::Unit * unit);
     void    updateAllWorkerData();
-    void    updateWorker(const UnitTag & unit);
-    void    setWorkerJob(const UnitTag & unit, int job, UnitTag jobUnitTag = 0);
+    void    updateWorker(const sc2::Unit * unit);
+    void    setWorkerJob(const sc2::Unit * unit, int job, const sc2::Unit * jobUnit = 0);
     void    drawDepotDebugInfo();
     size_t  getNumWorkers() const;
     int     getWorkerJobCount(int job) const;
-    int     getNumAssignedWorkers(const UnitTag & unit);
-    int     getWorkerJob(const UnitTag & unit) const;
-    UnitTag getMineralToMine(const UnitTag & unit) const;
-    UnitTag getWorkerDepot(const UnitTag & unit) const;
-    const char * getJobCode(const UnitTag & unit);
-    const std::set<UnitTag> & getWorkers() const;
+    int     getNumAssignedWorkers(const sc2::Unit * unit);
+    int     getWorkerJob(const sc2::Unit * unit) const;
+    const sc2::Unit * getMineralToMine(const sc2::Unit * unit) const;
+    const sc2::Unit * getWorkerDepot(const sc2::Unit * unit) const;
+    const char * getJobCode(const sc2::Unit * unit);
+    const std::set<const sc2::Unit *> & getWorkers() const;
 };

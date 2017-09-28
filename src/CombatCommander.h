@@ -11,7 +11,7 @@ class CombatCommander
     CCBot &         m_bot;
 
     SquadData       m_squadData;
-    std::vector<UnitTag>  m_combatUnits;
+    std::vector<const sc2::Unit *>  m_combatUnits;
     bool            m_initialized;
     bool            m_attackStarted;
 
@@ -21,8 +21,8 @@ class CombatCommander
     void            updateIdleSquad();
     bool            isSquadUpdateFrame();
 
-    UnitTag         findClosestDefender(const Squad & defenseSquad, const sc2::Point2D & pos);
-    UnitTag         findClosestWorkerTo(std::vector<UnitTag> & unitsToAssign, const sc2::Point2D & target);
+    const sc2::Unit * findClosestDefender(const Squad & defenseSquad, const sc2::Point2D & pos);
+    const sc2::Unit * findClosestWorkerTo(std::vector<const sc2::Unit *> & unitsToAssign, const sc2::Point2D & target);
 
     sc2::Point2D    getMainAttackLocation();
 
@@ -35,7 +35,7 @@ public:
 
 
     void onStart();
-    void onFrame(const std::vector<UnitTag> & combatUnits);
+    void onFrame(const std::vector<const sc2::Unit *> & combatUnits);
 
     void drawSquadInformation();
 };

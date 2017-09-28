@@ -20,8 +20,8 @@ void BaseLocationManager::onStart()
     const int clusterDistance = 14;
     
     // stores each cluster of resources based on some ground distance
-    std::vector<std::vector<sc2::Unit>> resourceClusters;
-    for (auto & mineral : m_bot.Observation()->GetUnits(sc2::Unit::Alliance::Neutral))
+    std::vector<std::vector<const sc2::Unit *>> resourceClusters;
+    for (auto mineral : m_bot.Observation()->GetUnits(sc2::Unit::Alliance::Neutral))
     {
         // skip minerals that don't have more than 100 starting minerals
         // these are probably stupid map-blocking minerals to confuse us
@@ -33,7 +33,7 @@ void BaseLocationManager::onStart()
         bool foundCluster = false;
         for (auto & cluster : resourceClusters)
         {
-            float dist = Util::Dist(mineral.pos, Util::CalcCenter(cluster));
+            float dist = Util::Dist(mineral->pos, Util::CalcCenter(cluster));
             
             // quick initial air distance check to eliminate most resources
             if (dist < clusterDistance)
@@ -51,7 +51,7 @@ void BaseLocationManager::onStart()
 
         if (!foundCluster)
         {
-            resourceClusters.push_back(std::vector<sc2::Unit>());
+            resourceClusters.push_back(std::vector<const sc2::Unit *>());
             resourceClusters.back().push_back(mineral);
         }
     }
@@ -67,7 +67,7 @@ void BaseLocationManager::onStart()
         for (auto & cluster : resourceClusters)
         {
             //int groundDist = m_bot.Map().getGroundDistance(geyser.pos, Util::CalcCenter(cluster));
-            float groundDist = Util::Dist(geyser.pos, Util::CalcCenter(cluster));
+            float groundDist = Util::Dist(geyser->pos, Util::CalcCenter(cluster));
 
             if (groundDist >= 0 && groundDist < clusterDistance)
             {
@@ -149,12 +149,12 @@ void BaseLocationManager::onFrame()
     for (auto & unit : m_bot.Observation()->GetUnits(sc2::Unit::Alliance::Ally))
     {
         // we only care about buildings on the ground
-        if (!m_bot.Data(unit.unit_type).isBuilding || unit.is_flying)
+        if (!m_bot.Data(unit->unit_type).isBuilding || unit->is_flying)
         {
             continue;
         }
 
-        BaseLocation * baseLocation = getBaseLocation(unit.pos);
+        BaseLocation * baseLocation = getBaseLocation(unit->pos);
 
         if (baseLocation != nullptr)
         {

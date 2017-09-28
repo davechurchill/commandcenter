@@ -15,8 +15,8 @@ public:
     sc2::Point2D    finalPosition;
     sc2::Point2D    position;
     sc2::UnitTypeID type;
-    UnitTag         buildingUnitTag;
-    UnitTag         builderUnitTag;
+    const sc2::Unit * buildingUnit;
+    const sc2::Unit * builderUnit;
     size_t          status;
     int             lastOrderFrame;
     bool            buildCommandGiven;

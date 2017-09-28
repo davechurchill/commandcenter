@@ -41,12 +41,12 @@ void UnitInfoManager::updateUnitInfo()
     m_unitData[Players::Enemy].removeBadUnits();
 }
 
-const std::map<int,UnitInfo> & UnitInfoManager::getUnitInfoMap(int player) const
+const std::map<const sc2::Unit *, UnitInfo> & UnitInfoManager::getUnitInfoMap(int player) const
 {
     return getUnitData(player).getUnitInfoMap();
 }
 
-const std::vector<sc2::Unit> & UnitInfoManager::getUnits(int player) const
+const std::vector<const sc2::Unit *> & UnitInfoManager::getUnits(int player) const
 {
     BOT_ASSERT(m_units.find(player) != m_units.end(), "Couldn't find player units: %d", player);
 
@@ -65,10 +65,10 @@ static std::string GetAbilityText(sc2::AbilityID ability_id) {
 void UnitInfoManager::drawSelectedUnitDebugInfo()
 {
     const sc2::Unit * unit = nullptr;
-    for (const sc2::Unit & u : m_bot.Observation()->GetUnits()) 
+    for (auto u : m_bot.Observation()->GetUnits()) 
     {
-        if (u.is_selected && u.alliance == sc2::Unit::Self) {
-            unit = &u;
+        if (u->is_selected && u->alliance == sc2::Unit::Self) {
+            unit = u;
             break;
         }
     }
@@ -88,7 +88,7 @@ void UnitInfoManager::drawSelectedUnitDebugInfo()
     }
     debug_txt += " (" + std::to_string(unit->unit_type) + ")";
         
-    sc2::AvailableAbilities available_abilities = query->GetAbilitiesForUnit(unit->tag);
+    sc2::AvailableAbilities available_abilities = query->GetAbilitiesForUnit(unit);
     if (available_abilities.abilities.size() < 1) 
     {
         std::cout << "No abilities available for this unit" << std::endl;
@@ -185,7 +185,7 @@ size_t UnitInfoManager::getUnitTypeCount(int player, sc2::UnitTypeID type, bool 
 
     for (auto & unit : getUnits(player))
     {
-        if ((!type || type == unit.unit_type) && (!completed || unit.build_progress == 1.0f))
+        if ((!type || type == unit->unit_type) && (!completed || unit->build_progress == 1.0f))
         {
             count++;
         }
@@ -225,7 +225,7 @@ void UnitInfoManager::drawUnitInformation(float x,float y) const
 
 }
 
-void UnitInfoManager::updateUnit(const sc2::Unit & unit)
+void UnitInfoManager::updateUnit(const sc2::Unit * unit)
 {
     if (!(Util::GetPlayer(unit) == Players::Self || Util::GetPlayer(unit) == Players::Enemy))
     {
@@ -236,8 +236,10 @@ void UnitInfoManager::updateUnit(const sc2::Unit & unit)
 }
 
 // is the unit valid?
-bool UnitInfoManager::isValidUnit(const sc2::Unit & unit)
+bool UnitInfoManager::isValidUnit(const sc2::Unit * unit)
 {
+    if (!unit) { return false; }
+
     // we only care about our units and enemy units
     if (!(Util::GetPlayer(unit) == Players::Self || Util::GetPlayer(unit) == Players::Enemy))
     {
@@ -245,13 +247,13 @@ bool UnitInfoManager::isValidUnit(const sc2::Unit & unit)
     }
 
     // if it's a weird unit, don't bother
-    if (unit.unit_type == sc2::UNIT_TYPEID::ZERG_EGG || unit.unit_type == sc2::UNIT_TYPEID::ZERG_LARVA)
+    if (unit->unit_type == sc2::UNIT_TYPEID::ZERG_EGG || unit->unit_type == sc2::UNIT_TYPEID::ZERG_LARVA)
     {
         return false;
     }
 
     // if the position isn't valid throw it out
-    if (!m_bot.Map().isValid(unit.pos))
+    if (!m_bot.Map().isValid(unit->pos))
     {
         return false;
     }
@@ -260,7 +262,7 @@ bool UnitInfoManager::isValidUnit(const sc2::Unit & unit)
     return true;
 }
 
-void UnitInfoManager::getNearbyForce(std::vector<UnitInfo> & unitInfo, sc2::Point2D p,int player, float radius) const
+void UnitInfoManager::getNearbyForce(std::vector<UnitInfo> & unitInfo, sc2::Point2D p, int player, float radius) const
 {
     bool hasBunker = false;
     // for each unit we know about for that player

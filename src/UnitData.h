@@ -11,7 +11,7 @@ struct UnitInfo
     float           lastHealth;
     float           lastShields;
     int             player;
-    sc2::Unit       unit;
+    const sc2::Unit * unit;
     sc2::Point3D    lastPosition;
     sc2::UnitTypeID type;
     float           progress;
@@ -27,9 +27,9 @@ struct UnitInfo
 
     }
 
-    bool operator == (sc2::Unit & unit) const
+    bool operator == (sc2::Unit * unit) const
     {
-        return tag == unit.tag;
+        return tag == unit->tag;
     }
 
     bool operator == (const UnitInfo & rhs) const
@@ -47,7 +47,7 @@ typedef std::vector<UnitInfo> UnitInfoVector;
 
 class UnitData
 {
-    std::map<int, UnitInfo> m_unitMap;
+    std::map<const sc2::Unit *, UnitInfo> m_unitMap;
     std::vector<int>        m_numDeadUnits;
     std::vector<int>        m_numUnits;
     int                     m_mineralsLost;
@@ -59,13 +59,13 @@ public:
 
     UnitData();
 
-    void	updateUnit(const sc2::Unit & unit);
-    void	killUnit(const sc2::Unit & unit);
+    void	updateUnit(const sc2::Unit * unit);
+    void	killUnit(const sc2::Unit * unit);
     void	removeBadUnits();
 
     int		getGasLost()                                const;
     int		getMineralsLost()                           const;
     int		getNumUnits(sc2::UnitTypeID t)              const;
     int		getNumDeadUnits(sc2::UnitTypeID t)          const;
-    const	std::map<int, UnitInfo> & getUnitInfoMap()  const;
+    const	std::map<const sc2::Unit *, UnitInfo> & getUnitInfoMap()  const;
 };

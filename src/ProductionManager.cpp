@@ -42,7 +42,7 @@ void ProductionManager::onFrame()
 }
 
 // on unit destroy
-void ProductionManager::onUnitDestroy(const sc2::Unit & unit)
+void ProductionManager::onUnitDestroy(const sc2::Unit * unit)
 {
     // TODO: might have to re-do build order if a vital unit died
 }
@@ -62,7 +62,7 @@ void ProductionManager::manageBuildOrderQueue()
     while (!m_queue.isEmpty())
     {
         // this is the unit which can produce the currentItem
-        UnitTag producer = getProducer(currentItem.type);
+        const sc2::Unit * producer = getProducer(currentItem.type);
 
         // check to see if we can make it right now
         bool canMake = canMakeNow(producer, currentItem.type);
@@ -96,33 +96,33 @@ void ProductionManager::manageBuildOrderQueue()
     }
 }
 
-UnitTag ProductionManager::getProducer(const BuildType & type, sc2::Point2D closestTo)
+const sc2::Unit * ProductionManager::getProducer(const BuildType & type, sc2::Point2D closestTo)
 {
     // get all the types of units that cna build this type
     auto & producerTypes = m_bot.Data(type).whatBuilds;
 
     // make a set of all candidate producers
-    std::vector<UnitTag> candidateProducers;
-    for (auto & unit : m_bot.UnitInfo().getUnits(Players::Self))
+    std::vector<const sc2::Unit *> candidateProducers;
+    for (auto unit : m_bot.UnitInfo().getUnits(Players::Self))
     {
         // reasons a unit can not train the desired type
-        if (std::find(producerTypes.begin(), producerTypes.end(), unit.unit_type) == producerTypes.end()) { continue; }
-        if (unit.build_progress < 1.0f) { continue; }
-        if (m_bot.Data(unit.unit_type).isBuilding && unit.orders.size() > 0) { continue; }
-        if (unit.is_flying) { continue; }
+        if (std::find(producerTypes.begin(), producerTypes.end(), unit->unit_type) == producerTypes.end()) { continue; }
+        if (unit->build_progress < 1.0f) { continue; }
+        if (m_bot.Data(unit->unit_type).isBuilding && unit->orders.size() > 0) { continue; }
+        if (unit->is_flying) { continue; }
 
         // TODO: if unit is not powered continue
         // TODO: if the type is an addon, some special cases
         // TODO: if the type requires an addon and the producer doesn't have one
 
         // if we haven't cut it, add it to the set of candidates
-        candidateProducers.push_back(unit.tag);
+        candidateProducers.push_back(unit);
     }
 
     return getClosestUnitToPosition(candidateProducers, closestTo);
 }
 
-UnitTag ProductionManager::getClosestUnitToPosition(const std::vector<UnitTag> & units, sc2::Point2D closestTo)
+const sc2::Unit * ProductionManager::getClosestUnitToPosition(const std::vector<const sc2::Unit *> & units, sc2::Point2D closestTo)
 {
     if (units.size() == 0)
     {
@@ -135,12 +135,12 @@ UnitTag ProductionManager::getClosestUnitToPosition(const std::vector<UnitTag> &
         return units[0];
     }
 
-    UnitTag closestUnit = 0;
+    const sc2::Unit * closestUnit = nullptr;
     double minDist = std::numeric_limits<double>::max();
 
     for (auto & unit : units)
     {
-        double distance = Util::Dist(m_bot.GetUnit(unit)->pos, closestTo);
+        double distance = Util::Dist(unit->pos, closestTo);
         if (!closestUnit || distance < minDist)
         {
             closestUnit = unit;
@@ -152,7 +152,7 @@ UnitTag ProductionManager::getClosestUnitToPosition(const std::vector<UnitTag> &
 }
 
 // this function will check to see if all preconditions are met and then create a unit
-void ProductionManager::create(UnitTag producer, BuildOrderItem & item)
+void ProductionManager::create(const sc2::Unit * producer, BuildOrderItem & item)
 {
     if (!producer)
     {
@@ -177,7 +177,7 @@ void ProductionManager::create(UnitTag producer, BuildOrderItem & item)
     }
 }
 
-bool ProductionManager::canMakeNow(UnitTag producerTag, const BuildType & type)
+bool ProductionManager::canMakeNow(const sc2::Unit * producerTag, const BuildType & type)
 {
     if (!meetsReservedResources(type))
     {
@@ -242,7 +242,7 @@ void ProductionManager::drawProductionInformation()
 
     for (auto & unit : m_bot.UnitInfo().getUnits(Players::Self))
     {
-        if (unit.build_progress < 1.0f)
+        if (unit->build_progress < 1.0f)
         {
             //ss << sc2::UnitTypeToName(unit.unit_type) << " " << unit.build_progress << "\n";
         }

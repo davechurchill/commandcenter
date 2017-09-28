@@ -10,25 +10,25 @@ UnitData::UnitData()
     m_numUnits		    = std::vector<int>(maxTypeID + 1, 0);
 }
 
-void UnitData::updateUnit(const sc2::Unit & unit)
+void UnitData::updateUnit(const sc2::Unit * unit)
 {
     bool firstSeen = false;
-    const auto & it = m_unitMap.find((int)unit.tag);
+    const auto & it = m_unitMap.find(unit);
     if (it == m_unitMap.end())
     {
         firstSeen = true;
-        m_unitMap[(int)unit.tag] = UnitInfo();
+        m_unitMap[unit] = UnitInfo();
     }
 
-    UnitInfo & ui   = m_unitMap[(int)unit.tag];
+    UnitInfo & ui   = m_unitMap[unit];
     ui.unit         = unit;
     ui.player       = Util::GetPlayer(unit);
-    ui.lastPosition = unit.pos;
-    ui.lastHealth   = unit.health;
-    ui.lastShields  = unit.shield;
-    ui.tag          = (int)unit.tag;
-    ui.type         = unit.unit_type;
-    ui.progress     = unit.build_progress;
+    ui.lastPosition = unit->pos;
+    ui.lastHealth   = unit->health;
+    ui.lastShields  = unit->shield;
+    ui.tag          = unit->tag;
+    ui.type         = unit->unit_type;
+    ui.progress     = unit->build_progress;
 
     if (firstSeen)
     {
@@ -36,14 +36,14 @@ void UnitData::updateUnit(const sc2::Unit & unit)
     }
 }
 
-void UnitData::killUnit(const sc2::Unit & unit)
+void UnitData::killUnit(const sc2::Unit * unit)
 {
     //_mineralsLost += unit->getType().mineralPrice();
     //_gasLost += unit->getType().gasPrice();
-    m_numUnits[unit.unit_type]--;
-    m_numDeadUnits[unit.unit_type]++;
+    m_numUnits[unit->unit_type]--;
+    m_numDeadUnits[unit->unit_type]++;
 
-    m_unitMap.erase((int)unit.tag);
+    m_unitMap.erase(unit);
 }
 
 void UnitData::removeBadUnits()
@@ -87,7 +87,7 @@ int UnitData::getNumDeadUnits(sc2::UnitTypeID t) const
     return m_numDeadUnits[t];
 }
 
-const std::map<int, UnitInfo> & UnitData::getUnitInfoMap() const
+const std::map<const sc2::Unit *, UnitInfo> & UnitData::getUnitInfoMap() const
 {
     return m_unitMap;
 }
