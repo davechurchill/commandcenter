@@ -9,6 +9,7 @@
     "Game Info" :
     {
         "BotRace"                   : "Random",
+        "EnemyDifficulty"           : 2,
         "EnemyRace"                 : "Random",
         "MapFile"                   : "InterloperLE.SC2Map",
         "StepSize"                  : 1

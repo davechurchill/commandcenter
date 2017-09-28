@@ -42,6 +42,7 @@ int main(int argc, char* argv[])
     std::string enemyRaceString;
     std::string mapString;
     int stepSize = 1;
+    sc2::Difficulty enemyDifficulty = sc2::Difficulty::Easy;
 
     if (doc.HasMember("Game Info") && doc["Game Info"].IsObject())
     {
@@ -50,6 +51,7 @@ int main(int argc, char* argv[])
         JSONTools::ReadString("EnemyRace", info, enemyRaceString);
         JSONTools::ReadString("MapFile", info, mapString);
         JSONTools::ReadInt("StepSize", info, stepSize);
+        JSONTools::ReadInt("EnemyDifficulty", info, enemyDifficulty);
     }
     else
     {
@@ -70,7 +72,7 @@ int main(int argc, char* argv[])
 
     coordinator.SetParticipants({
         CreateParticipant(Util::GetRaceFromString(botRaceString), &bot),
-        CreateComputer(Util::GetRaceFromString(enemyRaceString))
+        CreateComputer(Util::GetRaceFromString(enemyRaceString), enemyDifficulty)
     });
 
     // Start the game.
