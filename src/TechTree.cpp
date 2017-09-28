@@ -22,6 +22,7 @@ void TechTree::initUnitTypeData()
     m_upgradeData[0] = TypeData();
 
     // Protoss Buildings                                                                                  unit  bld   wrk    rfn    sup    hall   add
+    m_unitTypeData[sc2::UNIT_TYPEID::PROTOSS_PYLONOVERCHARGED] =        { sc2::Race::Protoss, 0, 0, 0, 0, true, true, false, false,  true, false, false, sc2::ABILITY_ID::EFFECT_PHOTONOVERCHARGE, 0, { sc2::UNIT_TYPEID::PROTOSS_MOTHERSHIPCORE, sc2::UNIT_TYPEID::PROTOSS_PYLON }, {}, {} }; 
     m_unitTypeData[sc2::UNIT_TYPEID::PROTOSS_PYLON] =                   { sc2::Race::Protoss, 0, 0, 0, 0, true, true, false, false,  true, false, false, sc2::ABILITY_ID::BUILD_PYLON, 0, { sc2::UNIT_TYPEID::PROTOSS_PROBE }, {}, {} }; 
     m_unitTypeData[sc2::UNIT_TYPEID::PROTOSS_NEXUS] =                   { sc2::Race::Protoss, 0, 0, 0, 0, true, true, false, false, false,  true, false, sc2::ABILITY_ID::BUILD_NEXUS, 0, { sc2::UNIT_TYPEID::PROTOSS_PROBE }, {}, {} }; 
     m_unitTypeData[sc2::UNIT_TYPEID::PROTOSS_ASSIMILATOR] =             { sc2::Race::Protoss, 0, 0, 0, 0, true, true, false,  true, false, false, false, sc2::ABILITY_ID::BUILD_ASSIMILATOR, 0, { sc2::UNIT_TYPEID::PROTOSS_PROBE }, {}, {} }; 
