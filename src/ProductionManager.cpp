@@ -177,14 +177,14 @@ void ProductionManager::create(const sc2::Unit * producer, BuildOrderItem & item
     }
 }
 
-bool ProductionManager::canMakeNow(const sc2::Unit * producerTag, const BuildType & type)
+bool ProductionManager::canMakeNow(const sc2::Unit * producer, const BuildType & type)
 {
-    if (!meetsReservedResources(type))
+    if (!producer || !meetsReservedResources(type))
     {
         return false;
     }
 
-    sc2::AvailableAbilities available_abilities = m_bot.Query()->GetAbilitiesForUnit(producerTag);
+    sc2::AvailableAbilities available_abilities = m_bot.Query()->GetAbilitiesForUnit(producer);
 
     // quick check if the unit can't do anything it certainly can't build the thing we want
     if (available_abilities.abilities.empty())
