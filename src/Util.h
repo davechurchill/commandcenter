@@ -59,4 +59,6 @@ namespace Util
     bool    Placement(const sc2::GameInfo& info, const sc2::Point2D& point);
     bool    Pathable(const sc2::GameInfo& info, const sc2::Point2D& point);
 
+    std::string     GetStringFromDifficulty(const sc2::Difficulty difficulty);
+    sc2::Difficulty GetDifficultyFromInt(const int difficulty);
 };
