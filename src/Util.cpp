@@ -345,18 +345,13 @@ void Util::VisualizeGrids(const sc2::ObservationInterface * obs, sc2::DebugInter
 
 std::string Util::GetStringFromRace(const sc2::Race & race)
 {
-    if (race == sc2::Race::Terran)
-    {
-        return "Terran";
-    }
-    else if (race == sc2::Race::Protoss)
-    {
-        return "Protoss";
-    }
-    else
-    {
-        return "Zerg";
-    }
+    	switch ( race )
+	{
+		case sc2::Race::Protoss: return "Protoss";
+		case sc2::Race::Terran:  return "Terran";
+		case sc2::Race::Zerg:    return "Zerg";
+		default: return "Random";
+	}
 }
 
 sc2::Race Util::GetRaceFromString(const std::string & raceIn)
