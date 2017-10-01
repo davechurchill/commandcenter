@@ -86,8 +86,8 @@
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</GenerateManifest>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LibraryPath>C:\Libraries\SC2AI\sc2api_precompiled\lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>C:\Libraries\SC2AI\sc2api_precompiled\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SC2API_DIR)\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SC2API_DIR)\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LibraryPath>C:\Libraries\SC2AI\sc2api_precompiled\lib;$(LibraryPath)</LibraryPath>
