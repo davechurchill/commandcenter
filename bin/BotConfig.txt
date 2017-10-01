@@ -11,15 +11,15 @@
         "BotRace"                   : "Random",
         "EnemyDifficulty"           : 2,
         "EnemyRace"                 : "Random",
-        "MapFile"                   : "InterloperLE.SC2Map",
+        "MapFile"                   : "DefeatZerglingsAndBanelings.SC2Map",
         "StepSize"                  : 1
     },
         
     "Micro" :
     {
-        "KiteWithRangedUnits"       : false,
+        "KiteWithRangedUnits"       : true,
         "ScoutHarassEnemy"          : true,
-        "CombatUnitsForAttack"      : 12
+        "CombatUnitsForAttack"      : 1
     },
     
     "Macro" :

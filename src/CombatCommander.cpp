@@ -118,7 +118,8 @@ void CombatCommander::updateScoutDefenseSquad()
 
     // get the region that our base is located in
     const BaseLocation * myBaseLocation = m_bot.Bases().getPlayerStartingBaseLocation(Players::Self);
-    BOT_ASSERT(myBaseLocation, "null self base location");
+    if (!myBaseLocation)
+        return;
 
     // get all of the enemy units in this region
     std::vector<const sc2::Unit *> enemyUnitsInRegion;
