@@ -39,7 +39,7 @@
         "DrawScoutInfo"             : false,
         "DrawEnemyUnitInfo"         : false,
         "DrawResourceInfo"          : false,
-        "DrawUnitTargetInfo"        : false,
+        "DrawUnitTargetInfo"        : true,
         "DrawLastSeenTileInfo"      : false,
         "DrawSquadInfo"             : false,
         "DrawWorkerInfo"            : false,

@@ -6,11 +6,15 @@ cmake_install.cmake
 
 # IDEs
 .vscode/
-vs/.vs/
-vs/commandcenter
-vs/*.user
+**/vs/.vs/
+**/vs/commandcenter
+**/vs/*.user
+**/Debug # **/ not working ?
+**/Release
 
-bin/CommandCenter
-bin/*.exe
-bin/*.ilk
-bin/TechTree.json
+**/bin/CommandCenter
+**/bin/*.exe
+**/bin/*.ilk
+**/bin/TechTree.json
+commandcenter/vs/CommandCenter/Debug
+commandcenter/vs/CommandCenter/Release
