@@ -200,6 +200,9 @@
     <ClInclude Include="..\src\TechTree.h">
       <Filter>util</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\Behavior.h">
+      <Filter>util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="global">
