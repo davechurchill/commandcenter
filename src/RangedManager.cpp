@@ -1,6 +1,7 @@
 #include "RangedManager.h"
 #include "Util.h"
 #include "CCBot.h"
+#include "Behavior.h"
 
 // TODO: BEHAVIORS TO IMPLEMENT
 /*
@@ -39,6 +40,7 @@ RangedManager::RangedManager(CCBot & bot)
 
 void RangedManager::executeMicro(const std::vector<const sc2::Unit *> & targets)
 {
+	// build bt tree here
     assignTargets(targets);
 }
 
