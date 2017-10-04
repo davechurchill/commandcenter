@@ -208,6 +208,7 @@ bool Util::IsDetectorType(const sc2::UnitTypeID & type)
         case sc2::UNIT_TYPEID::TERRAN_MISSILETURRET    : return true;
         case sc2::UNIT_TYPEID::ZERG_SPORECRAWLER       : return true;
         case sc2::UNIT_TYPEID::PROTOSS_PHOTONCANNON    : return true;
+        case sc2::UNIT_TYPEID::TERRAN_RAVEN            : return true;
         default: return false;
     }
 }
