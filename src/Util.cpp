@@ -203,7 +203,6 @@ bool Util::IsDetectorType(const sc2::UnitTypeID & type)
     switch (type.ToType())
     {
         case sc2::UNIT_TYPEID::PROTOSS_OBSERVER        : return true;
-        case sc2::UNIT_TYPEID::TERRAN_BANSHEE          : return true;
         case sc2::UNIT_TYPEID::ZERG_OVERSEER           : return true;
         case sc2::UNIT_TYPEID::TERRAN_MISSILETURRET    : return true;
         case sc2::UNIT_TYPEID::ZERG_SPORECRAWLER       : return true;
