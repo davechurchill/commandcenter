@@ -315,6 +315,7 @@
     <ClCompile Include="..\src\WorkerManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\Behavior.h" />
     <ClInclude Include="..\src\CCBot.h" />
     <ClInclude Include="..\src\BaseLocation.h" />
     <ClInclude Include="..\src\BaseLocationManager.h" />
