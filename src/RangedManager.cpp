@@ -57,7 +57,7 @@ void RangedManager::assignTargets(const std::vector<const sc2::Unit *> & targets
         rangedUnitTargets.push_back(target);
     }
 
-    // for each meleeUnit
+    // for each rangedUnit
     for (auto rangedUnit : rangedUnits)
     {
         BOT_ASSERT(rangedUnit, "ranged unit is null");
@@ -67,7 +67,7 @@ void RangedManager::assignTargets(const std::vector<const sc2::Unit *> & targets
         {
             if (!rangedUnitTargets.empty())
             {
-                // find the best target for this meleeUnit
+                // find the best target for this rangedUnit
                 const sc2::Unit * target = getTarget(rangedUnit, rangedUnitTargets);
 
                 // attack it
@@ -136,6 +136,8 @@ int RangedManager::getAttackPriority(const sc2::Unit * attacker, const sc2::Unit
 
     if (Util::IsCombatUnit(unit, m_bot))
     {
+        if (unit->unit_type == sc2::UNIT_TYPEID::ZERG_BANELING)
+            return 11;
         return 10;
     }
 

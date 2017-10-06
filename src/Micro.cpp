@@ -45,7 +45,17 @@ void Micro::SmartKiteTarget(const sc2::Unit * rangedUnit, const sc2::Unit * targ
 {
     BOT_ASSERT(rangedUnit != nullptr, "RangedUnit is null");
     BOT_ASSERT(target != nullptr, "Target is null");
-    bot.Actions()->UnitCommand(rangedUnit, sc2::ABILITY_ID::ATTACK_ATTACK, target);
+    if (rangedUnit->weapon_cooldown > 0.f)
+    {
+        sc2::Point3D difference(rangedUnit->pos - target->pos);
+        sc2::Point2D direction(difference.x, difference.y);
+        sc2::Normalize2D(direction);
+        bot.Actions()->UnitCommand(rangedUnit, sc2::ABILITY_ID::MOVE, rangedUnit->pos + direction * 5);
+    }
+    else
+    {
+        bot.Actions()->UnitCommand(rangedUnit, sc2::ABILITY_ID::ATTACK_ATTACK, target);
+    }
 }
 
 void Micro::SmartBuild(const sc2::Unit * builder, const sc2::UnitTypeID & buildingType, sc2::Point2D pos, CCBot & bot)
