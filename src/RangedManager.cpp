@@ -105,7 +105,7 @@ void RangedManager::assignTargets(const std::vector<const sc2::Unit *> & targets
 // TODO: this is the melee targeting code, replace it with something better for ranged units
 const sc2::Unit * RangedManager::getTarget(const sc2::Unit * rangedUnit, const std::vector<const sc2::Unit *> & targets)
 {
-    BOT_ASSERT(rangedUnit, "null melee unit in getTarget");
+    BOT_ASSERT(rangedUnit, "null ranged unit in getTarget");
 
     int highPriority = 0;
     double closestDist = std::numeric_limits<double>::max();
@@ -131,21 +131,30 @@ const sc2::Unit * RangedManager::getTarget(const sc2::Unit * rangedUnit, const s
     return closestTarget;
 }
 
-// get the attack priority of a type in relation to a zergling
-int RangedManager::getAttackPriority(const sc2::Unit * attacker, const sc2::Unit * unit)
+// TODO: instead of returning an hardcoded int, calculate a threat score based on dps, distance and other factors
+float RangedManager::getAttackPriority(const sc2::Unit * attacker, const sc2::Unit * unit)
 {
     BOT_ASSERT(unit, "null unit in getAttackPriority");
 
     if (Util::IsCombatUnit(unit, m_bot))
     {
-        if (unit->unit_type == sc2::UNIT_TYPEID::ZERG_BANELING)
+        sc2::UnitTypeData unitTypeData = Util::GetUnitTypeDataFromUnitTypeId(unit->unit_type, m_bot);
+        float dps = 0.f;
+        for (sc2::Weapon & weapon : unitTypeData.weapons)
+        {
+            float weaponDps = weapon.attacks * weapon.damage_ * (1 / weapon.speed);
+            if (weaponDps > dps)
+                dps = weaponDps;
+        }
+        return dps;
+        /*if (unit->unit_type == sc2::UNIT_TYPEID::ZERG_BANELING)
             return 11;
-        return 10;
+        return 10;*/
     }
 
     if (Util::IsWorker(unit))
     {
-        return 9;
+        return 2;
     }
 
     return 1;
