@@ -45,16 +45,26 @@ void Micro::SmartKiteTarget(const sc2::Unit * rangedUnit, const sc2::Unit * targ
 {
     BOT_ASSERT(rangedUnit != nullptr, "RangedUnit is null");
     BOT_ASSERT(target != nullptr, "Target is null");
-    if (rangedUnit->weapon_cooldown > 0.f)
+    sc2::UnitTypeData unitTypeData = bot.Observation()->GetUnitTypeData()[rangedUnit->unit_type];
+
+    // use the correct weapon range regardless of target type
+    float range(Util::GetAttackRangeForTarget(rangedUnit, target, bot));
+    bool kite(true);
+    float dist(Util::Dist(rangedUnit->pos, target->pos));
+    float timeToEnter = std::max(0.f, (dist - range) / unitTypeData.movement_speed);
+
+    kite = Util::IsCombatUnitType(target->unit_type, bot) && !(timeToEnter >= rangedUnit->weapon_cooldown);
+
+    if (kite)
     {
-        sc2::Point3D difference(rangedUnit->pos - target->pos);
-        sc2::Point2D direction(difference.x, difference.y);
-        sc2::Normalize2D(direction);
-        bot.Actions()->UnitCommand(rangedUnit, sc2::ABILITY_ID::MOVE, rangedUnit->pos + direction * 5);
+        // if we can't shoot, run away
+        sc2::Point2D fleePosition(rangedUnit->pos - target->pos + rangedUnit->pos);
+        Micro::SmartMove(rangedUnit, fleePosition, bot);
     }
     else
     {
-        bot.Actions()->UnitCommand(rangedUnit, sc2::ABILITY_ID::ATTACK_ATTACK, target);
+        // otherwise shoot
+        Micro::SmartAttackUnit(rangedUnit, target, bot);
     }
 }
 

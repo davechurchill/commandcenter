@@ -198,6 +198,21 @@ float Util::GetAttackRange(const sc2::UnitTypeID & type, CCBot & bot)
     return maxRange;
 }
 
+float Util::GetAttackRangeForTarget(const sc2::Unit * unit, const sc2::Unit * target, CCBot & bot)
+{
+	sc2::UnitTypeData unitTypeData(bot.Observation()->GetUnitTypeData()[unit->unit_type]);
+	sc2::Weapon::TargetType expectedWeaponType = target->is_flying ? sc2::Weapon::TargetType::Air : sc2::Weapon::TargetType::Ground;
+	
+	float maxRange = 0.0f;
+	for (auto & weapon : unitTypeData.weapons)
+	{
+		// can attack target with a weapon
+		if ((weapon.type == sc2::Weapon::TargetType::Any || weapon.type == expectedWeaponType))
+			maxRange = weapon.range;
+	}
+	return maxRange;
+}
+
 bool Util::IsDetectorType(const sc2::UnitTypeID & type)
 {
     switch (type.ToType())
