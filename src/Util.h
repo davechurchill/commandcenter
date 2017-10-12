@@ -33,6 +33,7 @@ namespace Util
     bool IsIdle(const sc2::Unit * unit);
     bool IsCompleted(const sc2::Unit * unit);
     float GetAttackRange(const sc2::UnitTypeID & type, CCBot & bot);
+    float GetAttackRangeForTarget(const sc2::Unit * unit, const sc2::Unit * target, CCBot & bot);
     
     bool UnitCanBuildTypeNow(const sc2::Unit * unit, const sc2::UnitTypeID & type, CCBot & m_bot);
     int GetUnitTypeWidth(const sc2::UnitTypeID type, const CCBot & bot);
