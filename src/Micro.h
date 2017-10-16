@@ -14,6 +14,7 @@ namespace Micro
     void SmartRightClick    (const sc2::Unit * unit,      const sc2::Unit * target, CCBot & bot);
     void SmartRepair        (const sc2::Unit * unit,      const sc2::Unit * target, CCBot & bot);
     void SmartKiteTarget    (const sc2::Unit * rangedUnit,const sc2::Unit * target, CCBot & bot);
+	void SmartFocusFire     (const sc2::Unit * rangedUnit,const sc2::Unit * target, CCBot & bot);
     void SmartBuild         (const sc2::Unit * builder,   const sc2::UnitTypeID & buildingType, sc2::Point2D pos, CCBot & bot);
     void SmartBuildTarget   (const sc2::Unit * builder,   const sc2::UnitTypeID & buildingType, const sc2::Unit * target, CCBot & bot);
     void SmartTrain         (const sc2::Unit * builder,   const sc2::UnitTypeID & buildingType, CCBot & bot);

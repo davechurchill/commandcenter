@@ -11,7 +11,7 @@
         "BotRace"                   : "Random",
         "EnemyDifficulty"           : 2,
         "EnemyRace"                 : "Random",
-        "MapFile"                   : "DefeatZerglingsAndBanelings.SC2Map",
+        "MapFile"                   : "DefeatRoaches.SC2Map",
         "StepSize"                  : 1
     },
         

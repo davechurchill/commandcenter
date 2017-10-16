@@ -68,6 +68,27 @@ void Micro::SmartKiteTarget(const sc2::Unit * rangedUnit, const sc2::Unit * targ
     }
 }
 
+void Micro::SmartFocusFire(const sc2::Unit * rangedUnit, const sc2::Unit * target, CCBot & bot)
+{
+
+    /*
+    float health = rangedUnit->health / rangedUnit->health_max;
+    bool isNearer = Util::Dist(Util::CalcCenter(rangedUnits), target->pos) < Util::Dist(rangedUnit->pos, target->pos);
+    if (isNearer) {
+        bool hasMinHealth(true);
+        for (auto unit : rangedUnits)
+            if (unit->health / unit->health_max <= health) hasMinHealth = false;
+
+        if (hasMinHealth) {
+            sc2::Point2D fleePosition((Util::CalcCenter(rangedUnits) - target->pos) * 0.5f + Util::CalcCenter(rangedUnits));
+            Micro::SmartMove(rangedUnit, fleePosition, bot);
+            return;
+        }
+    }
+    */
+    Micro::SmartAttackUnit(rangedUnit, target, bot);
+}
+
 void Micro::SmartBuild(const sc2::Unit * builder, const sc2::UnitTypeID & buildingType, sc2::Point2D pos, CCBot & bot)
 {
     BOT_ASSERT(builder != nullptr, "Builder is null");
