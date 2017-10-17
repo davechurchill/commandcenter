@@ -292,7 +292,10 @@
     <ClCompile Include="..\src\BuildOrderQueue.cpp" />
     <ClCompile Include="..\src\CombatCommander.cpp" />
     <ClCompile Include="..\src\DistanceMap.cpp" />
+    <ClCompile Include="..\src\DonePullBackTransition.cpp" />
     <ClCompile Include="..\src\FiniteStateMachine.cpp" />
+    <ClCompile Include="..\src\FireClosestFSMState.cpp" />
+    <ClCompile Include="..\src\FocusFireFiniteStateMachine.cpp" />
     <ClCompile Include="..\src\GameCommander.cpp" />
     <ClCompile Include="..\src\JSONTools.cpp" />
     <ClCompile Include="..\src\main.cpp" />
@@ -302,8 +305,10 @@
     <ClCompile Include="..\src\Micro.cpp" />
     <ClCompile Include="..\src\MicroManager.cpp" />
     <ClCompile Include="..\src\ProductionManager.cpp" />
+    <ClCompile Include="..\src\PullBackFSMState.cpp" />
     <ClCompile Include="..\src\RangedManager.cpp" />
     <ClCompile Include="..\src\ScoutManager.cpp" />
+    <ClCompile Include="..\src\ShouldPullBackTransition.cpp" />
     <ClCompile Include="..\src\Squad.cpp" />
     <ClCompile Include="..\src\SquadData.cpp" />
     <ClCompile Include="..\src\SquadOrder.cpp" />
@@ -331,8 +336,9 @@
     <ClInclude Include="..\src\Common.h" />
     <ClInclude Include="..\src\BotConfig.h" />
     <ClInclude Include="..\src\DistanceMap.h" />
+    <ClInclude Include="..\src\DonePullBackTransition.h" />
     <ClInclude Include="..\src\FiniteStateMachine.h" />
-    <ClInclude Include="..\src\FocusFireFiniteStateMachine.cpp" />
+    <ClInclude Include="..\src\FireClosestFSMState.h" />
     <ClInclude Include="..\src\FocusFireFiniteStateMachine.h" />
     <ClInclude Include="..\src\GameCommander.h" />
     <ClInclude Include="..\src\JSONTools.h" />
@@ -342,8 +348,10 @@
     <ClInclude Include="..\src\Micro.h" />
     <ClInclude Include="..\src\MicroManager.h" />
     <ClInclude Include="..\src\ProductionManager.h" />
+    <ClInclude Include="..\src\PullBackFSMState.h" />
     <ClInclude Include="..\src\RangedManager.h" />
     <ClInclude Include="..\src\ScoutManager.h" />
+    <ClInclude Include="..\src\ShouldPullBackTransition.h" />
     <ClInclude Include="..\src\Squad.h" />
     <ClInclude Include="..\src\SquadData.h" />
     <ClInclude Include="..\src\SquadOrder.h" />

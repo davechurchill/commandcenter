@@ -98,7 +98,22 @@
       <Filter>util</Filter>
     </ClCompile>
     <ClCompile Include="..\src\FiniteStateMachine.cpp">
-      <Filter>util</Filter>
+      <Filter>micro\FSMs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\PullBackFSMState.cpp">
+      <Filter>micro\FSMs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ShouldPullBackTransition.cpp">
+      <Filter>micro\FSMs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\DonePullBackTransition.cpp">
+      <Filter>micro\FSMs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\FireClosestFSMState.cpp">
+      <Filter>micro\FSMs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\FocusFireFiniteStateMachine.cpp">
+      <Filter>micro\FSMs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -206,15 +221,24 @@
     <ClInclude Include="..\src\Behavior.h">
       <Filter>util</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\FiniteStateMachine.h">
-      <Filter>util</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h" />
-    <ClInclude Include="..\src\FocusFireFiniteStateMachine.cpp">
-      <Filter>micro</Filter>
+    <ClInclude Include="..\src\FiniteStateMachine.h">
+      <Filter>micro\FSMs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\PullBackFSMState.h">
+      <Filter>micro\FSMs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ShouldPullBackTransition.h">
+      <Filter>micro\FSMs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\DonePullBackTransition.h">
+      <Filter>micro\FSMs</Filter>
     </ClInclude>
     <ClInclude Include="..\src\FocusFireFiniteStateMachine.h">
-      <Filter>micro</Filter>
+      <Filter>micro\FSMs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\FireClosestFSMState.h">
+      <Filter>micro\FSMs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -232,6 +256,9 @@
     </Filter>
     <Filter Include="micro">
       <UniqueIdentifier>{9829f5c0-728d-4121-8884-bf1fddd88a87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micro\FSMs">
+      <UniqueIdentifier>{9ece38aa-6c86-410a-b06c-ee706c5b2de2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

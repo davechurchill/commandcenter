@@ -1,50 +1,18 @@
 #pragma once
-#include "sc2api/sc2_api.h"
 #include "FiniteStateMachine.h"
+#include "DonePullBackTransition.h"
+#include "FireClosestFSMState.h"
+#include "PullBackFSMState.h"
+#include "ShouldPullBackTransition.h"
+
 class CCBot;
-class FocusFireClosestFSMState : public FSMState
+class FocusFireFiniteStateMachine  : public CCFiniteStateMachine
 {
 private:
-    const sc2::Unit* m_unit;
-    const sc2::Unit* m_target;
-    CCBot* m_bot;
+    CCFSMState* initialState;
+    CCFSMState* activeState;
 public:
-    FocusFireClosestFSMState(const sc2::Unit* unit, const sc2::Unit* target, CCBot* bot);
-    virtual void onEnter();
-    virtual void onUpdate();
-    virtual void onExit();
-    std::vector<FSMTransition> transitions;
-};
-
-class PullBackFSMState : public FSMState
-{
-private:
-    const sc2::Unit* m_unit;
-    const sc2::Unit* m_target;
-    CCBot* m_bot;
-public:
-    virtual void onEnter();
-    virtual void onUpdate();
-    virtual void onExit();
-    std::vector<FSMTransition> transitions;
-};
-
-class ShouldPullBackTransition : public FSMTransition
-{
-private:
-    FSMState* m_nextState;
-public:
-    virtual bool isValid();
-    virtual FSMState* getNextState();
-    virtual void onTransition();
-};
-
-class DonePullBackTransition : public virtual FSMTransition
-{
-private:
-    FSMState* m_nextState;
-public:
-    virtual bool isValid();
-    virtual FSMState* getNextState();
-    virtual void onTransition();
+    FocusFireFiniteStateMachine();
+    FocusFireFiniteStateMachine(const sc2::Unit * unit, const std::vector<const sc2::Unit*> * units, const sc2::Unit * target);
+    void update(const sc2::Unit * target, CCBot* bot);
 };
