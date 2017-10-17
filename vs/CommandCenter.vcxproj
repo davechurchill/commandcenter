@@ -292,6 +292,7 @@
     <ClCompile Include="..\src\BuildOrderQueue.cpp" />
     <ClCompile Include="..\src\CombatCommander.cpp" />
     <ClCompile Include="..\src\DistanceMap.cpp" />
+    <ClCompile Include="..\src\FiniteStateMachine.cpp" />
     <ClCompile Include="..\src\GameCommander.cpp" />
     <ClCompile Include="..\src\JSONTools.cpp" />
     <ClCompile Include="..\src\main.cpp" />
@@ -330,6 +331,9 @@
     <ClInclude Include="..\src\Common.h" />
     <ClInclude Include="..\src\BotConfig.h" />
     <ClInclude Include="..\src\DistanceMap.h" />
+    <ClInclude Include="..\src\FiniteStateMachine.h" />
+    <ClInclude Include="..\src\FocusFireFiniteStateMachine.cpp" />
+    <ClInclude Include="..\src\FocusFireFiniteStateMachine.h" />
     <ClInclude Include="..\src\GameCommander.h" />
     <ClInclude Include="..\src\JSONTools.h" />
     <ClInclude Include="..\src\MapTools.h" />
@@ -351,6 +355,10 @@
     <ClInclude Include="..\src\Util.h" />
     <ClInclude Include="..\src\WorkerData.h" />
     <ClInclude Include="..\src\WorkerManager.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="CommandCenter.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

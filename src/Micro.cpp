@@ -68,25 +68,67 @@ void Micro::SmartKiteTarget(const sc2::Unit * rangedUnit, const sc2::Unit * targ
     }
 }
 
-void Micro::SmartFocusFire(const sc2::Unit * rangedUnit, const sc2::Unit * target, CCBot & bot)
+void Micro::SmartFocusFire(const sc2::Unit * rangedUnit, const std::vector<const sc2::Unit *> rangedUnits, const sc2::Unit * target, CCBot & bot, std::map<sc2::Tag, FSMState*> &states)
 {
+    BOT_ASSERT(rangedUnit != nullptr, "RangedUnit is null");
+    BOT_ASSERT(target != nullptr, "Target is null");
 
+    // The Micro is the FSM
     /*
-    float health = rangedUnit->health / rangedUnit->health_max;
-    bool isNearer = Util::Dist(Util::CalcCenter(rangedUnits), target->pos) < Util::Dist(rangedUnit->pos, target->pos);
-    if (isNearer) {
-        bool hasMinHealth(true);
-        for (auto unit : rangedUnits)
-            if (unit->health / unit->health_max <= health) hasMinHealth = false;
+    FSMState* initialState = new FocusFireClosestFSMState(rangedUnit, target, &bot);
+    FSMState* activeState;
+    */
+    // INITIALIZE STATES AND TRANSITIONS HERE
+    // TODO: verifiy that state of unit is possible in this FSM. Otherwise unit changed BT leaf
+    /*
+    if (states.find(rangedUnit->tag) == states.end()) {
+        activeState = initialState;
+    }
+    else activeState = states[rangedUnit->tag];
 
-        if (hasMinHealth) {
-            sc2::Point2D fleePosition((Util::CalcCenter(rangedUnits) - target->pos) * 0.5f + Util::CalcCenter(rangedUnits));
-            Micro::SmartMove(rangedUnit, fleePosition, bot);
-            return;
+    bool isATransitionValid = false;
+    for (auto transition : activeState->transitions)
+    {
+        if (transition->isValid())
+        {
+            activeState->onExit();
+            activeState = transition->getNextState();
+            activeState->onEnter();
+            states.insert_or_assign(rangedUnit->tag, activeState);
         }
     }
+    activeState->onUpdate();
     */
-    Micro::SmartAttackUnit(rangedUnit, target, bot);
+
+    // TODO: PUT THIS LOGIC IN STATES AND TRANSITIONS
+    sc2::UnitTypeData unitTypeData = bot.Observation()->GetUnitTypeData()[rangedUnit->unit_type];
+
+    // use the correct weapon range regardless of target type
+    float range(Util::GetAttackRangeForTarget(rangedUnit, target, bot));
+    bool kite(true);
+    float dist(Util::Dist(rangedUnit->pos, target->pos));
+    float timeToEnter = std::max(0.f, (dist - range) / unitTypeData.movement_speed);
+
+    bool isNearest = true;
+
+    for (auto unit : rangedUnits)
+    {
+        float unitDist(Util::Dist(unit->pos, target->pos));
+        if (unitDist < dist) isNearest = false;
+    }
+
+    kite = !(timeToEnter >= rangedUnit->weapon_cooldown) && isNearest;
+
+    if (kite)
+    {
+        sc2::Point2D fleePosition(rangedUnit->pos - target->pos + rangedUnit->pos);
+        Micro::SmartMove(rangedUnit, fleePosition, bot);
+    }
+    else
+    {
+        // otherwise shoot
+        Micro::SmartAttackUnit(rangedUnit, target, bot);
+    }
 }
 
 void Micro::SmartBuild(const sc2::Unit * builder, const sc2::UnitTypeID & buildingType, sc2::Point2D pos, CCBot & bot)

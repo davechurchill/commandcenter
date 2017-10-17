@@ -21,6 +21,7 @@ class CCBot;
 class MicroManager
 {
     std::vector<const sc2::Unit *> m_units;
+    // map of each unit and their current state
 
 protected:
 
@@ -40,5 +41,7 @@ public:
     void setUnits(const std::vector<const sc2::Unit *> & u);
     void execute(const SquadOrder & order);
     void regroup(const sc2::Point2D & regroupPosition) const;
+
+    std::map<sc2::Tag, FSMState*> m_states;
 
 };
