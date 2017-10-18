@@ -30,7 +30,6 @@ void RangedManager::assignTargets(const std::vector<const sc2::Unit *> & targets
 
         rangedUnitTargets.push_back(target);
     }
-    sc2::Point2D targetCenter = Util::CalcCenter(rangedUnitTargets);
     // for each rangedUnit
     for (auto rangedUnit : rangedUnits)
     {
@@ -46,7 +45,7 @@ void RangedManager::assignTargets(const std::vector<const sc2::Unit *> & targets
 
                 if (isTargetRanged(target))
                 {
-                    Micro::SmartFocusFire(rangedUnit, rangedUnits, target, targetCenter, m_bot, m_focusFireStates);
+                    Micro::SmartFocusFire(rangedUnit, target, &rangedUnitTargets, m_bot, m_focusFireStates, m_unitHealth);
                 }
                 // attack it
                 else if (m_bot.Config().KiteWithRangedUnits)
@@ -127,7 +126,7 @@ float RangedManager::getAttackPriority(const sc2::Unit * attacker, const sc2::Un
             if (weaponDps > dps)
                 dps = weaponDps;
         }
-        return dps;
+        return dps * remainingHealth;
         /*if (unit->unit_type == sc2::UNIT_TYPEID::ZERG_BANELING)
             return 11;
         return 10;*/

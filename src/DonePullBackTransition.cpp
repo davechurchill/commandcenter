@@ -9,7 +9,7 @@ DonePullBackTransition::DonePullBackTransition(const sc2::Unit * unit, sc2::Poin
     m_position = position;
 }
 
-bool DonePullBackTransition::isValid(sc2::Point2D position)
+bool DonePullBackTransition::isValid(std::map<sc2::Tag, float> *, CCBot*)
 {
     bool done(false);
     done = m_position == m_unit->pos;

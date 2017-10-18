@@ -44,5 +44,6 @@ public:
 
     std::map<sc2::Tag, FocusFireFiniteStateMachine*> m_focusFireStates;
     std::map<sc2::Tag, KitingFiniteStateMachine*> m_kittingStates;
+    std::map<sc2::Tag, float> m_unitHealth;
 
 };

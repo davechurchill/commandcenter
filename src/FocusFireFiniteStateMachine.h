@@ -9,6 +9,6 @@ private:
     FocusFireFSMState* activeState;
 public:
     FocusFireFiniteStateMachine();
-    FocusFireFiniteStateMachine(const sc2::Unit * unit, const std::vector<const sc2::Unit*> * units, const sc2::Unit * target);
-    void update(const sc2::Unit * target, sc2::Point2D position, CCBot* bot);
+    FocusFireFiniteStateMachine(const sc2::Unit *, const sc2::Unit * target, const std::vector<const sc2::Unit*> *, CCBot*);
+    void update(const sc2::Unit * target, const std::vector<const sc2::Unit*> * targets, std::map<sc2::Tag, float> *unitHealth, CCBot* bot);
 };

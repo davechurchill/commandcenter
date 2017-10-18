@@ -8,10 +8,10 @@
 
     "Game Info" :
     {
-        "BotRace"                   : "Random",
+        "BotRace"                   : "Terran",
         "EnemyDifficulty"           : 2,
-        "EnemyRace"                 : "Random",
-        "MapFile"                   : "DefeatZerglingsAndBanelings.SC2Map",
+        "EnemyRace"                 : "Zerg",
+        "MapFile"                   : "DefeatMarines.SC2Map",
         "StepSize"                  : 1
     },
         
@@ -32,7 +32,7 @@
     "Debug" :
     {
         "DrawGameInfo"              : true, 
-        "DrawProductionInfo"        : true, 
+        "DrawProductionInfo"        : false, 
         "DrawBaseLocationInfo"      : false,
         "DrawTileInfo"              : false,
         "DrawWalkableSectors"       : false,
