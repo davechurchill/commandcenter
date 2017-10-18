@@ -2,15 +2,15 @@
 #include "sc2api/sc2_api.h"
 #include "FiniteStateMachine.h"
 
-class DonePullBackTransition : public CCFSMTransition
+class DonePullBackTransition : public FocusFireFSMTransition
 {
 private:
-    CCFSMState* m_nextState;
+    FocusFireFSMState* m_nextState;
     const sc2::Unit* m_unit;
     sc2::Point2D m_position;
 public:
-    DonePullBackTransition(const sc2::Unit * rangedUnit, sc2::Point2D position, CCFSMState* nextState);
-    bool isValid();
-    CCFSMState* getNextState();
+    DonePullBackTransition(const sc2::Unit * rangedUnit, sc2::Point2D position, FocusFireFSMState* nextState);
+    bool isValid(sc2::Point2D position);
+    FocusFireFSMState* getNextState();
     void onTransition();
 };

@@ -100,20 +100,23 @@
     <ClCompile Include="..\src\FiniteStateMachine.cpp">
       <Filter>micro\FSMs</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\PullBackFSMState.cpp">
-      <Filter>micro\FSMs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\ShouldPullBackTransition.cpp">
-      <Filter>micro\FSMs</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\DonePullBackTransition.cpp">
-      <Filter>micro\FSMs</Filter>
+      <Filter>micro\FSMs\FocusFireFSM</Filter>
     </ClCompile>
     <ClCompile Include="..\src\FireClosestFSMState.cpp">
-      <Filter>micro\FSMs</Filter>
+      <Filter>micro\FSMs\FocusFireFSM</Filter>
     </ClCompile>
     <ClCompile Include="..\src\FocusFireFiniteStateMachine.cpp">
-      <Filter>micro\FSMs</Filter>
+      <Filter>micro\FSMs\FocusFireFSM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\PullBackFSMState.cpp">
+      <Filter>micro\FSMs\FocusFireFSM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ShouldPullBackTransition.cpp">
+      <Filter>micro\FSMs\FocusFireFSM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\FocusFireFSM.cpp">
+      <Filter>micro\FSMs\FocusFireFSM</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -225,20 +228,23 @@
     <ClInclude Include="..\src\FiniteStateMachine.h">
       <Filter>micro\FSMs</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\PullBackFSMState.h">
-      <Filter>micro\FSMs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\ShouldPullBackTransition.h">
-      <Filter>micro\FSMs</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\DonePullBackTransition.h">
-      <Filter>micro\FSMs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\FocusFireFiniteStateMachine.h">
-      <Filter>micro\FSMs</Filter>
+      <Filter>micro\FSMs\FocusFireFSM</Filter>
     </ClInclude>
     <ClInclude Include="..\src\FireClosestFSMState.h">
-      <Filter>micro\FSMs</Filter>
+      <Filter>micro\FSMs\FocusFireFSM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\FocusFireFiniteStateMachine.h">
+      <Filter>micro\FSMs\FocusFireFSM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\PullBackFSMState.h">
+      <Filter>micro\FSMs\FocusFireFSM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ShouldPullBackTransition.h">
+      <Filter>micro\FSMs\FocusFireFSM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\FocusFireFSM.h">
+      <Filter>micro\FSMs\FocusFireFSM</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -259,6 +265,9 @@
     </Filter>
     <Filter Include="micro\FSMs">
       <UniqueIdentifier>{9ece38aa-6c86-410a-b06c-ee706c5b2de2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micro\FSMs\FocusFireFSM">
+      <UniqueIdentifier>{cf421e21-3eaa-4b26-a2fc-ef7b340be898}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

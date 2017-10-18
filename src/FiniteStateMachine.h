@@ -20,23 +20,3 @@ public:
     virtual FSMState* getNextState();
     virtual void onTransition();
 };
-
-class CCFSMTransition;
-class CCFSMState : public FSMState
-{
-public:
-    virtual void onUpdate(const sc2::Unit * m_target, CCBot*);
-    virtual std::vector<CCFSMTransition*> getTransitions();
-};
-
-class CCFSMTransition : public FSMTransition
-{
-public:
-    virtual CCFSMState* getNextState();
-};
-
-class CCFiniteStateMachine
-{
-public:
-    virtual void update(const sc2::Unit * target, CCBot* bot);
-};

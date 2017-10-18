@@ -42,6 +42,6 @@ public:
     void execute(const SquadOrder & order);
     void regroup(const sc2::Point2D & regroupPosition) const;
 
-    std::map<sc2::Tag, CCFiniteStateMachine*> m_states;
+    std::map<sc2::Tag, FocusFireFiniteStateMachine*> m_states;
 
 };

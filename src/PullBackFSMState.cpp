@@ -10,13 +10,13 @@ PullBackFSMState::PullBackFSMState(const sc2::Unit * unit, const std::vector<con
 
 void PullBackFSMState::onEnter() 
 {
-    m_position = ((m_unit->pos - m_target->pos) / 2) + m_unit->pos;
-    CCFSMState* fireClosest = new FireClosestFSMState(m_unit, m_units, m_target);
-    CCFSMTransition* donePull = new DonePullBackTransition(m_unit, m_position, fireClosest);
+    m_position = ((m_unit->pos - m_target->pos) / 3.5f) + m_unit->pos;
+    FocusFireFSMState* fireClosest = new FireClosestFSMState(m_unit, m_units, m_target);
+    FocusFireFSMTransition* donePull = new DonePullBackTransition(m_unit, m_position, fireClosest);
     this->transitions = { donePull };
 }
 void PullBackFSMState::onExit() {}
-std::vector<CCFSMTransition*> PullBackFSMState::getTransitions()
+std::vector<FocusFireFSMTransition*> PullBackFSMState::getTransitions()
 {
     return transitions;
 }

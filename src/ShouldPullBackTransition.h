@@ -2,17 +2,17 @@
 #include "sc2api/sc2_api.h"
 #include "FiniteStateMachine.h"
 
-class ShouldPullBackTransition : public CCFSMTransition
+class ShouldPullBackTransition : public FocusFireFSMTransition
 {
 private:
-    CCFSMState* m_nextState;
+    FocusFireFSMState* m_nextState;
     const sc2::Unit * m_unit;
     const sc2::Unit * m_target;
     const std::vector<const sc2::Unit *> * m_units;
 
 public:
-    ShouldPullBackTransition(const sc2::Unit * unit, const std::vector<const sc2::Unit *> * units, const sc2::Unit * target, CCFSMState* nextState);
-    bool isValid();
-    CCFSMState* getNextState();
+    ShouldPullBackTransition(const sc2::Unit * unit, const std::vector<const sc2::Unit *> * units, const sc2::Unit * target, FocusFireFSMState* nextState);
+    bool isValid(sc2::Point2D);
+    FocusFireFSMState* getNextState();
     void onTransition();
 };

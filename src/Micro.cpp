@@ -68,19 +68,19 @@ void Micro::SmartKiteTarget(const sc2::Unit * rangedUnit, const sc2::Unit * targ
     }
 }
 
-void Micro::SmartFocusFire(const sc2::Unit * rangedUnit, const std::vector<const sc2::Unit *> rangedUnits, const sc2::Unit * target, CCBot & bot, std::map<sc2::Tag, CCFiniteStateMachine*> &state)
+void Micro::SmartFocusFire(const sc2::Unit * rangedUnit, const std::vector<const sc2::Unit *> rangedUnits, const sc2::Unit * target, sc2::Point2D position, CCBot & bot, std::map<sc2::Tag, FocusFireFiniteStateMachine*> &state)
 {
     BOT_ASSERT(rangedUnit != nullptr, "RangedUnit is null");
     BOT_ASSERT(target != nullptr, "Target is null");
 
-    CCFiniteStateMachine* stateMachine;
+    FocusFireFiniteStateMachine* stateMachine;
     if (state.find(rangedUnit->tag) == state.end()) {
         stateMachine = new FocusFireFiniteStateMachine(rangedUnit, &rangedUnits, target);
     }
     else 
         stateMachine = state[rangedUnit->tag];
     
-    stateMachine->update(target, &bot);
+    stateMachine->update(target, position, &bot);
     state.insert_or_assign(rangedUnit->tag, stateMachine);
 }
 

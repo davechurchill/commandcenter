@@ -30,7 +30,7 @@ void RangedManager::assignTargets(const std::vector<const sc2::Unit *> & targets
 
         rangedUnitTargets.push_back(target);
     }
-
+    sc2::Point2D targetCenter = Util::CalcCenter(rangedUnitTargets);
     // for each rangedUnit
     for (auto rangedUnit : rangedUnits)
     {
@@ -46,7 +46,7 @@ void RangedManager::assignTargets(const std::vector<const sc2::Unit *> & targets
 
                 if (isTargetRanged(target))
                 {
-                    Micro::SmartFocusFire(rangedUnit, rangedUnits, target, m_bot, m_states);
+                    Micro::SmartFocusFire(rangedUnit, rangedUnits, target, targetCenter, m_bot, m_states);
                 }
                 // attack it
                 else if (m_bot.Config().KiteWithRangedUnits)

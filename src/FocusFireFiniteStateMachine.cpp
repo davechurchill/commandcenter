@@ -2,18 +2,18 @@
 FocusFireFiniteStateMachine::FocusFireFiniteStateMachine() {};
 FocusFireFiniteStateMachine::FocusFireFiniteStateMachine(const sc2::Unit * unit, const std::vector<const sc2::Unit*> * units, const sc2::Unit * target)
 {
-    CCFSMState* fireClosest = new FireClosestFSMState(unit, units, target);
-    CCFSMState* pullBack = new PullBackFSMState(unit, units, target);
+    FocusFireFSMState* fireClosest = new FireClosestFSMState(unit, units, target);
+    FocusFireFSMState* pullBack = new PullBackFSMState(unit, units, target);
     initialState = fireClosest;
     activeState = initialState;
     activeState->onEnter();
 }
 
-void FocusFireFiniteStateMachine::update(const sc2::Unit * target, CCBot* bot)
+void FocusFireFiniteStateMachine::update(const sc2::Unit * target, sc2::Point2D position, CCBot* bot)
 {
     for (auto transition : this->activeState->getTransitions())
     {
-        if (transition->isValid())
+        if (transition->isValid(position))
         {
             activeState->onExit();
             activeState = transition->getNextState();

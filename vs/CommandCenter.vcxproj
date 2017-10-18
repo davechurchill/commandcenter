@@ -296,6 +296,7 @@
     <ClCompile Include="..\src\FiniteStateMachine.cpp" />
     <ClCompile Include="..\src\FireClosestFSMState.cpp" />
     <ClCompile Include="..\src\FocusFireFiniteStateMachine.cpp" />
+    <ClCompile Include="..\src\FocusFireFSM.cpp" />
     <ClCompile Include="..\src\GameCommander.cpp" />
     <ClCompile Include="..\src\JSONTools.cpp" />
     <ClCompile Include="..\src\main.cpp" />
@@ -340,6 +341,7 @@
     <ClInclude Include="..\src\FiniteStateMachine.h" />
     <ClInclude Include="..\src\FireClosestFSMState.h" />
     <ClInclude Include="..\src\FocusFireFiniteStateMachine.h" />
+    <ClInclude Include="..\src\FocusFireFSM.h" />
     <ClInclude Include="..\src\GameCommander.h" />
     <ClInclude Include="..\src\JSONTools.h" />
     <ClInclude Include="..\src\MapTools.h" />
