@@ -279,6 +279,7 @@
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\AttackFSMState.cpp" />
     <ClCompile Include="..\src\CCBot.cpp" />
     <ClCompile Include="..\src\BaseLocation.cpp" />
     <ClCompile Include="..\src\BaseLocationManager.cpp" />
@@ -295,10 +296,13 @@
     <ClCompile Include="..\src\DonePullBackTransition.cpp" />
     <ClCompile Include="..\src\FiniteStateMachine.cpp" />
     <ClCompile Include="..\src\FireClosestFSMState.cpp" />
+    <ClCompile Include="..\src\FleeFSMState.cpp" />
     <ClCompile Include="..\src\FocusFireFiniteStateMachine.cpp" />
     <ClCompile Include="..\src\FocusFireFSM.cpp" />
     <ClCompile Include="..\src\GameCommander.cpp" />
     <ClCompile Include="..\src\JSONTools.cpp" />
+    <ClCompile Include="..\src\KitingFiniteStateMachine.cpp" />
+    <ClCompile Include="..\src\KitingFSM.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\MapTools.cpp" />
     <ClCompile Include="..\src\MeleeManager.cpp" />
@@ -309,6 +313,8 @@
     <ClCompile Include="..\src\PullBackFSMState.cpp" />
     <ClCompile Include="..\src\RangedManager.cpp" />
     <ClCompile Include="..\src\ScoutManager.cpp" />
+    <ClCompile Include="..\src\ShouldAttackTransition.cpp" />
+    <ClCompile Include="..\src\ShouldFleeTransition.cpp" />
     <ClCompile Include="..\src\ShouldPullBackTransition.cpp" />
     <ClCompile Include="..\src\Squad.cpp" />
     <ClCompile Include="..\src\SquadData.cpp" />
@@ -322,6 +328,7 @@
     <ClCompile Include="..\src\WorkerManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\AttackFSMState.h" />
     <ClInclude Include="..\src\Behavior.h" />
     <ClInclude Include="..\src\CCBot.h" />
     <ClInclude Include="..\src\BaseLocation.h" />
@@ -340,10 +347,13 @@
     <ClInclude Include="..\src\DonePullBackTransition.h" />
     <ClInclude Include="..\src\FiniteStateMachine.h" />
     <ClInclude Include="..\src\FireClosestFSMState.h" />
+    <ClInclude Include="..\src\FleeFSMState.h" />
     <ClInclude Include="..\src\FocusFireFiniteStateMachine.h" />
     <ClInclude Include="..\src\FocusFireFSM.h" />
     <ClInclude Include="..\src\GameCommander.h" />
     <ClInclude Include="..\src\JSONTools.h" />
+    <ClInclude Include="..\src\KitingFiniteStateMachine.h" />
+    <ClInclude Include="..\src\KitingFSM.h" />
     <ClInclude Include="..\src\MapTools.h" />
     <ClInclude Include="..\src\MeleeManager.h" />
     <ClInclude Include="..\src\BuildType.h" />
@@ -353,6 +363,8 @@
     <ClInclude Include="..\src\PullBackFSMState.h" />
     <ClInclude Include="..\src\RangedManager.h" />
     <ClInclude Include="..\src\ScoutManager.h" />
+    <ClInclude Include="..\src\ShouldAttackTransition.h" />
+    <ClInclude Include="..\src\ShouldFleeTransition.h" />
     <ClInclude Include="..\src\ShouldPullBackTransition.h" />
     <ClInclude Include="..\src\Squad.h" />
     <ClInclude Include="..\src\SquadData.h" />

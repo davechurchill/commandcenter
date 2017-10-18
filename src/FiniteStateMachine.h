@@ -17,6 +17,12 @@ class FSMTransition
 {
 public:
     virtual bool isValid();
-    virtual FSMState* getNextState();
+    virtual FSMState* getNextState() = 0;
     virtual void onTransition();
+};
+
+class FiniteStateMachine
+{
+public:
+    void update();
 };

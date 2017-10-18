@@ -15,9 +15,3 @@ public:
     virtual FocusFireFSMState* getNextState();
     virtual bool isValid(sc2::Point2D);
 };
-
-class FocusFireFiniteStateMachine
-{
-public:
-    virtual void update(const sc2::Unit * target, sc2::Point2D, CCBot* bot);
-};

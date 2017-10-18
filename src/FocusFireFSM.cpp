@@ -21,7 +21,3 @@ bool FocusFireFSMTransition::isValid(sc2::Point2D)
 {
     return false;
 }
-
-void FocusFireFiniteStateMachine::update(const sc2::Unit * target, sc2::Point2D position, CCBot * bot)
-{
-}

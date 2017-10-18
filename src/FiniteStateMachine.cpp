@@ -29,3 +29,7 @@ void FSMState::onUpdate()
 void FSMState::onExit()
 {
 }
+
+void FiniteStateMachine::update()
+{
+}

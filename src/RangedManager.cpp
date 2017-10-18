@@ -46,12 +46,12 @@ void RangedManager::assignTargets(const std::vector<const sc2::Unit *> & targets
 
                 if (isTargetRanged(target))
                 {
-                    Micro::SmartFocusFire(rangedUnit, rangedUnits, target, targetCenter, m_bot, m_states);
+                    Micro::SmartFocusFire(rangedUnit, rangedUnits, target, targetCenter, m_bot, m_focusFireStates);
                 }
                 // attack it
                 else if (m_bot.Config().KiteWithRangedUnits)
                 {
-                    Micro::SmartKiteTarget(rangedUnit, target, m_bot);
+                    Micro::SmartKiteTarget(rangedUnit, target, m_bot, m_kittingStates);
                 }
                 else
                 {

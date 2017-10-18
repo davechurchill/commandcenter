@@ -118,6 +118,24 @@
     <ClCompile Include="..\src\FocusFireFSM.cpp">
       <Filter>micro\FSMs\FocusFireFSM</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\KitingFSM.cpp">
+      <Filter>micro\FSMs\KitingFSM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\KitingFiniteStateMachine.cpp">
+      <Filter>micro\FSMs\KitingFSM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\FleeFSMState.cpp">
+      <Filter>micro\FSMs\KitingFSM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\AttackFSMState.cpp">
+      <Filter>micro\FSMs\KitingFSM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ShouldFleeTransition.cpp">
+      <Filter>micro\FSMs\KitingFSM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ShouldAttackTransition.cpp">
+      <Filter>micro\FSMs\KitingFSM</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\BaseLocationManager.h">
@@ -246,6 +264,24 @@
     <ClInclude Include="..\src\FocusFireFSM.h">
       <Filter>micro\FSMs\FocusFireFSM</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\KitingFSM.h">
+      <Filter>micro\FSMs\KitingFSM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\KitingFiniteStateMachine.h">
+      <Filter>micro\FSMs\KitingFSM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\FleeFSMState.h">
+      <Filter>micro\FSMs\KitingFSM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\AttackFSMState.h">
+      <Filter>micro\FSMs\KitingFSM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ShouldFleeTransition.h">
+      <Filter>micro\FSMs\KitingFSM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ShouldAttackTransition.h">
+      <Filter>micro\FSMs\KitingFSM</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="global">
@@ -268,6 +304,9 @@
     </Filter>
     <Filter Include="micro\FSMs\FocusFireFSM">
       <UniqueIdentifier>{cf421e21-3eaa-4b26-a2fc-ef7b340be898}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micro\FSMs\KitingFSM">
+      <UniqueIdentifier>{488af303-796a-4c83-bd3a-e2bef7453438}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

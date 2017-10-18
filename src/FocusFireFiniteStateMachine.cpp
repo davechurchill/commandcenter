@@ -1,4 +1,7 @@
 #include "FocusFireFiniteStateMachine.h"
+#include "FireClosestFSMState.h"
+#include "PullBackFSMState.h"
+
 FocusFireFiniteStateMachine::FocusFireFiniteStateMachine() {};
 FocusFireFiniteStateMachine::FocusFireFiniteStateMachine(const sc2::Unit * unit, const std::vector<const sc2::Unit*> * units, const sc2::Unit * target)
 {
@@ -11,7 +14,7 @@ FocusFireFiniteStateMachine::FocusFireFiniteStateMachine(const sc2::Unit * unit,
 
 void FocusFireFiniteStateMachine::update(const sc2::Unit * target, sc2::Point2D position, CCBot* bot)
 {
-    for (auto transition : this->activeState->getTransitions())
+    for (auto transition : activeState->getTransitions())
     {
         if (transition->isValid(position))
         {

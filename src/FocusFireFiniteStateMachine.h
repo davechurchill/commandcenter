@@ -1,12 +1,8 @@
 #pragma once
 #include "FocusFireFSM.h"
-#include "DonePullBackTransition.h"
-#include "FireClosestFSMState.h"
-#include "PullBackFSMState.h"
-#include "ShouldPullBackTransition.h"
 
 class CCBot;
-class FocusFireFiniteStateMachine  : public FocusFireFiniteStateMachine
+class FocusFireFiniteStateMachine : FiniteStateMachine
 {
 private:
     FocusFireFSMState* initialState;
