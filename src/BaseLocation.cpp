@@ -103,7 +103,7 @@ const CCPosition & BaseLocation::getDepotPosition() const
     return getPosition();
 }
 
-void BaseLocation::setPlayerOccupying(int player, bool occupying)
+void BaseLocation::setPlayerOccupying(CCPlayer player, bool occupying)
 {
     m_isPlayerOccupying[player] = occupying;
 
@@ -119,7 +119,7 @@ bool BaseLocation::isInResourceBox(int x, int y) const
     return x >= m_left && x < m_right && y < m_top && y >= m_bottom;
 }
 
-bool BaseLocation::isOccupiedByPlayer(int player) const
+bool BaseLocation::isOccupiedByPlayer(CCPlayer player) const
 {
     return m_isPlayerOccupying.at(player);
 }
@@ -129,7 +129,7 @@ bool BaseLocation::isExplored() const
     return false;
 }
 
-bool BaseLocation::isPlayerStartLocation(int player) const
+bool BaseLocation::isPlayerStartLocation(CCPlayer player) const
 {
     return m_isPlayerStartLocation.at(player);
 }

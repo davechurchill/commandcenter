@@ -2,6 +2,63 @@
 #include "CCBot.h"
 #include <iostream>
 
+std::string Util::GetStringFromRace(const CCRace & race)
+{
+#ifdef SC2API
+    if      (race == sc2::Race::Terran)  { return "Terran"; }
+    else if (race == sc2::Race::Protoss) { return "Protoss"; }
+    else if (race == sc2::Race::Zerg)    { return "Zerg"; }
+    else if (race == sc2::Race::Random)  { return "Random"; }
+#else
+    BWAPI::Race race = type.getRace();
+    if      (race == BWAPI::Races::Terran)  { return "Terran"; }
+    else if (race == BWAPI::Races::Protoss) { return "Protoss"; }
+    else if (race == BWAPI::Races::Zerg)    { return "Zerg"; }
+    else if (race == BWAPI::Races::Unknown) { return "Unknown"; }
+#endif
+    BOT_ASSERT(false, "Unknown Race");
+    return "Error";
+}
+
+CCRace Util::GetRaceFromString(const std::string & raceIn)
+{
+    std::string race(raceIn);
+    std::transform(race.begin(), race.end(), race.begin(), ::tolower);
+
+#ifdef SC2API
+    if      (race == "terran")  { return sc2::Race::Terran; }
+    else if (race == "protoss") { return sc2::Race::Protoss; }
+    else if (race == "zerg")    { return sc2::Race::Zerg; }
+    else if (race == "random")  { return sc2::Race::Random; }
+    
+    BOT_ASSERT(false, "Unknown Race: ", race.c_str());
+    return sc2::Race::Random;
+#else
+    if      (race == "terran")  { return BWAPI::Races::Terran; }
+    else if (race == "protoss") { return BWAPI::Races::Protoss; }
+    else if (race == "zerg")    { return BWAPI::Races::Zerg; }
+    else if (race == "random")  { return BWAPI::Races::Unknown; }
+
+    BOT_ASSERT(false, "Unknown Race: ", race.c_str());
+    return BWAPI::Races::Unknown;
+#endif
+}
+
+CCRace Util::GetRace(CCUnit unit, CCBot & bot)
+{
+    return GetRace(GetType(unit), bot);
+}
+
+CCRace Util::GetRace(const CCUnitType & type, CCBot & bot)
+{
+#ifdef SC2API
+    return bot.Observation()->GetUnitTypeData()[type].race;
+#else
+    return type.getRace();
+#endif
+}
+
+
 CCUnitType Util::GetType(CCUnit unit)
 {
 #ifdef SC2API
@@ -240,7 +297,7 @@ bool Util::IsDetectorType(const CCUnitType & type)
     }
 }
 
-int Util::GetPlayer(CCUnit unit)
+CCPlayer Util::GetPlayer(CCUnit unit)
 {
     BOT_ASSERT(unit, "Unit pointer was null");
     if (unit->alliance == sc2::Unit::Alliance::Self)
@@ -311,44 +368,6 @@ float Util::DistSq(const CCPosition & p1, const CCPosition & p2)
     float dy = p1.y - p2.y;
 
     return dx*dx + dy*dy;
-}
-
-
-std::string Util::GetStringFromRace(const sc2::Race & race)
-{
-    switch ( race )
-	{
-		case sc2::Race::Protoss: return "Protoss";
-		case sc2::Race::Terran:  return "Terran";
-		case sc2::Race::Zerg:    return "Zerg";
-		default: return "Random";
-	}
-}
-
-sc2::Race Util::GetRaceFromString(const std::string & raceIn)
-{
-    std::string race(raceIn);
-    std::transform(race.begin(), race.end(), race.begin(), ::tolower);
-
-    if (race == "terran")
-    {
-        return sc2::Race::Terran;
-    }
-    else if (race == "protoss")
-    {
-        return sc2::Race::Protoss;
-    }
-    else if (race == "zerg")
-    {
-        return sc2::Race::Zerg;
-    }
-    else if (race == "random")
-    {
-        return sc2::Race::Random;
-    }
-
-    BOT_ASSERT(false, "Unknown Race: ", race.c_str());
-    return sc2::Race::Terran;
 }
 
 CCUnitType Util::GetUnitTypeFromName(const std::string & name, CCBot & bot)

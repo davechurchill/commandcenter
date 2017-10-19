@@ -10,7 +10,7 @@ struct UnitInfo
     CCUnitID        id;
     float           lastHealth;
     float           lastShields;
-    int             player;
+    CCPlayer        player;
     CCUnit          unit;
     sc2::Point3D    lastPosition;
     CCUnitType      type;

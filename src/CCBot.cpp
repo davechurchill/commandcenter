@@ -1,5 +1,3 @@
-#include "sc2api/sc2_api.h"
-
 #include "CCBot.h"
 #include "Util.h"
 

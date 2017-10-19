@@ -1,8 +1,6 @@
 #pragma once
 
 #include <vector>
-
-#include "sc2api/sc2_api.h"
 #include "DistanceMap.h"
 
 class CCBot;

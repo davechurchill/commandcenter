@@ -1,9 +1,9 @@
 #pragma once
 
+#include "Common.h"
+#include "DistanceMap.h"
 #include <map>
 #include <vector>
-#include "sc2api/sc2_api.h"
-#include "DistanceMap.h"
 
 class CCBot;
 
@@ -12,16 +12,16 @@ class BaseLocation
     CCBot &                     m_bot;
     DistanceMap                 m_distanceMap;
 
-    CCPosition                m_depotPosition;
-    CCPosition                m_centerOfResources;
-    std::vector<CCUnit> m_geysers;
-    std::vector<CCUnit> m_minerals;
+    CCPosition                  m_depotPosition;
+    CCPosition                  m_centerOfResources;
+    std::vector<CCUnit>         m_geysers;
+    std::vector<CCUnit>         m_minerals;
 
-    std::vector<CCPosition>   m_mineralPositions;
-    std::vector<CCPosition>   m_geyserPositions;
+    std::vector<CCPosition>     m_mineralPositions;
+    std::vector<CCPosition>     m_geyserPositions;
 
-    std::map<int, bool>         m_isPlayerOccupying;
-    std::map<int, bool>         m_isPlayerStartLocation;
+    std::map<CCPlayer, bool>    m_isPlayerOccupying;
+    std::map<CCPlayer, bool>    m_isPlayerStartLocation;
         
     int                         m_baseID;
     float                       m_left;
@@ -36,18 +36,18 @@ public:
     
     int getGroundDistance(const CCPosition & pos) const;
     bool isStartLocation() const;
-    bool isPlayerStartLocation(int player) const;
+    bool isPlayerStartLocation(CCPlayer player) const;
     bool isMineralOnly() const;
     bool containsPosition(const CCPosition & pos) const;
     const CCPosition & getDepotPosition() const;
     const CCPosition & getPosition() const;
     const std::vector<CCUnit> & getGeysers() const;
     const std::vector<CCUnit> & getMinerals() const;
-    bool isOccupiedByPlayer(int player) const;
+    bool isOccupiedByPlayer(CCPlayer player) const;
     bool isExplored() const;
     bool isInResourceBox(int x, int y) const;
 
-    void setPlayerOccupying(int player, bool occupying);
+    void setPlayerOccupying(CCPlayer player, bool occupying);
 
     const std::vector<CCPosition> & getClosestTiles() const;
 

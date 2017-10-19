@@ -40,12 +40,12 @@ void UnitInfoManager::updateUnitInfo()
     m_unitData[Players::Neutral].removeBadUnits();
 }
 
-const std::map<CCUnit, UnitInfo> & UnitInfoManager::getUnitInfoMap(int player) const
+const std::map<CCUnit, UnitInfo> & UnitInfoManager::getUnitInfoMap(CCPlayer player) const
 {
     return getUnitData(player).getUnitInfoMap();
 }
 
-const std::vector<CCUnit> & UnitInfoManager::getUnits(int player) const
+const std::vector<CCUnit> & UnitInfoManager::getUnits(CCPlayer player) const
 {
     BOT_ASSERT(m_units.find(player) != m_units.end(), "Couldn't find player units: %d", player);
 
@@ -179,7 +179,7 @@ void UnitInfoManager::drawSelectedUnitDebugInfo()
 }
 
 // passing in a unit type of 0 returns a count of all units
-size_t UnitInfoManager::getUnitTypeCount(int player, CCUnitType type, bool completed) const
+size_t UnitInfoManager::getUnitTypeCount(CCPlayer player, CCUnitType type, bool completed) const
 {
     size_t count = 0;
 
@@ -275,7 +275,7 @@ void UnitInfoManager::getNearbyForce(std::vector<UnitInfo> & unitInfo, CCPositio
     }
 }
 
-const UnitData & UnitInfoManager::getUnitData(int player) const
+const UnitData & UnitInfoManager::getUnitData(CCPlayer player) const
 {
     return m_unitData.find(player)->second;
 }

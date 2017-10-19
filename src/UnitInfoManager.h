@@ -1,7 +1,6 @@
 #pragma once
 
-#include "sc2api/sc2_api.h"
-
+#include "Common.h"
 #include "UnitData.h"
 #include "BaseLocation.h"
 
@@ -10,15 +9,14 @@ class UnitInfoManager
 {
     CCBot &           m_bot;
 
-    std::map<int, UnitData> m_unitData;
-
-    std::map<int, std::vector<CCUnit>> m_units;
+    std::map<CCPlayer, UnitData> m_unitData; 
+    std::map<CCPlayer, std::vector<CCUnit>> m_units;
 
     void                    updateUnit(CCUnit unit);
     void                    updateUnitInfo();
     bool                    isValidUnit(CCUnit unit);
     
-    const UnitData &        getUnitData(int player) const;
+    const UnitData &        getUnitData(CCPlayer player) const;
 
     void drawSelectedUnitDebugInfo();
 
@@ -29,13 +27,13 @@ public:
     void                    onFrame();
     void                    onStart();
 
-    const std::vector<CCUnit> & getUnits(int player) const;
+    const std::vector<CCUnit> & getUnits(CCPlayer player) const;
 
-    size_t                  getUnitTypeCount(int player, CCUnitType type, bool completed = true) const;
+    size_t                  getUnitTypeCount(CCPlayer player, CCUnitType type, bool completed = true) const;
 
     void                    getNearbyForce(std::vector<UnitInfo> & unitInfo, CCPosition p, int player, float radius) const;
 
-    const std::map<CCUnit, UnitInfo> & getUnitInfoMap(int player) const;
+    const std::map<CCUnit, UnitInfo> & getUnitInfoMap(CCPlayer player) const;
 
     //bool                  enemyHasCloakedUnits() const;
     void                    drawUnitInformation(float x, float y) const;

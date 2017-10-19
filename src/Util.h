@@ -6,9 +6,13 @@ class CCBot;
 
 namespace Util
 {
-    int GetPlayer(CCUnit unit);
-    CCUnitType GetType(CCUnit unit);
-    CCUnitID GetID(CCUnit unit);
+    CCPlayer    GetPlayer(CCUnit unit);
+    CCUnitType  GetType(CCUnit unit);
+    CCUnitID    GetID(CCUnit unit);
+    CCRace      GetRace(CCUnit unit, CCBot & bot);
+    CCRace      GetRace(const CCUnitType & type, CCBot & bot);
+    CCRace      GetRaceFromString(const std::string & str);
+    std::string GetStringFromRace(const CCRace & race);
 
     bool IsCombatUnit(CCUnit unit, CCBot & bot);
     bool IsCombatUnitType(const CCUnitType & type, CCBot & bot);
@@ -37,8 +41,6 @@ namespace Util
     int GetUnitTypeGasPrice(const CCUnitType type, const CCBot & bot);
     CCUnitType GetTownHall(const sc2::Race & race);
     CCUnitType GetSupplyProvider(const sc2::Race & race);
-    std::string     GetStringFromRace(const sc2::Race & race);
-    sc2::Race       GetRaceFromString(const std::string & race);
     CCPosition    CalcCenter(const std::vector<CCUnit> & units);
 
     CCUnitType GetUnitTypeFromName(const std::string & name, CCBot & bot);

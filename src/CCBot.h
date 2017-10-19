@@ -1,6 +1,6 @@
 #pragma once
 
-#include "sc2api/sc2_api.h"
+#include "Common.h"
 
 #include "MapTools.h"
 #include "BaseLocationManager.h"

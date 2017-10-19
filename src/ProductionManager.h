@@ -1,5 +1,5 @@
 #pragma once
-#include "sc2api/sc2_api.h"
+
 #include "Common.h"
 #include "BuildOrder.h"
 #include "BuildingManager.h"
