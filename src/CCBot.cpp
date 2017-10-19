@@ -19,6 +19,7 @@ void CCBot::OnGameStart()
 {
     m_config.readConfigFile();
     
+#ifdef SC2API
     // get my race
     auto playerID = Observation()->GetPlayerID();
     for (auto & playerInfo : Observation()->GetGameInfo().player_info)
@@ -32,6 +33,9 @@ void CCBot::OnGameStart()
             m_playerRace[Players::Enemy] = playerInfo.race_requested;
         }
     }
+#else
+
+#endif
     
     m_techTree.onStart();
     m_strategy.onStart();
@@ -45,7 +49,19 @@ void CCBot::OnGameStart()
 
 void CCBot::OnStep()
 {
+
+    // update the internal unit list
+    m_allUnits.clear();
+    
+#ifdef SC2API
     Control()->GetObservation();
+    for (auto & unit : Observation()->GetUnits())
+    {
+        m_allUnits.push_back(unit);    
+    }
+#else
+
+#endif
 
     m_map.onFrame();
     m_unitInfo.onFrame();
@@ -90,9 +106,14 @@ const UnitInfoManager & CCBot::UnitInfo() const
     return m_unitInfo;
 }
 
-const TypeData & CCBot::Data(const sc2::UnitTypeID & type) const
+const TypeData & CCBot::Data(const CCUnitType & type) const
 {
     return m_techTree.getData(type);
+}
+
+const TypeData & CCBot::Data(CCUnit unit) const
+{
+    return m_techTree.getData(unit->unit_type);
 }
 
 const TypeData & CCBot::Data(const sc2::UpgradeID & type) const
@@ -110,9 +131,18 @@ WorkerManager & CCBot::Workers()
     return m_workers;
 }
 
-const sc2::Unit * CCBot::GetUnit(const UnitTag & tag) const
+CCUnit CCBot::GetUnit(const UnitTag & tag) const
 {
+#ifdef SC2API
     return Observation()->GetUnit(tag);
+#else
+
+#endif
+}
+
+const std::vector<CCUnit> & CCBot::GetUnits() const
+{
+    return m_allUnits;
 }
 
 sc2::Point2D CCBot::GetStartLocation() const
@@ -120,7 +150,10 @@ sc2::Point2D CCBot::GetStartLocation() const
     return Observation()->GetStartLocation();
 }
 
+
+#ifdef SC2API
 void CCBot::OnError(const std::vector<sc2::ClientError> & client_errors, const std::vector<std::string> & protocol_errors)
 {
     
 }
+#endif

@@ -24,8 +24,9 @@ class CCBot : public sc2::Agent
     StrategyManager         m_strategy;
     BotConfig               m_config;
     TechTree                m_techTree;
-
     GameCommander           m_gameCommander;
+
+    std::vector<CCUnit>     m_allUnits;
 
     void OnError(const std::vector<sc2::ClientError> & client_errors, 
                  const std::vector<std::string> & protocol_errors = {}) override;
@@ -42,10 +43,19 @@ public:
     const MapTools & Map() const;
     const UnitInfoManager & UnitInfo() const;
     const StrategyManager & Strategy() const;
-    const TypeData & Data(const sc2::UnitTypeID & type) const;
+    const TypeData & Data(const CCUnitType & type) const;
     const TypeData & Data(const sc2::UpgradeID & type) const;
     const TypeData & Data(const BuildType & type) const;
+    const TypeData & Data(CCUnit unit) const;
     const sc2::Race & GetPlayerRace(int player) const;
     sc2::Point2D GetStartLocation() const;
-    const sc2::Unit * GetUnit(const UnitTag & tag) const;
+
+    CCUnit GetUnit(const UnitTag & tag) const;
+    const std::vector<CCUnit> & GetUnits() const;
+
+#ifdef SC2API
+
+#else
+
+#endif
 };
