@@ -24,7 +24,7 @@ void ScoutManager::onFrame()
     drawScoutInformation();
 }
 
-void ScoutManager::setWorkerScout(const sc2::Unit * tag)
+void ScoutManager::setWorkerScout(CCUnit tag)
 {
     // if we have a previous worker scout, release it back to the worker manager
     if (m_scoutUnit)
@@ -83,7 +83,7 @@ void ScoutManager::moveScouts()
         if (scoutInRangeOfenemy)
         {
             // get the closest enemy worker
-            const sc2::Unit * closestEnemyWorkerUnit = closestEnemyWorkerTo(workerScout->pos);
+            CCUnit closestEnemyWorkerUnit = closestEnemyWorkerTo(workerScout->pos);
 
             // if the worker scout is not under attack
             if (!m_scoutUnderAttack)
@@ -145,7 +145,7 @@ void ScoutManager::moveScouts()
     m_previousScoutHP = scoutHP;
 }
 
-const sc2::Unit * ScoutManager::closestEnemyWorkerTo(const sc2::Point2D & pos) const
+CCUnit ScoutManager::closestEnemyWorkerTo(const sc2::Point2D & pos) const
 {
     if (!m_scoutUnit) { return nullptr; }
 

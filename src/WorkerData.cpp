@@ -38,7 +38,7 @@ void WorkerData::updateAllWorkerData()
     }
 
     // remove any worker units which no longer exist in the game
-    std::vector<const sc2::Unit *> workersDestroyed;
+    std::vector<CCUnit> workersDestroyed;
     for (auto worker : getWorkers())
     {
         // TODO: for now skip gas workers because they disappear inside refineries, this is annoying
@@ -54,13 +54,13 @@ void WorkerData::updateAllWorkerData()
     }
 }
 
-void WorkerData::workerDestroyed(const sc2::Unit * unit)
+void WorkerData::workerDestroyed(CCUnit unit)
 {
     clearPreviousJob(unit);
     m_workers.erase(unit);
 }
 
-void WorkerData::updateWorker(const sc2::Unit * unit)
+void WorkerData::updateWorker(CCUnit unit)
 {
     if (m_workers.find(unit) == m_workers.end())
     {
@@ -69,7 +69,7 @@ void WorkerData::updateWorker(const sc2::Unit * unit)
     }
 }
 
-void WorkerData::setWorkerJob(const sc2::Unit * unit, int job, const sc2::Unit * jobUnit)
+void WorkerData::setWorkerJob(CCUnit unit, int job, CCUnit jobUnit)
 {
     clearPreviousJob(unit);
     m_workerJobMap[unit] = job;
@@ -91,7 +91,7 @@ void WorkerData::setWorkerJob(const sc2::Unit * unit, int job, const sc2::Unit *
         m_depotWorkerCount[jobUnit]++;
 
         // find the mineral to mine and mine it
-        const sc2::Unit * mineralToMine = getMineralToMine(unit);
+        CCUnit mineralToMine = getMineralToMine(unit);
         
         Micro::SmartRightClick(unit, mineralToMine, m_bot);
     }
@@ -124,7 +124,7 @@ void WorkerData::setWorkerJob(const sc2::Unit * unit, int job, const sc2::Unit *
     }
 }
 
-void WorkerData::clearPreviousJob(const sc2::Unit * unit)
+void WorkerData::clearPreviousJob(CCUnit unit)
 {
     const int previousJob = getWorkerJob(unit);
     m_workerJobCount[previousJob]--;
@@ -166,7 +166,7 @@ int WorkerData::getWorkerJobCount(int job) const
     return m_workerJobCount.at(job);
 }
 
-int WorkerData::getWorkerJob(const sc2::Unit * unit) const
+int WorkerData::getWorkerJob(CCUnit unit) const
 {
     auto it = m_workerJobMap.find(unit);
 
@@ -178,9 +178,9 @@ int WorkerData::getWorkerJob(const sc2::Unit * unit) const
     return WorkerJobs::None;
 }
 
-const sc2::Unit * WorkerData::getMineralToMine(const sc2::Unit * unit) const
+CCUnit WorkerData::getMineralToMine(CCUnit unit) const
 {
-    const sc2::Unit * bestMineral = nullptr;
+    CCUnit bestMineral = nullptr;
     double bestDist = 100000;
 
     for (auto mineral : m_bot.Observation()->GetUnits())
@@ -199,7 +199,7 @@ const sc2::Unit * WorkerData::getMineralToMine(const sc2::Unit * unit) const
     return bestMineral;
 }
 
-const sc2::Unit * WorkerData::getWorkerDepot(const sc2::Unit * unit) const
+CCUnit WorkerData::getWorkerDepot(CCUnit unit) const
 {
     auto it = m_workerDepotMap.find(unit);
 
@@ -211,7 +211,7 @@ const sc2::Unit * WorkerData::getWorkerDepot(const sc2::Unit * unit) const
     return nullptr;
 }
 
-int WorkerData::getNumAssignedWorkers(const sc2::Unit * unit)
+int WorkerData::getNumAssignedWorkers(CCUnit unit)
 {
     if (Util::IsTownHall(unit))
     {
@@ -243,7 +243,7 @@ int WorkerData::getNumAssignedWorkers(const sc2::Unit * unit)
     return 0;
 }
 
-const char * WorkerData::getJobCode(const sc2::Unit * unit)
+const char * WorkerData::getJobCode(CCUnit unit)
 {
     const int j = getWorkerJob(unit);
 
@@ -270,7 +270,7 @@ void WorkerData::drawDepotDebugInfo()
     }
 }
 
-const std::set<const sc2::Unit *> & WorkerData::getWorkers() const
+const std::set<CCUnit> & WorkerData::getWorkers() const
 {
     return m_workers;
 }

@@ -33,7 +33,7 @@
     {
         "DrawGameInfo"              : true, 
         "DrawProductionInfo"        : true, 
-        "DrawBaseLocationInfo"      : false,
+        "DrawBaseLocationInfo"      : true,
         "DrawTileInfo"              : false,
         "DrawWalkableSectors"       : false,
         "DrawScoutInfo"             : false,

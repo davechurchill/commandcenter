@@ -8,17 +8,17 @@ MeleeManager::MeleeManager(CCBot & bot)
 
 }
 
-void MeleeManager::executeMicro(const std::vector<const sc2::Unit *> & targets)
+void MeleeManager::executeMicro(const std::vector<CCUnit> & targets)
 {
     assignTargets(targets);
 }
 
-void MeleeManager::assignTargets(const std::vector<const sc2::Unit *> & targets)
+void MeleeManager::assignTargets(const std::vector<CCUnit> & targets)
 {
-    const std::vector<const sc2::Unit *> & meleeUnits = getUnits();
+    const std::vector<CCUnit> & meleeUnits = getUnits();
 
     // figure out targets
-    std::vector<const sc2::Unit *> meleeUnitTargets;
+    std::vector<CCUnit> meleeUnitTargets;
     for (auto target : targets)
     {
         if (!target) { continue; }
@@ -48,7 +48,7 @@ void MeleeManager::assignTargets(const std::vector<const sc2::Unit *> & targets)
             else if (!meleeUnitTargets.empty())
             {
                 // find the best target for this meleeUnit
-                const sc2::Unit * target = getTarget(meleeUnit, meleeUnitTargets);
+                CCUnit target = getTarget(meleeUnit, meleeUnitTargets);
 
                 // attack it
                 Micro::SmartAttackUnit(meleeUnit, target, m_bot);
@@ -73,13 +73,13 @@ void MeleeManager::assignTargets(const std::vector<const sc2::Unit *> & targets)
 }
 
 // get a target for the meleeUnit to attack
-const sc2::Unit * MeleeManager::getTarget(const sc2::Unit * meleeUnit, const std::vector<const sc2::Unit *> & targets)
+CCUnit MeleeManager::getTarget(CCUnit meleeUnit, const std::vector<CCUnit> & targets)
 {
     BOT_ASSERT(meleeUnit, "null melee unit in getTarget");
 
     int highPriority = 0;
     double closestDist = std::numeric_limits<double>::max();
-    const sc2::Unit * closestTarget = nullptr;
+    CCUnit closestTarget = nullptr;
 
     // for each target possiblity
     for (auto & targetUnit : targets)
@@ -102,7 +102,7 @@ const sc2::Unit * MeleeManager::getTarget(const sc2::Unit * meleeUnit, const std
 }
 
 // get the attack priority of a type in relation to a zergling
-int MeleeManager::getAttackPriority(const sc2::Unit * attacker, const sc2::Unit * unit)
+int MeleeManager::getAttackPriority(CCUnit attacker, CCUnit unit)
 {
     BOT_ASSERT(unit, "null unit in getAttackPriority");
 
@@ -119,7 +119,7 @@ int MeleeManager::getAttackPriority(const sc2::Unit * attacker, const sc2::Unit 
     return 1;
 }
 
-bool MeleeManager::meleeUnitShouldRetreat(const sc2::Unit * meleeUnit, const std::vector<const sc2::Unit *> & targets)
+bool MeleeManager::meleeUnitShouldRetreat(CCUnit meleeUnit, const std::vector<CCUnit> & targets)
 {
     // TODO: should melee units ever retreat?
     return false;

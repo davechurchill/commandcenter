@@ -1,21 +1,26 @@
-#include "sc2api/sc2_api.h"
-#include "sc2utils/sc2_manage_process.h"
 #include "Util.h"
 #include "CCBot.h"
 #include <iostream>
 
-Util::IsUnit::IsUnit(sc2::UNIT_TYPEID type) 
-    : m_type(type) 
+CCUnitType Util::GetType(CCUnit unit)
 {
+#ifdef SC2API
+    return unit->unit_type;
+#else
+    return unit->getType();
+#endif
 }
- 
-bool Util::IsUnit::operator()(const sc2::Unit * unit, const sc2::ObservationInterface*) 
-{ 
-    return unit->unit_type == m_type; 
-};
 
-bool Util::IsTownHallType(const sc2::UnitTypeID & type)
+
+bool Util::IsTownHall(CCUnit unit)
 {
+    BOT_ASSERT(unit, "Unit pointer was null");
+    return IsTownHallType(GetType(unit));
+}
+
+bool Util::IsTownHallType(const CCUnitType & type)
+{
+#ifdef SC2API
     switch (type.ToType()) 
     {
         case sc2::UNIT_TYPEID::ZERG_HATCHERY                : return true;
@@ -28,21 +33,18 @@ bool Util::IsTownHallType(const sc2::UnitTypeID & type)
         case sc2::UNIT_TYPEID::PROTOSS_NEXUS                : return true;
         default: return false;
     }
+#else
+
+#endif
 }
 
-bool Util::IsTownHall(const sc2::Unit * unit)
+bool Util::IsRefinery(CCUnit unit)
 {
     BOT_ASSERT(unit, "Unit pointer was null");
-    return IsTownHallType(unit->unit_type);
+    return IsRefineryType(GetType(unit));
 }
 
-bool Util::IsRefinery(const sc2::Unit * unit)
-{
-    BOT_ASSERT(unit, "Unit pointer was null");
-    return IsRefineryType(unit->unit_type);
-}
-
-bool Util::IsRefineryType(const sc2::UnitTypeID & type)
+bool Util::IsRefineryType(const CCUnitType & type)
 {
     switch (type.ToType()) 
     {
@@ -53,10 +55,15 @@ bool Util::IsRefineryType(const sc2::UnitTypeID & type)
     }
 }
 
-bool Util::IsGeyser(const sc2::Unit * unit)
+bool Util::IsGeyser(CCUnit unit)
 {
     BOT_ASSERT(unit, "Unit pointer was null");
-    switch (unit->unit_type.ToType()) 
+    return IsGeyserType(GetType(unit));
+}
+
+bool Util::IsGeyserType(const CCUnitType & type)
+{
+    switch (type.ToType()) 
     {
         case sc2::UNIT_TYPEID::NEUTRAL_VESPENEGEYSER        : return true;
         case sc2::UNIT_TYPEID::NEUTRAL_PROTOSSVESPENEGEYSER : return true;
@@ -65,10 +72,16 @@ bool Util::IsGeyser(const sc2::Unit * unit)
     }
 }
 
-bool Util::IsMineral(const sc2::Unit * unit)
+bool Util::IsMineral(CCUnit unit)
 {
     BOT_ASSERT(unit, "Unit pointer was null");
-    switch (unit->unit_type.ToType()) 
+    return IsMineralType(GetType(unit));
+}
+
+bool Util::IsMineralType(const CCUnitType & type)
+{
+#ifdef SC2API
+    switch (type.ToType()) 
     {
         case sc2::UNIT_TYPEID::NEUTRAL_MINERALFIELD         : return true;
         case sc2::UNIT_TYPEID::NEUTRAL_MINERALFIELD750      : return true;
@@ -76,15 +89,18 @@ bool Util::IsMineral(const sc2::Unit * unit)
         case sc2::UNIT_TYPEID::NEUTRAL_RICHMINERALFIELD750  : return true;
         default: return false;
     }
+#else
+
+#endif
 }
 
-bool Util::IsWorker(const sc2::Unit * unit)
+bool Util::IsWorker(CCUnit unit)
 {
     BOT_ASSERT(unit, "Unit pointer was null");
-    return IsWorkerType(unit->unit_type);
+    return IsWorkerType(GetType(unit));
 }
 
-bool Util::IsWorkerType(const sc2::UnitTypeID & unit)
+bool Util::IsWorkerType(const CCUnitType & unit)
 {
     switch (unit.ToType()) 
     {
@@ -96,7 +112,7 @@ bool Util::IsWorkerType(const sc2::UnitTypeID & unit)
     }
 }
 
-sc2::UnitTypeID Util::GetSupplyProvider(const sc2::Race & race)
+CCUnitType Util::GetSupplyProvider(const sc2::Race & race)
 {
     switch (race) 
     {
@@ -107,7 +123,7 @@ sc2::UnitTypeID Util::GetSupplyProvider(const sc2::Race & race)
     }
 }
 
-sc2::UnitTypeID Util::GetTownHall(const sc2::Race & race)
+CCUnitType Util::GetTownHall(const sc2::Race & race)
 {
     switch (race) 
     {
@@ -118,40 +134,40 @@ sc2::UnitTypeID Util::GetTownHall(const sc2::Race & race)
     }
 }
 
-bool Util::IsCompleted(const sc2::Unit * unit)
+bool Util::IsCompleted(CCUnit unit)
 {
     BOT_ASSERT(unit, "Unit pointer was null");
     return unit->build_progress == 1.0f;
 }
 
-bool Util::IsIdle(const sc2::Unit * unit)
+bool Util::IsIdle(CCUnit unit)
 {
     BOT_ASSERT(unit, "Unit pointer was null");
     return unit->orders.empty();
 }
 
-int Util::GetUnitTypeMineralPrice(const sc2::UnitTypeID type, const CCBot & bot)
+int Util::GetUnitTypeMineralPrice(const CCUnitType type, const CCBot & bot)
 {
     return bot.Observation()->GetUnitTypeData()[type].mineral_cost;
 }
 
-int Util::GetUnitTypeGasPrice(const sc2::UnitTypeID type, const CCBot & bot)
+int Util::GetUnitTypeGasPrice(const CCUnitType type, const CCBot & bot)
 {
     return bot.Observation()->GetUnitTypeData()[type].vespene_cost;
 }
 
-int Util::GetUnitTypeWidth(const sc2::UnitTypeID type, const CCBot & bot)
+int Util::GetUnitTypeWidth(const CCUnitType type, const CCBot & bot)
 {
     return (int)(2 * bot.Observation()->GetAbilityData()[bot.Data(type).buildAbility].footprint_radius);
 }
 
-int Util::GetUnitTypeHeight(const sc2::UnitTypeID type, const CCBot & bot)
+int Util::GetUnitTypeHeight(const CCUnitType type, const CCBot & bot)
 {
     return (int)(2 * bot.Observation()->GetAbilityData()[bot.Data(type).buildAbility].footprint_radius);
 }
 
 
-sc2::Point2D Util::CalcCenter(const std::vector<const sc2::Unit *> & units)
+sc2::Point2D Util::CalcCenter(const std::vector<CCUnit> & units)
 {
     if (units.empty())
     {
@@ -171,14 +187,15 @@ sc2::Point2D Util::CalcCenter(const std::vector<const sc2::Unit *> & units)
     return sc2::Point2D(cx / units.size(), cy / units.size());
 }
 
-bool Util::IsDetector(const sc2::Unit * unit)
+bool Util::IsDetector(CCUnit unit)
 {
     BOT_ASSERT(unit, "Unit pointer was null");
     return IsDetectorType(unit->unit_type);
 }
 
-float Util::GetAttackRange(const sc2::UnitTypeID & type, CCBot & bot)
+float Util::GetAttackRange(const CCUnitType & type, CCBot & bot)
 {
+#ifdef SC2API
     auto & weapons = bot.Observation()->GetUnitTypeData()[type].weapons;
     
     if (weapons.empty())
@@ -196,9 +213,12 @@ float Util::GetAttackRange(const sc2::UnitTypeID & type, CCBot & bot)
     }
 
     return maxRange;
+#else
+
+#endif
 }
 
-bool Util::IsDetectorType(const sc2::UnitTypeID & type)
+bool Util::IsDetectorType(const CCUnitType & type)
 {
     switch (type.ToType())
     {
@@ -212,7 +232,7 @@ bool Util::IsDetectorType(const sc2::UnitTypeID & type)
     }
 }
 
-int Util::GetPlayer(const sc2::Unit * unit)
+int Util::GetPlayer(CCUnit unit)
 {
     BOT_ASSERT(unit, "Unit pointer was null");
     if (unit->alliance == sc2::Unit::Alliance::Self)
@@ -233,7 +253,7 @@ int Util::GetPlayer(const sc2::Unit * unit)
     return -1;
 }
 
-bool Util::IsCombatUnitType(const sc2::UnitTypeID & type, CCBot & bot)
+bool Util::IsCombatUnitType(const CCUnitType & type, CCBot & bot)
 {
     if (IsWorkerType(type)) { return false; }
     if (IsSupplyProviderType(type)) { return false; }
@@ -245,13 +265,19 @@ bool Util::IsCombatUnitType(const sc2::UnitTypeID & type, CCBot & bot)
     return true;
 }
 
-bool Util::IsCombatUnit(const sc2::Unit * unit, CCBot & bot)
+bool Util::IsCombatUnit(CCUnit unit, CCBot & bot)
 {
     BOT_ASSERT(unit, "Unit pointer was null");
-    return IsCombatUnitType(unit->unit_type, bot);
+    return IsCombatUnitType(GetType(unit), bot);
 }
 
-bool Util::IsSupplyProviderType(const sc2::UnitTypeID & type)
+bool Util::IsSupplyProvider(CCUnit unit)
+{
+    BOT_ASSERT(unit, "Unit pointer was null");
+    return IsSupplyProviderType(unit->unit_type);
+}
+
+bool Util::IsSupplyProviderType(const CCUnitType & type)
 {
     switch (type.ToType()) 
     {
@@ -264,12 +290,6 @@ bool Util::IsSupplyProviderType(const sc2::UnitTypeID & type)
     }
 
     return true;
-}
-
-bool Util::IsSupplyProvider(const sc2::Unit * unit)
-{
-    BOT_ASSERT(unit, "Unit pointer was null");
-    return IsSupplyProviderType(unit->unit_type);
 }
 
 float Util::Dist(const sc2::Point2D & p1, const sc2::Point2D & p2)
@@ -285,75 +305,10 @@ float Util::DistSq(const sc2::Point2D & p1, const sc2::Point2D & p2)
     return dx*dx + dy*dy;
 }
 
-bool Util::Pathable(const sc2::GameInfo & info, const sc2::Point2D & point) 
-{
-    sc2::Point2DI pointI((int)point.x, (int)point.y);
-    if (pointI.x < 0 || pointI.x >= info.width || pointI.y < 0 || pointI.y >= info.width)
-    {
-        return false;
-    }
-
-    assert(info.pathing_grid.data.size() == info.width * info.height);
-    unsigned char encodedPlacement = info.pathing_grid.data[pointI.x + ((info.height - 1) - pointI.y) * info.width];
-    bool decodedPlacement = encodedPlacement == 255 ? false : true;
-    return decodedPlacement;
-}
-
-bool Util::Placement(const sc2::GameInfo & info, const sc2::Point2D & point) 
-{
-    sc2::Point2DI pointI((int)point.x, (int)point.y);
-    if (pointI.x < 0 || pointI.x >= info.width || pointI.y < 0 || pointI.y >= info.width)
-    {
-        return false;
-    }
-
-    assert(info.placement_grid.data.size() == info.width * info.height);
-    unsigned char encodedPlacement = info.placement_grid.data[pointI.x + ((info.height - 1) - pointI.y) * info.width];
-    bool decodedPlacement = encodedPlacement == 255 ? true : false;
-    return decodedPlacement;
-}
-
-float Util::TerainHeight(const sc2::GameInfo & info, const sc2::Point2D & point) 
-{
-    sc2::Point2DI pointI((int)point.x, (int)point.y);
-    if (pointI.x < 0 || pointI.x >= info.width || pointI.y < 0 || pointI.y >= info.width)
-    {
-        return 0.0f;
-    }
-
-    assert(info.terrain_height.data.size() == info.width * info.height);
-    unsigned char encodedHeight = info.terrain_height.data[pointI.x + ((info.height - 1) - pointI.y) * info.width];
-    float decodedHeight = -100.0f + 200.0f * float(encodedHeight) / 255.0f;
-    return decodedHeight;
-}
-
-void Util::VisualizeGrids(const sc2::ObservationInterface * obs, sc2::DebugInterface * debug) 
-{
-    const sc2::GameInfo& info = obs->GetGameInfo();
-
-    sc2::Point2D camera = obs->GetCameraPos();
-    for (float x = camera.x - 8.0f; x < camera.x + 8.0f; ++x) 
-    {
-        for (float y = camera.y - 8.0f; y < camera.y + 8.0f; ++y) 
-        {
-            // Draw in the center of each 1x1 cell
-            sc2::Point2D point(x + 0.5f, y + 0.5f);
-
-            float height = TerainHeight(info, sc2::Point2D(x, y));
-            bool placable = Placement(info, sc2::Point2D(x, y));
-            //bool pathable = Pathable(info, sc2::Point2D(x, y));
-
-            sc2::Color color = placable ? sc2::Colors::Green : sc2::Colors::Red;
-            debug->DebugSphereOut(sc2::Point3D(point.x, point.y, height + 0.5f), 0.4f, color);
-        }
-    }
-
-    debug->SendDebug();
-}
 
 std::string Util::GetStringFromRace(const sc2::Race & race)
 {
-    	switch ( race )
+    switch ( race )
 	{
 		case sc2::Race::Protoss: return "Protoss";
 		case sc2::Race::Terran:  return "Terran";
@@ -388,8 +343,9 @@ sc2::Race Util::GetRaceFromString(const std::string & raceIn)
     return sc2::Race::Terran;
 }
 
-sc2::UnitTypeID Util::GetUnitTypeIDFromName(const std::string & name, CCBot & bot)
+CCUnitType Util::GetUnitTypeFromName(const std::string & name, CCBot & bot)
 {
+#ifdef SC2API
     for (const sc2::UnitTypeData & data : bot.Observation()->GetUnitTypeData())
     {
         if (name == data.name)
@@ -397,12 +353,16 @@ sc2::UnitTypeID Util::GetUnitTypeIDFromName(const std::string & name, CCBot & bo
             return data.unit_type_id;
         }
     }
+#else
+
+#endif
 
     return 0;
 }
 
-sc2::UpgradeID Util::GetUpgradeIDFromName(const std::string & name, CCBot & bot)
+sc2::UpgradeID Util::GetUpgradeFromName(const std::string & name, CCBot & bot)
 {
+#ifdef SC2API
     for (const sc2::UpgradeData & data : bot.Observation()->GetUpgradeData())
     {
         if (name == data.name)
@@ -412,9 +372,13 @@ sc2::UpgradeID Util::GetUpgradeIDFromName(const std::string & name, CCBot & bot)
     }
 
     return 0;
+#else
+
+#endif
 }
 
-sc2::BuffID Util::GetBuffIDFromName(const std::string & name, CCBot & bot)
+#ifdef SC2API
+sc2::BuffID Util::GetBuffFromName(const std::string & name, CCBot & bot)
 {
     for (const sc2::BuffData & data : bot.Observation()->GetBuffData())
     {
@@ -427,7 +391,7 @@ sc2::BuffID Util::GetBuffIDFromName(const std::string & name, CCBot & bot)
     return 0;
 }
 
-sc2::AbilityID Util::GetAbilityIDFromName(const std::string & name, CCBot & bot)
+sc2::AbilityID Util::GetAbilityFromName(const std::string & name, CCBot & bot)
 {
     for (const sc2::AbilityData & data : bot.Observation()->GetAbilityData())
     {
@@ -439,8 +403,9 @@ sc2::AbilityID Util::GetAbilityIDFromName(const std::string & name, CCBot & bot)
 
     return 0;
 }
+#endif
 
-UnitTag GetClosestEnemyUnitTo(const sc2::Unit * ourUnit, const sc2::ObservationInterface * obs)
+UnitTag GetClosestEnemyUnitTo(CCUnit ourUnit, const sc2::ObservationInterface * obs)
 {
     UnitTag closestTag = 0;
 	double closestDist = std::numeric_limits<double>::max();
@@ -461,7 +426,7 @@ UnitTag GetClosestEnemyUnitTo(const sc2::Unit * ourUnit, const sc2::ObservationI
 
 // checks where a given unit can make a given unit type now
 // this is done by iterating its legal abilities for the build command to make the unit
-bool Util::UnitCanBuildTypeNow(const sc2::Unit * unit, const sc2::UnitTypeID & type, CCBot & m_bot)
+bool Util::UnitCanBuildTypeNow(CCUnit unit, const CCUnitType & type, CCBot & m_bot)
 {
     BOT_ASSERT(unit, "Unit pointer was null");
     sc2::AvailableAbilities available_abilities = m_bot.Query()->GetAbilitiesForUnit(unit);

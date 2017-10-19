@@ -16,14 +16,14 @@ BuildType::BuildType(const std::string & name, CCBot & bot)
 {
     m_name = name;
 
-    m_unitType = Util::GetUnitTypeIDFromName(m_name, bot);
+    m_unitType = Util::GetUnitTypeFromName(m_name, bot);
     if (m_unitType)
     {
         m_type = BuildTypes::Unit;
         return;
     }
 
-    m_upgrade = Util::GetUpgradeIDFromName(m_name, bot);
+    m_upgrade = Util::GetUpgradeFromName(m_name, bot);
     if (m_upgrade)
     {
         m_type = BuildTypes::Upgrade;
@@ -33,7 +33,7 @@ BuildType::BuildType(const std::string & name, CCBot & bot)
     BOT_ASSERT(false, "Could not find BuildType with name: %s", name.c_str());
 }
 
-BuildType::BuildType(const sc2::UnitTypeID & unitType)
+BuildType::BuildType(const CCUnitType & unitType)
 {
     m_type          = BuildTypes::Unit;
     m_unitType      = unitType;
@@ -65,7 +65,7 @@ const sc2::Race & BuildType::getRace() const
     return m_race;
 }
 
-const sc2::UnitTypeID & BuildType::getUnitTypeID() const
+const CCUnitType & BuildType::getUnitTypeID() const
 {
     return m_unitType;
 }

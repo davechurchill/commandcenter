@@ -42,9 +42,9 @@ void MapTools::onStart()
     {
         for (size_t y(0); y < m_height; ++y)
         {
-            m_buildable[x][y]   = Util::Placement(m_bot.Observation()->GetGameInfo(), sc2::Point2D(x+0.5f, y+0.5f));
-            m_walkable[x][y]    = m_buildable[x][y] || Util::Pathable(m_bot.Observation()->GetGameInfo(), sc2::Point2D(x+0.5f, y+0.5f));
-            m_terrainHeight[x][y]   = Util::TerainHeight(m_bot.Observation()->GetGameInfo(), sc2::Point2D(x+0.5f, y+0.5f));
+            m_buildable[x][y]   = canBuild(sc2::Point2D(x+0.5f, y+0.5f));
+            m_walkable[x][y]    = m_buildable[x][y] || canWalk(sc2::Point2D(x+0.5f, y+0.5f));
+            m_terrainHeight[x][y]   = terainHeight(sc2::Point2D(x+0.5f, y+0.5f));
         }
     }
 
@@ -317,7 +317,7 @@ bool MapTools::isBuildable(int x, int y) const
     return m_buildable[x][y];
 }
 
-bool MapTools::canBuildTypeAtPosition(int x, int y, sc2::UnitTypeID type) const
+bool MapTools::canBuildTypeAtPosition(int x, int y, CCUnitType type) const
 {
     return m_bot.Query()->Placement(m_bot.Data(type).buildAbility, sc2::Point2D((float)x, (float)y));
 }
@@ -386,10 +386,8 @@ const std::vector<sc2::Point2D> & MapTools::getClosestTilesTo(const sc2::Point2D
 }
 
 
-void MapTools::drawBoxAroundUnit(const UnitTag & unitTag, sc2::Color color) const
+void MapTools::drawBoxAroundUnit(CCUnit unit, sc2::Color color) const
 {
-    const sc2::Unit * unit = m_bot.GetUnit(unitTag);
-
     if (!unit) { return; }
 
     sc2::Point3D p_min = unit->pos;
@@ -403,15 +401,6 @@ void MapTools::drawBoxAroundUnit(const UnitTag & unitTag, sc2::Color color) cons
     p_max.z += 2.0f;
 
     drawSquare(unit->pos.x - 2.0f, unit->pos.y - 2.0f, unit->pos.x + 2.0f, unit->pos.y + 2.0f, color);
-}
-
-void MapTools::drawSphereAroundUnit(const UnitTag & unitTag, sc2::Color color) const
-{
-    const sc2::Unit * unit = m_bot.GetUnit(unitTag);
-
-    if (!unit) { return; }
-
-    drawSphere(unit->pos, 1, color);
 }
 
 sc2::Point2D MapTools::getLeastRecentlySeenPosition() const
@@ -433,4 +422,61 @@ sc2::Point2D MapTools::getLeastRecentlySeenPosition() const
     }
 
     return leastSeen;
+}
+
+bool MapTools::canWalk(const sc2::Point2D & point) 
+{
+#ifdef SC2API
+    auto & info = m_bot.Observation()->GetGameInfo();
+    sc2::Point2DI pointI((int)point.x, (int)point.y);
+    if (pointI.x < 0 || pointI.x >= info.width || pointI.y < 0 || pointI.y >= info.width)
+    {
+        return false;
+    }
+
+    assert(info.pathing_grid.data.size() == info.width * info.height);
+    unsigned char encodedPlacement = info.pathing_grid.data[pointI.x + ((info.height - 1) - pointI.y) * info.width];
+    bool decodedPlacement = encodedPlacement == 255 ? false : true;
+    return decodedPlacement;
+#else
+    // BWAPI
+#endif
+}
+
+bool MapTools::canBuild(const sc2::Point2D & point) 
+{
+#ifdef SC2API
+    auto & info = m_bot.Observation()->GetGameInfo();
+    sc2::Point2DI pointI((int)point.x, (int)point.y);
+    if (pointI.x < 0 || pointI.x >= info.width || pointI.y < 0 || pointI.y >= info.width)
+    {
+        return false;
+    }
+
+    assert(info.placement_grid.data.size() == info.width * info.height);
+    unsigned char encodedPlacement = info.placement_grid.data[pointI.x + ((info.height - 1) - pointI.y) * info.width];
+    bool decodedPlacement = encodedPlacement == 255 ? true : false;
+    return decodedPlacement;
+#else
+
+#endif
+}
+
+float MapTools::terainHeight(const sc2::Point2D & point) 
+{
+#ifdef SC2API
+    auto & info = m_bot.Observation()->GetGameInfo();
+    sc2::Point2DI pointI((int)point.x, (int)point.y);
+    if (pointI.x < 0 || pointI.x >= info.width || pointI.y < 0 || pointI.y >= info.width)
+    {
+        return 0.0f;
+    }
+
+    assert(info.terrain_height.data.size() == info.width * info.height);
+    unsigned char encodedHeight = info.terrain_height.data[pointI.x + ((info.height - 1) - pointI.y) * info.width];
+    float decodedHeight = -100.0f + 200.0f * float(encodedHeight) / 255.0f;
+    return decodedHeight;
+#else
+    return 0;
+#endif
 }

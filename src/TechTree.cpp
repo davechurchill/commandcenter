@@ -259,7 +259,7 @@ void TechTree::initUpgradeData()
     m_upgradeData[sc2::UPGRADE_ID::ZERGMISSILEWEAPONSLEVEL3] =          { sc2::Race::Zerg, 200, 200, 0, 3520, false, false, false, false, false, false, false, sc2::ABILITY_ID::RESEARCH_ZERGMISSILEWEAPONSLEVEL3, 0, { sc2::UNIT_TYPEID::ZERG_EVOLUTIONCHAMBER }, { sc2::UNIT_TYPEID::ZERG_HIVE }, {sc2::UPGRADE_ID::ZERGMISSILEWEAPONSLEVEL2} };
 }
 
-const TypeData & TechTree::getData(const sc2::UnitTypeID & type) const
+const TypeData & TechTree::getData(const CCUnitType & type) const
 {
     if (m_unitTypeData.find(type) == m_unitTypeData.end())
     {

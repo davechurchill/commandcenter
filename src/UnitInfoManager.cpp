@@ -26,27 +26,26 @@ void UnitInfoManager::updateUnitInfo()
 {
     m_units[Players::Self].clear();
     m_units[Players::Enemy].clear();
+    m_units[Players::Neutral].clear();
 
-    for (auto & unit : m_bot.Observation()->GetUnits())
+    for (auto & unit : m_bot.GetUnits())
     {
-        if (Util::GetPlayer(unit) == Players::Self || Util::GetPlayer(unit) == Players::Enemy)
-        {
-            updateUnit(unit);
-            m_units[Util::GetPlayer(unit)].push_back(unit);
-        }        
+        updateUnit(unit);
+        m_units[Util::GetPlayer(unit)].push_back(unit);     
     }
 
     // remove bad enemy units
     m_unitData[Players::Self].removeBadUnits();
     m_unitData[Players::Enemy].removeBadUnits();
+    m_unitData[Players::Neutral].removeBadUnits();
 }
 
-const std::map<const sc2::Unit *, UnitInfo> & UnitInfoManager::getUnitInfoMap(int player) const
+const std::map<CCUnit, UnitInfo> & UnitInfoManager::getUnitInfoMap(int player) const
 {
     return getUnitData(player).getUnitInfoMap();
 }
 
-const std::vector<const sc2::Unit *> & UnitInfoManager::getUnits(int player) const
+const std::vector<CCUnit> & UnitInfoManager::getUnits(int player) const
 {
     BOT_ASSERT(m_units.find(player) != m_units.end(), "Couldn't find player units: %d", player);
 
@@ -64,8 +63,9 @@ static std::string GetAbilityText(sc2::AbilityID ability_id) {
 
 void UnitInfoManager::drawSelectedUnitDebugInfo()
 {
-    const sc2::Unit * unit = nullptr;
-    for (auto u : m_bot.Observation()->GetUnits()) 
+#ifdef SC2API
+    CCUnit unit = nullptr;
+    for (auto u : m_bot.GetUnits()) 
     {
         if (u->is_selected && u->alliance == sc2::Unit::Self) {
             unit = u;
@@ -175,11 +175,11 @@ void UnitInfoManager::drawSelectedUnitDebugInfo()
         debug->DebugSphereOut(target, 1.25f, sc2::Colors::Blue);
         debug->DebugTextOut(target_info, p1, sc2::Colors::Yellow);
     }
-    
+#endif
 }
 
 // passing in a unit type of 0 returns a count of all units
-size_t UnitInfoManager::getUnitTypeCount(int player, sc2::UnitTypeID type, bool completed) const
+size_t UnitInfoManager::getUnitTypeCount(int player, CCUnitType type, bool completed) const
 {
     size_t count = 0;
 
@@ -225,18 +225,13 @@ void UnitInfoManager::drawUnitInformation(float x,float y) const
 
 }
 
-void UnitInfoManager::updateUnit(const sc2::Unit * unit)
+void UnitInfoManager::updateUnit(CCUnit unit)
 {
-    if (!(Util::GetPlayer(unit) == Players::Self || Util::GetPlayer(unit) == Players::Enemy))
-    {
-        return;
-    }
-
     m_unitData[Util::GetPlayer(unit)].updateUnit(unit);
 }
 
 // is the unit valid?
-bool UnitInfoManager::isValidUnit(const sc2::Unit * unit)
+bool UnitInfoManager::isValidUnit(CCUnit unit)
 {
     if (!unit) { return false; }
 

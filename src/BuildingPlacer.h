@@ -16,7 +16,7 @@ class BuildingPlacer
     bool			buildable(const Building & b, int x, int y) const;
     bool			isReserved(int x, int y) const;
     bool			isInResourceBox(int x, int y) const;
-    bool			tileOverlapsBaseLocation(int x, int y, sc2::UnitTypeID type) const;
+    bool			tileOverlapsBaseLocation(int x, int y, CCUnitType type) const;
 
 
 public:

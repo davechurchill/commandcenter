@@ -20,7 +20,7 @@ void BaseLocationManager::onStart()
     const int clusterDistance = 14;
     
     // stores each cluster of resources based on some ground distance
-    std::vector<std::vector<const sc2::Unit *>> resourceClusters;
+    std::vector<std::vector<CCUnit>> resourceClusters;
     for (auto mineral : m_bot.Observation()->GetUnits(sc2::Unit::Alliance::Neutral))
     {
         // skip minerals that don't have more than 100 starting minerals
@@ -51,7 +51,7 @@ void BaseLocationManager::onStart()
 
         if (!foundCluster)
         {
-            resourceClusters.push_back(std::vector<const sc2::Unit *>());
+            resourceClusters.push_back(std::vector<CCUnit>());
             resourceClusters.back().push_back(mineral);
         }
     }

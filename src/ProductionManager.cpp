@@ -42,7 +42,7 @@ void ProductionManager::onFrame()
 }
 
 // on unit destroy
-void ProductionManager::onUnitDestroy(const sc2::Unit * unit)
+void ProductionManager::onUnitDestroy(CCUnit unit)
 {
     // TODO: might have to re-do build order if a vital unit died
 }
@@ -62,7 +62,7 @@ void ProductionManager::manageBuildOrderQueue()
     while (!m_queue.isEmpty())
     {
         // this is the unit which can produce the currentItem
-        const sc2::Unit * producer = getProducer(currentItem.type);
+        CCUnit producer = getProducer(currentItem.type);
 
         // check to see if we can make it right now
         bool canMake = canMakeNow(producer, currentItem.type);
@@ -96,13 +96,13 @@ void ProductionManager::manageBuildOrderQueue()
     }
 }
 
-const sc2::Unit * ProductionManager::getProducer(const BuildType & type, sc2::Point2D closestTo)
+CCUnit ProductionManager::getProducer(const BuildType & type, sc2::Point2D closestTo)
 {
     // get all the types of units that cna build this type
     auto & producerTypes = m_bot.Data(type).whatBuilds;
 
     // make a set of all candidate producers
-    std::vector<const sc2::Unit *> candidateProducers;
+    std::vector<CCUnit> candidateProducers;
     for (auto unit : m_bot.UnitInfo().getUnits(Players::Self))
     {
         // reasons a unit can not train the desired type
@@ -122,7 +122,7 @@ const sc2::Unit * ProductionManager::getProducer(const BuildType & type, sc2::Po
     return getClosestUnitToPosition(candidateProducers, closestTo);
 }
 
-const sc2::Unit * ProductionManager::getClosestUnitToPosition(const std::vector<const sc2::Unit *> & units, sc2::Point2D closestTo)
+CCUnit ProductionManager::getClosestUnitToPosition(const std::vector<CCUnit> & units, sc2::Point2D closestTo)
 {
     if (units.size() == 0)
     {
@@ -135,7 +135,7 @@ const sc2::Unit * ProductionManager::getClosestUnitToPosition(const std::vector<
         return units[0];
     }
 
-    const sc2::Unit * closestUnit = nullptr;
+    CCUnit closestUnit = nullptr;
     double minDist = std::numeric_limits<double>::max();
 
     for (auto & unit : units)
@@ -152,7 +152,7 @@ const sc2::Unit * ProductionManager::getClosestUnitToPosition(const std::vector<
 }
 
 // this function will check to see if all preconditions are met and then create a unit
-void ProductionManager::create(const sc2::Unit * producer, BuildOrderItem & item)
+void ProductionManager::create(CCUnit producer, BuildOrderItem & item)
 {
     if (!producer)
     {
@@ -177,7 +177,7 @@ void ProductionManager::create(const sc2::Unit * producer, BuildOrderItem & item
     }
 }
 
-bool ProductionManager::canMakeNow(const sc2::Unit * producer, const BuildType & type)
+bool ProductionManager::canMakeNow(CCUnit producer, const BuildType & type)
 {
     if (!producer || !meetsReservedResources(type))
     {

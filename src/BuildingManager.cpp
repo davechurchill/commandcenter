@@ -43,7 +43,7 @@ void BuildingManager::onFrame()
     drawBuildingInformation();
 }
 
-bool BuildingManager::isBeingBuilt(sc2::UnitTypeID type)
+bool BuildingManager::isBeingBuilt(CCUnitType type)
 {
     for (auto & b : m_buildings)
     {
@@ -109,7 +109,7 @@ void BuildingManager::assignWorkersToUnassignedBuildings()
         b.finalPosition = testLocation;
 
         // grab the worker unit from WorkerManager which is closest to this final position
-        const sc2::Unit * builderUnit = m_bot.Workers().getBuilder(b);
+        CCUnit builderUnit = m_bot.Workers().getBuilder(b);
         b.builderUnit = builderUnit;
         if (!b.builderUnit)
         {
@@ -135,7 +135,7 @@ void BuildingManager::constructAssignedBuildings()
 
         // TODO: not sure if this is the correct way to tell if the building is constructing
         sc2::AbilityID buildAbility = m_bot.Data(b.type).buildAbility;
-        const sc2::Unit * builderUnit = b.builderUnit;
+        CCUnit builderUnit = b.builderUnit;
 
         bool isConstructing = false;
 
@@ -174,7 +174,7 @@ void BuildingManager::constructAssignedBuildings()
                 if (Util::IsRefineryType(b.type))
                 {
                     // first we find the geyser at the desired location
-                    const sc2::Unit * geyser = nullptr;
+                    CCUnit geyser = nullptr;
                     for (auto unit : m_bot.Observation()->GetUnits())
                     {
                         if (Util::IsGeyser(unit) && Util::Dist(b.finalPosition, unit->pos) < 3)
@@ -304,7 +304,7 @@ void BuildingManager::checkForCompletedBuildings()
 }
 
 // add a new building to be constructed
-void BuildingManager::addBuildingTask(const sc2::UnitTypeID & type, const sc2::Point2D & desiredPosition)
+void BuildingManager::addBuildingTask(const CCUnitType & type, const sc2::Point2D & desiredPosition)
 {
     m_reservedMinerals  += Util::GetUnitTypeMineralPrice(type, m_bot);
     m_reservedGas	    += Util::GetUnitTypeGasPrice(type, m_bot);
@@ -393,9 +393,9 @@ void BuildingManager::drawBuildingInformation()
     m_bot.Map().drawTextScreen(sc2::Point2D(0.05f, 0.05f), ss.str());
 }
 
-std::vector<sc2::UnitTypeID> BuildingManager::buildingsQueued() const
+std::vector<CCUnitType> BuildingManager::buildingsQueued() const
 {
-    std::vector<sc2::UnitTypeID> buildingsQueued;
+    std::vector<CCUnitType> buildingsQueued;
 
     for (const auto & b : m_buildings)
     {

@@ -10,9 +10,9 @@ class WorkerManager
     CCBot & m_bot;
 
     mutable WorkerData  m_workerData;
-    const sc2::Unit *   m_previousClosestWorker;
+    CCUnit   m_previousClosestWorker;
 
-    void        setMineralWorker(const sc2::Unit * unit);
+    void        setMineralWorker(CCUnit unit);
     
     void        handleIdleWorkers();
     void        handleGasWorkers();
@@ -25,24 +25,24 @@ public:
     void        onStart();
     void        onFrame();
 
-    void        finishedWithWorker(const sc2::Unit * unit);
+    void        finishedWithWorker(CCUnit unit);
     void        drawResourceDebugInfo();
     void        drawWorkerInformation();
-    void        setScoutWorker(const sc2::Unit * worker);
-    void        setCombatWorker(const sc2::Unit * worker);
-    void        setBuildingWorker(const sc2::Unit * worker, Building & b);
-    void        setRepairWorker(const sc2::Unit * worker,const sc2::Unit * unitToRepair);
-    void        stopRepairing(const sc2::Unit * worker);
+    void        setScoutWorker(CCUnit worker);
+    void        setCombatWorker(CCUnit worker);
+    void        setBuildingWorker(CCUnit worker, Building & b);
+    void        setRepairWorker(CCUnit worker,CCUnit unitToRepair);
+    void        stopRepairing(CCUnit worker);
 
     int         getNumMineralWorkers();
     int         getNumGasWorkers();
-    bool        isWorkerScout(const sc2::Unit * worker) const;
-    bool        isFree(const sc2::Unit * worker) const;
-    bool        isBuilder(const sc2::Unit * worker) const;
+    bool        isWorkerScout(CCUnit worker) const;
+    bool        isFree(CCUnit worker) const;
+    bool        isBuilder(CCUnit worker) const;
 
-    const sc2::Unit * getBuilder(Building & b,bool setJobAsBuilder = true) const;
-    const sc2::Unit * getClosestDepot(const sc2::Unit * worker) const;
-    const sc2::Unit * getGasWorker(const sc2::Unit * refinery) const;
-    const sc2::Unit * getClosestMineralWorkerTo(const sc2::Point2D & pos) const;
+    CCUnit getBuilder(Building & b,bool setJobAsBuilder = true) const;
+    CCUnit getClosestDepot(CCUnit worker) const;
+    CCUnit getGasWorker(CCUnit refinery) const;
+    CCUnit getClosestMineralWorkerTo(const sc2::Point2D & pos) const;
 };
 

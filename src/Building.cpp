@@ -14,7 +14,7 @@ Building::Building()
 {} 
 
 // constructor we use most often
-Building::Building(sc2::UnitTypeID t, sc2::Point2D desired)
+Building::Building(CCUnitType t, sc2::Point2D desired)
     : desiredPosition   (desired)
     , finalPosition     (0,0)
     , position          (0,0)

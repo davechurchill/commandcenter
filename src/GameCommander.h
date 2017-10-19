@@ -17,14 +17,14 @@ class GameCommander
     ScoutManager            m_scoutManager;
     CombatCommander         m_combatCommander;
 
-    std::vector<const sc2::Unit *>    m_validUnits;
-    std::vector<const sc2::Unit *>    m_combatUnits;
-    std::vector<const sc2::Unit *>    m_scoutUnits;
+    std::vector<CCUnit>    m_validUnits;
+    std::vector<CCUnit>    m_combatUnits;
+    std::vector<CCUnit>    m_scoutUnits;
 
     bool                    m_initialScoutSet;
 
-    void assignUnit(const sc2::Unit * unit, std::vector<const sc2::Unit *> & units);
-    bool isAssigned(const sc2::Unit * unit) const;
+    void assignUnit(CCUnit unit, std::vector<CCUnit> & units);
+    bool isAssigned(CCUnit unit) const;
 
 public:
 
@@ -43,6 +43,6 @@ public:
 
     bool shouldSendInitialScout();
 
-    void onUnitCreate(const sc2::Unit * unit);
-    void onUnitDestroy(const sc2::Unit * unit);
+    void onUnitCreate(CCUnit unit);
+    void onUnitDestroy(CCUnit unit);
 };

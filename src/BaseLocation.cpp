@@ -6,7 +6,7 @@
 
 const int NearBaseLocationTileDistance = 20;
 
-BaseLocation::BaseLocation(CCBot & bot, int baseID, const std::vector<const sc2::Unit *> & resources)
+BaseLocation::BaseLocation(CCBot & bot, int baseID, const std::vector<CCUnit> & resources)
     : m_bot(bot)
     , m_baseID               (baseID)
     , m_isStartLocation      (false)
@@ -144,12 +144,12 @@ bool BaseLocation::containsPosition(const sc2::Point2D & pos) const
     return getGroundDistance(pos) < NearBaseLocationTileDistance;
 }
 
-const std::vector<const sc2::Unit *> & BaseLocation::getGeysers() const
+const std::vector<CCUnit> & BaseLocation::getGeysers() const
 {
     return m_geysers;
 }
 
-const std::vector<const sc2::Unit *> & BaseLocation::getMinerals() const
+const std::vector<CCUnit> & BaseLocation::getMinerals() const
 {
     return m_minerals;
 }

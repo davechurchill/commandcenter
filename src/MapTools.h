@@ -33,6 +33,10 @@ class MapTools
         
     void printMap();
 
+    float   terainHeight(const sc2::Point2D& point);
+    bool    canBuild(const sc2::Point2D& point);
+    bool    canWalk(const sc2::Point2D& point);
+
 public:
 
     MapTools(CCBot & bot);
@@ -54,15 +58,14 @@ public:
     void    drawSphere(const sc2::Point2D & pos, float radius, const sc2::Color & color = sc2::Colors::White) const;
     void    drawText(const sc2::Point2D & pos, const std::string & str, const sc2::Color & color = sc2::Colors::White) const;
     void    drawTextScreen(const sc2::Point2D & pos, const std::string & str, const sc2::Color & color = sc2::Colors::White) const;
-    void    drawBoxAroundUnit(const UnitTag & uinit, sc2::Color color) const;
-    void    drawSphereAroundUnit(const UnitTag & uinit, sc2::Color color) const;
+    void    drawBoxAroundUnit(CCUnit unit, sc2::Color color) const;
     
     bool    isValid(int x, int y) const;
     bool    isValid(const sc2::Point2D & pos) const;
     bool    isPowered(const sc2::Point2D & pos) const;
     bool    isExplored(const sc2::Point2D & pos) const;
     bool    isVisible(const sc2::Point2D & pos) const;
-    bool    canBuildTypeAtPosition(int x, int y, sc2::UnitTypeID type) const;
+    bool    canBuildTypeAtPosition(int x, int y, CCUnitType type) const;
 
     const   DistanceMap & getDistanceMap(const sc2::Point2D & tile) const;
     int     getGroundDistance(const sc2::Point2D & src, const sc2::Point2D & dest) const;

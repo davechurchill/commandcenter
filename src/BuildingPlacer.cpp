@@ -53,7 +53,7 @@ bool BuildingPlacer::canBuildHere(int bx, int by, const Building & b) const
 //returns true if we can build this type of unit here with the specified amount of space.
 bool BuildingPlacer::canBuildHereWithSpace(int bx, int by, const Building & b, int buildDist) const
 {
-    sc2::UnitTypeID type = b.type;
+    CCUnitType type = b.type;
 
     //if we can't build here, we of course can't build here with space
     if (!canBuildHere(bx, by, b))
@@ -129,7 +129,7 @@ sc2::Point2D BuildingPlacer::getBuildLocationNear(const Building & b, int buildD
     return sc2::Point2D(0, 0);
 }
 
-bool BuildingPlacer::tileOverlapsBaseLocation(int x, int y, sc2::UnitTypeID type) const
+bool BuildingPlacer::tileOverlapsBaseLocation(int x, int y, CCUnitType type) const
 {
     // if it's a resource depot we don't care if it overlaps
     if (Util::IsTownHallType(type))

@@ -16,5 +16,5 @@ public:
     void        addBuilding(const Building & b);
     void        removeBuilding(const Building & b);
     void        removeBuildings(const std::vector<Building> & buildings);
-    bool        isBeingBuilt(sc2::UnitTypeID type);
+    bool        isBeingBuilt(CCUnitType type);
 };

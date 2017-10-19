@@ -10,7 +10,7 @@ UnitData::UnitData()
     m_numUnits		    = std::vector<int>(maxTypeID + 1, 0);
 }
 
-void UnitData::updateUnit(const sc2::Unit * unit)
+void UnitData::updateUnit(CCUnit unit)
 {
     bool firstSeen = false;
     const auto & it = m_unitMap.find(unit);
@@ -36,7 +36,7 @@ void UnitData::updateUnit(const sc2::Unit * unit)
     }
 }
 
-void UnitData::killUnit(const sc2::Unit * unit)
+void UnitData::killUnit(CCUnit unit)
 {
     //_mineralsLost += unit->getType().mineralPrice();
     //_gasLost += unit->getType().gasPrice();
@@ -77,17 +77,17 @@ int UnitData::getMineralsLost() const
     return m_mineralsLost;
 }
 
-int UnitData::getNumUnits(sc2::UnitTypeID t) const
+int UnitData::getNumUnits(CCUnitType t) const
 {
     return m_numUnits[t];
 }
 
-int UnitData::getNumDeadUnits(sc2::UnitTypeID t) const
+int UnitData::getNumDeadUnits(CCUnitType t) const
 {
     return m_numDeadUnits[t];
 }
 
-const std::map<const sc2::Unit *, UnitInfo> & UnitData::getUnitInfoMap() const
+const std::map<CCUnit, UnitInfo> & UnitData::getUnitInfoMap() const
 {
     return m_unitMap;
 }

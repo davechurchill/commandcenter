@@ -60,7 +60,7 @@ void GameCommander::handleUnitAssignments()
     setCombatUnits();
 }
 
-bool GameCommander::isAssigned(const sc2::Unit * unit) const
+bool GameCommander::isAssigned(CCUnit unit) const
 {
     return     (std::find(m_combatUnits.begin(), m_combatUnits.end(), unit) != m_combatUnits.end())
         || (std::find(m_scoutUnits.begin(), m_scoutUnits.end(), unit) != m_scoutUnits.end());
@@ -85,7 +85,7 @@ void GameCommander::setScoutUnits()
         if (shouldSendInitialScout())
         {
             // grab the closest worker to the supply provider to send to scout
-            const sc2::Unit * workerScout = m_bot.Workers().getClosestMineralWorkerTo(m_bot.GetStartLocation());
+            CCUnit workerScout = m_bot.Workers().getClosestMineralWorkerTo(m_bot.GetStartLocation());
 
             // if we find a worker (which we should) add it to the scout units
             if (workerScout)
@@ -129,18 +129,18 @@ void GameCommander::setCombatUnits()
     }
 }
 
-void GameCommander::onUnitCreate(const sc2::Unit * unit)
+void GameCommander::onUnitCreate(CCUnit unit)
 {
 
 }
 
-void GameCommander::onUnitDestroy(const sc2::Unit * unit)
+void GameCommander::onUnitDestroy(CCUnit unit)
 {
     //_productionManager.onUnitDestroy(unit);
 }
 
 
-void GameCommander::assignUnit(const sc2::Unit * unit, std::vector<const sc2::Unit *> & units)
+void GameCommander::assignUnit(CCUnit unit, std::vector<CCUnit> & units)
 {
     if (std::find(m_scoutUnits.begin(), m_scoutUnits.end(), unit) != m_scoutUnits.end())
     {

@@ -12,11 +12,11 @@ class UnitInfoManager
 
     std::map<int, UnitData> m_unitData;
 
-    std::map<int, std::vector<const sc2::Unit *>> m_units;
+    std::map<int, std::vector<CCUnit>> m_units;
 
-    void                    updateUnit(const sc2::Unit * unit);
+    void                    updateUnit(CCUnit unit);
     void                    updateUnitInfo();
-    bool                    isValidUnit(const sc2::Unit * unit);
+    bool                    isValidUnit(CCUnit unit);
     
     const UnitData &        getUnitData(int player) const;
 
@@ -29,13 +29,13 @@ public:
     void                    onFrame();
     void                    onStart();
 
-    const std::vector<const sc2::Unit *> & getUnits(int player) const;
+    const std::vector<CCUnit> & getUnits(int player) const;
 
-    size_t                  getUnitTypeCount(int player, sc2::UnitTypeID type, bool completed = true) const;
+    size_t                  getUnitTypeCount(int player, CCUnitType type, bool completed = true) const;
 
     void                    getNearbyForce(std::vector<UnitInfo> & unitInfo, sc2::Point2D p, int player, float radius) const;
 
-    const std::map<const sc2::Unit *, UnitInfo> & getUnitInfoMap(int player) const;
+    const std::map<CCUnit, UnitInfo> & getUnitInfoMap(int player) const;
 
     //bool                  enemyHasCloakedUnits() const;
     void                    drawUnitInformation(float x, float y) const;

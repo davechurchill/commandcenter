@@ -8,17 +8,17 @@ RangedManager::RangedManager(CCBot & bot)
 
 }
 
-void RangedManager::executeMicro(const std::vector<const sc2::Unit *> & targets)
+void RangedManager::executeMicro(const std::vector<CCUnit> & targets)
 {
     assignTargets(targets);
 }
 
-void RangedManager::assignTargets(const std::vector<const sc2::Unit *> & targets)
+void RangedManager::assignTargets(const std::vector<CCUnit> & targets)
 {
-    const std::vector<const sc2::Unit *> & rangedUnits = getUnits();
+    const std::vector<CCUnit> & rangedUnits = getUnits();
 
     // figure out targets
-    std::vector<const sc2::Unit *> rangedUnitTargets;
+    std::vector<CCUnit> rangedUnitTargets;
     for (auto target : targets)
     {
         if (!target) { continue; }
@@ -39,7 +39,7 @@ void RangedManager::assignTargets(const std::vector<const sc2::Unit *> & targets
             if (!rangedUnitTargets.empty())
             {
                 // find the best target for this meleeUnit
-                const sc2::Unit * target = getTarget(rangedUnit, rangedUnitTargets);
+                CCUnit target = getTarget(rangedUnit, rangedUnitTargets);
 
                 // attack it
                 if (m_bot.Config().KiteWithRangedUnits)
@@ -72,13 +72,13 @@ void RangedManager::assignTargets(const std::vector<const sc2::Unit *> & targets
 
 // get a target for the ranged unit to attack
 // TODO: this is the melee targeting code, replace it with something better for ranged units
-const sc2::Unit * RangedManager::getTarget(const sc2::Unit * rangedUnit, const std::vector<const sc2::Unit *> & targets)
+CCUnit RangedManager::getTarget(CCUnit rangedUnit, const std::vector<CCUnit> & targets)
 {
     BOT_ASSERT(rangedUnit, "null melee unit in getTarget");
 
     int highPriority = 0;
     double closestDist = std::numeric_limits<double>::max();
-    const sc2::Unit * closestTarget = nullptr;
+    CCUnit closestTarget = nullptr;
 
     // for each target possiblity
     for (auto targetUnit : targets)
@@ -101,7 +101,7 @@ const sc2::Unit * RangedManager::getTarget(const sc2::Unit * rangedUnit, const s
 }
 
 // get the attack priority of a type in relation to a zergling
-int RangedManager::getAttackPriority(const sc2::Unit * attacker, const sc2::Unit * unit)
+int RangedManager::getAttackPriority(CCUnit attacker, CCUnit unit)
 {
     BOT_ASSERT(unit, "null unit in getAttackPriority");
 

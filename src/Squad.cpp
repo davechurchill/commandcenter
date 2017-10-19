@@ -79,7 +79,7 @@ void Squad::updateUnits()
 void Squad::setAllUnits()
 {
     // clean up the _units vector just in case one of them died
-    std::set<const sc2::Unit *> goodUnits;
+    std::set<CCUnit> goodUnits;
     for (auto unit : m_units)
     {
         if (!unit) { continue; }
@@ -106,11 +106,11 @@ void Squad::setNearEnemyUnits()
 
 void Squad::addUnitsToMicroManagers()
 {
-    std::vector<const sc2::Unit *> meleeUnits;
-    std::vector<const sc2::Unit *> rangedUnits;
-    std::vector<const sc2::Unit *> detectorUnits;
-    std::vector<const sc2::Unit *> transportUnits;
-    std::vector<const sc2::Unit *> tankUnits;
+    std::vector<CCUnit> meleeUnits;
+    std::vector<CCUnit> rangedUnits;
+    std::vector<CCUnit> detectorUnits;
+    std::vector<CCUnit> transportUnits;
+    std::vector<CCUnit> tankUnits;
 
     // add _units to micro managers
     for (auto unit : m_units)
@@ -155,7 +155,7 @@ void Squad::setSquadOrder(const SquadOrder & so)
     m_order = so;
 }
 
-bool Squad::containsUnit(const sc2::Unit * unit) const
+bool Squad::containsUnit(CCUnit unit) const
 {
     return std::find(m_units.begin(), m_units.end(), unit) != m_units.end();
 }
@@ -175,7 +175,7 @@ void Squad::clear()
     m_units.clear();
 }
 
-bool Squad::isUnitNearEnemy(const sc2::Unit * unit) const
+bool Squad::isUnitNearEnemy(CCUnit unit) const
 {
     BOT_ASSERT(unit, "null unit in squad");
 
@@ -236,9 +236,9 @@ sc2::Point2D Squad::calcRegroupPosition() const
     }
 }
 
-const sc2::Unit * Squad::unitClosestToEnemy() const
+CCUnit Squad::unitClosestToEnemy() const
 {
-    const sc2::Unit * closest = nullptr;
+    CCUnit closest = nullptr;
     float closestDist = std::numeric_limits<float>::max();
 
     for (auto unit : m_units)
@@ -275,7 +275,7 @@ int Squad::squadUnitsNear(const sc2::Point2D & p) const
     return numUnits;
 }
 
-const std::set<const sc2::Unit *> & Squad::getUnits() const
+const std::set<CCUnit> & Squad::getUnits() const
 {
     return m_units;
 }
@@ -285,12 +285,12 @@ const SquadOrder & Squad::getSquadOrder()	const
     return m_order;
 }
 
-void Squad::addUnit(const sc2::Unit * unit)
+void Squad::addUnit(CCUnit unit)
 {
     m_units.insert(unit);
 }
 
-void Squad::removeUnit(const sc2::Unit * unit)
+void Squad::removeUnit(CCUnit unit)
 {
     m_units.erase(unit);
 }

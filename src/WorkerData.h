@@ -12,32 +12,32 @@ class WorkerData
 {
     CCBot & m_bot;
 
-    std::set<const sc2::Unit *>         m_workers;
-    std::set<const sc2::Unit *>         m_depots;
+    std::set<CCUnit>         m_workers;
+    std::set<CCUnit>         m_depots;
     std::map<int, int>                  m_workerJobCount;
-    std::map<const sc2::Unit *, int>    m_workerJobMap;
-    std::map<const sc2::Unit *, int>    m_refineryWorkerCount;
-    std::map<const sc2::Unit *, int>    m_depotWorkerCount;
-    std::map<const sc2::Unit *, const sc2::Unit *>  m_workerRefineryMap;
-    std::map<const sc2::Unit *, const sc2::Unit *>  m_workerDepotMap;
+    std::map<CCUnit, int>    m_workerJobMap;
+    std::map<CCUnit, int>    m_refineryWorkerCount;
+    std::map<CCUnit, int>    m_depotWorkerCount;
+    std::map<CCUnit, CCUnit>  m_workerRefineryMap;
+    std::map<CCUnit, CCUnit>  m_workerDepotMap;
 
-    void clearPreviousJob(const sc2::Unit * unit);
+    void clearPreviousJob(CCUnit unit);
 
 public:
 
     WorkerData(CCBot & bot);
 
-    void    workerDestroyed(const sc2::Unit * unit);
+    void    workerDestroyed(CCUnit unit);
     void    updateAllWorkerData();
-    void    updateWorker(const sc2::Unit * unit);
-    void    setWorkerJob(const sc2::Unit * unit, int job, const sc2::Unit * jobUnit = 0);
+    void    updateWorker(CCUnit unit);
+    void    setWorkerJob(CCUnit unit, int job, CCUnit jobUnit = 0);
     void    drawDepotDebugInfo();
     size_t  getNumWorkers() const;
     int     getWorkerJobCount(int job) const;
-    int     getNumAssignedWorkers(const sc2::Unit * unit);
-    int     getWorkerJob(const sc2::Unit * unit) const;
-    const sc2::Unit * getMineralToMine(const sc2::Unit * unit) const;
-    const sc2::Unit * getWorkerDepot(const sc2::Unit * unit) const;
-    const char * getJobCode(const sc2::Unit * unit);
-    const std::set<const sc2::Unit *> & getWorkers() const;
+    int     getNumAssignedWorkers(CCUnit unit);
+    int     getWorkerJob(CCUnit unit) const;
+    CCUnit getMineralToMine(CCUnit unit) const;
+    CCUnit getWorkerDepot(CCUnit unit) const;
+    const char * getJobCode(CCUnit unit);
+    const std::set<CCUnit> & getWorkers() const;
 };

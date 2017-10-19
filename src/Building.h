@@ -14,9 +14,9 @@ public:
     sc2::Point2D    desiredPosition;
     sc2::Point2D    finalPosition;
     sc2::Point2D    position;
-    sc2::UnitTypeID type;
-    const sc2::Unit * buildingUnit;
-    const sc2::Unit * builderUnit;
+    CCUnitType type;
+    CCUnit buildingUnit;
+    CCUnit builderUnit;
     size_t          status;
     int             lastOrderFrame;
     bool            buildCommandGiven;
@@ -25,7 +25,7 @@ public:
     Building();
 
     // constructor we use most often
-    Building(sc2::UnitTypeID t, sc2::Point2D desired);
+    Building(CCUnitType t, sc2::Point2D desired);
 
     // equals operator
     bool operator == (const Building & b);

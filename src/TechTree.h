@@ -21,15 +21,15 @@ struct TypeData
     bool                            isAddon         = false;
     sc2::AbilityID                  buildAbility    = 0;     // the ability that creates this item
     sc2::AbilityID                  warpAbility     = 0;      // the ability that creates this item via warp-in
-    std::vector<sc2::UnitTypeID>    whatBuilds;       // any of these units can build the item
-    std::vector<sc2::UnitTypeID>    requiredUnits;    // owning ONE of these is required to make
+    std::vector<CCUnitType>    whatBuilds;       // any of these units can build the item
+    std::vector<CCUnitType>    requiredUnits;    // owning ONE of these is required to make
     std::vector<sc2::UpgradeID>     requiredUpgrades; // having ALL of these is required to make
 };
 
 class TechTree
 {
     CCBot & m_bot;
-    std::map<sc2::UnitTypeID, TypeData> m_unitTypeData;
+    std::map<CCUnitType, TypeData> m_unitTypeData;
     std::map<sc2::UpgradeID, TypeData>  m_upgradeData;
 
     void initUnitTypeData();
@@ -42,7 +42,7 @@ public:
     TechTree(CCBot & bot);
     void onStart();
 
-    const TypeData & getData(const sc2::UnitTypeID & type) const;
+    const TypeData & getData(const CCUnitType & type) const;
     const TypeData & getData(const sc2::UpgradeID & type)  const;
     const TypeData & getData(const BuildType & type)       const;
 };
