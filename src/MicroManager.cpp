@@ -113,9 +113,9 @@ const std::vector<CCUnit> & MicroManager::getUnits() const
     return m_units;
 }
 
-void MicroManager::regroup(const sc2::Point2D & regroupPosition) const
+void MicroManager::regroup(const CCPosition & regroupPosition) const
 {
-    sc2::Point2D ourBasePosition = m_bot.GetStartLocation();
+    CCPosition ourBasePosition = m_bot.GetStartLocation();
     int regroupDistanceFromBase = m_bot.Map().getGroundDistance(regroupPosition, ourBasePosition);
 
     // for each of the units we have

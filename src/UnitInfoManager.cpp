@@ -104,7 +104,7 @@ void UnitInfoManager::drawSelectedUnitDebugInfo()
             debug_txt += GetAbilityText(ability.ability_id) + "\n";
         }
     }
-    debug->DebugTextOut(debug_txt, unit->pos, sc2::Colors::Green);
+    debug->DebugTextOut(debug_txt, unit->pos, CCColor(0, 255, 0));
 
     // Show the direction of the unit.
     sc2::Point3D p1; // Use this to show target distance.
@@ -116,7 +116,7 @@ void UnitInfoManager::drawSelectedUnitDebugInfo()
         assert(unit->facing >= 0.0f && unit->facing < 6.29f);
         p1.x += length * std::cos(unit->facing);
         p1.y += length * std::sin(unit->facing);
-        debug->DebugLineOut(p0, p1, sc2::Colors::Yellow);
+        debug->DebugLineOut(p0, p1, CCColor(255, 255, 0));
     }
 
     // Box around the unit.
@@ -129,14 +129,14 @@ void UnitInfoManager::drawSelectedUnitDebugInfo()
         p_max.x += 2.0f;
         p_max.y += 2.0f;
         p_max.z += 2.0f;
-        debug->DebugBoxOut(p_min, p_max, sc2::Colors::Blue);
+        debug->DebugBoxOut(p_min, p_max, CCColor(0, 0, 255));
     }
 
     // Sphere around the unit.
     {
         sc2::Point3D p = unit->pos;
         p.z += 0.1f; // Raise the line off the ground a bit so it renders more clearly.
-        debug->DebugSphereOut(p, 1.25f, sc2::Colors::Purple);
+        debug->DebugSphereOut(p, 1.25f, CCColor(255, 0, 255));
     }
 
     // Pathing query to get the target.
@@ -172,8 +172,8 @@ void UnitInfoManager::drawSelectedUnitDebugInfo()
     {
         sc2::Point3D p = target;
         p.z += 0.1f; // Raise the line off the ground a bit so it renders more clearly.
-        debug->DebugSphereOut(target, 1.25f, sc2::Colors::Blue);
-        debug->DebugTextOut(target_info, p1, sc2::Colors::Yellow);
+        debug->DebugSphereOut(target, 1.25f, CCColor(0, 0, 255));
+        debug->DebugTextOut(target_info, p1, CCColor(255, 255, 0));
     }
 #endif
 }
@@ -257,7 +257,7 @@ bool UnitInfoManager::isValidUnit(CCUnit unit)
     return true;
 }
 
-void UnitInfoManager::getNearbyForce(std::vector<UnitInfo> & unitInfo, sc2::Point2D p, int player, float radius) const
+void UnitInfoManager::getNearbyForce(std::vector<UnitInfo> & unitInfo, CCPosition p, int player, float radius) const
 {
     bool hasBunker = false;
     // for each unit we know about for that player

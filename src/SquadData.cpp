@@ -101,18 +101,18 @@ void SquadData::drawSquadInformation()
         ss << squad.getName() << " " << units.size() << " (";
         ss << (int)order.getPosition().x << ", " << (int)order.getPosition().y << ")\n";
 
-        m_bot.Map().drawSphere(order.getPosition(), 5, sc2::Colors::Red);
-        m_bot.Map().drawText(order.getPosition(), squad.getName(), sc2::Colors::Red);
+        m_bot.Map().drawCircle(order.getPosition(), 5, CCColor(255, 0, 0));
+        m_bot.Map().drawText(order.getPosition(), squad.getName(), CCColor(255, 0, 0));
 
         for (auto unit : units)
         {
             BOT_ASSERT(unit, "null unit");
 
-            m_bot.Map().drawText(unit->pos, squad.getName(), sc2::Colors::Green);
+            m_bot.Map().drawText(unit->pos, squad.getName(), CCColor(0, 255, 0));
         }
     }
 
-    m_bot.Map().drawTextScreen(sc2::Point2D(0.5f, 0.2f), ss.str(), sc2::Colors::Red);
+    m_bot.Map().drawTextScreen(CCPosition(0.5f, 0.2f), ss.str(), CCColor(255, 0, 0));
 }
 
 void SquadData::verifySquadUniqueMembership()

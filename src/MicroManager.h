@@ -6,13 +6,13 @@
 
 struct AirThreat
 {
-    UnitTag	unit;
+    CCUnit unit;
     double weight;
 };
 
 struct GroundThreat
 {
-    UnitTag	unit;
+    CCUnit unit;
     double weight;
 };
 
@@ -39,6 +39,6 @@ public:
 
     void setUnits(const std::vector<CCUnit> & u);
     void execute(const SquadOrder & order);
-    void regroup(const sc2::Point2D & regroupPosition) const;
+    void regroup(const CCPosition & regroupPosition) const;
 
 };

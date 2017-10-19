@@ -99,7 +99,7 @@ bool BuildingPlacer::canBuildHereWithSpace(int bx, int by, const Building & b, i
     return true;
 }
 
-sc2::Point2D BuildingPlacer::getBuildLocationNear(const Building & b, int buildDist) const
+CCPosition BuildingPlacer::getBuildLocationNear(const Building & b, int buildDist) const
 {
     Timer t;
     t.start();
@@ -126,7 +126,7 @@ sc2::Point2D BuildingPlacer::getBuildLocationNear(const Building & b, int buildD
     double ms = t.getElapsedTimeInMilliSec();
     //printf("Building Placer Took %lf ms\n", ms);
 
-    return sc2::Point2D(0, 0);
+    return CCPosition(0, 0);
 }
 
 bool BuildingPlacer::tileOverlapsBaseLocation(int x, int y, CCUnitType type) const
@@ -213,7 +213,7 @@ void BuildingPlacer::drawReservedTiles()
                 int x2 = (x+1)*32 - 8;
                 int y2 = (y+1)*32 - 8;
 
-                m_bot.Map().drawBox((float)x1, (float)y1, (float)x2, (float)y2, sc2::Colors::Yellow);
+                m_bot.Map().drawBox((float)x1, (float)y1, (float)x2, (float)y2, CCColor(255, 255, 0));
             }
         }
     }
@@ -233,11 +233,11 @@ void BuildingPlacer::freeTiles(int bx, int by, int width, int height)
     }
 }
 
-sc2::Point2D BuildingPlacer::getRefineryPosition()
+CCPosition BuildingPlacer::getRefineryPosition()
 {
-    sc2::Point2D closestGeyser(0, 0);
+    CCPosition closestGeyser(0, 0);
     double minGeyserDistanceFromHome = std::numeric_limits<double>::max();
-    sc2::Point2D homePosition = m_bot.GetStartLocation();
+    CCPosition homePosition = m_bot.GetStartLocation();
 
     for (auto & unit : m_bot.Observation()->GetUnits())
     {
@@ -246,7 +246,7 @@ sc2::Point2D BuildingPlacer::getRefineryPosition()
             continue;
         }
 
-        sc2::Point2D geyserPos(unit->pos);
+        CCPosition geyserPos(unit->pos);
 
         // check to see if it's next to one of our depots
         bool nearDepot = false;

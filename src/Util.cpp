@@ -11,6 +11,14 @@ CCUnitType Util::GetType(CCUnit unit)
 #endif
 }
 
+CCUnitID Util::GetID(CCUnit unit)
+{
+#ifdef SC2API
+    return unit->tag;
+#else
+    return unit->getID();
+#endif
+}
 
 bool Util::IsTownHall(CCUnit unit)
 {
@@ -167,11 +175,11 @@ int Util::GetUnitTypeHeight(const CCUnitType type, const CCBot & bot)
 }
 
 
-sc2::Point2D Util::CalcCenter(const std::vector<CCUnit> & units)
+CCPosition Util::CalcCenter(const std::vector<CCUnit> & units)
 {
     if (units.empty())
     {
-        return sc2::Point2D(0.0f,0.0f);
+        return CCPosition(0.0f,0.0f);
     }
 
     float cx = 0.0f;
@@ -184,7 +192,7 @@ sc2::Point2D Util::CalcCenter(const std::vector<CCUnit> & units)
         cy += unit->pos.y;
     }
 
-    return sc2::Point2D(cx / units.size(), cy / units.size());
+    return CCPosition(cx / units.size(), cy / units.size());
 }
 
 bool Util::IsDetector(CCUnit unit)
@@ -292,12 +300,12 @@ bool Util::IsSupplyProviderType(const CCUnitType & type)
     return true;
 }
 
-float Util::Dist(const sc2::Point2D & p1, const sc2::Point2D & p2)
+float Util::Dist(const CCPosition & p1, const CCPosition & p2)
 {
     return sqrtf(Util::DistSq(p1,p2));
 }
 
-float Util::DistSq(const sc2::Point2D & p1, const sc2::Point2D & p2)
+float Util::DistSq(const CCPosition & p1, const CCPosition & p2)
 {
     float dx = p1.x - p2.x;
     float dy = p1.y - p2.y;
@@ -404,25 +412,6 @@ sc2::AbilityID Util::GetAbilityFromName(const std::string & name, CCBot & bot)
     return 0;
 }
 #endif
-
-UnitTag GetClosestEnemyUnitTo(CCUnit ourUnit, const sc2::ObservationInterface * obs)
-{
-    UnitTag closestTag = 0;
-	double closestDist = std::numeric_limits<double>::max();
-
-	for (auto & unit : obs->GetUnits())
-	{
-		double dist = Util::DistSq(unit->pos, ourUnit->pos);
-
-		if (!closestTag || (dist < closestDist))
-		{
-			closestTag = unit->tag;
-			closestDist = dist;
-		}
-	}
-
-	return closestTag;
-}
 
 // checks where a given unit can make a given unit type now
 // this is done by iterating its legal abilities for the build command to make the unit

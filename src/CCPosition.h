@@ -2,18 +2,13 @@
 
 #include "Common.h"
 
-namespace BuildingStatus
-{
-    enum { Unassigned = 0, Assigned = 1, UnderConstruction = 2, Size = 3 };
-}
-
-class Building
+class CCPosition
 {
 public:
 
-    CCPosition    desiredPosition;
-    CCPosition    finalPosition;
-    CCPosition    position;
+    sc2::Point2D    desiredPosition;
+    sc2::Point2D    finalPosition;
+    sc2::Point2D    position;
     CCUnitType type;
     CCUnit buildingUnit;
     CCUnit builderUnit;
@@ -25,7 +20,7 @@ public:
     Building();
 
     // constructor we use most often
-    Building(CCUnitType t, CCPosition desired);
+    Building(CCUnitType t, sc2::Point2D desired);
 
     // equals operator
     bool operator == (const Building & b);

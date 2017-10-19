@@ -48,9 +48,9 @@ public:
     const TypeData & Data(const BuildType & type) const;
     const TypeData & Data(CCUnit unit) const;
     const sc2::Race & GetPlayerRace(int player) const;
-    sc2::Point2D GetStartLocation() const;
+    CCPosition GetStartLocation() const;
 
-    CCUnit GetUnit(const UnitTag & tag) const;
+    CCUnit GetUnit(const CCUnitID & tag) const;
     const std::vector<CCUnit> & GetUnits() const;
 
 #ifdef SC2API

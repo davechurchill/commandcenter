@@ -12,13 +12,13 @@ class BaseLocation
     CCBot &                     m_bot;
     DistanceMap                 m_distanceMap;
 
-    sc2::Point2D                m_depotPosition;
-    sc2::Point2D                m_centerOfResources;
+    CCPosition                m_depotPosition;
+    CCPosition                m_centerOfResources;
     std::vector<CCUnit> m_geysers;
     std::vector<CCUnit> m_minerals;
 
-    std::vector<sc2::Point2D>   m_mineralPositions;
-    std::vector<sc2::Point2D>   m_geyserPositions;
+    std::vector<CCPosition>   m_mineralPositions;
+    std::vector<CCPosition>   m_geyserPositions;
 
     std::map<int, bool>         m_isPlayerOccupying;
     std::map<int, bool>         m_isPlayerStartLocation;
@@ -34,13 +34,13 @@ public:
 
     BaseLocation(CCBot & bot, int baseID, const std::vector<CCUnit> & resources);
     
-    int getGroundDistance(const sc2::Point2D & pos) const;
+    int getGroundDistance(const CCPosition & pos) const;
     bool isStartLocation() const;
     bool isPlayerStartLocation(int player) const;
     bool isMineralOnly() const;
-    bool containsPosition(const sc2::Point2D & pos) const;
-    const sc2::Point2D & getDepotPosition() const;
-    const sc2::Point2D & getPosition() const;
+    bool containsPosition(const CCPosition & pos) const;
+    const CCPosition & getDepotPosition() const;
+    const CCPosition & getPosition() const;
     const std::vector<CCUnit> & getGeysers() const;
     const std::vector<CCUnit> & getMinerals() const;
     bool isOccupiedByPlayer(int player) const;
@@ -49,7 +49,7 @@ public:
 
     void setPlayerOccupying(int player, bool occupying);
 
-    const std::vector<sc2::Point2D> & getClosestTiles() const;
+    const std::vector<CCPosition> & getClosestTiles() const;
 
     void draw();
 };

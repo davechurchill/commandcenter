@@ -43,6 +43,6 @@ public:
     CCUnit getBuilder(Building & b,bool setJobAsBuilder = true) const;
     CCUnit getClosestDepot(CCUnit worker) const;
     CCUnit getGasWorker(CCUnit refinery) const;
-    CCUnit getClosestMineralWorkerTo(const sc2::Point2D & pos) const;
+    CCUnit getClosestMineralWorkerTo(const CCPosition & pos) const;
 };
 

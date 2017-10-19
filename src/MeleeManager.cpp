@@ -40,7 +40,7 @@ void MeleeManager::assignTargets(const std::vector<CCUnit> & targets)
             // run away if we meet the retreat critereon
             if (meleeUnitShouldRetreat(meleeUnit, targets))
             {
-                sc2::Point2D fleeTo(m_bot.GetStartLocation());
+                CCPosition fleeTo(m_bot.GetStartLocation());
 
                 Micro::SmartMove(meleeUnit, fleeTo, m_bot);
             }

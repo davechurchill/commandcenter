@@ -8,7 +8,7 @@ namespace Util
 {
     int GetPlayer(CCUnit unit);
     CCUnitType GetType(CCUnit unit);
-
+    CCUnitID GetID(CCUnit unit);
 
     bool IsCombatUnit(CCUnit unit, CCBot & bot);
     bool IsCombatUnitType(const CCUnitType & type, CCBot & bot);
@@ -39,7 +39,7 @@ namespace Util
     CCUnitType GetSupplyProvider(const sc2::Race & race);
     std::string     GetStringFromRace(const sc2::Race & race);
     sc2::Race       GetRaceFromString(const std::string & race);
-    sc2::Point2D    CalcCenter(const std::vector<CCUnit> & units);
+    CCPosition    CalcCenter(const std::vector<CCUnit> & units);
 
     CCUnitType GetUnitTypeFromName(const std::string & name, CCBot & bot);
     sc2::UpgradeID  GetUpgradeFromName(const std::string & name, CCBot & bot);
@@ -49,8 +49,8 @@ namespace Util
     sc2::AbilityID  GetAbilityFromName(const std::string & name, CCBot & bot);
 #endif
 
-    float Dist(const sc2::Point2D & p1, const sc2::Point2D & p2);
-    float DistSq(const sc2::Point2D & p1, const sc2::Point2D & p2);
+    float Dist(const CCPosition & p1, const CCPosition & p2);
+    float DistSq(const CCPosition & p1, const CCPosition & p2);
     
     // Kevin-provided helper functions
 

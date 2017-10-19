@@ -33,7 +33,7 @@ public:
 
     size_t                  getUnitTypeCount(int player, CCUnitType type, bool completed = true) const;
 
-    void                    getNearbyForce(std::vector<UnitInfo> & unitInfo, sc2::Point2D p, int player, float radius) const;
+    void                    getNearbyForce(std::vector<UnitInfo> & unitInfo, CCPosition p, int player, float radius) const;
 
     const std::map<CCUnit, UnitInfo> & getUnitInfoMap(int player) const;
 

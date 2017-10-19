@@ -37,10 +37,10 @@ BotConfig::BotConfig()
     ScoutHarassEnemy                    = true;
     CombatUnitsForAttack                = 12;
 
-    ColorLineTarget                     = sc2::Colors::White;
-    ColorLineMineral                    = sc2::Colors::Teal;
-    ColorUnitNearEnemy                  = sc2::Colors::Red;
-    ColorUnitNotNearEnemy               = sc2::Colors::Green;
+    ColorLineTarget                     = CCColor(255, 255, 255);
+    ColorLineMineral                    = CCColor(0, 128, 128);
+    ColorUnitNearEnemy                  = CCColor(255, 0, 0);
+    ColorUnitNotNearEnemy               = CCColor(0, 255, 0);
     
     WorkersPerRefinery                  = 3;
     BuildingSpacing                     = 1;

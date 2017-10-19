@@ -34,9 +34,9 @@ public:
 
     void                onStart();
     void                onFrame();
-    void                addBuildingTask(const CCUnitType & type, const sc2::Point2D & desiredPosition);
+    void                addBuildingTask(const CCUnitType & type, const CCPosition & desiredPosition);
     void                drawBuildingInformation();
-    sc2::Point2D        getBuildingLocation(const Building & b);
+    CCPosition        getBuildingLocation(const Building & b);
 
     int                 getReservedMinerals();
     int                 getReservedGas();

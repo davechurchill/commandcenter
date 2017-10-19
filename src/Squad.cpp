@@ -37,9 +37,9 @@ void Squad::onFrame()
     // if we do need to regroup, do it
     if (needToRegroup)
     {
-        sc2::Point2D regroupPosition = calcRegroupPosition();
+        CCPosition regroupPosition = calcRegroupPosition();
 
-        m_bot.Map().drawSphere(regroupPosition, 3, sc2::Colors::Purple);
+        m_bot.Map().drawCircle(regroupPosition, 3, CCColor(255, 0, 255));
 
         m_meleeManager.regroup(regroupPosition);
         m_rangedManager.regroup(regroupPosition);
@@ -99,8 +99,8 @@ void Squad::setNearEnemyUnits()
     {
         m_nearEnemy[unit] = isUnitNearEnemy(unit);
 
-        sc2::Color color = m_nearEnemy[unit] ? m_bot.Config().ColorUnitNearEnemy : m_bot.Config().ColorUnitNotNearEnemy;
-        //m_bot.Map().drawSphereAroundUnit(unitTag, color);
+        CCColor color = m_nearEnemy[unit] ? m_bot.Config().ColorUnitNearEnemy : m_bot.Config().ColorUnitNotNearEnemy;
+        //m_bot.Map().drawCircleAroundUnit(unitTag, color);
     }
 }
 
@@ -190,26 +190,26 @@ bool Squad::isUnitNearEnemy(CCUnit unit) const
     return false;
 }
 
-sc2::Point2D Squad::calcCenter() const
+CCPosition Squad::calcCenter() const
 {
     if (m_units.empty())
     {
-        return sc2::Point2D(0.0f,0.0f);
+        return CCPosition(0.0f,0.0f);
     }
 
-    sc2::Point2D sum(0,0);
+    CCPosition sum(0,0);
     for (auto unit: m_units)
     {
         BOT_ASSERT(unit, "null unit in squad calcCenter");
         sum += unit->pos;
     }
 
-    return sc2::Point2D(sum.x / m_units.size(), sum.y / m_units.size());
+    return CCPosition(sum.x / m_units.size(), sum.y / m_units.size());
 }
 
-sc2::Point2D Squad::calcRegroupPosition() const
+CCPosition Squad::calcRegroupPosition() const
 {
-    sc2::Point2D regroup(0.0f,0.0f);
+    CCPosition regroup(0.0f,0.0f);
 
     float minDist = std::numeric_limits<float>::max();
 
@@ -258,7 +258,7 @@ CCUnit Squad::unitClosestToEnemy() const
     return closest;
 }
 
-int Squad::squadUnitsNear(const sc2::Point2D & p) const
+int Squad::squadUnitsNear(const CCPosition & p) const
 {
     int numUnits = 0;
 

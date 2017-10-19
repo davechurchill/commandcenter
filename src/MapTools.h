@@ -29,13 +29,13 @@ class MapTools
     void computeConnectivity();
 
     int getSectorNumber(int x, int y) const;
-    int getSectorNumber(const sc2::Point2D & pos) const;
+    int getSectorNumber(const CCPosition & pos) const;
         
     void printMap();
 
-    float   terainHeight(const sc2::Point2D& point);
-    bool    canBuild(const sc2::Point2D& point);
-    bool    canWalk(const sc2::Point2D& point);
+    float   terainHeight(const CCPosition& point);
+    bool    canBuild(const CCPosition& point);
+    bool    canWalk(const CCPosition& point);
 
 public:
 
@@ -49,39 +49,38 @@ public:
     int     height() const;
     float   terrainHeight(float x, float y) const;
 
-    void    drawLine(float x1, float y1, float x2, float y2, const sc2::Color & color = sc2::Colors::White) const;
-    void    drawLine(const sc2::Point2D & min, const sc2::Point2D max, const sc2::Color & color = sc2::Colors::White) const;
-    void    drawSquare(float x1, float y1, float x2, float y2, const sc2::Color & color = sc2::Colors::White) const;
-    void    drawBox(float x1, float y1, float x2, float y2, const sc2::Color & color = sc2::Colors::White) const;
-    void    drawBox(const sc2::Point2D & min, const sc2::Point2D max, const sc2::Color & color = sc2::Colors::White) const;
-    void    drawSphere(float x1, float x2, float radius, const sc2::Color & color = sc2::Colors::White) const;
-    void    drawSphere(const sc2::Point2D & pos, float radius, const sc2::Color & color = sc2::Colors::White) const;
-    void    drawText(const sc2::Point2D & pos, const std::string & str, const sc2::Color & color = sc2::Colors::White) const;
-    void    drawTextScreen(const sc2::Point2D & pos, const std::string & str, const sc2::Color & color = sc2::Colors::White) const;
-    void    drawBoxAroundUnit(CCUnit unit, sc2::Color color) const;
+    void    drawLine(float x1, float y1, float x2, float y2, const CCColor & color = CCColor(255, 255, 255)) const;
+    void    drawLine(const CCPosition & min, const CCPosition max, const CCColor & color = CCColor(255, 255, 255)) const;
+    void    drawSquare(float x1, float y1, float x2, float y2, const CCColor & color = CCColor(255, 255, 255)) const;
+    void    drawBox(float x1, float y1, float x2, float y2, const CCColor & color = CCColor(255, 255, 255)) const;
+    void    drawBox(const CCPosition & min, const CCPosition max, const CCColor & color = CCColor(255, 255, 255)) const;
+    void    drawCircle(float x1, float x2, float radius, const CCColor & color = CCColor(255, 255, 255)) const;
+    void    drawCircle(const CCPosition & pos, float radius, const CCColor & color = CCColor(255, 255, 255)) const;
+    void    drawText(const CCPosition & pos, const std::string & str, const CCColor & color = CCColor(255, 255, 255)) const;
+    void    drawTextScreen(const CCPosition & pos, const std::string & str, const CCColor & color = CCColor(255, 255, 255)) const;
+    void    drawBoxAroundUnit(CCUnit unit, CCColor color) const;
     
     bool    isValid(int x, int y) const;
-    bool    isValid(const sc2::Point2D & pos) const;
-    bool    isPowered(const sc2::Point2D & pos) const;
-    bool    isExplored(const sc2::Point2D & pos) const;
-    bool    isVisible(const sc2::Point2D & pos) const;
+    bool    isValid(const CCPosition & pos) const;
+    bool    isPowered(const CCPosition & pos) const;
+    bool    isExplored(const CCPosition & pos) const;
+    bool    isVisible(const CCPosition & pos) const;
     bool    canBuildTypeAtPosition(int x, int y, CCUnitType type) const;
 
-    const   DistanceMap & getDistanceMap(const sc2::Point2D & tile) const;
-    int     getGroundDistance(const sc2::Point2D & src, const sc2::Point2D & dest) const;
+    const   DistanceMap & getDistanceMap(const CCPosition & tile) const;
+    int     getGroundDistance(const CCPosition & src, const CCPosition & dest) const;
     bool    isConnected(int x1, int y1, int x2, int y2) const;
-    bool    isConnected(const sc2::Point2D & from, const sc2::Point2D & to) const;
-    bool    isWalkable(const sc2::Point2D & pos) const;
+    bool    isConnected(const CCPosition & from, const CCPosition & to) const;
+    bool    isWalkable(const CCPosition & pos) const;
     bool    isWalkable(int x, int y) const;
-    void    drawLastSeen() const;
     
-    bool    isBuildable(const sc2::Point2D & pos) const;
+    bool    isBuildable(const CCPosition & pos) const;
     bool    isBuildable(int x, int y) const;
-    bool    isDepotBuildableTile(const sc2::Point2D & pos) const;
+    bool    isDepotBuildableTile(const CCPosition & pos) const;
     
-    sc2::Point2D getLeastRecentlySeenPosition() const;
+    CCPosition getLeastRecentlySeenPosition() const;
 
     // returns a list of all tiles on the map, sorted by 4-direcitonal walk distance from the given position
-    const std::vector<sc2::Point2D> & getClosestTilesTo(const sc2::Point2D & pos) const;
+    const std::vector<CCPosition> & getClosestTilesTo(const CCPosition & pos) const;
 };
 

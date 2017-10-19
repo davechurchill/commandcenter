@@ -17,19 +17,19 @@ int DistanceMap::getDistance(int tileX, int tileY) const
     return m_dist[tileX][tileY]; 
 }
 
-int DistanceMap::getDistance(const sc2::Point2D & pos) const
+int DistanceMap::getDistance(const CCPosition & pos) const
 { 
     return getDistance((int)pos.x, (int)pos.y); 
 }
 
-const std::vector<sc2::Point2D> & DistanceMap::getSortedTiles() const
+const std::vector<CCPosition> & DistanceMap::getSortedTiles() const
 {
     return m_sortedTilePositions;
 }
 
 // Computes m_dist[x][y] = ground distance from (startX, startY) to (x,y)
 // Uses BFS, since the map is quite large and DFS may cause a stack overflow
-void DistanceMap::computeDistanceMap(CCBot & m_bot, const sc2::Point2D & startTile)
+void DistanceMap::computeDistanceMap(CCBot & m_bot, const CCPosition & startTile)
 {
     m_startTile = startTile;
     m_width = m_bot.Map().width();
@@ -38,7 +38,7 @@ void DistanceMap::computeDistanceMap(CCBot & m_bot, const sc2::Point2D & startTi
     m_sortedTilePositions.reserve(m_width * m_height);
 
     // the fringe for the BFS we will perform to calculate distances
-    std::vector<sc2::Point2D> fringe;
+    std::vector<CCPosition> fringe;
     fringe.reserve(m_width * m_height);
     fringe.push_back(startTile);
     m_sortedTilePositions.push_back(startTile);
@@ -47,12 +47,12 @@ void DistanceMap::computeDistanceMap(CCBot & m_bot, const sc2::Point2D & startTi
 
     for (size_t fringeIndex=0; fringeIndex<fringe.size(); ++fringeIndex)
     {
-        const sc2::Point2D & tile = fringe[fringeIndex];
+        const CCPosition & tile = fringe[fringeIndex];
 
         // check every possible child of this tile
         for (size_t a=0; a<LegalActions; ++a)
         {
-            sc2::Point2D nextTile(tile.x + actionX[a], tile.y + actionY[a]);
+            CCPosition nextTile(tile.x + actionX[a], tile.y + actionY[a]);
 
             // if the new tile is inside the map bounds, is walkable, and has not been visited yet, set the distance of its parent + 1
             if (m_bot.Map().isWalkable(nextTile) && getDistance(nextTile) == -1)
@@ -73,7 +73,7 @@ void DistanceMap::draw(CCBot & bot) const
         auto & tile = m_sortedTilePositions[i];
         int dist = getDistance(tile);
 
-        sc2::Point2D textPos(tile.x + 0.5f, tile.y + 0.5f);
+        CCPosition textPos(tile.x + 0.5f, tile.y + 0.5f);
         std::stringstream ss;
         ss << dist;
 
@@ -81,7 +81,7 @@ void DistanceMap::draw(CCBot & bot) const
     }
 }
 
-const sc2::Point2D & DistanceMap::getStartTile() const
+const CCPosition & DistanceMap::getStartTile() const
 {
     return m_startTile;
 }

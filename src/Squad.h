@@ -33,7 +33,7 @@ class Squad
 
     bool isUnitNearEnemy(CCUnit unit) const;
     bool needsToRegroup() const;
-    int  squadUnitsNear(const sc2::Point2D & pos) const;
+    int  squadUnitsNear(const CCPosition & pos) const;
 
 public:
 
@@ -52,8 +52,8 @@ public:
     void setPriority(const size_t & priority);
     const std::string & getName() const;
 
-    sc2::Point2D calcCenter() const;
-    sc2::Point2D calcRegroupPosition() const;
+    CCPosition calcCenter() const;
+    CCPosition calcRegroupPosition() const;
 
     const std::set<CCUnit> & getUnits() const;
     const SquadOrder & getSquadOrder() const;

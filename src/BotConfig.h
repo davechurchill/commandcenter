@@ -42,10 +42,10 @@ public:
     bool DrawUnitTargetInfo;
     bool DrawSquadInfo;		
     
-    sc2::Color ColorLineTarget;
-    sc2::Color ColorLineMineral;
-    sc2::Color ColorUnitNearEnemy;
-    sc2::Color ColorUnitNotNearEnemy;
+    CCColor ColorLineTarget;
+    CCColor ColorLineMineral;
+    CCColor ColorUnitNearEnemy;
+    CCColor ColorUnitNotNearEnemy;
     
     bool KiteWithRangedUnits;    
     bool ScoutHarassEnemy;

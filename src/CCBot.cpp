@@ -131,7 +131,7 @@ WorkerManager & CCBot::Workers()
     return m_workers;
 }
 
-CCUnit CCBot::GetUnit(const UnitTag & tag) const
+CCUnit CCBot::GetUnit(const CCUnitID & tag) const
 {
 #ifdef SC2API
     return Observation()->GetUnit(tag);
@@ -145,7 +145,7 @@ const std::vector<CCUnit> & CCBot::GetUnits() const
     return m_allUnits;
 }
 
-sc2::Point2D CCBot::GetStartLocation() const
+CCPosition CCBot::GetStartLocation() const
 {
     return Observation()->GetStartLocation();
 }

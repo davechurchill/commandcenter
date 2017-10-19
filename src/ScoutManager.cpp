@@ -46,7 +46,7 @@ void ScoutManager::drawScoutInformation()
     std::stringstream ss;
     ss << "Scout Info: " << m_scoutStatus;
 
-    m_bot.Map().drawTextScreen(sc2::Point2D(0.1f, 0.6f), ss.str());
+    m_bot.Map().drawTextScreen(CCPosition(0.1f, 0.6f), ss.str());
 }
 
 void ScoutManager::moveScouts()
@@ -145,11 +145,11 @@ void ScoutManager::moveScouts()
     m_previousScoutHP = scoutHP;
 }
 
-CCUnit ScoutManager::closestEnemyWorkerTo(const sc2::Point2D & pos) const
+CCUnit ScoutManager::closestEnemyWorkerTo(const CCPosition & pos) const
 {
     if (!m_scoutUnit) { return nullptr; }
 
-    UnitTag enemyWorkerTag = 0;
+    CCUnit enemyWorker = nullptr;
     float minDist = std::numeric_limits<float>::max();
 
     // for each enemy worker
@@ -162,14 +162,14 @@ CCUnit ScoutManager::closestEnemyWorkerTo(const sc2::Point2D & pos) const
             if (dist < minDist)
             {
                 minDist = dist;
-                enemyWorkerTag = unit->tag;
+                enemyWorker = unit;
             }
         }
     }
 
-    return m_bot.GetUnit(enemyWorkerTag);
+    return enemyWorker;
 }
-bool ScoutManager::enemyWorkerInRadiusOf(const sc2::Point2D & pos) const
+bool ScoutManager::enemyWorkerInRadiusOf(const CCPosition & pos) const
 {
     for (auto & unit : m_bot.UnitInfo().getUnits(Players::Enemy))
     {
@@ -182,7 +182,7 @@ bool ScoutManager::enemyWorkerInRadiusOf(const sc2::Point2D & pos) const
     return false;
 }
 
-sc2::Point2D ScoutManager::getFleePosition() const
+CCPosition ScoutManager::getFleePosition() const
 {
     // TODO: make this follow the perimeter of the enemy base again, but for now just use home base as flee direction
     return m_bot.GetStartLocation();

@@ -7,17 +7,17 @@ struct UnitInfo
     // we need to store all of this data because if the unit is not visible, we
     // can't reference it from the unit pointer
 
-    UnitTag         tag;
+    CCUnitID        id;
     float           lastHealth;
     float           lastShields;
     int             player;
-    CCUnit unit;
+    CCUnit          unit;
     sc2::Point3D    lastPosition;
-    CCUnitType type;
+    CCUnitType      type;
     float           progress;
 
     UnitInfo()
-        : tag(0)
+        : id(0)
         , lastHealth(0)
         , player(-1)
         , lastPosition(sc2::Point3D(0, 0, 0))
@@ -29,17 +29,21 @@ struct UnitInfo
 
     bool operator == (CCUnit unit) const
     {
-        return tag == unit->tag;
+#ifdef SC2API
+        return id == unit->tag;
+#else
+        return id == unit->getID();
+#endif
     }
 
     bool operator == (const UnitInfo & rhs) const
     {
-        return (tag == rhs.tag);
+        return (id == rhs.id);
     }
 
     bool operator < (const UnitInfo & rhs) const
     {
-        return (tag < rhs.tag);
+        return (id < rhs.id);
     }
 };
 

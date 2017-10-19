@@ -90,7 +90,7 @@ void WorkerManager::handleRepairWorkers()
     // TODO
 }
 
-CCUnit WorkerManager::getClosestMineralWorkerTo(const sc2::Point2D & pos) const
+CCUnit WorkerManager::getClosestMineralWorkerTo(const CCPosition & pos) const
 {
     CCUnit closestMineralWorker = nullptr;
     double closestDist = std::numeric_limits<double>::max();
@@ -239,7 +239,7 @@ void WorkerManager::drawWorkerInformation()
         ss << m_workerData.getJobCode(workerTag) << " " << workerTag << "\n";
     }
 
-    m_bot.Map().drawTextScreen(sc2::Point2D(0.75f, 0.2f), ss.str());
+    m_bot.Map().drawTextScreen(CCPosition(0.75f, 0.2f), ss.str());
 }
 
 bool WorkerManager::isFree(CCUnit worker) const

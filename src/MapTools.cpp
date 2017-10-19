@@ -42,9 +42,9 @@ void MapTools::onStart()
     {
         for (size_t y(0); y < m_height; ++y)
         {
-            m_buildable[x][y]   = canBuild(sc2::Point2D(x+0.5f, y+0.5f));
-            m_walkable[x][y]    = m_buildable[x][y] || canWalk(sc2::Point2D(x+0.5f, y+0.5f));
-            m_terrainHeight[x][y]   = terainHeight(sc2::Point2D(x+0.5f, y+0.5f));
+            m_buildable[x][y]   = canBuild(CCPosition(x+0.5f, y+0.5f));
+            m_walkable[x][y]    = m_buildable[x][y] || canWalk(CCPosition(x+0.5f, y+0.5f));
+            m_terrainHeight[x][y]   = terainHeight(CCPosition(x+0.5f, y+0.5f));
         }
     }
 
@@ -64,7 +64,7 @@ void MapTools::onFrame()
     {
         for (int y=0; y<m_height; ++y)
         {
-            if (isVisible(sc2::Point2D((float)x, (float)y)))
+            if (isVisible(CCPosition((float)x, (float)y)))
             {
                 m_lastSeen[x][y] = m_frame;
             }
@@ -77,7 +77,7 @@ void MapTools::onFrame()
 void MapTools::computeConnectivity()
 {
     // the fringe data structe we will use to do our BFS searches
-    std::vector<sc2::Point2D> fringe;
+    std::vector<CCPosition> fringe;
     fringe.reserve(m_width*m_height);
     int sectorNumber = 0;
 
@@ -97,7 +97,7 @@ void MapTools::computeConnectivity()
 
             // reset the fringe for the search and add the start tile to it
             fringe.clear();
-            fringe.push_back(sc2::Point2D(x+0.5f, y+0.5f));
+            fringe.push_back(CCPosition(x+0.5f, y+0.5f));
             m_sectorNumber[x][y] = sectorNumber;
 
             // do the BFS, stopping when we reach the last element of the fringe
@@ -108,7 +108,7 @@ void MapTools::computeConnectivity()
                 // check every possible child of this tile
                 for (size_t a=0; a<LegalActions; ++a)
                 {
-                    sc2::Point2D nextTile(tile.x + actionX[a], tile.y + actionY[a]);
+                    CCPosition nextTile(tile.x + actionX[a], tile.y + actionY[a]);
 
                     // if the new tile is inside the map bounds, is walkable, and has not been assigned a sector, add it to the current sector and the fringe
                     if (isValid(nextTile) && isWalkable(nextTile) && (getSectorNumber(nextTile) == 0))
@@ -122,7 +122,7 @@ void MapTools::computeConnectivity()
     }
 }
 
-bool MapTools::isExplored(const sc2::Point2D & pos) const
+bool MapTools::isExplored(const CCPosition & pos) const
 {
     if (!isValid(pos)) { return false; }
 
@@ -130,14 +130,14 @@ bool MapTools::isExplored(const sc2::Point2D & pos) const
     return vis == sc2::Visibility::Fogged || vis == sc2::Visibility::Visible;
 }
 
-bool MapTools::isVisible(const sc2::Point2D & pos) const
+bool MapTools::isVisible(const CCPosition & pos) const
 {
     if (!isValid(pos)) { return false; }
 
     return m_bot.Observation()->GetVisibility(pos) == sc2::Visibility::Visible;
 }
 
-bool MapTools::isPowered(const sc2::Point2D & pos) const
+bool MapTools::isPowered(const CCPosition & pos) const
 {
     for (auto & powerSource : m_bot.Observation()->GetPowerSources())
     {
@@ -155,12 +155,12 @@ float MapTools::terrainHeight(float x, float y) const
     return m_terrainHeight[(int)x][(int)y];
 }
 
-//int MapTools::getGroundDistance(const sc2::Point2D & src, const sc2::Point2D & dest) const
+//int MapTools::getGroundDistance(const CCPosition & src, const CCPosition & dest) const
 //{
 //    return (int)Util::Dist(src, dest);
 //}
 
-int MapTools::getGroundDistance(const sc2::Point2D & src, const sc2::Point2D & dest) const
+int MapTools::getGroundDistance(const CCPosition & src, const CCPosition & dest) const
 {
     if (_allMaps.size() > 50)
     {
@@ -170,7 +170,7 @@ int MapTools::getGroundDistance(const sc2::Point2D & src, const sc2::Point2D & d
     return getDistanceMap(dest).getDistance(src);
 }
 
-const DistanceMap & MapTools::getDistanceMap(const sc2::Point2D & tile) const
+const DistanceMap & MapTools::getDistanceMap(const CCPosition & tile) const
 {
     std::pair<int, int> intTile((int)tile.x, (int)tile.y);
 
@@ -193,7 +193,7 @@ int MapTools::getSectorNumber(int x, int y) const
     return m_sectorNumber[x][y];
 }
 
-int MapTools::getSectorNumber(const sc2::Point2D & pos) const
+int MapTools::getSectorNumber(const CCPosition & pos) const
 {
     return getSectorNumber((int)pos.x, (int)pos.y);
 }
@@ -203,14 +203,15 @@ bool MapTools::isValid(int x, int y) const
     return x >= 0 && y >= 0 && x < m_width && y < m_height;
 }
 
-bool MapTools::isValid(const sc2::Point2D & pos) const
+bool MapTools::isValid(const CCPosition & pos) const
 {
     return isValid((int)pos.x, (int)pos.y);
 }
 
 void MapTools::draw() const
 {
-    sc2::Point2D camera = m_bot.Observation()->GetCameraPos();
+#ifdef SC2API
+    CCPosition camera = m_bot.Observation()->GetCameraPos();
     for (float x = camera.x - 16.0f; x < camera.x + 16.0f; ++x)
     {
         for (float y = camera.y - 16.0f; y < camera.y + 16.0f; ++y)
@@ -229,7 +230,7 @@ void MapTools::draw() const
 
             if (m_bot.Config().DrawTileInfo)
             {
-                sc2::Color color = isWalkable((int)x, (int)y) ? sc2::Colors::Green : sc2::Colors::Red;
+                CCColor color = isWalkable((int)x, (int)y) ? sc2::Colors::Green : sc2::Colors::Red;
                 if (isWalkable((int)x, (int)y) && !isBuildable((int)x, (int)y))
                 {
                     color = sc2::Colors::Yellow;
@@ -239,54 +240,94 @@ void MapTools::draw() const
             }
         }
     }
+#else
+
+#endif
 }
 
-void MapTools::drawLine(float x1, float y1, float x2, float y2, const sc2::Color & color) const
+void MapTools::drawLine(float x1, float y1, float x2, float y2, const CCColor & color) const
 {
+#ifdef SC2API
     m_bot.Debug()->DebugLineOut(sc2::Point3D(x1, y1, m_maxZ + 0.2f), sc2::Point3D(x2, y2, m_maxZ + 0.2f), color);
+#else
+    // BWAPI
+#endif
 }
 
-void MapTools::drawLine(const sc2::Point2D & min, const sc2::Point2D max, const sc2::Color & color) const
+void MapTools::drawLine(const CCPosition & min, const CCPosition max, const CCColor & color) const
 {
+#ifdef SC2API
     m_bot.Debug()->DebugLineOut(sc2::Point3D(min.x, min.y, m_maxZ + 0.2f), sc2::Point3D(max.x, max.y, m_maxZ + 0.2f), color);
+#else
+    // BWAPI
+#endif
 }
 
-void MapTools::drawSquare(float x1, float y1, float x2, float y2, const sc2::Color & color) const
+void MapTools::drawSquare(float x1, float y1, float x2, float y2, const CCColor & color) const
 {
+#ifdef SC2API
     m_bot.Debug()->DebugLineOut(sc2::Point3D(x1, y1, m_maxZ), sc2::Point3D(x1+1, y1, m_maxZ), color);
     m_bot.Debug()->DebugLineOut(sc2::Point3D(x1, y1, m_maxZ), sc2::Point3D(x1, y1+1, m_maxZ), color);
     m_bot.Debug()->DebugLineOut(sc2::Point3D(x1+1, y1+1, m_maxZ), sc2::Point3D(x1+1, y1, m_maxZ), color);
     m_bot.Debug()->DebugLineOut(sc2::Point3D(x1+1, y1+1, m_maxZ), sc2::Point3D(x1, y1+1, m_maxZ), color);
+#else
+
+#endif
 }
 
-void MapTools::drawBox(float x1, float y1, float x2, float y2, const sc2::Color & color) const
+void MapTools::drawBox(float x1, float y1, float x2, float y2, const CCColor & color) const
 {
+#ifdef SC2API
     m_bot.Debug()->DebugBoxOut(sc2::Point3D(x1, y1, m_maxZ + 2.0f), sc2::Point3D(x2, y2, m_maxZ-5.0f), color);
+#else
+
+#endif
 }
 
-void MapTools::drawBox(const sc2::Point2D & min, const sc2::Point2D max, const sc2::Color & color) const
+void MapTools::drawBox(const CCPosition & min, const CCPosition max, const CCColor & color) const
 {
+#ifdef SC2API
     m_bot.Debug()->DebugBoxOut(sc2::Point3D(min.x, min.y, m_maxZ + 2.0f), sc2::Point3D(max.x, max.y, m_maxZ-5.0f), color);
+#else
+
+#endif
 }
 
-void MapTools::drawSphere(const sc2::Point2D & pos, float radius, const sc2::Color & color) const
+void MapTools::drawCircle(const CCPosition & pos, float radius, const CCColor & color) const
 {
+#ifdef SC2API
     m_bot.Debug()->DebugSphereOut(sc2::Point3D(pos.x, pos.y, m_maxZ), radius, color);
+#else
+
+#endif
 }
 
-void MapTools::drawSphere(float x, float y, float radius, const sc2::Color & color) const
+void MapTools::drawCircle(float x, float y, float radius, const CCColor & color) const
 {
+#ifdef SC2API
     m_bot.Debug()->DebugSphereOut(sc2::Point3D(x, y, m_maxZ), radius, color);
+#else
+
+#endif
 }
 
-void MapTools::drawText(const sc2::Point2D & pos, const std::string & str, const sc2::Color & color) const
+
+void MapTools::drawText(const CCPosition & pos, const std::string & str, const CCColor & color) const
 {
+#ifdef SC2API
     m_bot.Debug()->DebugTextOut(str, sc2::Point3D(pos.x, pos.y, m_maxZ), color);
+#else
+
+#endif
 }
 
-void MapTools::drawTextScreen(const sc2::Point2D & pos, const std::string & str, const sc2::Color & color) const
+void MapTools::drawTextScreen(const CCPosition & pos, const std::string & str, const CCColor & color) const
 {
+#ifdef SC2API
     m_bot.Debug()->DebugTextOut(str, pos, color);
+#else
+
+#endif
 }
 
 bool MapTools::isConnected(int x1, int y1, int x2, int y2) const
@@ -302,7 +343,7 @@ bool MapTools::isConnected(int x1, int y1, int x2, int y2) const
     return s1 != 0 && (s1 == s2);
 }
 
-bool MapTools::isConnected(const sc2::Point2D & p1, const sc2::Point2D & p2) const
+bool MapTools::isConnected(const CCPosition & p1, const CCPosition & p2) const
 {
     return isConnected((int)p1.x, (int)p1.y, (int)p2.x, (int)p2.y);
 }
@@ -319,10 +360,10 @@ bool MapTools::isBuildable(int x, int y) const
 
 bool MapTools::canBuildTypeAtPosition(int x, int y, CCUnitType type) const
 {
-    return m_bot.Query()->Placement(m_bot.Data(type).buildAbility, sc2::Point2D((float)x, (float)y));
+    return m_bot.Query()->Placement(m_bot.Data(type).buildAbility, CCPosition((float)x, (float)y));
 }
 
-bool MapTools::isBuildable(const sc2::Point2D & tile) const
+bool MapTools::isBuildable(const CCPosition & tile) const
 {
     return isBuildable((int)tile.x, (int)tile.y);
 }
@@ -345,7 +386,7 @@ void MapTools::printMap()
     out.close();
 }
 
-bool MapTools::isDepotBuildableTile(const sc2::Point2D & tile) const
+bool MapTools::isDepotBuildableTile(const CCPosition & tile) const
 {
     if (!isValid(tile))
     {
@@ -365,7 +406,7 @@ bool MapTools::isWalkable(int x, int y) const
     return m_walkable[x][y];
 }
 
-bool MapTools::isWalkable(const sc2::Point2D & tile) const
+bool MapTools::isWalkable(const CCPosition & tile) const
 {
     return isWalkable((int)tile.x, (int)tile.y);
 }
@@ -380,13 +421,13 @@ int MapTools::height() const
     return m_height;
 }
 
-const std::vector<sc2::Point2D> & MapTools::getClosestTilesTo(const sc2::Point2D & pos) const
+const std::vector<CCPosition> & MapTools::getClosestTilesTo(const CCPosition & pos) const
 {
     return getDistanceMap(pos).getSortedTiles();
 }
 
 
-void MapTools::drawBoxAroundUnit(CCUnit unit, sc2::Color color) const
+void MapTools::drawBoxAroundUnit(CCUnit unit, CCColor color) const
 {
     if (!unit) { return; }
 
@@ -403,10 +444,10 @@ void MapTools::drawBoxAroundUnit(CCUnit unit, sc2::Color color) const
     drawSquare(unit->pos.x - 2.0f, unit->pos.y - 2.0f, unit->pos.x + 2.0f, unit->pos.y + 2.0f, color);
 }
 
-sc2::Point2D MapTools::getLeastRecentlySeenPosition() const
+CCPosition MapTools::getLeastRecentlySeenPosition() const
 {
     int minSeen = std::numeric_limits<int>::max();
-    sc2::Point2D leastSeen(0.0f, 0.0f);
+    CCPosition leastSeen(0.0f, 0.0f);
     const BaseLocation * baseLocation = m_bot.Bases().getPlayerStartingBaseLocation(Players::Self);
 
     for (auto & tile : baseLocation->getClosestTiles())
@@ -424,7 +465,7 @@ sc2::Point2D MapTools::getLeastRecentlySeenPosition() const
     return leastSeen;
 }
 
-bool MapTools::canWalk(const sc2::Point2D & point) 
+bool MapTools::canWalk(const CCPosition & point) 
 {
 #ifdef SC2API
     auto & info = m_bot.Observation()->GetGameInfo();
@@ -443,7 +484,7 @@ bool MapTools::canWalk(const sc2::Point2D & point)
 #endif
 }
 
-bool MapTools::canBuild(const sc2::Point2D & point) 
+bool MapTools::canBuild(const CCPosition & point) 
 {
 #ifdef SC2API
     auto & info = m_bot.Observation()->GetGameInfo();
@@ -462,7 +503,7 @@ bool MapTools::canBuild(const sc2::Point2D & point)
 #endif
 }
 
-float MapTools::terainHeight(const sc2::Point2D & point) 
+float MapTools::terainHeight(const CCPosition & point) 
 {
 #ifdef SC2API
     auto & info = m_bot.Observation()->GetGameInfo();

@@ -17,13 +17,13 @@ void Micro::SmartAttackUnit(CCUnit attacker, CCUnit target, CCBot & bot)
     bot.Actions()->UnitCommand(attacker, sc2::ABILITY_ID::ATTACK_ATTACK, target);
 }
 
-void Micro::SmartAttackMove(CCUnit attacker, const sc2::Point2D & targetPosition, CCBot & bot)
+void Micro::SmartAttackMove(CCUnit attacker, const CCPosition & targetPosition, CCBot & bot)
 {
     BOT_ASSERT(attacker != nullptr, "Attacker is null");
     bot.Actions()->UnitCommand(attacker, sc2::ABILITY_ID::ATTACK_ATTACK, targetPosition);
 }
 
-void Micro::SmartMove(CCUnit attacker, const sc2::Point2D & targetPosition, CCBot & bot)
+void Micro::SmartMove(CCUnit attacker, const CCPosition & targetPosition, CCBot & bot)
 {
     BOT_ASSERT(attacker != nullptr, "Attacker is null");
     bot.Actions()->UnitCommand(attacker, sc2::ABILITY_ID::MOVE, targetPosition);
@@ -48,7 +48,7 @@ void Micro::SmartKiteTarget(CCUnit rangedUnit, CCUnit target, CCBot & bot)
     bot.Actions()->UnitCommand(rangedUnit, sc2::ABILITY_ID::ATTACK_ATTACK, target);
 }
 
-void Micro::SmartBuild(CCUnit builder, const CCUnitType & buildingType, sc2::Point2D pos, CCBot & bot)
+void Micro::SmartBuild(CCUnit builder, const CCUnitType & buildingType, CCPosition pos, CCBot & bot)
 {
     BOT_ASSERT(builder != nullptr, "Builder is null");
     bot.Actions()->UnitCommand(builder, bot.Data(buildingType).buildAbility, pos);

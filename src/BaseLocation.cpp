@@ -58,7 +58,7 @@ BaseLocation::BaseLocation(CCBot & bot, int baseID, const std::vector<CCUnit> & 
     // calculate the center of the resources
     size_t numResources = m_minerals.size() + m_geysers.size();
 
-    m_centerOfResources = sc2::Point2D(m_left + (m_right-m_left)/2.0f, m_top + (m_bottom-m_top)/2.0f);
+    m_centerOfResources = CCPosition(m_left + (m_right-m_left)/2.0f, m_top + (m_bottom-m_top)/2.0f);
 
     // compute this BaseLocation's DistanceMap, which will compute the ground distance
     // from the center of its recourses to every other tile on the map
@@ -98,7 +98,7 @@ BaseLocation::BaseLocation(CCBot & bot, int baseID, const std::vector<CCUnit> & 
 }
 
 // TODO: calculate the actual depot position
-const sc2::Point2D & BaseLocation::getDepotPosition() const
+const CCPosition & BaseLocation::getDepotPosition() const
 {
     return getPosition();
 }
@@ -134,7 +134,7 @@ bool BaseLocation::isPlayerStartLocation(int player) const
     return m_isPlayerStartLocation.at(player);
 }
 
-bool BaseLocation::containsPosition(const sc2::Point2D & pos) const
+bool BaseLocation::containsPosition(const CCPosition & pos) const
 {
     if (!m_bot.Map().isValid(pos) || (pos.x == 0 && pos.y == 0))
     {
@@ -154,12 +154,12 @@ const std::vector<CCUnit> & BaseLocation::getMinerals() const
     return m_minerals;
 }
 
-const sc2::Point2D & BaseLocation::getPosition() const
+const CCPosition & BaseLocation::getPosition() const
 {
     return m_centerOfResources;
 }
 
-int BaseLocation::getGroundDistance(const sc2::Point2D & pos) const
+int BaseLocation::getGroundDistance(const CCPosition & pos) const
 {
     //return Util::Dist(pos, m_centerOfResources);
     return m_distanceMap.getDistance(pos);
@@ -170,14 +170,14 @@ bool BaseLocation::isStartLocation() const
     return m_isStartLocation;
 }
 
-const std::vector<sc2::Point2D> & BaseLocation::getClosestTiles() const
+const std::vector<CCPosition> & BaseLocation::getClosestTiles() const
 {
     return m_distanceMap.getSortedTiles();
 }
 
 void BaseLocation::draw()
 {
-    m_bot.Map().drawSphere(m_centerOfResources, 1.0f, sc2::Colors::Yellow);
+    m_bot.Map().drawCircle(m_centerOfResources, 1.0f, CCColor(255, 255, 0));
 
     std::stringstream ss;
     ss << "BaseLocation: " << m_baseID << "\n";
@@ -196,43 +196,43 @@ void BaseLocation::draw()
         ss << "Enemy ";
     }
 
-    m_bot.Map().drawText(sc2::Point2D(m_left, m_top+3), ss.str().c_str());
-    m_bot.Map().drawText(sc2::Point2D(m_left, m_bottom), ss.str().c_str());
+    m_bot.Map().drawText(CCPosition(m_left, m_top+3), ss.str().c_str());
+    m_bot.Map().drawText(CCPosition(m_left, m_bottom), ss.str().c_str());
 
     // draw the base bounding box
     m_bot.Map().drawBox(m_left, m_top, m_right, m_bottom);
 
     for (float x=m_left; x < m_right; ++x)
     {
-        m_bot.Map().drawLine(x, m_top, x, m_bottom, sc2::Color(160, 160, 160));
+        m_bot.Map().drawLine(x, m_top, x, m_bottom, CCColor(160, 160, 160));
     }
 
     for (float y=m_bottom; y<m_top; ++y)
     {
-        m_bot.Map().drawLine(m_left, y, m_right, y, sc2::Color(160, 160, 160));
+        m_bot.Map().drawLine(m_left, y, m_right, y, CCColor(160, 160, 160));
     }
 
     for (auto & mineralPos : m_mineralPositions)
     {
-        m_bot.Map().drawSphere(mineralPos, 1.0f, sc2::Colors::Teal);
+        m_bot.Map().drawCircle(mineralPos, 1.0f, CCColor(0, 128, 128));
     }
 
     for (auto & geyserPos : m_geyserPositions)
     {
-        m_bot.Map().drawSphere(geyserPos, 1.0f, sc2::Colors::Green);
+        m_bot.Map().drawCircle(geyserPos, 1.0f, CCColor(0, 255, 0));
     }
 
     if (m_isStartLocation)
     {
-        m_bot.Map().drawSphere(m_depotPosition, 1.0f, sc2::Colors::Red);
+        m_bot.Map().drawCircle(m_depotPosition, 1.0f, CCColor(255, 0, 0));
     }
     
     float ccWidth = 5;
     float ccHeight = 4;
-    sc2::Point2D boxtl = m_depotPosition - sc2::Point2D(ccWidth/2, -ccHeight/2);
-    sc2::Point2D boxbr = m_depotPosition + sc2::Point2D(ccWidth/2, -ccHeight/2);
+    CCPosition boxtl = m_depotPosition - CCPosition(ccWidth/2, -ccHeight/2);
+    CCPosition boxbr = m_depotPosition + CCPosition(ccWidth/2, -ccHeight/2);
 
-    m_bot.Map().drawBox(boxtl.x, boxtl.y, boxbr.x, boxbr.y, sc2::Colors::Red);
+    m_bot.Map().drawBox(boxtl.x, boxtl.y, boxbr.x, boxbr.y, CCColor(255, 0, 0));
 
     //m_distanceMap.draw(m_bot);
 }

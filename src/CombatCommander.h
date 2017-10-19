@@ -21,10 +21,10 @@ class CombatCommander
     void            updateIdleSquad();
     bool            isSquadUpdateFrame();
 
-    CCUnit findClosestDefender(const Squad & defenseSquad, const sc2::Point2D & pos);
-    CCUnit findClosestWorkerTo(std::vector<CCUnit> & unitsToAssign, const sc2::Point2D & target);
+    CCUnit findClosestDefender(const Squad & defenseSquad, const CCPosition & pos);
+    CCUnit findClosestWorkerTo(std::vector<CCUnit> & unitsToAssign, const CCPosition & target);
 
-    sc2::Point2D    getMainAttackLocation();
+    CCPosition    getMainAttackLocation();
 
     void            updateDefenseSquadUnits(Squad & defenseSquad, const size_t & flyingDefendersNeeded, const size_t & groundDefendersNeeded);
     bool            shouldWeStartAttacking();

@@ -26,9 +26,14 @@ void UnitData::updateUnit(CCUnit unit)
     ui.lastPosition = unit->pos;
     ui.lastHealth   = unit->health;
     ui.lastShields  = unit->shield;
-    ui.tag          = unit->tag;
     ui.type         = unit->unit_type;
     ui.progress     = unit->build_progress;
+
+#ifdef SC2API
+    ui.id           = unit->tag;
+#else
+    ui.id           = unit->getID();
+#endif
 
     if (firstSeen)
     {

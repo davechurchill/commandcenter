@@ -117,7 +117,7 @@ void BaseLocationManager::onStart()
         {
             for (auto & baseLocation : m_baseLocationData)
             {
-                sc2::Point2D pos(x + 0.5f, y + 0.5f);
+                CCPosition pos(x + 0.5f, y + 0.5f);
 
                 if (baseLocation.containsPosition(pos))
                 {
@@ -247,7 +247,7 @@ void BaseLocationManager::onFrame()
     
 }
 
-BaseLocation * BaseLocationManager::getBaseLocation(const sc2::Point2D & pos) const
+BaseLocation * BaseLocationManager::getBaseLocation(const CCPosition & pos) const
 {
     if (!m_bot.Map().isValid(pos)) { return nullptr; }
 
@@ -267,10 +267,10 @@ void BaseLocationManager::drawBaseLocations()
     }
 
     // draw a purple sphere at the next expansion location
-    sc2::Point2D nextExpansionPosition = getNextExpansion(Players::Self);
+    CCPosition nextExpansionPosition = getNextExpansion(Players::Self);
 
-    m_bot.Map().drawSphere(nextExpansionPosition, 1, sc2::Colors::Purple);
-    m_bot.Map().drawText(nextExpansionPosition, "Next Expansion Location", sc2::Colors::Purple);
+    m_bot.Map().drawCircle(nextExpansionPosition, 1, CCColor(255, 0, 255));
+    m_bot.Map().drawText(nextExpansionPosition, "Next Expansion Location", CCColor(255, 0, 255));
 }
 
 const std::vector<const BaseLocation *> & BaseLocationManager::getBaseLocations() const
@@ -294,13 +294,13 @@ const std::set<const BaseLocation *> & BaseLocationManager::getOccupiedBaseLocat
 }
 
 
-sc2::Point2D BaseLocationManager::getNextExpansion(int player) const
+CCPosition BaseLocationManager::getNextExpansion(int player) const
 {
     const BaseLocation * homeBase = getPlayerStartingBaseLocation(player);
     const BaseLocation * closestBase = nullptr;
     int minDistance = std::numeric_limits<int>::max();
 
-    sc2::Point2D homeTile = homeBase->getPosition();
+    CCPosition homeTile = homeBase->getPosition();
     
     for (auto & base : getBaseLocations())
     {
@@ -336,5 +336,5 @@ sc2::Point2D BaseLocationManager::getNextExpansion(int player) const
         }
     }
 
-    return closestBase ? closestBase->getDepotPosition() : sc2::Point2D(0.0f, 0.0f);
+    return closestBase ? closestBase->getDepotPosition() : CCPosition(0.0f, 0.0f);
 }

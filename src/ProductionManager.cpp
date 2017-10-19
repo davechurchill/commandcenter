@@ -96,7 +96,7 @@ void ProductionManager::manageBuildOrderQueue()
     }
 }
 
-CCUnit ProductionManager::getProducer(const BuildType & type, sc2::Point2D closestTo)
+CCUnit ProductionManager::getProducer(const BuildType & type, CCPosition closestTo)
 {
     // get all the types of units that cna build this type
     auto & producerTypes = m_bot.Data(type).whatBuilds;
@@ -122,7 +122,7 @@ CCUnit ProductionManager::getProducer(const BuildType & type, sc2::Point2D close
     return getClosestUnitToPosition(candidateProducers, closestTo);
 }
 
-CCUnit ProductionManager::getClosestUnitToPosition(const std::vector<CCUnit> & units, sc2::Point2D closestTo)
+CCUnit ProductionManager::getClosestUnitToPosition(const std::vector<CCUnit> & units, CCPosition closestTo)
 {
     if (units.size() == 0)
     {
@@ -250,5 +250,5 @@ void ProductionManager::drawProductionInformation()
 
     ss << m_queue.getQueueInformation();
 
-    m_bot.Map().drawTextScreen(sc2::Point2D(0.01f, 0.01f), ss.str(), sc2::Colors::Yellow);
+    m_bot.Map().drawTextScreen(CCPosition(0.01f, 0.01f), ss.str(), CCColor(255, 255, 0));
 }
