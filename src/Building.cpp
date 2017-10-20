@@ -14,7 +14,7 @@ Building::Building()
 {} 
 
 // constructor we use most often
-Building::Building(CCUnitType t, CCPosition desired)
+Building::Building(CCUnitType t, CCTilePosition desired)
     : desiredPosition   (desired)
     , finalPosition     (0,0)
     , position          (0,0)

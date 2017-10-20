@@ -8,10 +8,15 @@ namespace Util
 {
     CCPlayer    GetPlayer(CCUnit unit);
     CCUnitType  GetType(CCUnit unit);
+    CCHealth    GetHealth(CCUnit unit);
+    CCHealth    GetShield(CCUnit unit);
     CCUnitID    GetID(CCUnit unit);
+    CCPosition  GetPosition(CCUnit unit);
     CCRace      GetRace(CCUnit unit, CCBot & bot);
     CCRace      GetRace(const CCUnitType & type, CCBot & bot);
     CCRace      GetRaceFromString(const std::string & str);
+    CCTilePosition GetTilePosition(const CCPosition & pos);
+    CCPosition GetPosition(const CCTilePosition & tile);
     std::string GetStringFromRace(const CCRace & race);
 
     bool IsCombatUnit(CCUnit unit, CCBot & bot);
@@ -37,13 +42,12 @@ namespace Util
     bool UnitCanBuildTypeNow(CCUnit unit, const CCUnitType & type, CCBot & m_bot);
     int GetUnitTypeWidth(const CCUnitType type, const CCBot & bot);
     int GetUnitTypeHeight(const CCUnitType type, const CCBot & bot);
-    int GetUnitTypeMineralPrice(const CCUnitType type, const CCBot & bot);
-    int GetUnitTypeGasPrice(const CCUnitType type, const CCBot & bot);
-    CCUnitType GetTownHall(const sc2::Race & race);
-    CCUnitType GetSupplyProvider(const sc2::Race & race);
-    CCPosition    CalcCenter(const std::vector<CCUnit> & units);
+    CCUnitType GetTownHall(const CCRace & race);
+    CCUnitType GetSupplyProvider(const CCRace & race);
+    CCPosition CalcCenter(const std::vector<CCUnit> & units);
 
-    CCUnitType GetUnitTypeFromName(const std::string & name, CCBot & bot);
+    std::string     GetNameFromUnitType(const CCUnitType & type);
+    CCUnitType      GetUnitTypeFromName(const std::string & name, CCBot & bot);
     sc2::UpgradeID  GetUpgradeFromName(const std::string & name, CCBot & bot);
 
 #ifdef SC2API

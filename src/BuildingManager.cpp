@@ -28,7 +28,7 @@ void BuildingManager::onFrame()
         if (m_bot.Data(unit->unit_type).isBuilding)
         {
             std::stringstream ss;
-            ss << unit->tag;
+            ss << Util::GetID(unit);
             m_bot.Map().drawText(unit->pos, ss.str());
         }
     }
@@ -100,8 +100,8 @@ void BuildingManager::assignWorkersToUnassignedBuildings()
         if (m_debugMode) { printf("Assigning Worker To: %s", sc2::UnitTypeToName(b.type)); }
 
         // grab a worker unit from WorkerManager which is closest to this final position
-        CCPosition testLocation = getBuildingLocation(b);
-        if (!m_bot.Map().isValid(testLocation))
+        CCTilePosition testLocation = getBuildingLocation(b);
+        if (!m_bot.Map().isValidTile(testLocation))
         {
             continue;
         }
@@ -175,9 +175,9 @@ void BuildingManager::constructAssignedBuildings()
                 {
                     // first we find the geyser at the desired location
                     CCUnit geyser = nullptr;
-                    for (auto unit : m_bot.Observation()->GetUnits())
+                    for (auto unit : m_bot.GetUnits())
                     {
-                        if (Util::IsGeyser(unit) && Util::Dist(b.finalPosition, unit->pos) < 3)
+                        if (Util::IsGeyser(unit) && Util::Dist(Util::GetPosition(b.finalPosition), Util::GetPosition(unit)) < 3)
                         {
                             geyser = unit;
                             break;
@@ -239,8 +239,8 @@ void BuildingManager::checkForStartedConstruction()
                 }
 
                 // the resources should now be spent, so unreserve them
-                m_reservedMinerals -= Util::GetUnitTypeMineralPrice(buildingStarted->unit_type, m_bot);
-                m_reservedGas      -= Util::GetUnitTypeGasPrice(buildingStarted->unit_type, m_bot);
+                m_reservedMinerals -= m_bot.Data(buildingStarted).mineralCost;
+                m_reservedGas      -= m_bot.Data(buildingStarted).gasCost;
                 
                 // flag it as started and set the buildingUnit
                 b.underConstruction = true;
@@ -304,10 +304,10 @@ void BuildingManager::checkForCompletedBuildings()
 }
 
 // add a new building to be constructed
-void BuildingManager::addBuildingTask(const CCUnitType & type, const CCPosition & desiredPosition)
+void BuildingManager::addBuildingTask(const CCUnitType & type, const CCTilePosition & desiredPosition)
 {
-    m_reservedMinerals  += Util::GetUnitTypeMineralPrice(type, m_bot);
-    m_reservedGas	    += Util::GetUnitTypeGasPrice(type, m_bot);
+    m_reservedMinerals  += m_bot.Data(type).mineralCost;
+    m_reservedGas	    += m_bot.Data(type).gasCost;
 
     Building b(type, desiredPosition);
     b.status = BuildingStatus::Unassigned;
@@ -357,36 +357,34 @@ void BuildingManager::drawBuildingInformation()
 
         if (b.builderUnit)
         {
-            dss << "\n\nBuilder: " << b.builderUnit->tag << "\n";
+            dss << "\n\nBuilder: " << Util::GetID(b.builderUnit) << "\n";
         }
 
         if (b.buildingUnit)
         {
-            dss << "Building: " << b.buildingUnit->tag << "\n" << b.buildingUnit->build_progress;
+            dss << "Building: " << Util::GetID(b.buildingUnit) << "\n" << b.buildingUnit->build_progress;
             m_bot.Map().drawText(b.buildingUnit->pos, dss.str());
         }
-
-
-
+        
         if (b.status == BuildingStatus::Unassigned)
         {
             ss << "Unassigned " << sc2::UnitTypeToName(b.type) << "    " << getBuildingWorkerCode(b) << "\n";
         }
         else if (b.status == BuildingStatus::Assigned)
         {
-            ss << "Assigned " << sc2::UnitTypeToName(b.type) << "    " << b.builderUnit->tag << " " << getBuildingWorkerCode(b) << " (" << b.finalPosition.x << "," << b.finalPosition.y << ")\n";
+            ss << "Assigned " << sc2::UnitTypeToName(b.type) << "    " << Util::GetID(b.builderUnit) << " " << getBuildingWorkerCode(b) << " (" << b.finalPosition.x << "," << b.finalPosition.y << ")\n";
 
-            float x1 = b.finalPosition.x;
-            float y1 = b.finalPosition.y;
-            float x2 = b.finalPosition.x + Util::GetUnitTypeWidth(b.type, m_bot);
-            float y2 = b.finalPosition.y + Util::GetUnitTypeHeight(b.type, m_bot);
+            int x1 = b.finalPosition.x;
+            int y1 = b.finalPosition.y;
+            int x2 = b.finalPosition.x + Util::GetUnitTypeWidth(b.type, m_bot);
+            int y2 = b.finalPosition.y + Util::GetUnitTypeHeight(b.type, m_bot);
 
-            m_bot.Map().drawSquare(x1, y1, x2, y2, CCColor(255, 0, 0));
+            m_bot.Map().drawSquare((float)x1, (float)y1, (float)x2, (float)y2, CCColor(255, 0, 0));
             //m_bot.Map().drawLine(b.finalPosition, m_bot.GetUnit(b.builderUnitTag)->pos, CCColors::Yellow);
         }
         else if (b.status == BuildingStatus::UnderConstruction)
         {
-            ss << "Constructing " << sc2::UnitTypeToName(b.type) << "    " << b.builderUnit->tag << " " << b.buildingUnit->tag << " " << getBuildingWorkerCode(b) << "\n";
+            ss << "Constructing " << sc2::UnitTypeToName(b.type) << "    " << Util::GetID(b.builderUnit) << " " << Util::GetID(b.buildingUnit) << " " << getBuildingWorkerCode(b) << "\n";
         }
     }
 
@@ -408,7 +406,7 @@ std::vector<CCUnitType> BuildingManager::buildingsQueued() const
     return buildingsQueued;
 }
 
-CCPosition BuildingManager::getBuildingLocation(const Building & b)
+CCTilePosition BuildingManager::getBuildingLocation(const Building & b)
 {
     size_t numPylons = m_bot.UnitInfo().getUnitTypeCount(Players::Self, Util::GetSupplyProvider(m_bot.GetPlayerRace(Players::Self)), true);
 

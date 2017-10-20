@@ -218,11 +218,10 @@ void UnitInfoManager::drawUnitInformation(float x,float y) const
     
     for (auto & kv : getUnitData(Players::Enemy).getUnitInfoMap())
     {
-        m_bot.Debug()->DebugSphereOut(kv.second.lastPosition, 0.5f);
-        m_bot.Debug()->DebugTextOut(sc2::UnitTypeToName(kv.second.type), kv.second.lastPosition);
+        m_bot.Map().drawCircle(kv.second.lastPosition, 0.5f);
+        m_bot.Map().drawText(kv.second.lastPosition, sc2::UnitTypeToName(kv.second.type));
     }
-
-
+    
 }
 
 void UnitInfoManager::updateUnit(CCUnit unit)
@@ -248,7 +247,7 @@ bool UnitInfoManager::isValidUnit(CCUnit unit)
     }
 
     // if the position isn't valid throw it out
-    if (!m_bot.Map().isValid(unit->pos))
+    if (!m_bot.Map().isValidPosition(unit->pos))
     {
         return false;
     }

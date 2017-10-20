@@ -15,7 +15,7 @@ class MapTools
     
 
     // a cache of already computed distance maps, which is mutable since it only acts as a cache
-    mutable std::map<std::pair<int, int>, DistanceMap>   _allMaps;   
+    mutable std::map<std::pair<int,int>, DistanceMap>   _allMaps;   
 
     std::vector<std::vector<bool>>  m_walkable;         // whether a tile is buildable (includes static resources)
     std::vector<std::vector<bool>>  m_buildable;        // whether a tile is buildable (includes static resources)
@@ -27,13 +27,12 @@ class MapTools
     void computeConnectivity();
 
     int getSectorNumber(int x, int y) const;
-    int getSectorNumber(const CCPosition & pos) const;
         
     void printMap();
 
-    float   terainHeight(const CCPosition& point);
-    bool    canBuild(const CCPosition& point);
-    bool    canWalk(const CCPosition& point);
+    float   terainHeight(const CCPosition & point);
+    bool    canBuild(int tileX, int tileY);
+    bool    canWalk(int tileX, int tileY);
 
 public:
 
@@ -56,29 +55,33 @@ public:
     void    drawCircle(const CCPosition & pos, float radius, const CCColor & color = CCColor(255, 255, 255)) const;
     void    drawText(const CCPosition & pos, const std::string & str, const CCColor & color = CCColor(255, 255, 255)) const;
     void    drawTextScreen(const CCPosition & pos, const std::string & str, const CCColor & color = CCColor(255, 255, 255)) const;
-    void    drawBoxAroundUnit(CCUnit unit, CCColor color) const;
     
-    bool    isValid(int x, int y) const;
-    bool    isValid(const CCPosition & pos) const;
-    bool    isPowered(const CCPosition & pos) const;
+    bool    isValidTile(int tileX, int tileY) const;
+    bool    isValidTile(const CCTilePosition & tile) const;
+    bool    isValidPosition(const CCPosition & pos) const;
+    bool    isPowered(int tileX, int tileY) const;
+    bool    isExplored(int tileX, int tileY) const;
     bool    isExplored(const CCPosition & pos) const;
-    bool    isVisible(const CCPosition & pos) const;
-    bool    canBuildTypeAtPosition(int x, int y, CCUnitType type) const;
+    bool    isExplored(const CCTilePosition & pos) const;
+    bool    isVisible(int tileX, int tileY) const;
+    bool    canBuildTypeAtPosition(int tileX, int tileY, CCUnitType type) const;
 
+    const   DistanceMap & getDistanceMap(const CCTilePosition & tile) const;
     const   DistanceMap & getDistanceMap(const CCPosition & tile) const;
     int     getGroundDistance(const CCPosition & src, const CCPosition & dest) const;
     bool    isConnected(int x1, int y1, int x2, int y2) const;
+    bool    isConnected(const CCTilePosition & from, const CCTilePosition & to) const;
     bool    isConnected(const CCPosition & from, const CCPosition & to) const;
-    bool    isWalkable(const CCPosition & pos) const;
-    bool    isWalkable(int x, int y) const;
+    bool    isWalkable(int tileX, int tileY) const;
+    bool    isWalkable(const CCTilePosition & tile) const;
     
-    bool    isBuildable(const CCPosition & pos) const;
-    bool    isBuildable(int x, int y) const;
-    bool    isDepotBuildableTile(const CCPosition & pos) const;
+    bool    isBuildable(int tileX, int tileY) const;
+    bool    isBuildable(const CCTilePosition & tile) const;
+    bool    isDepotBuildableTile(int tileX, int tileY) const;
     
-    CCPosition getLeastRecentlySeenPosition() const;
+    CCTilePosition getLeastRecentlySeenTile() const;
 
     // returns a list of all tiles on the map, sorted by 4-direcitonal walk distance from the given position
-    const std::vector<CCPosition> & getClosestTilesTo(const CCPosition & pos) const;
+    const std::vector<CCTilePosition> & getClosestTilesTo(const CCTilePosition & pos) const;
 };
 

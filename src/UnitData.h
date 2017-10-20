@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Common.h"
+#include "Util.h"
 
 struct UnitInfo
 {
@@ -8,11 +9,11 @@ struct UnitInfo
     // can't reference it from the unit pointer
 
     CCUnitID        id;
-    float           lastHealth;
-    float           lastShields;
+    CCHealth        lastHealth;
+    CCHealth        lastShields;
     CCPlayer        player;
     CCUnit          unit;
-    sc2::Point3D    lastPosition;
+    CCPosition      lastPosition;
     CCUnitType      type;
     float           progress;
 
@@ -29,11 +30,7 @@ struct UnitInfo
 
     bool operator == (CCUnit unit) const
     {
-#ifdef SC2API
-        return id == unit->tag;
-#else
-        return id == unit->getID();
-#endif
+        return id == Util::GetID(unit);
     }
 
     bool operator == (const UnitInfo & rhs) const

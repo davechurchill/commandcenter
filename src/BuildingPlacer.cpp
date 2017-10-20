@@ -34,7 +34,7 @@ bool BuildingPlacer::canBuildHere(int bx, int by, const Building & b) const
     {
         for (int y = by; y < by + Util::GetUnitTypeHeight(b.type, m_bot); y++)
         {
-            if (!m_bot.Map().isValid(x, y) || m_reserveMap[x][y])
+            if (!m_bot.Map().isValidTile(x, y) || m_reserveMap[x][y])
             {
                 return false;
             }
@@ -99,7 +99,7 @@ bool BuildingPlacer::canBuildHereWithSpace(int bx, int by, const Building & b, i
     return true;
 }
 
-CCPosition BuildingPlacer::getBuildLocationNear(const Building & b, int buildDist) const
+CCTilePosition BuildingPlacer::getBuildLocationNear(const Building & b, int buildDist) const
 {
     Timer t;
     t.start();
@@ -126,7 +126,7 @@ CCPosition BuildingPlacer::getBuildLocationNear(const Building & b, int buildDis
     double ms = t.getElapsedTimeInMilliSec();
     //printf("Building Placer Took %lf ms\n", ms);
 
-    return CCPosition(0, 0);
+    return CCTilePosition(0, 0);
 }
 
 bool BuildingPlacer::tileOverlapsBaseLocation(int x, int y, CCUnitType type) const
@@ -169,7 +169,7 @@ bool BuildingPlacer::tileOverlapsBaseLocation(int x, int y, CCUnitType type) con
 bool BuildingPlacer::buildable(const Building & b, int x, int y) const
 {
     // TODO: does this take units on the map into account?
-    if (!m_bot.Map().isValid(x, y) || !m_bot.Map().canBuildTypeAtPosition(x, y, b.type))
+    if (!m_bot.Map().isValidTile(x, y) || !m_bot.Map().canBuildTypeAtPosition(x, y, b.type))
     {
         return false;
     }
@@ -233,7 +233,7 @@ void BuildingPlacer::freeTiles(int bx, int by, int width, int height)
     }
 }
 
-CCPosition BuildingPlacer::getRefineryPosition()
+CCTilePosition BuildingPlacer::getRefineryPosition()
 {
     CCPosition closestGeyser(0, 0);
     double minGeyserDistanceFromHome = std::numeric_limits<double>::max();
@@ -270,7 +270,11 @@ CCPosition BuildingPlacer::getRefineryPosition()
         }
     }
 
-    return closestGeyser;
+#ifdef SC2API
+    return CCTilePosition((int)closestGeyser.x, (int)closestGeyser.y);
+#else
+    return CCTilePosition(closestGeyser);
+#endif
 }
 
 bool BuildingPlacer::isReserved(int x, int y) const

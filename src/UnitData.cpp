@@ -23,17 +23,12 @@ void UnitData::updateUnit(CCUnit unit)
     UnitInfo & ui   = m_unitMap[unit];
     ui.unit         = unit;
     ui.player       = Util::GetPlayer(unit);
-    ui.lastPosition = unit->pos;
-    ui.lastHealth   = unit->health;
-    ui.lastShields  = unit->shield;
-    ui.type         = unit->unit_type;
+    ui.lastPosition = Util::GetPosition(unit);
+    ui.lastHealth   = Util::GetHealth(unit);
+    ui.lastShields  = Util::GetShield(unit);
+    ui.type         = Util::GetType(unit);
     ui.progress     = unit->build_progress;
-
-#ifdef SC2API
-    ui.id           = unit->tag;
-#else
-    ui.id           = unit->getID();
-#endif
+    ui.id           = Util::GetID(unit);
 
     if (firstSeen)
     {

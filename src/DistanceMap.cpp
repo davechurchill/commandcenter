@@ -17,49 +17,58 @@ int DistanceMap::getDistance(int tileX, int tileY) const
     return m_dist[tileX][tileY]; 
 }
 
-int DistanceMap::getDistance(const CCPosition & pos) const
+int DistanceMap::getDistance(const CCTilePosition & pos) const
 { 
-    return getDistance((int)pos.x, (int)pos.y); 
+    return getDistance(pos.x, pos.y); 
 }
 
-const std::vector<CCPosition> & DistanceMap::getSortedTiles() const
+int DistanceMap::getDistance(const CCPosition & pos) const
+{ 
+#ifdef SC2API
+    return getDistance(CCTilePosition((int)pos.x, (int)pos.y));
+#else
+    return getDistance(CCTilePosition(pos));
+#endif
+}
+
+const std::vector<CCTilePosition> & DistanceMap::getSortedTiles() const
 {
-    return m_sortedTilePositions;
+    return m_sortedTiles;
 }
 
 // Computes m_dist[x][y] = ground distance from (startX, startY) to (x,y)
 // Uses BFS, since the map is quite large and DFS may cause a stack overflow
-void DistanceMap::computeDistanceMap(CCBot & m_bot, const CCPosition & startTile)
+void DistanceMap::computeDistanceMap(CCBot & m_bot, const CCTilePosition & startTile)
 {
     m_startTile = startTile;
     m_width = m_bot.Map().width();
     m_height = m_bot.Map().height();
     m_dist = std::vector<std::vector<int>>(m_width, std::vector<int>(m_height, -1));
-    m_sortedTilePositions.reserve(m_width * m_height);
+    m_sortedTiles.reserve(m_width * m_height);
 
     // the fringe for the BFS we will perform to calculate distances
-    std::vector<CCPosition> fringe;
+    std::vector<CCTilePosition> fringe;
     fringe.reserve(m_width * m_height);
     fringe.push_back(startTile);
-    m_sortedTilePositions.push_back(startTile);
+    m_sortedTiles.push_back(startTile);
 
     m_dist[(int)startTile.x][(int)startTile.y] = 0;
 
     for (size_t fringeIndex=0; fringeIndex<fringe.size(); ++fringeIndex)
     {
-        const CCPosition & tile = fringe[fringeIndex];
+        auto & tile = fringe[fringeIndex];
 
         // check every possible child of this tile
         for (size_t a=0; a<LegalActions; ++a)
         {
-            CCPosition nextTile(tile.x + actionX[a], tile.y + actionY[a]);
+            CCTilePosition nextTile(tile.x + actionX[a], tile.y + actionY[a]);
 
             // if the new tile is inside the map bounds, is walkable, and has not been visited yet, set the distance of its parent + 1
             if (m_bot.Map().isWalkable(nextTile) && getDistance(nextTile) == -1)
             {
                 m_dist[(int)nextTile.x][(int)nextTile.y] = m_dist[(int)tile.x][(int)tile.y] + 1;
                 fringe.push_back(nextTile);
-                m_sortedTilePositions.push_back(nextTile);
+                m_sortedTiles.push_back(nextTile);
             }
         }
     }
@@ -70,7 +79,7 @@ void DistanceMap::draw(CCBot & bot) const
     const int tilesToDraw = 200;
     for (size_t i(0); i < tilesToDraw; ++i)
     {
-        auto & tile = m_sortedTilePositions[i];
+        auto & tile = m_sortedTiles[i];
         int dist = getDistance(tile);
 
         CCPosition textPos(tile.x + 0.5f, tile.y + 0.5f);
@@ -81,7 +90,7 @@ void DistanceMap::draw(CCBot & bot) const
     }
 }
 
-const CCPosition & DistanceMap::getStartTile() const
+const CCTilePosition & DistanceMap::getStartTile() const
 {
     return m_startTile;
 }

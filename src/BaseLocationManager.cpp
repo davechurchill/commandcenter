@@ -249,9 +249,13 @@ void BaseLocationManager::onFrame()
 
 BaseLocation * BaseLocationManager::getBaseLocation(const CCPosition & pos) const
 {
-    if (!m_bot.Map().isValid(pos)) { return nullptr; }
+    if (!m_bot.Map().isValidPosition(pos)) { return nullptr; }
 
+#ifdef SC2API
     return m_tileBaseLocations[(int)pos.x][(int)pos.y];
+#else
+    return m_tileBaseLocations[pos.x / 32][pos.y / 32];
+#endif
 }
 
 void BaseLocationManager::drawBaseLocations()

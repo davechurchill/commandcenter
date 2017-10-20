@@ -136,7 +136,7 @@ bool BaseLocation::isPlayerStartLocation(CCPlayer player) const
 
 bool BaseLocation::containsPosition(const CCPosition & pos) const
 {
-    if (!m_bot.Map().isValid(pos) || (pos.x == 0 && pos.y == 0))
+    if (!m_bot.Map().isValidPosition(pos) || (pos.x == 0 && pos.y == 0))
     {
         return false;
     }
@@ -170,7 +170,7 @@ bool BaseLocation::isStartLocation() const
     return m_isStartLocation;
 }
 
-const std::vector<CCPosition> & BaseLocation::getClosestTiles() const
+const std::vector<CCTilePosition> & BaseLocation::getClosestTiles() const
 {
     return m_distanceMap.getSortedTiles();
 }

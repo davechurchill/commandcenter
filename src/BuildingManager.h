@@ -34,9 +34,9 @@ public:
 
     void                onStart();
     void                onFrame();
-    void                addBuildingTask(const CCUnitType & type, const CCPosition & desiredPosition);
+    void                addBuildingTask(const CCUnitType & type, const CCTilePosition & desiredPosition);
     void                drawBuildingInformation();
-    CCPosition        getBuildingLocation(const Building & b);
+    CCTilePosition      getBuildingLocation(const Building & b);
 
     int                 getReservedMinerals();
     int                 getReservedGas();

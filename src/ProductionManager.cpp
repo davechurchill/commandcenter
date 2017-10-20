@@ -164,7 +164,7 @@ void ProductionManager::create(CCUnit producer, BuildOrderItem & item)
     if (m_bot.Data(item.type).isBuilding)
     {
         // send the building task to the building manager
-        m_buildingManager.addBuildingTask(item.type.getUnitTypeID(), m_bot.GetStartLocation());
+        m_buildingManager.addBuildingTask(item.type.getUnitTypeID(), Util::GetTilePosition(m_bot.GetStartLocation()));
     }
     // if we're dealing with a non-building unit
     else if (item.type.isUnit())

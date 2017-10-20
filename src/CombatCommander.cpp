@@ -423,7 +423,7 @@ CCPosition CombatCommander::getMainAttackLocation()
     }
 
     // Fourth choice: We can't see anything so explore the map attacking along the way
-    return m_bot.Map().getLeastRecentlySeenPosition();
+    return Util::GetPosition(m_bot.Map().getLeastRecentlySeenTile());
 }
 
 CCUnit CombatCommander::findClosestWorkerTo(std::vector<CCUnit> & unitsToAssign, const CCPosition & target)

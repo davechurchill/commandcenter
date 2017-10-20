@@ -58,7 +58,6 @@ CCRace Util::GetRace(const CCUnitType & type, CCBot & bot)
 #endif
 }
 
-
 CCUnitType Util::GetType(CCUnit unit)
 {
 #ifdef SC2API
@@ -74,6 +73,33 @@ CCUnitID Util::GetID(CCUnit unit)
     return unit->tag;
 #else
     return unit->getID();
+#endif
+}
+
+CCHealth Util::GetHealth(CCUnit unit)
+{
+#ifdef SC2API
+    return unit->health;
+#else
+    return unit->getHitPoints();
+#endif
+}
+
+CCHealth Util::GetShield(CCUnit unit)
+{
+#ifdef SC2API
+    return unit->shield;
+#else
+    return unit->getShields();
+#endif
+}
+
+CCPosition Util::GetPosition(CCUnit unit)
+{
+#ifdef SC2API
+    return unit->pos;
+#else
+    return unit->getPosition();
 #endif
 }
 
@@ -99,7 +125,7 @@ bool Util::IsTownHallType(const CCUnitType & type)
         default: return false;
     }
 #else
-
+    return type.isResourceDepot();
 #endif
 }
 
@@ -111,6 +137,7 @@ bool Util::IsRefinery(CCUnit unit)
 
 bool Util::IsRefineryType(const CCUnitType & type)
 {
+#ifdef SC2API
     switch (type.ToType()) 
     {
         case sc2::UNIT_TYPEID::TERRAN_REFINERY      : return true;
@@ -118,6 +145,9 @@ bool Util::IsRefineryType(const CCUnitType & type)
         case sc2::UNIT_TYPEID::ZERG_EXTRACTOR       : return true;
         default: return false;
     }
+#else
+    return type.isRefinery();
+#endif
 }
 
 bool Util::IsGeyser(CCUnit unit)
@@ -128,6 +158,7 @@ bool Util::IsGeyser(CCUnit unit)
 
 bool Util::IsGeyserType(const CCUnitType & type)
 {
+#ifdef SC2API
     switch (type.ToType()) 
     {
         case sc2::UNIT_TYPEID::NEUTRAL_VESPENEGEYSER        : return true;
@@ -135,6 +166,9 @@ bool Util::IsGeyserType(const CCUnitType & type)
         case sc2::UNIT_TYPEID::NEUTRAL_SPACEPLATFORMGEYSER  : return true;
         default: return false;
     }
+#else
+    return type.isGeyser();
+#endif
 }
 
 bool Util::IsMineral(CCUnit unit)
@@ -165,9 +199,10 @@ bool Util::IsWorker(CCUnit unit)
     return IsWorkerType(GetType(unit));
 }
 
-bool Util::IsWorkerType(const CCUnitType & unit)
+bool Util::IsWorkerType(const CCUnitType & type)
 {
-    switch (unit.ToType()) 
+#ifdef SC2API
+    switch (type.ToType()) 
     {
         case sc2::UNIT_TYPEID::TERRAN_SCV           : return true;
         case sc2::UNIT_TYPEID::PROTOSS_PROBE        : return true;
@@ -175,10 +210,14 @@ bool Util::IsWorkerType(const CCUnitType & unit)
         case sc2::UNIT_TYPEID::ZERG_DRONEBURROWED   : return true;
         default: return false;
     }
+#else
+    return type.isWorker();
+#endif
 }
 
-CCUnitType Util::GetSupplyProvider(const sc2::Race & race)
+CCUnitType Util::GetSupplyProvider(const CCRace & race)
 {
+#ifdef SC2API
     switch (race) 
     {
         case sc2::Race::Terran: return sc2::UNIT_TYPEID::TERRAN_SUPPLYDEPOT;
@@ -186,10 +225,14 @@ CCUnitType Util::GetSupplyProvider(const sc2::Race & race)
         case sc2::Race::Zerg: return sc2::UNIT_TYPEID::ZERG_OVERLORD;
         default: return 0;
     }
+#else
+    return race.getSupplyProvider();
+#endif
 }
 
 CCUnitType Util::GetTownHall(const sc2::Race & race)
 {
+#ifdef SC2API
     switch (race) 
     {
         case sc2::Race::Terran: return sc2::UNIT_TYPEID::TERRAN_COMMANDCENTER;
@@ -197,6 +240,9 @@ CCUnitType Util::GetTownHall(const sc2::Race & race)
         case sc2::Race::Zerg: return sc2::UNIT_TYPEID::ZERG_HATCHERY;
         default: return 0;
     }
+#else
+    return race.getResourceDepot();
+#endif
 }
 
 bool Util::IsCompleted(CCUnit unit)
@@ -211,26 +257,32 @@ bool Util::IsIdle(CCUnit unit)
     return unit->orders.empty();
 }
 
-int Util::GetUnitTypeMineralPrice(const CCUnitType type, const CCBot & bot)
-{
-    return bot.Observation()->GetUnitTypeData()[type].mineral_cost;
-}
-
-int Util::GetUnitTypeGasPrice(const CCUnitType type, const CCBot & bot)
-{
-    return bot.Observation()->GetUnitTypeData()[type].vespene_cost;
-}
-
 int Util::GetUnitTypeWidth(const CCUnitType type, const CCBot & bot)
 {
+#ifdef SC2API
     return (int)(2 * bot.Observation()->GetAbilityData()[bot.Data(type).buildAbility].footprint_radius);
+#else
+
+#endif
 }
 
 int Util::GetUnitTypeHeight(const CCUnitType type, const CCBot & bot)
 {
+#ifdef SC2API
     return (int)(2 * bot.Observation()->GetAbilityData()[bot.Data(type).buildAbility].footprint_radius);
+#else
+
+#endif
 }
 
+std::string Util::GetNameFromUnitType(const CCUnitType & type)
+{
+#ifdef SC2API
+    return sc2::UnitTypeToName(type);
+#else
+    return type.getName();
+#endif
+}
 
 CCPosition Util::CalcCenter(const std::vector<CCUnit> & units)
 {
@@ -256,6 +308,24 @@ bool Util::IsDetector(CCUnit unit)
 {
     BOT_ASSERT(unit, "Unit pointer was null");
     return IsDetectorType(unit->unit_type);
+}
+
+CCTilePosition Util::GetTilePosition(const CCPosition & pos)
+{
+#ifdef SC2API
+    return CCTilePosition((int)std::floor(pos.x), (int)std::floor(pos.y));
+#else
+    return CCTilePosition(pos);
+#endif
+}
+
+CCPosition Util::GetPosition(const CCTilePosition & tile)
+{
+#ifdef SC2API
+    return CCPosition((float)tile.x, (float)tile.y);
+#else
+    return CCPosition(tile);
+#endif
 }
 
 float Util::GetAttackRange(const CCUnitType & type, CCBot & bot)
