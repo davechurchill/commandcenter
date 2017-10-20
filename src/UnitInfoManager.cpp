@@ -75,7 +75,6 @@ void UnitInfoManager::drawSelectedUnitDebugInfo()
 
     if (!unit) { return; }
 
-    auto debug = m_bot.Debug();
     auto query = m_bot.Query();
     auto abilities = m_bot.Observation()->GetAbilityData();
 
@@ -104,7 +103,7 @@ void UnitInfoManager::drawSelectedUnitDebugInfo()
             debug_txt += GetAbilityText(ability.ability_id) + "\n";
         }
     }
-    debug->DebugTextOut(debug_txt, unit->pos, CCColor(0, 255, 0));
+    m_bot.Map().drawText(unit->pos, debug_txt, CCColor(0, 255, 0));
 
     // Show the direction of the unit.
     sc2::Point3D p1; // Use this to show target distance.
@@ -116,7 +115,7 @@ void UnitInfoManager::drawSelectedUnitDebugInfo()
         assert(unit->facing >= 0.0f && unit->facing < 6.29f);
         p1.x += length * std::cos(unit->facing);
         p1.y += length * std::sin(unit->facing);
-        debug->DebugLineOut(p0, p1, CCColor(255, 255, 0));
+        m_bot.Map().drawLine(p0, p1, CCColor(255, 255, 0));
     }
 
     // Box around the unit.
@@ -129,14 +128,14 @@ void UnitInfoManager::drawSelectedUnitDebugInfo()
         p_max.x += 2.0f;
         p_max.y += 2.0f;
         p_max.z += 2.0f;
-        debug->DebugBoxOut(p_min, p_max, CCColor(0, 0, 255));
+        m_bot.Map().drawBox(p_min, p_max, CCColor(0, 0, 255));
     }
 
     // Sphere around the unit.
     {
         sc2::Point3D p = unit->pos;
         p.z += 0.1f; // Raise the line off the ground a bit so it renders more clearly.
-        debug->DebugSphereOut(p, 1.25f, CCColor(255, 0, 255));
+        m_bot.Map().drawCircle(p, 1.25f, CCColor(255, 0, 255));
     }
 
     // Pathing query to get the target.
@@ -172,8 +171,8 @@ void UnitInfoManager::drawSelectedUnitDebugInfo()
     {
         sc2::Point3D p = target;
         p.z += 0.1f; // Raise the line off the ground a bit so it renders more clearly.
-        debug->DebugSphereOut(target, 1.25f, CCColor(0, 0, 255));
-        debug->DebugTextOut(target_info, p1, CCColor(255, 255, 0));
+        m_bot.Map().drawCircle(target, 1.25f, CCColor(0, 0, 255));
+        m_bot.Map().drawText(p1, target_info, CCColor(255, 255, 0));
     }
 #endif
 }

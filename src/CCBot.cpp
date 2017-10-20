@@ -50,7 +50,6 @@ void CCBot::OnStep()
 
     // update the internal unit list
     m_allUnits.clear();
-    
 #ifdef SC2API
     Control()->GetObservation();
     for (auto & unit : Observation()->GetUnits())
@@ -69,11 +68,12 @@ void CCBot::OnStep()
 
     m_gameCommander.onFrame();
 
+#ifdef SC2API
     Debug()->SendDebug();
+#endif
 }
 
-// TODO: Figure out my race
-const sc2::Race & CCBot::GetPlayerRace(int player) const
+const CCRace & CCBot::GetPlayerRace(int player) const
 {
     BOT_ASSERT(player == Players::Self || player == Players::Enemy, "invalid player for GetPlayerRace");
     return m_playerRace[player];
@@ -129,6 +129,24 @@ WorkerManager & CCBot::Workers()
     return m_workers;
 }
 
+int CCBot::GetMinerals() const
+{
+#ifdef SC2API
+    return Observation()->GetMinerals();
+#else
+
+#endif
+}
+
+int CCBot::GetGas() const
+{
+#ifdef SC2API
+    return Observation()->GetVespene();
+#else
+    
+#endif
+}
+
 CCUnit CCBot::GetUnit(const CCUnitID & tag) const
 {
 #ifdef SC2API
@@ -145,9 +163,21 @@ const std::vector<CCUnit> & CCBot::GetUnits() const
 
 CCPosition CCBot::GetStartLocation() const
 {
+#ifdef SC2API
     return Observation()->GetStartLocation();
+#else
+
+#endif
 }
 
+const std::vector<CCPosition> & CCBot::GetEnemyStartLocations() const
+{
+#ifdef SC2API
+    return Observation()->GetGameInfo().enemy_start_locations;
+#else
+
+#endif
+}
 
 #ifdef SC2API
 void CCBot::OnError(const std::vector<sc2::ClientError> & client_errors, const std::vector<std::string> & protocol_errors)

@@ -183,7 +183,7 @@ CCUnit WorkerData::getMineralToMine(CCUnit unit) const
     CCUnit bestMineral = nullptr;
     double bestDist = 100000;
 
-    for (auto mineral : m_bot.Observation()->GetUnits())
+    for (auto mineral : m_bot.GetUnits())
     {
         if (!Util::IsMineral(mineral)) continue;
 

@@ -239,7 +239,7 @@ CCTilePosition BuildingPlacer::getRefineryPosition()
     double minGeyserDistanceFromHome = std::numeric_limits<double>::max();
     CCPosition homePosition = m_bot.GetStartLocation();
 
-    for (auto & unit : m_bot.Observation()->GetUnits())
+    for (auto & unit : m_bot.GetUnits())
     {
         if (!Util::IsGeyser(unit))
         {

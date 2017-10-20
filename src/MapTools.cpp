@@ -265,7 +265,7 @@ void MapTools::draw() const
             {
                 std::stringstream ss;
                 ss << getSectorNumber((int)x, (int)y);
-                m_bot.Debug()->DebugTextOut(ss.str(), sc2::Point3D(x + 0.5f, y + 0.5f, m_maxZ + 0.1f), sc2::Colors::Yellow);
+                drawText(sc2::Point2D(x + 0.5f, y + 0.5f), ss.str(), sc2::Colors::Yellow);
             }
 
             if (m_bot.Config().DrawTileInfo)

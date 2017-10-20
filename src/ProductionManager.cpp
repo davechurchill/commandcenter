@@ -215,12 +215,12 @@ bool ProductionManager::detectBuildOrderDeadlock()
 
 int ProductionManager::getFreeMinerals()
 {
-    return m_bot.Observation()->GetMinerals() - m_buildingManager.getReservedMinerals();
+    return m_bot.GetMinerals() - m_buildingManager.getReservedMinerals();
 }
 
 int ProductionManager::getFreeGas()
 {
-    return m_bot.Observation()->GetVespene() - m_buildingManager.getReservedGas();
+    return m_bot.GetGas() - m_buildingManager.getReservedGas();
 }
 
 // return whether or not we meet resources, including building reserves

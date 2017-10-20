@@ -15,7 +15,7 @@
 
 class CCBot : public sc2::Agent 
 {
-    sc2::Race               m_playerRace[2];
+    CCRace                  m_playerRace[2];
 
     MapTools                m_map;
     BaseLocationManager     m_bases;
@@ -47,11 +47,14 @@ public:
     const TypeData & Data(const sc2::UpgradeID & type) const;
     const TypeData & Data(const BuildType & type) const;
     const TypeData & Data(CCUnit unit) const;
-    const sc2::Race & GetPlayerRace(int player) const;
+    const CCRace & GetPlayerRace(int player) const;
     CCPosition GetStartLocation() const;
 
+    int GetMinerals() const;
+    int GetGas() const;
     CCUnit GetUnit(const CCUnitID & tag) const;
     const std::vector<CCUnit> & GetUnits() const;
+    const std::vector<CCPosition> & GetEnemyStartLocations() const;
 
 #ifdef SC2API
 

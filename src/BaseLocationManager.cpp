@@ -21,7 +21,7 @@ void BaseLocationManager::onStart()
     
     // stores each cluster of resources based on some ground distance
     std::vector<std::vector<CCUnit>> resourceClusters;
-    for (auto mineral : m_bot.Observation()->GetUnits(sc2::Unit::Alliance::Neutral))
+    for (auto mineral : m_bot.GetUnits())
     {
         // skip minerals that don't have more than 100 starting minerals
         // these are probably stupid map-blocking minerals to confuse us
@@ -57,7 +57,7 @@ void BaseLocationManager::onStart()
     }
 
     // add geysers only to existing resource clusters
-    for (auto & geyser : m_bot.Observation()->GetUnits(sc2::Unit::Alliance::Neutral))
+    for (auto & geyser : m_bot.GetUnits())
     {
         if (!Util::IsGeyser(geyser))
         {
@@ -146,7 +146,7 @@ void BaseLocationManager::onFrame()
     }
 
     // for each unit on the map, update which base location it may be occupying
-    for (auto & unit : m_bot.Observation()->GetUnits(sc2::Unit::Alliance::Ally))
+    for (auto & unit : m_bot.UnitInfo().getUnits(Players::Self))
     {
         // we only care about buildings on the ground
         if (!m_bot.Data(unit->unit_type).isBuilding || unit->is_flying)

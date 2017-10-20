@@ -179,7 +179,7 @@ bool Squad::isUnitNearEnemy(CCUnit unit) const
 {
     BOT_ASSERT(unit, "null unit in squad");
 
-    for (auto & u : m_bot.Observation()->GetUnits())
+    for (auto & u : m_bot.GetUnits())
     {
         if ((Util::GetPlayer(u) == Players::Enemy) && (Util::Dist(unit->pos, u->pos) < 20))
         {
