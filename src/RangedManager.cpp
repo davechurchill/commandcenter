@@ -2,6 +2,7 @@
 #include "Util.h"
 #include "CCBot.h"
 #include "Behavior.h"
+#include "BehaviorTreeBuilder.h"
 
 // TODO: BEHAVIORS TO IMPLEMENT
 /*
@@ -10,26 +11,6 @@
 - kiting
 - send injured units to back
 - flee
-*/
-
-/*
-Le BT ressemblerait  quelque chose comme:
-BehaviorTree* bt = BehaviorTreeBuilder()
-    .sequence() // attack
-        .sequence()
-            .condition(EnemyInSight)
-        .condition(EnemyInRange)
-            .selector()
-            .condition(IsEnemyMelee)
-                .action(Kite)
-            .condition(IsUnitHurt)
-                .sequence()
-                    .action(SendToBack)
-                    .action(Focus)
-            .action(Focus)
-    .sequence()
-        .action(search)
-    .end();
 */
 
 RangedManager::RangedManager(CCBot & bot)
@@ -41,6 +22,7 @@ RangedManager::RangedManager(CCBot & bot)
 void RangedManager::executeMicro(const std::vector<const sc2::Unit *> & targets)
 {
 	// build bt tree here
+
     assignTargets(targets);
 }
 

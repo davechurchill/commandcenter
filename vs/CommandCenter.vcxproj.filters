@@ -201,7 +201,10 @@
       <Filter>util</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Behavior.h">
-      <Filter>util</Filter>
+      <Filter>behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\BehaviorTreeBuilder.h">
+      <Filter>behavior</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -219,6 +222,9 @@
     </Filter>
     <Filter Include="micro">
       <UniqueIdentifier>{9829f5c0-728d-4121-8884-bf1fddd88a87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="behavior">
+      <UniqueIdentifier>{b5b36603-ed22-40f9-9d56-89b05e6c623c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

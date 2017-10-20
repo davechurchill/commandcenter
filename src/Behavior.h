@@ -43,6 +43,16 @@ public:
 private:
 	Status m_eStatus;
 };
+
+class ConditionAction : public Behavior {
+protected:
+    bool condition;
+
+public:
+    ConditionAction(bool pred) : condition(pred) {}
+    virtual Status update() override { return condition ? Status::BH_SUCCESS : Status::BH_FAILURE; }
+};
+
 class Decorator : public Behavior
 {
 protected:
@@ -52,30 +62,24 @@ public:
 	Decorator(Behavior* child) : m_pChild(child) {}
 };
 
-
 class Repeat : public Decorator
 {
 public:
-	Repeat(Behavior* child) : Decorator(child) {}
-
-	void setCount(int count) { m_iLimit = count; }
+	Repeat(Behavior* child, size_t count) : Decorator(child) { m_iLimit = count; }
 	void onInitialize() { m_iCounter = 0; }
 	Status update()
 	{
-		for (;;)
-		{
-			m_pChild->tick();
-			if (m_pChild->getStatus() == BH_RUNNING) break;
-			if (m_pChild->getStatus() == BH_FAILURE) return BH_FAILURE;
-			if (++m_iCounter == m_iLimit) return BH_SUCCESS;
-			m_pChild->reset();
-		}
-		return BH_INVALID;
+        for (size_t i = 0; i < m_iLimit; ++i) 
+        {
+            if (m_pChild->tick() != BH_SUCCESS)
+                break;
+        }
+        return m_pChild->getStatus();
 	}
 
 protected:
-	int m_iLimit;
-	int m_iCounter;
+    size_t m_iLimit;
+    size_t m_iCounter;
 };
 
 class Composite : public Behavior
@@ -91,11 +95,10 @@ protected:
 
 class Sequence : public Composite
 {
-protected:
-	virtual ~Sequence()
-	{
-	}
+public:
+    virtual ~Sequence() {}
 
+protected:
 	virtual void onInitialize()
 	{
 		m_CurrentChild = m_Children.begin();
@@ -104,7 +107,7 @@ protected:
 	virtual Status update()
 	{
 		// Keep going until a child behavior says it's running.
-		for (;;)
+		while (true)
 		{
 			Status s = (*m_CurrentChild)->tick();
 
@@ -121,23 +124,24 @@ protected:
 
 class Selector : public Composite
 {
-protected:
-	virtual ~Selector() {}
+public:
+    virtual ~Selector() {}
 
+protected:
 	virtual void onInitialize() { m_Current = m_Children.begin(); }
 
 	virtual Status update()
 	{
 		// Keep going until a child behavior says its running.
-		for (;;)
+        while (true)
 		{
 			Status s = (*m_Current)->tick();
 
 			// If the child succeeds, or keeps running, do the same.
-			if (s != BH_FAILURE) { return s; }
+			if (s != BH_FAILURE) return s;
 
 			// Hit the end of the array, it didn't end well...
-			if (++m_Current == m_Children.end()) { return BH_FAILURE; }
+			if (++m_Current == m_Children.end()) return BH_FAILURE;
 		}
 	}
 
