@@ -23,6 +23,30 @@ void RangedManager::executeMicro(const std::vector<const sc2::Unit *> & targets)
 {
 	// build bt tree here
 
+    /*
+    ActionVerbose FireAtPlayer("FireAtPlayer"), MoveTowardsPlayer("MoveTowardsPlayer"), MoveToPlayersLastKnownPosition("MoveToPlayersLastKnownPosition"),
+        LookAround("LookAround") , MoveToRandomPosition("MoveToRandomPosition");
+
+    ActionVerbose IsPlayerVisible("IsPlayerVisible"), IsPlayerInRange("IsPlayerInRange"), HaveWeGotASuspectedLocation("HaveWeGotASuspectedLocation");
+
+    BehaviorTreeBuilder* bt = BehaviorTreeBuilder()
+        .activeSelector()
+        ->sequence()
+            ->condition(&IsPlayerVisible)
+            ->activeSelector()
+                ->sequence()
+                    ->condition(&IsPlayerInRange)
+                        ->action(&FireAtPlayer)
+                ->action(&MoveTowardsPlayer)
+        ->sequence()
+            ->condition(&HaveWeGotASuspectedLocation)
+            ->action(&MoveToPlayersLastKnownPosition)
+            ->action(&LookAround)
+        ->sequence()
+            ->action(&MoveToRandomPosition)
+            ->action(&LookAround)
+        ->end();
+*/
     assignTargets(targets);
 }
 

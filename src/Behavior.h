@@ -268,3 +268,15 @@ protected:
 		return result;
 	}
 };
+
+class ActionVerbose : public Behavior {
+private:
+    std::string name;
+public:
+    ActionVerbose(const std::string n) : name(n) {}
+private:
+    virtual Status update() override {
+        std::cout << name << " succeeded." << std::endl;
+        return Status::BH_SUCCESS;
+    }
+};

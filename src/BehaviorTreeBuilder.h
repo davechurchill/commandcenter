@@ -1,5 +1,7 @@
 #pragma once
 #include <stack>
+#include <string>
+#include <iostream>
 #include <assert.h>
 #include "Behavior.h"
 
@@ -20,7 +22,7 @@ public:
 
     BehaviorTreeBuilder* action(Behavior* action)
     {
-        assert(m_parentNode.empty());
+        assert(!m_parentNode.empty());
         m_parentNode.top()->addChild(action);
         return this;
     }
@@ -36,7 +38,7 @@ public:
 
     Behavior* build()
     {
-        assert(m_currentNode == nullptr);
+        assert(m_currentNode != nullptr);
         return m_currentNode;
     }
 
@@ -46,16 +48,42 @@ public:
         return this;
     }
 
-};
+    static void test() {
+        ActionVerbose FireAtPlayer("FireAtPlayer"), MoveTowardsPlayer("MoveTowardsPlayer"), MoveToPlayersLastKnownPosition("MoveToPlayersLastKnownPosition"),
+            LookAround("LookAround"), MoveToRandomPosition("MoveToRandomPosition");
 
-class ActionVerbose : public Behavior {
-private:
-    std::string name;
-public:
-    ActionVerbose(const std::string n) : name(n) {}
-private:
-    virtual Status update() override {
-        std::cout << name << " succeeded." << std::endl;
-        return Status::BH_SUCCESS;
+        ActionVerbose IsPlayerVisible("IsPlayerVisible"), IsPlayerInRange("IsPlayerInRange"), HaveWeGotASuspectedLocation("HaveWeGotASuspectedLocation");
+
+        BehaviorTreeBuilder* bt = BehaviorTreeBuilder()
+        .activeSelector()
+        ->sequence()
+            ->condition(&IsPlayerVisible)
+            ->activeSelector()
+                ->sequence()
+                    ->condition(&IsPlayerInRange)
+                        ->action(&FireAtPlayer)
+                ->action(&MoveTowardsPlayer)
+        ->sequence()
+            ->condition(&HaveWeGotASuspectedLocation)
+            ->action(&MoveToPlayersLastKnownPosition)
+            ->action(&LookAround)
+        ->sequence()
+            ->action(&MoveToRandomPosition)
+            ->action(&LookAround)
+        ->end();
+    }
+
+    
+    static void test2() {
+        ActionVerbose FireAtPlayer("FireAtPlayer"), MoveTowardsPlayer("MoveTowardsPlayer"), MoveToPlayersLastKnownPosition("MoveToPlayersLastKnownPosition"),
+            LookAround("LookAround"), MoveToRandomPosition("MoveToRandomPosition");
+
+        ActionVerbose IsPlayerVisible("IsPlayerVisible"), IsPlayerInRange("IsPlayerInRange"), HaveWeGotASuspectedLocation("HaveWeGotASuspectedLocation");
+
+        BehaviorTreeBuilder* bt = BehaviorTreeBuilder()
+        .sequence()
+            ->action(&MoveToRandomPosition)
+        ->end();
     }
 };
+
