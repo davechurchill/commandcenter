@@ -35,6 +35,7 @@ void CCBot::OnGameStart()
 
 #endif
     
+    setUnits();
     m_techTree.onStart();
     m_strategy.onStart();
     m_map.onStart();
@@ -47,19 +48,7 @@ void CCBot::OnGameStart()
 
 void CCBot::OnStep()
 {
-
-    // update the internal unit list
-    m_allUnits.clear();
-#ifdef SC2API
-    Control()->GetObservation();
-    for (auto & unit : Observation()->GetUnits())
-    {
-        m_allUnits.push_back(unit);    
-    }
-#else
-
-#endif
-
+    setUnits();
     m_map.onFrame();
     m_unitInfo.onFrame();
     m_bases.onFrame();
@@ -70,6 +59,20 @@ void CCBot::OnStep()
 
 #ifdef SC2API
     Debug()->SendDebug();
+#endif
+}
+
+void CCBot::setUnits()
+{
+    m_allUnits.clear();
+#ifdef SC2API
+    Control()->GetObservation();
+    for (auto & unit : Observation()->GetUnits())
+    {
+        m_allUnits.push_back(unit);    
+    }
+#else
+
 #endif
 }
 

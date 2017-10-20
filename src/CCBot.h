@@ -28,6 +28,7 @@ class CCBot : public sc2::Agent
 
     std::vector<CCUnit>     m_allUnits;
 
+    void setUnits();
     void OnError(const std::vector<sc2::ClientError> & client_errors, 
                  const std::vector<std::string> & protocol_errors = {}) override;
 
