@@ -33,7 +33,7 @@ public:
     const CCUnitType & getType() const;
     const CCRace & getRace() const;
 
-    const CCPosition & getPosition() const;
+    CCPosition getPosition() const;
     CCHealth getHitPoints() const;
     CCHealth getShields() const;
     CCHealth getEnergy() const;

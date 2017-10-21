@@ -64,118 +64,118 @@ static std::string GetAbilityText(sc2::AbilityID ability_id) {
 
 void UnitInfoManager::drawSelectedUnitDebugInfo()
 {
-#ifdef SC2API
-    const sc2::Unit * unit;
-    for (auto u : m_bot.Observation()->GetUnits()) 
-    {
-        if (u->is_selected && u->alliance == sc2::Unit::Self) {
-            unit = u;
-            break;
-        }
-    }
-
-    if (!unit) { return; }
-
-    auto query = m_bot.Query();
-    auto abilities = m_bot.Observation()->GetAbilityData();
-
-    std::string debug_txt;
-    debug_txt = UnitTypeToName(unit->unit_type);
-    if (debug_txt.length() < 1) 
-    {
-        debug_txt = "(Unknown name)";
-        assert(0);
-    }
-    debug_txt += " (" + std::to_string(unit->unit_type) + ")";
-        
-    sc2::AvailableAbilities available_abilities = query->GetAbilitiesForUnit(unit);
-    if (available_abilities.abilities.size() < 1) 
-    {
-        std::cout << "No abilities available for this unit" << std::endl;
-    }
-    else 
-    {
-        for (const sc2::AvailableAbility & available_ability : available_abilities.abilities) 
-        {
-            if (available_ability.ability_id >= abilities.size()) { continue; }
-
-            const sc2::AbilityData & ability = abilities[available_ability.ability_id];
-
-            debug_txt += GetAbilityText(ability.ability_id) + "\n";
-        }
-    }
-    m_bot.Map().drawText(unit->pos, debug_txt, CCColor(0, 255, 0));
-
-    // Show the direction of the unit.
-    sc2::Point3D p1; // Use this to show target distance.
-    {
-        const float length = 5.0f;
-        sc2::Point3D p0 = unit->pos;
-        p0.z += 0.1f; // Raise the line off the ground a bit so it renders more clearly.
-        p1 = unit->pos;
-        assert(unit->facing >= 0.0f && unit->facing < 6.29f);
-        p1.x += length * std::cos(unit->facing);
-        p1.y += length * std::sin(unit->facing);
-        m_bot.Map().drawLine(p0, p1, CCColor(255, 255, 0));
-    }
-
-    // Box around the unit.
-    {
-        sc2::Point3D p_min = unit->pos;
-        p_min.x -= 2.0f;
-        p_min.y -= 2.0f;
-        p_min.z -= 2.0f;
-        sc2::Point3D p_max = unit->pos;
-        p_max.x += 2.0f;
-        p_max.y += 2.0f;
-        p_max.z += 2.0f;
-        m_bot.Map().drawBox(p_min, p_max, CCColor(0, 0, 255));
-    }
-
-    // Sphere around the unit.
-    {
-        sc2::Point3D p = unit->pos;
-        p.z += 0.1f; // Raise the line off the ground a bit so it renders more clearly.
-        m_bot.Map().drawCircle(p, 1.25f, CCColor(255, 0, 255));
-    }
-
-    // Pathing query to get the target.
-    bool has_target = false;
-    sc2::Point3D target;
-    std::string target_info;
-    for (const sc2::UnitOrder& unit_order : unit->orders)
-    {
-        // TODO: Need to determine if there is a target point, no target point, or the target is a unit/snapshot.
-        target.x = unit_order.target_pos.x;
-        target.y = unit_order.target_pos.y;
-        target.z = p1.z;
-        has_target = true;
-
-        target_info = "Target:\n";
-        if (unit_order.target_unit_tag != 0x0LL) {
-            target_info += "Tag: " + std::to_string(unit_order.target_unit_tag) + "\n";
-        }
-        if (unit_order.progress != 0.0f && unit_order.progress != 1.0f) {
-            target_info += "Progress: " + std::to_string(unit_order.progress) + "\n";
-        }
-
-        // Perform the pathing query.
-        {
-            float distance = query->PathingDistance(unit->pos, target);
-            target_info += "\nPathing dist: " + std::to_string(distance);
-        }
-
-        break;
-    }
-
-    if (has_target)
-    {
-        sc2::Point3D p = target;
-        p.z += 0.1f; // Raise the line off the ground a bit so it renders more clearly.
-        m_bot.Map().drawCircle(target, 1.25f, CCColor(0, 0, 255));
-        m_bot.Map().drawText(p1, target_info, CCColor(255, 255, 0));
-    }
-#endif
+//#ifdef SC2API
+//    const sc2::Unit * unit;
+//    for (auto u : m_bot.Observation()->GetUnits()) 
+//    {
+//        if (u->is_selected && u->alliance == sc2::Unit::Self) {
+//            unit = u;
+//            break;
+//        }
+//    }
+//
+//    if (!unit) { return; }
+//
+//    auto query = m_bot.Query();
+//    auto abilities = m_bot.Observation()->GetAbilityData();
+//
+//    std::string debug_txt;
+//    debug_txt = UnitTypeToName(unit->unit_type);
+//    if (debug_txt.length() < 1) 
+//    {
+//        debug_txt = "(Unknown name)";
+//        assert(0);
+//    }
+//    debug_txt += " (" + std::to_string(unit->unit_type) + ")";
+//        
+//    sc2::AvailableAbilities available_abilities = query->GetAbilitiesForUnit(unit);
+//    if (available_abilities.abilities.size() < 1) 
+//    {
+//        std::cout << "No abilities available for this unit" << std::endl;
+//    }
+//    else 
+//    {
+//        for (const sc2::AvailableAbility & available_ability : available_abilities.abilities) 
+//        {
+//            if (available_ability.ability_id >= abilities.size()) { continue; }
+//
+//            const sc2::AbilityData & ability = abilities[available_ability.ability_id];
+//
+//            debug_txt += GetAbilityText(ability.ability_id) + "\n";
+//        }
+//    }
+//    m_bot.Map().drawText(unit->pos, debug_txt, CCColor(0, 255, 0));
+//
+//    // Show the direction of the unit.
+//    sc2::Point3D p1; // Use this to show target distance.
+//    {
+//        const float length = 5.0f;
+//        sc2::Point3D p0 = unit->pos;
+//        p0.z += 0.1f; // Raise the line off the ground a bit so it renders more clearly.
+//        p1 = unit->pos;
+//        assert(unit->facing >= 0.0f && unit->facing < 6.29f);
+//        p1.x += length * std::cos(unit->facing);
+//        p1.y += length * std::sin(unit->facing);
+//        m_bot.Map().drawLine(p0, p1, CCColor(255, 255, 0));
+//    }
+//
+//    // Box around the unit.
+//    {
+//        sc2::Point3D p_min = unit->pos;
+//        p_min.x -= 2.0f;
+//        p_min.y -= 2.0f;
+//        p_min.z -= 2.0f;
+//        sc2::Point3D p_max = unit->pos;
+//        p_max.x += 2.0f;
+//        p_max.y += 2.0f;
+//        p_max.z += 2.0f;
+//        m_bot.Map().drawBox(p_min, p_max, CCColor(0, 0, 255));
+//    }
+//
+//    // Sphere around the unit.
+//    {
+//        sc2::Point3D p = unit->pos;
+//        p.z += 0.1f; // Raise the line off the ground a bit so it renders more clearly.
+//        m_bot.Map().drawCircle(p, 1.25f, CCColor(255, 0, 255));
+//    }
+//
+//    // Pathing query to get the target.
+//    bool has_target = false;
+//    sc2::Point3D target;
+//    std::string target_info;
+//    for (const sc2::UnitOrder& unit_order : unit->orders)
+//    {
+//        // TODO: Need to determine if there is a target point, no target point, or the target is a unit/snapshot.
+//        target.x = unit_order.target_pos.x;
+//        target.y = unit_order.target_pos.y;
+//        target.z = p1.z;
+//        has_target = true;
+//
+//        target_info = "Target:\n";
+//        if (unit_order.target_unit_tag != 0x0LL) {
+//            target_info += "Tag: " + std::to_string(unit_order.target_unit_tag) + "\n";
+//        }
+//        if (unit_order.progress != 0.0f && unit_order.progress != 1.0f) {
+//            target_info += "Progress: " + std::to_string(unit_order.progress) + "\n";
+//        }
+//
+//        // Perform the pathing query.
+//        {
+//            float distance = query->PathingDistance(unit->pos, target);
+//            target_info += "\nPathing dist: " + std::to_string(distance);
+//        }
+//
+//        break;
+//    }
+//
+//    if (has_target)
+//    {
+//        sc2::Point3D p = target;
+//        p.z += 0.1f; // Raise the line off the ground a bit so it renders more clearly.
+//        m_bot.Map().drawCircle(target, 1.25f, CCColor(0, 0, 255));
+//        m_bot.Map().drawText(p1, target_info, CCColor(255, 255, 0));
+//    }
+//#endif
 }
 
 // passing in a unit type of 0 returns a count of all units

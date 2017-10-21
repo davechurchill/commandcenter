@@ -94,7 +94,7 @@ void BuildingManager::assignWorkersToUnassignedBuildings()
             continue;
         }
 
-        BOT_ASSERT(b.builderUnit.isValid(), "Error: Tried to assign a builder to a building that already had one ");
+        BOT_ASSERT(!b.builderUnit.isValid(), "Error: Tried to assign a builder to a building that already had one ");
 
         if (m_debugMode) { printf("Assigning Worker To: %s", sc2::UnitTypeToName(b.type)); }
 

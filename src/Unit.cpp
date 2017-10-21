@@ -4,6 +4,7 @@
 Unit::Unit()
     : m_bot(nullptr)
     , m_unit(nullptr)
+    , m_unitID(0)
 {
 
 }
@@ -67,7 +68,7 @@ const CCUnitType & Unit::getType() const
 #endif
 }
 
-const CCPosition & Unit::getPosition() const
+CCPosition Unit::getPosition() const
 {
     BOT_ASSERT(isValid(), "Unit is not valid");
 #ifdef SC2API
@@ -178,7 +179,7 @@ int Unit::getWeaponCooldown() const
 {
     BOT_ASSERT(isValid(), "Unit is not valid");
 #ifdef SC2API
-    return m_unit->weapon_cooldown;
+    return (int)m_unit->weapon_cooldown;
 #else
     return std::max(m_unit->getGroundWeaponCooldown(), m_unit->getAirWeaponCooldown());
 #endif
@@ -246,7 +247,7 @@ bool Unit::isBurrowed() const
 
 bool Unit::isValid() const
 {
-    return m_unit && isAlive();
+    return m_unit != nullptr;
 }
 
 void Unit::stop() const

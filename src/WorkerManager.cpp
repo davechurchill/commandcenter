@@ -97,7 +97,7 @@ Unit WorkerManager::getClosestMineralWorkerTo(const CCPosition & pos) const
     // for each of our workers
     for (auto & worker : m_workerData.getWorkers())
     {
-        if (!worker.isIdle()) { continue; }
+        if (!worker.isValid()) { continue; }
 
         // if it is a mineral worker
         if (m_workerData.getWorkerJob(worker) == WorkerJobs::Minerals)
