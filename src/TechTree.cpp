@@ -19,7 +19,7 @@ void TechTree::onStart()
 
 void TechTree::initUnitTypeData()
 {
-    m_upgradeData[0] = TypeData();
+    m_upgradeData[0] = UnitTypeData();
 
     // Protoss Buildings                                                                                  unit  bld   wrk    rfn    sup    hall   add
     m_unitTypeData[sc2::UNIT_TYPEID::PROTOSS_PYLONOVERCHARGED] =        { sc2::Race::Protoss, 0, 0, 0, 0, true, true, false, false,  true, false, false, sc2::ABILITY_ID::EFFECT_PHOTONOVERCHARGE, 0, { sc2::UNIT_TYPEID::PROTOSS_MOTHERSHIPCORE, sc2::UNIT_TYPEID::PROTOSS_PYLON }, {}, {} }; 
@@ -165,7 +165,7 @@ void TechTree::initUnitTypeData()
 void TechTree::initUpgradeData()
 {
     // 0 data for null / error return
-    m_upgradeData[0] = TypeData();
+    m_upgradeData[0] = UnitTypeData();
 
     // Terran Upgrades
     m_upgradeData[sc2::UPGRADE_ID::BANSHEECLOAK] =                      { sc2::Race::Terran, 100, 100, 0, 1760, false, false, false, false, false, false, false, sc2::ABILITY_ID::RESEARCH_BANSHEECLOAKINGFIELD, 0, { sc2::UNIT_TYPEID::TERRAN_SCV }, {}, {} };
@@ -259,7 +259,7 @@ void TechTree::initUpgradeData()
     m_upgradeData[sc2::UPGRADE_ID::ZERGMISSILEWEAPONSLEVEL3] =          { sc2::Race::Zerg, 200, 200, 0, 3520, false, false, false, false, false, false, false, sc2::ABILITY_ID::RESEARCH_ZERGMISSILEWEAPONSLEVEL3, 0, { sc2::UNIT_TYPEID::ZERG_EVOLUTIONCHAMBER }, { sc2::UNIT_TYPEID::ZERG_HIVE }, {sc2::UPGRADE_ID::ZERGMISSILEWEAPONSLEVEL2} };
 }
 
-const TypeData & TechTree::getData(const CCUnitType & type) const
+const UnitTypeData & TechTree::getData(const CCUnitType & type) const
 {
     if (m_unitTypeData.find(type) == m_unitTypeData.end())
     {
@@ -270,7 +270,7 @@ const TypeData & TechTree::getData(const CCUnitType & type) const
     return m_unitTypeData.at(type);
 }
 
-const TypeData & TechTree::getData(const sc2::UpgradeID & type)  const
+const UnitTypeData & TechTree::getData(const sc2::UpgradeID & type)  const
 {
     if (m_upgradeData.find(type) == m_upgradeData.end())
     {
@@ -281,7 +281,7 @@ const TypeData & TechTree::getData(const sc2::UpgradeID & type)  const
     return m_upgradeData.at(type);
 }
 
-const TypeData & TechTree::getData(const BuildType & type) const
+const UnitTypeData & TechTree::getData(const BuildType & type) const
 {
     if (type.getBuildType() == BuildTypes::Unit)
     {
@@ -304,7 +304,7 @@ void TechTree::outputJSON(const std::string & filename) const
     std::string q = "\"";
     std::string qcs = "\", ";
 
-    std::vector<std::pair<int, TypeData>> allData;
+    std::vector<std::pair<int, UnitTypeData>> allData;
     for (auto & kv : m_unitTypeData) { allData.push_back({kv.first, kv.second}); }
     for (auto & kv : m_upgradeData) { allData.push_back({kv.first, kv.second}); }
 

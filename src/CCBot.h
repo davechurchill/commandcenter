@@ -45,10 +45,10 @@ public:
     const MapTools & Map() const;
     const UnitInfoManager & UnitInfo() const;
     const StrategyManager & Strategy() const;
-    const TypeData & Data(const CCUnitType & type) const;
-    const TypeData & Data(const sc2::UpgradeID & type) const;
-    const TypeData & Data(const BuildType & type) const;
-    const TypeData & Data(const Unit & unit) const;
+    const UnitTypeData & Data(const CCUnitType & type) const;
+    const UnitTypeData & Data(const sc2::UpgradeID & type) const;
+    const UnitTypeData & Data(const BuildType & type) const;
+    const UnitTypeData & Data(const Unit & unit) const;
     const CCRace & GetPlayerRace(int player) const;
     CCPosition GetStartLocation() const;
 

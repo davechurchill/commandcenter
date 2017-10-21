@@ -3,6 +3,7 @@
 #include "Common.h"
 #include "Util.h"
 #include "Unit.h"
+#include "UnitType.h"
 
 struct UnitInfo
 {
@@ -15,7 +16,7 @@ struct UnitInfo
     CCPlayer        player;
     Unit            unit;
     CCPosition      lastPosition;
-    CCUnitType      type;
+    UnitType        type;
     float           progress;
 
     UnitInfo()
@@ -23,7 +24,6 @@ struct UnitInfo
         , lastHealth(0)
         , player(-1)
         , lastPosition(sc2::Point3D(0, 0, 0))
-        , type(0)
         , progress(1.0)
     {
 
@@ -49,11 +49,11 @@ typedef std::vector<UnitInfo> UnitInfoVector;
 
 class UnitData
 {
-    std::map<Unit, UnitInfo> m_unitMap;
-    std::vector<int>        m_numDeadUnits;
-    std::vector<int>        m_numUnits;
-    int                     m_mineralsLost;
-    int	                    m_gasLost;
+    std::map<Unit, UnitInfo>    m_unitMap;
+    std::map<UnitType, int>     m_numDeadUnits;
+    std::map<UnitType, int>     m_numUnits;
+    int                         m_mineralsLost;
+    int	                        m_gasLost;
 
     bool badUnitInfo(const UnitInfo & ui) const;
 
@@ -67,7 +67,7 @@ public:
 
     int		getGasLost()                                const;
     int		getMineralsLost()                           const;
-    int		getNumUnits(CCUnitType t)              const;
-    int		getNumDeadUnits(CCUnitType t)          const;
+    int		getNumUnits(const UnitType & t)              const;
+    int		getNumDeadUnits(const UnitType & t)          const;
     const	std::map<Unit, UnitInfo> & getUnitInfoMap()  const;
 };

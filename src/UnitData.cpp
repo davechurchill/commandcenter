@@ -5,9 +5,7 @@ UnitData::UnitData()
     : m_mineralsLost(0)
     , m_gasLost(0)
 {
-    const int maxTypeID = 1024;
-    m_numDeadUnits	    = std::vector<int>(maxTypeID + 1, 0);
-    m_numUnits		    = std::vector<int>(maxTypeID + 1, 0);
+
 }
 
 void UnitData::updateUnit(const Unit & unit)
@@ -32,6 +30,11 @@ void UnitData::updateUnit(const Unit & unit)
 
     if (firstSeen)
     {
+        if (std::find(m_numUnits.begin(), m_numUnits.end(), ui.type) == m_numUnits.end())
+        {
+            m_numUnits[ui.type] = 0;
+        }
+
         m_numUnits[ui.type]++;
     }
 }
@@ -77,14 +80,24 @@ int UnitData::getMineralsLost() const
     return m_mineralsLost;
 }
 
-int UnitData::getNumUnits(CCUnitType t) const
+int UnitData::getNumUnits(const UnitType & t) const
 {
-    return m_numUnits[t];
+    if (std::find(m_numUnits.begin(), m_numUnits.end(), t) == m_numUnits.end())
+    {
+        return 0;
+    }
+
+    return m_numUnits.at(t);
 }
 
-int UnitData::getNumDeadUnits(CCUnitType t) const
+int UnitData::getNumDeadUnits(const UnitType & t) const
 {
-    return m_numDeadUnits[t];
+    if (std::find(m_numDeadUnits.begin(), m_numDeadUnits.end(), t) == m_numDeadUnits.end())
+    {
+        return 0;
+    }
+
+    return m_numDeadUnits.at(t);
 }
 
 const std::map<Unit, UnitInfo> & UnitData::getUnitInfoMap() const

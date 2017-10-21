@@ -310,6 +310,7 @@
     <ClCompile Include="..\src\Unit.cpp" />
     <ClCompile Include="..\src\UnitData.cpp" />
     <ClCompile Include="..\src\UnitInfoManager.cpp" />
+    <ClCompile Include="..\src\UnitType.cpp" />
     <ClCompile Include="..\src\Util.cpp" />
     <ClCompile Include="..\src\WorkerData.cpp" />
     <ClCompile Include="..\src\WorkerManager.cpp" />
@@ -347,6 +348,7 @@
     <ClInclude Include="..\src\Unit.h" />
     <ClInclude Include="..\src\UnitData.h" />
     <ClInclude Include="..\src\UnitInfoManager.h" />
+    <ClInclude Include="..\src\UnitType.h" />
     <ClInclude Include="..\src\Util.h" />
     <ClInclude Include="..\src\WorkerData.h" />
     <ClInclude Include="..\src\WorkerManager.h" />

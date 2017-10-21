@@ -14,6 +14,7 @@ Unit::Unit(const sc2::Unit * unit, CCBot & bot)
     : m_bot(&bot)
     , m_unit(unit)
     , m_unitID(unit->tag)
+    , m_unitType(unit->unit_type, bot)
 {
     
 }
@@ -28,6 +29,7 @@ Unit::Unit(const BWAPI::Unit unit, CCBot & bot)
     : m_bot(&bot)
     , m_unit(unit)
     , m_unitID(unit->getID())
+    , m_unitType(unit->getType(), bot)
 {
     
 }
@@ -48,17 +50,12 @@ bool Unit::operator == (const Unit & rhs) const
     return m_unit == rhs.m_unit;
 }
 
-
-const CCRace & Unit::getRace() const
+const UnitType & Unit::getType() const
 {
-#ifdef SC2API
-    return m_bot->Observation()->GetUnitTypeData()[getType()].race;
-#else
-    return getType().getRace();
-#endif
+    return m_unitType;
 }
 
-const CCUnitType & Unit::getType() const
+const CCUnitType & Unit::getAPIUnitType() const
 {
     BOT_ASSERT(isValid(), "Unit is not valid");
 #ifdef SC2API

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Common.h"
+#include "UnitType.h"
 
 class CCBot;
 
@@ -8,6 +9,7 @@ class Unit
 {
     mutable CCBot * m_bot;
     CCUnitID    m_unitID;
+    UnitType    m_unitType;
 
 #ifdef SC2API
     const sc2::Unit * m_unit;
@@ -30,7 +32,8 @@ public:
     bool operator < (const Unit & rhs) const;
     bool operator == (const Unit & rhs) const;
 
-    const CCUnitType & getType() const;
+    const UnitType & getType() const;
+    const CCUnitType & getAPIUnitType() const;
     const CCRace & getRace() const;
 
     CCPosition getPosition() const;

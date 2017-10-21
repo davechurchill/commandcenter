@@ -5,7 +5,7 @@
 class CCBot;
 class BuildType;
 
-struct TypeData
+struct UnitTypeData
 {
     sc2::Race                       race            = sc2::Race::Random;             // the race of this item
     int                             mineralCost     = 0;      // mineral cost of the item
@@ -21,16 +21,16 @@ struct TypeData
     bool                            isAddon         = false;
     sc2::AbilityID                  buildAbility    = 0;     // the ability that creates this item
     sc2::AbilityID                  warpAbility     = 0;      // the ability that creates this item via warp-in
-    std::vector<CCUnitType>    whatBuilds;       // any of these units can build the item
-    std::vector<CCUnitType>    requiredUnits;    // owning ONE of these is required to make
+    std::vector<CCUnitType>         whatBuilds;       // any of these units can build the item
+    std::vector<CCUnitType>         requiredUnits;    // owning ONE of these is required to make
     std::vector<sc2::UpgradeID>     requiredUpgrades; // having ALL of these is required to make
 };
 
 class TechTree
 {
     CCBot & m_bot;
-    std::map<CCUnitType, TypeData> m_unitTypeData;
-    std::map<sc2::UpgradeID, TypeData>  m_upgradeData;
+    std::map<CCUnitType, UnitTypeData> m_unitTypeData;
+    std::map<sc2::UpgradeID, UnitTypeData>  m_upgradeData;
 
     void initUnitTypeData();
     void initUpgradeData();
@@ -42,7 +42,7 @@ public:
     TechTree(CCBot & bot);
     void onStart();
 
-    const TypeData & getData(const CCUnitType & type) const;
-    const TypeData & getData(const sc2::UpgradeID & type)  const;
-    const TypeData & getData(const BuildType & type)       const;
+    const UnitTypeData & getData(const CCUnitType & type) const;
+    const UnitTypeData & getData(const sc2::UpgradeID & type)  const;
+    const UnitTypeData & getData(const BuildType & type)       const;
 };
