@@ -14,12 +14,12 @@ class ProductionManager
     BuildingManager m_buildingManager;
     BuildOrderQueue m_queue;
 
-    CCUnit getClosestUnitToPosition(const std::vector<CCUnit> & units, CCPosition closestTo);
+    Unit getClosestUnitToPosition(const std::vector<Unit> & units, CCPosition closestTo);
     bool    meetsReservedResources(const BuildType & type);
-    bool    canMakeNow(CCUnit producer, const BuildType & type);
+    bool    canMakeNow(const Unit & producer, const BuildType & type);
     bool    detectBuildOrderDeadlock();
     void    setBuildOrder(const BuildOrder & buildOrder);
-    void    create(CCUnit producer, BuildOrderItem & item);
+    void    create(const Unit & producer, BuildOrderItem & item);
     void    manageBuildOrderQueue();
     int     getFreeMinerals();
     int     getFreeGas();
@@ -30,8 +30,8 @@ public:
 
     void    onStart();
     void    onFrame();
-    void    onUnitDestroy(CCUnit unit);
+    void    onUnitDestroy(const Unit & unit);
     void    drawProductionInformation();
 
-    CCUnit getProducer(const BuildType & type, CCPosition closestTo = CCPosition(0, 0));
+    Unit getProducer(const BuildType & type, CCPosition closestTo = CCPosition(0, 0));
 };

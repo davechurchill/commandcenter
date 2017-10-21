@@ -10,9 +10,9 @@ class WorkerManager
     CCBot & m_bot;
 
     mutable WorkerData  m_workerData;
-    CCUnit   m_previousClosestWorker;
+    Unit   m_previousClosestWorker;
 
-    void        setMineralWorker(CCUnit unit);
+    void        setMineralWorker(const Unit & unit);
     
     void        handleIdleWorkers();
     void        handleGasWorkers();
@@ -25,24 +25,24 @@ public:
     void        onStart();
     void        onFrame();
 
-    void        finishedWithWorker(CCUnit unit);
+    void        finishedWithWorker(const Unit & unit);
     void        drawResourceDebugInfo();
     void        drawWorkerInformation();
-    void        setScoutWorker(CCUnit worker);
-    void        setCombatWorker(CCUnit worker);
-    void        setBuildingWorker(CCUnit worker, Building & b);
-    void        setRepairWorker(CCUnit worker,CCUnit unitToRepair);
-    void        stopRepairing(CCUnit worker);
+    void        setScoutWorker(Unit worker);
+    void        setCombatWorker(Unit worker);
+    void        setBuildingWorker(Unit worker, Building & b);
+    void        setRepairWorker(Unit worker,const Unit & unitToRepair);
+    void        stopRepairing(Unit worker);
 
     int         getNumMineralWorkers();
     int         getNumGasWorkers();
-    bool        isWorkerScout(CCUnit worker) const;
-    bool        isFree(CCUnit worker) const;
-    bool        isBuilder(CCUnit worker) const;
+    bool        isWorkerScout(Unit worker) const;
+    bool        isFree(Unit worker) const;
+    bool        isBuilder(Unit worker) const;
 
-    CCUnit getBuilder(Building & b,bool setJobAsBuilder = true) const;
-    CCUnit getClosestDepot(CCUnit worker) const;
-    CCUnit getGasWorker(CCUnit refinery) const;
-    CCUnit getClosestMineralWorkerTo(const CCPosition & pos) const;
+    Unit getBuilder(Building & b,bool setJobAsBuilder = true) const;
+    Unit getClosestDepot(Unit worker) const;
+    Unit getGasWorker(Unit refinery) const;
+    Unit getClosestMineralWorkerTo(const CCPosition & pos) const;
 };
 

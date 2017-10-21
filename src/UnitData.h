@@ -2,6 +2,7 @@
 
 #include "Common.h"
 #include "Util.h"
+#include "Unit.h"
 
 struct UnitInfo
 {
@@ -12,7 +13,7 @@ struct UnitInfo
     CCHealth        lastHealth;
     CCHealth        lastShields;
     CCPlayer        player;
-    CCUnit          unit;
+    Unit            unit;
     CCPosition      lastPosition;
     CCUnitType      type;
     float           progress;
@@ -28,9 +29,9 @@ struct UnitInfo
 
     }
 
-    bool operator == (CCUnit unit) const
+    bool operator == (const Unit & unit) const
     {
-        return id == Util::GetID(unit);
+        return id == unit.getID();
     }
 
     bool operator == (const UnitInfo & rhs) const
@@ -48,7 +49,7 @@ typedef std::vector<UnitInfo> UnitInfoVector;
 
 class UnitData
 {
-    std::map<CCUnit, UnitInfo> m_unitMap;
+    std::map<Unit, UnitInfo> m_unitMap;
     std::vector<int>        m_numDeadUnits;
     std::vector<int>        m_numUnits;
     int                     m_mineralsLost;
@@ -60,13 +61,13 @@ public:
 
     UnitData();
 
-    void	updateUnit(CCUnit unit);
-    void	killUnit(CCUnit unit);
+    void	updateUnit(const Unit & unit);
+    void	killUnit(const Unit & unit);
     void	removeBadUnits();
 
     int		getGasLost()                                const;
     int		getMineralsLost()                           const;
     int		getNumUnits(CCUnitType t)              const;
     int		getNumDeadUnits(CCUnitType t)          const;
-    const	std::map<CCUnit, UnitInfo> & getUnitInfoMap()  const;
+    const	std::map<Unit, UnitInfo> & getUnitInfoMap()  const;
 };

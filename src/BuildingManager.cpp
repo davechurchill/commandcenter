@@ -1,6 +1,5 @@
 #include "Common.h"
 #include "BuildingManager.h"
-#include "Micro.h"
 #include "CCBot.h"
 #include "Util.h"
 
@@ -25,11 +24,11 @@ void BuildingManager::onFrame()
     for (auto unit : m_bot.UnitInfo().getUnits(Players::Self))
     {
         // filter out units which aren't buildings under construction
-        if (m_bot.Data(unit->unit_type).isBuilding)
+        if (m_bot.Data(unit).isBuilding)
         {
             std::stringstream ss;
-            ss << Util::GetID(unit);
-            m_bot.Map().drawText(unit->pos, ss.str());
+            ss << unit.getID();
+            m_bot.Map().drawText(unit.getPosition(), ss.str());
         }
     }
 
@@ -75,7 +74,7 @@ void BuildingManager::validateWorkersAndBuildings()
         auto buildingUnit = b.buildingUnit;
 
         // TODO: || !b.buildingUnit->getType().isBuilding()
-        if (!buildingUnit || (buildingUnit->health <= 0))
+        if (!buildingUnit.isValid())
         {
             toRemove.push_back(b);
         }
@@ -95,7 +94,7 @@ void BuildingManager::assignWorkersToUnassignedBuildings()
             continue;
         }
 
-        BOT_ASSERT(b.builderUnit == nullptr, "Error: Tried to assign a builder to a building that already had one ");
+        BOT_ASSERT(b.builderUnit.isValid(), "Error: Tried to assign a builder to a building that already had one ");
 
         if (m_debugMode) { printf("Assigning Worker To: %s", sc2::UnitTypeToName(b.type)); }
 
@@ -109,9 +108,9 @@ void BuildingManager::assignWorkersToUnassignedBuildings()
         b.finalPosition = testLocation;
 
         // grab the worker unit from WorkerManager which is closest to this final position
-        CCUnit builderUnit = m_bot.Workers().getBuilder(b);
+        Unit builderUnit = m_bot.Workers().getBuilder(b);
         b.builderUnit = builderUnit;
-        if (!b.builderUnit)
+        if (!b.builderUnit.isValid())
         {
             continue;
         }
@@ -135,22 +134,23 @@ void BuildingManager::constructAssignedBuildings()
 
         // TODO: not sure if this is the correct way to tell if the building is constructing
         sc2::AbilityID buildAbility = m_bot.Data(b.type).buildAbility;
-        CCUnit builderUnit = b.builderUnit;
+        Unit builderUnit = b.builderUnit;
 
         bool isConstructing = false;
 
         // if we're zerg and the builder unit is null, we assume it morphed into the building
         if (m_bot.GetPlayerRace(Players::Self) == sc2::Race::Zerg)
         {
-            if (!builderUnit)
+            if (!builderUnit.isValid())
             {
                 isConstructing = true;
             }
         }
         else
         {
-            BOT_ASSERT(builderUnit, "null builder unit");
-            isConstructing = (builderUnit->orders.size() > 0) && (builderUnit->orders[0].ability_id == buildAbility);
+            BOT_ASSERT(builderUnit.isValid(), "null builder unit");
+            // BWAPI
+            isConstructing = (builderUnit.getUnitPtr()->orders.size() > 0) && (builderUnit.getUnitPtr()->orders[0].ability_id == buildAbility);
         }
 
         // if that worker is not currently constructing
@@ -159,7 +159,7 @@ void BuildingManager::constructAssignedBuildings()
             // if we haven't explored the build position, go there
             if (!isBuildingPositionExplored(b))
             {
-                Micro::SmartMove(builderUnit, b.finalPosition, m_bot);
+                builderUnit.move(b.finalPosition);
             }
             // if this is not the first time we've sent this guy to build this
             // it must be the case that something was in the way of building
@@ -174,19 +174,19 @@ void BuildingManager::constructAssignedBuildings()
                 if (Util::IsRefineryType(b.type))
                 {
                     // first we find the geyser at the desired location
-                    CCUnit geyser = nullptr;
+                    Unit geyser;
                     for (auto unit : m_bot.GetUnits())
                     {
-                        if (Util::IsGeyser(unit) && Util::Dist(Util::GetPosition(b.finalPosition), Util::GetPosition(unit)) < 3)
+                        if (Util::IsGeyser(unit) && Util::Dist(Util::GetPosition(b.finalPosition), unit.getPosition()) < 3)
                         {
                             geyser = unit;
                             break;
                         }
                     }
 
-                    if (geyser)
+                    if (geyser.isValid())
                     {
-                        Micro::SmartBuildTarget(b.builderUnit, b.type, geyser, m_bot);
+                        b.builderUnit.buildTarget(b.type, geyser);
                     }
                     else
                     {
@@ -196,7 +196,7 @@ void BuildingManager::constructAssignedBuildings()
                 // if it's not a refinery, we build right on the position
                 else
                 {
-                    Micro::SmartBuild(b.builderUnit, b.type, b.finalPosition, m_bot);
+                    b.builderUnit.build(b.type, b.finalPosition);
                 }
 
                 // set the flag to true
@@ -213,7 +213,7 @@ void BuildingManager::checkForStartedConstruction()
     for (auto buildingStarted : m_bot.UnitInfo().getUnits(Players::Self))
     {
         // filter out units which aren't buildings under construction
-        if (!m_bot.Data(buildingStarted->unit_type).isBuilding || buildingStarted->build_progress == 0.0f || buildingStarted->build_progress == 1.0f)
+        if (!m_bot.Data(buildingStarted).isBuilding || !buildingStarted.isBeingConstructed())
         {
             continue;
         }
@@ -228,12 +228,12 @@ void BuildingManager::checkForStartedConstruction()
             }
 
             // check if the positions match
-            float dx = b.finalPosition.x - buildingStarted->pos.x;
-            float dy = b.finalPosition.y - buildingStarted->pos.y;
+            float dx = b.finalPosition.x - buildingStarted.getPosition().x;
+            float dy = b.finalPosition.y - buildingStarted.getPosition().y;
 
             if (dx*dx + dy*dy < 1)
             {
-                if (b.buildingUnit != nullptr)
+                if (b.buildingUnit.isValid())
                 {
                     std::cout << "Building mis-match somehow\n";
                 }
@@ -249,12 +249,12 @@ void BuildingManager::checkForStartedConstruction()
                 // if we are zerg, the buildingUnit now becomes nullptr since it's destroyed
                 if (m_bot.GetPlayerRace(Players::Self) == sc2::Race::Zerg)
                 {
-                    b.builderUnit = nullptr;
+                    b.builderUnit = Unit();
                 }
                 else if (m_bot.GetPlayerRace(Players::Self) == sc2::Race::Protoss)
                 {
                     m_bot.Workers().finishedWithWorker(b.builderUnit);
-                    b.builderUnit = nullptr;
+                    b.builderUnit = Unit();
                 }
 
                 // put it in the under construction vector
@@ -287,7 +287,7 @@ void BuildingManager::checkForCompletedBuildings()
         }
 
         // if the unit has completed
-        if (b.buildingUnit->build_progress == 1.0f)
+        if (b.buildingUnit.isCompleted())
         {
             // if we are terran, give the worker back to worker manager
             if (m_bot.GetPlayerRace(Players::Self) == sc2::Race::Terran)
@@ -324,7 +324,7 @@ bool BuildingManager::isBuildingPositionExplored(const Building & b) const
 
 char BuildingManager::getBuildingWorkerCode(const Building & b) const
 {
-    return b.builderUnit == nullptr ? 'X' : 'W';
+    return b.builderUnit.isValid() ? 'W' : 'X';
 }
 
 int BuildingManager::getReservedMinerals()
@@ -355,15 +355,15 @@ void BuildingManager::drawBuildingInformation()
     {
         std::stringstream dss;
 
-        if (b.builderUnit)
+        if (b.builderUnit.isValid())
         {
-            dss << "\n\nBuilder: " << Util::GetID(b.builderUnit) << "\n";
+            dss << "\n\nBuilder: " << b.builderUnit.getID() << "\n";
         }
 
-        if (b.buildingUnit)
+        if (b.buildingUnit.isValid())
         {
-            dss << "Building: " << Util::GetID(b.buildingUnit) << "\n" << b.buildingUnit->build_progress;
-            m_bot.Map().drawText(b.buildingUnit->pos, dss.str());
+            dss << "Building: " << b.buildingUnit.getID() << "\n" << b.buildingUnit.getBuildPercentage();
+            m_bot.Map().drawText(b.buildingUnit.getPosition(), dss.str());
         }
         
         if (b.status == BuildingStatus::Unassigned)
@@ -372,7 +372,7 @@ void BuildingManager::drawBuildingInformation()
         }
         else if (b.status == BuildingStatus::Assigned)
         {
-            ss << "Assigned " << sc2::UnitTypeToName(b.type) << "    " << Util::GetID(b.builderUnit) << " " << getBuildingWorkerCode(b) << " (" << b.finalPosition.x << "," << b.finalPosition.y << ")\n";
+            ss << "Assigned " << sc2::UnitTypeToName(b.type) << "    " << b.builderUnit.getID() << " " << getBuildingWorkerCode(b) << " (" << b.finalPosition.x << "," << b.finalPosition.y << ")\n";
 
             int x1 = b.finalPosition.x;
             int y1 = b.finalPosition.y;
@@ -384,7 +384,7 @@ void BuildingManager::drawBuildingInformation()
         }
         else if (b.status == BuildingStatus::UnderConstruction)
         {
-            ss << "Constructing " << sc2::UnitTypeToName(b.type) << "    " << Util::GetID(b.builderUnit) << " " << Util::GetID(b.buildingUnit) << " " << getBuildingWorkerCode(b) << "\n";
+            ss << "Constructing " << sc2::UnitTypeToName(b.type) << "    " << b.builderUnit.getID() << " " << b.buildingUnit.getID() << " " << getBuildingWorkerCode(b) << "\n";
         }
     }
 

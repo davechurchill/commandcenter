@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Common.h"
+#include "Unit.h"
 
 class CCBot;
 
@@ -8,7 +9,7 @@ class ScoutManager
 {
     CCBot &   m_bot;
 
-    CCUnit m_scoutUnit;
+    Unit m_scoutUnit;
     std::string     m_scoutStatus;
     int             m_numScouts;
     bool            m_scoutUnderAttack;
@@ -16,7 +17,7 @@ class ScoutManager
 
     bool            enemyWorkerInRadiusOf(const CCPosition & pos) const;
     CCPosition    getFleePosition() const;
-    CCUnit closestEnemyWorkerTo(const CCPosition & pos) const;
+    Unit closestEnemyWorkerTo(const CCPosition & pos) const;
     void            moveScouts();
     void            drawScoutInformation();
 
@@ -27,5 +28,5 @@ public:
 
     void onStart();
     void onFrame();
-    void setWorkerScout(CCUnit unit);
+    void setWorkerScout(const Unit & unit);
 };

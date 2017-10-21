@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Common.h"
+#include "Unit.h"
 
 namespace BuildingStatus
 {
@@ -15,8 +16,8 @@ public:
     CCTilePosition    finalPosition;
     CCTilePosition    position;
     CCUnitType type;
-    CCUnit buildingUnit;
-    CCUnit builderUnit;
+    Unit            buildingUnit;
+    Unit            builderUnit;
     size_t          status;
     int             lastOrderFrame;
     bool            buildCommandGiven;

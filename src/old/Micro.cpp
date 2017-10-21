@@ -58,7 +58,7 @@ void Micro::SmartMove(CCUnit attacker, const CCTilePosition & targetTilePosition
 #endif
 }
 
-void Micro::SmartRightClick(CCUnit unit, CCUnit target, CCBot & bot)
+void Micro::SmartRightClick(const Unit & unit, CCUnit target, CCBot & bot)
 {
     BOT_ASSERT(unit != nullptr, "Unit is null");
 
@@ -69,7 +69,7 @@ void Micro::SmartRightClick(CCUnit unit, CCUnit target, CCBot & bot)
 #endif
 }
 
-void Micro::SmartRepair(CCUnit unit, CCUnit target, CCBot & bot)
+void Micro::SmartRepair(const Unit & unit, CCUnit target, CCBot & bot)
 {
     BOT_ASSERT(unit != nullptr, "Unit is null");
 

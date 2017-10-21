@@ -213,7 +213,7 @@ std::string Util::GetNameFromUnitType(const CCUnitType & type)
 #endif
 }
 
-CCPosition Util::CalcCenter(const std::vector<CCUnit> & units)
+CCPosition Util::CalcCenter(const std::vector<Unit> & units)
 {
     if (units.empty())
     {
@@ -223,11 +223,11 @@ CCPosition Util::CalcCenter(const std::vector<CCUnit> & units)
     float cx = 0.0f;
     float cy = 0.0f;
 
-    for (auto unit : units)
+    for (auto & unit : units)
     {
-        BOT_ASSERT(unit, "Unit pointer was null");
-        cx += unit->pos.x;
-        cy += unit->pos.y;
+        BOT_ASSERT(unit.isValid(), "Unit pointer was null");
+        cx += unit.getPosition().x;
+        cy += unit.getPosition().y;
     }
 
     return CCPosition(cx / units.size(), cy / units.size());

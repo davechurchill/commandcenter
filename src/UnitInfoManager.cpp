@@ -1,6 +1,7 @@
 #include "UnitInfoManager.h"
 #include "Util.h"
 #include "CCBot.h"
+#include "Unit.h"
 
 #include <sstream>
 
@@ -31,7 +32,7 @@ void UnitInfoManager::updateUnitInfo()
     for (auto & unit : m_bot.GetUnits())
     {
         updateUnit(unit);
-        m_units[Util::GetPlayer(unit)].push_back(unit);     
+        m_units[unit.getPlayer()].push_back(unit);     
     }
 
     // remove bad enemy units
@@ -40,12 +41,12 @@ void UnitInfoManager::updateUnitInfo()
     m_unitData[Players::Neutral].removeBadUnits();
 }
 
-const std::map<CCUnit, UnitInfo> & UnitInfoManager::getUnitInfoMap(CCPlayer player) const
+const std::map<Unit, UnitInfo> & UnitInfoManager::getUnitInfoMap(CCPlayer player) const
 {
     return getUnitData(player).getUnitInfoMap();
 }
 
-const std::vector<CCUnit> & UnitInfoManager::getUnits(CCPlayer player) const
+const std::vector<Unit> & UnitInfoManager::getUnits(CCPlayer player) const
 {
     BOT_ASSERT(m_units.find(player) != m_units.end(), "Couldn't find player units: %d", player);
 
@@ -64,8 +65,8 @@ static std::string GetAbilityText(sc2::AbilityID ability_id) {
 void UnitInfoManager::drawSelectedUnitDebugInfo()
 {
 #ifdef SC2API
-    CCUnit unit = nullptr;
-    for (auto u : m_bot.GetUnits()) 
+    const sc2::Unit * unit;
+    for (auto u : m_bot.Observation()->GetUnits()) 
     {
         if (u->is_selected && u->alliance == sc2::Unit::Self) {
             unit = u;
@@ -184,7 +185,7 @@ size_t UnitInfoManager::getUnitTypeCount(CCPlayer player, CCUnitType type, bool 
 
     for (auto & unit : getUnits(player))
     {
-        if ((!type || type == unit->unit_type) && (!completed || unit->build_progress == 1.0f))
+        if ((!type || type == unit.getType()) && (!completed || unit.isCompleted()))
         {
             count++;
         }
@@ -223,30 +224,24 @@ void UnitInfoManager::drawUnitInformation(float x,float y) const
     
 }
 
-void UnitInfoManager::updateUnit(CCUnit unit)
+void UnitInfoManager::updateUnit(const Unit & unit)
 {
-    m_unitData[Util::GetPlayer(unit)].updateUnit(unit);
+    m_unitData[unit.getPlayer()].updateUnit(unit);
 }
 
 // is the unit valid?
-bool UnitInfoManager::isValidUnit(CCUnit unit)
+bool UnitInfoManager::isValidUnit(const Unit & unit)
 {
-    if (!unit) { return false; }
-
-    // we only care about our units and enemy units
-    if (!(Util::GetPlayer(unit) == Players::Self || Util::GetPlayer(unit) == Players::Enemy))
-    {
-        return false;
-    }
+    if (!unit.isValid()) { return false; }
 
     // if it's a weird unit, don't bother
-    if (unit->unit_type == sc2::UNIT_TYPEID::ZERG_EGG || unit->unit_type == sc2::UNIT_TYPEID::ZERG_LARVA)
+    if (unit.getType() == sc2::UNIT_TYPEID::ZERG_EGG || unit.getType() == sc2::UNIT_TYPEID::ZERG_LARVA)
     {
         return false;
     }
 
     // if the position isn't valid throw it out
-    if (!m_bot.Map().isValidPosition(unit->pos))
+    if (!m_bot.Map().isValidPosition(unit.getPosition()))
     {
         return false;
     }

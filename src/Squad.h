@@ -12,7 +12,7 @@ class Squad
     CCBot &             m_bot;
 
     std::string         m_name;
-    std::set<CCUnit> m_units;
+    std::set<Unit> m_units;
     std::string         m_regroupStatus;
     int                 m_lastRetreatSwitch;
     bool                m_lastRetreatSwitchVal;
@@ -22,16 +22,16 @@ class Squad
     MeleeManager        m_meleeManager;
     RangedManager       m_rangedManager;
 
-    std::map<CCUnit, bool> m_nearEnemy;
+    std::map<Unit, bool> m_nearEnemy;
 
-    CCUnit unitClosestToEnemy() const;
+    Unit unitClosestToEnemy() const;
 
     void updateUnits();
     void addUnitsToMicroManagers();
     void setNearEnemyUnits();
     void setAllUnits();
 
-    bool isUnitNearEnemy(CCUnit unit) const;
+    bool isUnitNearEnemy(const Unit & unit) const;
     bool needsToRegroup() const;
     int  squadUnitsNear(const CCPosition & pos) const;
 
@@ -42,11 +42,11 @@ public:
 
     void onFrame();
     void setSquadOrder(const SquadOrder & so);
-    void addUnit(CCUnit unit);
-    void removeUnit(CCUnit unit);
+    void addUnit(const Unit & unit);
+    void removeUnit(const Unit & unit);
     void clear();
 
-    bool containsUnit(CCUnit unit) const;
+    bool containsUnit(const Unit & unit) const;
     bool isEmpty() const;
     size_t getPriority() const;
     void setPriority(const size_t & priority);
@@ -55,6 +55,6 @@ public:
     CCPosition calcCenter() const;
     CCPosition calcRegroupPosition() const;
 
-    const std::set<CCUnit> & getUnits() const;
+    const std::set<Unit> & getUnits() const;
     const SquadOrder & getSquadOrder() const;
 };

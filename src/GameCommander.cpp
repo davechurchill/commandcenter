@@ -60,7 +60,7 @@ void GameCommander::handleUnitAssignments()
     setCombatUnits();
 }
 
-bool GameCommander::isAssigned(CCUnit unit) const
+bool GameCommander::isAssigned(const Unit & unit) const
 {
     return     (std::find(m_combatUnits.begin(), m_combatUnits.end(), unit) != m_combatUnits.end())
         || (std::find(m_scoutUnits.begin(), m_scoutUnits.end(), unit) != m_scoutUnits.end());
@@ -85,10 +85,10 @@ void GameCommander::setScoutUnits()
         if (shouldSendInitialScout())
         {
             // grab the closest worker to the supply provider to send to scout
-            CCUnit workerScout = m_bot.Workers().getClosestMineralWorkerTo(m_bot.GetStartLocation());
+            Unit workerScout = m_bot.Workers().getClosestMineralWorkerTo(m_bot.GetStartLocation());
 
             // if we find a worker (which we should) add it to the scout units
-            if (workerScout)
+            if (workerScout.isValid())
             {
                 m_scoutManager.setWorkerScout(workerScout);
                 assignUnit(workerScout, m_scoutUnits);
@@ -120,27 +120,27 @@ void GameCommander::setCombatUnits()
 {
     for (auto & unit : m_validUnits)
     {
-        BOT_ASSERT(unit, "Have a null unit in our valid units\n");
+        BOT_ASSERT(unit.isValid(), "Have a null unit in our valid units\n");
 
-        if (!isAssigned(unit) && Util::IsCombatUnitType(unit->unit_type, m_bot))
+        if (!isAssigned(unit) && Util::IsCombatUnitType(unit.getType(), m_bot))
         {
             assignUnit(unit, m_combatUnits);
         }
     }
 }
 
-void GameCommander::onUnitCreate(CCUnit unit)
+void GameCommander::onUnitCreate(const Unit & unit)
 {
 
 }
 
-void GameCommander::onUnitDestroy(CCUnit unit)
+void GameCommander::onUnitDestroy(const Unit & unit)
 {
     //_productionManager.onUnitDestroy(unit);
 }
 
 
-void GameCommander::assignUnit(CCUnit unit, std::vector<CCUnit> & units)
+void GameCommander::assignUnit(const Unit & unit, std::vector<Unit> & units)
 {
     if (std::find(m_scoutUnits.begin(), m_scoutUnits.end(), unit) != m_scoutUnits.end())
     {

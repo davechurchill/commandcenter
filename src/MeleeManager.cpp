@@ -8,23 +8,23 @@ MeleeManager::MeleeManager(CCBot & bot)
 
 }
 
-void MeleeManager::executeMicro(const std::vector<CCUnit> & targets)
+void MeleeManager::executeMicro(const std::vector<Unit> & targets)
 {
     assignTargets(targets);
 }
 
-void MeleeManager::assignTargets(const std::vector<CCUnit> & targets)
+void MeleeManager::assignTargets(const std::vector<Unit> & targets)
 {
-    const std::vector<CCUnit> & meleeUnits = getUnits();
+    const std::vector<Unit> & meleeUnits = getUnits();
 
     // figure out targets
-    std::vector<CCUnit> meleeUnitTargets;
+    std::vector<Unit> meleeUnitTargets;
     for (auto target : targets)
     {
-        if (!target) { continue; }
-        if (target->is_flying) { continue; }
-        if (target->unit_type == sc2::UNIT_TYPEID::ZERG_EGG) { continue; }
-        if (target->unit_type == sc2::UNIT_TYPEID::ZERG_LARVA) { continue; }
+        if (!target.isValid()) { continue; }
+        if (target.isFlying()) { continue; }
+        if (target.getType() == sc2::UNIT_TYPEID::ZERG_EGG) { continue; }
+        if (target.getType() == sc2::UNIT_TYPEID::ZERG_LARVA) { continue; }
 
         meleeUnitTargets.push_back(target);
     }
@@ -32,7 +32,7 @@ void MeleeManager::assignTargets(const std::vector<CCUnit> & targets)
     // for each meleeUnit
     for (auto & meleeUnit : meleeUnits)
     {
-        BOT_ASSERT(meleeUnit, "melee unit is null");
+        BOT_ASSERT(meleeUnit.isValid(), "melee unit is null");
 
         // if the order is to attack or defend
         if (order.getType() == SquadOrderTypes::Attack || order.getType() == SquadOrderTypes::Defend)
@@ -42,25 +42,25 @@ void MeleeManager::assignTargets(const std::vector<CCUnit> & targets)
             {
                 CCPosition fleeTo(m_bot.GetStartLocation());
 
-                Micro::SmartMove(meleeUnit, fleeTo, m_bot);
+                meleeUnit.move(fleeTo);
             }
             // if there are targets
             else if (!meleeUnitTargets.empty())
             {
                 // find the best target for this meleeUnit
-                CCUnit target = getTarget(meleeUnit, meleeUnitTargets);
+                Unit target = getTarget(meleeUnit, meleeUnitTargets);
 
                 // attack it
-                Micro::SmartAttackUnit(meleeUnit, target, m_bot);
+                meleeUnit.attackUnit(target);
             }
             // if there are no targets
             else
             {
                 // if we're not near the order position
-                if (Util::Dist(meleeUnit->pos, order.getPosition()) > 4)
+                if (Util::Dist(meleeUnit, order.getPosition()) > 4)
                 {
                     // move to it
-                    Micro::SmartMove(meleeUnit, order.getPosition(), m_bot);
+                    meleeUnit.move(order.getPosition());
                 }
             }
         }
@@ -73,24 +73,24 @@ void MeleeManager::assignTargets(const std::vector<CCUnit> & targets)
 }
 
 // get a target for the meleeUnit to attack
-CCUnit MeleeManager::getTarget(CCUnit meleeUnit, const std::vector<CCUnit> & targets)
+Unit MeleeManager::getTarget(Unit meleeUnit, const std::vector<Unit> & targets)
 {
-    BOT_ASSERT(meleeUnit, "null melee unit in getTarget");
+    BOT_ASSERT(meleeUnit.isValid(), "null melee unit in getTarget");
 
     int highPriority = 0;
     double closestDist = std::numeric_limits<double>::max();
-    CCUnit closestTarget = nullptr;
+    Unit closestTarget;
 
     // for each target possiblity
     for (auto & targetUnit : targets)
     {
-        BOT_ASSERT(targetUnit, "null target unit in getTarget");
+        BOT_ASSERT(targetUnit.isValid(), "null target unit in getTarget");
 
         int priority = getAttackPriority(meleeUnit, targetUnit);
-        float distance = Util::Dist(meleeUnit->pos, targetUnit->pos);
+        float distance = Util::Dist(meleeUnit, targetUnit);
 
         // if it's a higher priority, or it's closer, set it
-        if (!closestTarget || (priority > highPriority) || (priority == highPriority && distance < closestDist))
+        if (!closestTarget.isValid() || (priority > highPriority) || (priority == highPriority && distance < closestDist))
         {
             closestDist = distance;
             highPriority = priority;
@@ -102,9 +102,9 @@ CCUnit MeleeManager::getTarget(CCUnit meleeUnit, const std::vector<CCUnit> & tar
 }
 
 // get the attack priority of a type in relation to a zergling
-int MeleeManager::getAttackPriority(CCUnit attacker, CCUnit unit)
+int MeleeManager::getAttackPriority(Unit attacker, const Unit & unit)
 {
-    BOT_ASSERT(unit, "null unit in getAttackPriority");
+    BOT_ASSERT(unit.isValid(), "null unit in getAttackPriority");
 
     if (Util::IsCombatUnit(unit, m_bot))
     {
@@ -119,7 +119,7 @@ int MeleeManager::getAttackPriority(CCUnit attacker, CCUnit unit)
     return 1;
 }
 
-bool MeleeManager::meleeUnitShouldRetreat(CCUnit meleeUnit, const std::vector<CCUnit> & targets)
+bool MeleeManager::meleeUnitShouldRetreat(Unit meleeUnit, const std::vector<Unit> & targets)
 {
     // TODO: should melee units ever retreat?
     return false;

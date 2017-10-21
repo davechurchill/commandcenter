@@ -10,7 +10,7 @@ UnitData::UnitData()
     m_numUnits		    = std::vector<int>(maxTypeID + 1, 0);
 }
 
-void UnitData::updateUnit(CCUnit unit)
+void UnitData::updateUnit(const Unit & unit)
 {
     bool firstSeen = false;
     const auto & it = m_unitMap.find(unit);
@@ -22,13 +22,13 @@ void UnitData::updateUnit(CCUnit unit)
 
     UnitInfo & ui   = m_unitMap[unit];
     ui.unit         = unit;
-    ui.player       = Util::GetPlayer(unit);
-    ui.lastPosition = Util::GetPosition(unit);
-    ui.lastHealth   = Util::GetHealth(unit);
-    ui.lastShields  = Util::GetShield(unit);
-    ui.type         = Util::GetType(unit);
-    ui.progress     = unit->build_progress;
-    ui.id           = Util::GetID(unit);
+    ui.player       = unit.getPlayer();
+    ui.lastPosition = unit.getPosition();
+    ui.lastHealth   = unit.getHitPoints();
+    ui.lastShields  = unit.getShields();
+    ui.type         = unit.getType();
+    ui.progress     = unit.getBuildPercentage();
+    ui.id           = unit.getID();
 
     if (firstSeen)
     {
@@ -36,12 +36,12 @@ void UnitData::updateUnit(CCUnit unit)
     }
 }
 
-void UnitData::killUnit(CCUnit unit)
+void UnitData::killUnit(const Unit & unit)
 {
     //_mineralsLost += unit->getType().mineralPrice();
     //_gasLost += unit->getType().gasPrice();
-    m_numUnits[unit->unit_type]--;
-    m_numDeadUnits[unit->unit_type]++;
+    m_numUnits[unit.getType()]--;
+    m_numDeadUnits[unit.getType()]++;
 
     m_unitMap.erase(unit);
 }
@@ -87,7 +87,7 @@ int UnitData::getNumDeadUnits(CCUnitType t) const
     return m_numDeadUnits[t];
 }
 
-const std::map<CCUnit, UnitInfo> & UnitData::getUnitInfoMap() const
+const std::map<Unit, UnitInfo> & UnitData::getUnitInfoMap() const
 {
     return m_unitMap;
 }

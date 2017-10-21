@@ -79,12 +79,11 @@ void Squad::updateUnits()
 void Squad::setAllUnits()
 {
     // clean up the _units vector just in case one of them died
-    std::set<CCUnit> goodUnits;
+    std::set<Unit> goodUnits;
     for (auto unit : m_units)
     {
-        if (!unit) { continue; }
-        if (unit->build_progress < 1.0f) { continue; }
-        if (unit->health <= 0) { continue; }
+        if (!unit.isValid()) { continue; }
+        if (unit.isBeingConstructed()) { continue; }
         
         goodUnits.insert(unit);
     }
@@ -106,33 +105,33 @@ void Squad::setNearEnemyUnits()
 
 void Squad::addUnitsToMicroManagers()
 {
-    std::vector<CCUnit> meleeUnits;
-    std::vector<CCUnit> rangedUnits;
-    std::vector<CCUnit> detectorUnits;
-    std::vector<CCUnit> transportUnits;
-    std::vector<CCUnit> tankUnits;
+    std::vector<Unit> meleeUnits;
+    std::vector<Unit> rangedUnits;
+    std::vector<Unit> detectorUnits;
+    std::vector<Unit> transportUnits;
+    std::vector<Unit> tankUnits;
 
     // add _units to micro managers
     for (auto unit : m_units)
     {
-        BOT_ASSERT(unit, "null unit in addUnitsToMicroManagers()");
+        BOT_ASSERT(unit.isValid(), "null unit in addUnitsToMicroManagers()");
 
-        if (unit->unit_type == sc2::UNIT_TYPEID::TERRAN_SIEGETANK || unit->unit_type == sc2::UNIT_TYPEID::TERRAN_SIEGETANKSIEGED)
+        if (unit.getType() == sc2::UNIT_TYPEID::TERRAN_SIEGETANK || unit.getType() == sc2::UNIT_TYPEID::TERRAN_SIEGETANKSIEGED)
         {
             tankUnits.push_back(unit);
         }
         // TODO: detectors
-        else if (Util::IsDetector(unit) && !m_bot.Data(unit->unit_type).isBuilding)
+        else if (Util::IsDetector(unit) && !m_bot.Data(unit).isBuilding)
         {
             detectorUnits.push_back(unit);
         }
         // select ranged _units
-        else if (Util::GetAttackRange(unit->unit_type, m_bot) >= 1.5f)
+        else if (Util::GetAttackRange(unit.getType(), m_bot) >= 1.5f)
         {
             rangedUnits.push_back(unit);
         }
         // select melee _units
-        else if (Util::GetAttackRange(unit->unit_type, m_bot) < 1.5f)
+        else if (Util::GetAttackRange(unit.getType(), m_bot) < 1.5f)
         {
             meleeUnits.push_back(unit);
         }
@@ -155,7 +154,7 @@ void Squad::setSquadOrder(const SquadOrder & so)
     m_order = so;
 }
 
-bool Squad::containsUnit(CCUnit unit) const
+bool Squad::containsUnit(const Unit & unit) const
 {
     return std::find(m_units.begin(), m_units.end(), unit) != m_units.end();
 }
@@ -164,7 +163,7 @@ void Squad::clear()
 {
     for (auto unit : getUnits())
     {
-        BOT_ASSERT(unit, "null unit in squad clear");
+        BOT_ASSERT(unit.isValid(), "null unit in squad clear");
 
         if (Util::IsWorker(unit))
         {
@@ -175,13 +174,13 @@ void Squad::clear()
     m_units.clear();
 }
 
-bool Squad::isUnitNearEnemy(CCUnit unit) const
+bool Squad::isUnitNearEnemy(const Unit & unit) const
 {
-    BOT_ASSERT(unit, "null unit in squad");
+    BOT_ASSERT(unit.isValid(), "null unit in squad");
 
     for (auto & u : m_bot.GetUnits())
     {
-        if ((Util::GetPlayer(u) == Players::Enemy) && (Util::Dist(unit->pos, u->pos) < 20))
+        if ((u.getPlayer() == Players::Enemy) && (Util::Dist(unit, u) < 20))
         {
             return true;
         }
@@ -200,8 +199,8 @@ CCPosition Squad::calcCenter() const
     CCPosition sum(0,0);
     for (auto unit: m_units)
     {
-        BOT_ASSERT(unit, "null unit in squad calcCenter");
-        sum += unit->pos;
+        BOT_ASSERT(unit.isValid(), "null unit in squad calcCenter");
+        sum += unit.getPosition();
     }
 
     return CCPosition(sum.x / m_units.size(), sum.y / m_units.size());
@@ -217,11 +216,11 @@ CCPosition Squad::calcRegroupPosition() const
     {
         if (!m_nearEnemy.at(unit))
         {
-            float dist = Util::Dist(m_order.getPosition(), unit->pos);
+            float dist = Util::Dist(m_order.getPosition(), unit.getPosition());
             if (dist < minDist)
             {
                 minDist = dist;
-                regroup = unit->pos;
+                regroup = unit.getPosition();
             }
         }
     }
@@ -236,19 +235,19 @@ CCPosition Squad::calcRegroupPosition() const
     }
 }
 
-CCUnit Squad::unitClosestToEnemy() const
+Unit Squad::unitClosestToEnemy() const
 {
-    CCUnit closest = nullptr;
+    Unit closest;
     float closestDist = std::numeric_limits<float>::max();
 
-    for (auto unit : m_units)
+    for (auto & unit : m_units)
     {
-        BOT_ASSERT(unit, "null unit");
+        BOT_ASSERT(unit.isValid(), "null unit");
 
         // the distance to the order position
-        int dist = m_bot.Map().getGroundDistance(unit->pos, m_order.getPosition());
+        int dist = m_bot.Map().getGroundDistance(unit.getPosition(), m_order.getPosition());
 
-        if (dist != -1 && (!closest || dist < closestDist))
+        if (dist != -1 && (!closest.isValid() || dist < closestDist))
         {
             closest = unit;
             closestDist = (float)dist;
@@ -264,9 +263,9 @@ int Squad::squadUnitsNear(const CCPosition & p) const
 
     for (auto unit : m_units)
     {
-        BOT_ASSERT(unit, "null unit");
+        BOT_ASSERT(unit.isValid(), "null unit");
 
-        if (Util::Dist(unit->pos, p) < 20.0f)
+        if (Util::Dist(unit, p) < 20.0f)
         {
             numUnits++;
         }
@@ -275,7 +274,7 @@ int Squad::squadUnitsNear(const CCPosition & p) const
     return numUnits;
 }
 
-const std::set<CCUnit> & Squad::getUnits() const
+const std::set<Unit> & Squad::getUnits() const
 {
     return m_units;
 }
@@ -285,12 +284,12 @@ const SquadOrder & Squad::getSquadOrder()	const
     return m_order;
 }
 
-void Squad::addUnit(CCUnit unit)
+void Squad::addUnit(const Unit & unit)
 {
     m_units.insert(unit);
 }
 
-void Squad::removeUnit(CCUnit unit)
+void Squad::removeUnit(const Unit & unit)
 {
     m_units.erase(unit);
 }

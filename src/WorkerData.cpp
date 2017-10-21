@@ -1,5 +1,4 @@
 #include "WorkerData.h"
-#include "Micro.h"
 #include "Util.h"
 #include "CCBot.h"
 #include <iostream>
@@ -38,11 +37,11 @@ void WorkerData::updateAllWorkerData()
     }
 
     // remove any worker units which no longer exist in the game
-    std::vector<CCUnit> workersDestroyed;
+    std::vector<Unit> workersDestroyed;
     for (auto worker : getWorkers())
     {
         // TODO: for now skip gas workers because they disappear inside refineries, this is annoying
-        if (!worker && (getWorkerJob(worker) != WorkerJobs::Gas))
+        if (!worker.isValid() && (getWorkerJob(worker) != WorkerJobs::Gas))
         {
             workersDestroyed.push_back(worker);
         }
@@ -54,13 +53,13 @@ void WorkerData::updateAllWorkerData()
     }
 }
 
-void WorkerData::workerDestroyed(CCUnit unit)
+void WorkerData::workerDestroyed(const Unit & unit)
 {
     clearPreviousJob(unit);
     m_workers.erase(unit);
 }
 
-void WorkerData::updateWorker(CCUnit unit)
+void WorkerData::updateWorker(const Unit & unit)
 {
     if (m_workers.find(unit) == m_workers.end())
     {
@@ -69,7 +68,7 @@ void WorkerData::updateWorker(CCUnit unit)
     }
 }
 
-void WorkerData::setWorkerJob(CCUnit unit, int job, CCUnit jobUnit)
+void WorkerData::setWorkerJob(const Unit & unit, int job, Unit jobUnit)
 {
     clearPreviousJob(unit);
     m_workerJobMap[unit] = job;
@@ -91,9 +90,9 @@ void WorkerData::setWorkerJob(CCUnit unit, int job, CCUnit jobUnit)
         m_depotWorkerCount[jobUnit]++;
 
         // find the mineral to mine and mine it
-        CCUnit mineralToMine = getMineralToMine(unit);
+        Unit mineralToMine = getMineralToMine(unit);
         
-        Micro::SmartRightClick(unit, mineralToMine, m_bot);
+        unit.rightClick(mineralToMine);
     }
     else if (job == WorkerJobs::Gas)
     {
@@ -108,11 +107,11 @@ void WorkerData::setWorkerJob(CCUnit unit, int job, CCUnit jobUnit)
         m_workerRefineryMap[unit] = jobUnit;
 
         // right click the refinery to start harvesting
-        Micro::SmartRightClick(unit, jobUnit, m_bot);
+        unit.rightClick(jobUnit);
     }
     else if (job == WorkerJobs::Repair)
     {
-        Micro::SmartRepair(unit, jobUnit, m_bot);
+        unit.rightClick(jobUnit);
     }
     else if (job == WorkerJobs::Scout)
     {
@@ -124,7 +123,7 @@ void WorkerData::setWorkerJob(CCUnit unit, int job, CCUnit jobUnit)
     }
 }
 
-void WorkerData::clearPreviousJob(CCUnit unit)
+void WorkerData::clearPreviousJob(const Unit & unit)
 {
     const int previousJob = getWorkerJob(unit);
     m_workerJobCount[previousJob]--;
@@ -166,7 +165,7 @@ int WorkerData::getWorkerJobCount(int job) const
     return m_workerJobCount.at(job);
 }
 
-int WorkerData::getWorkerJob(CCUnit unit) const
+int WorkerData::getWorkerJob(const Unit & unit) const
 {
     auto it = m_workerJobMap.find(unit);
 
@@ -178,16 +177,16 @@ int WorkerData::getWorkerJob(CCUnit unit) const
     return WorkerJobs::None;
 }
 
-CCUnit WorkerData::getMineralToMine(CCUnit unit) const
+Unit WorkerData::getMineralToMine(const Unit & unit) const
 {
-    CCUnit bestMineral = nullptr;
+    Unit bestMineral;
     double bestDist = 100000;
 
     for (auto mineral : m_bot.GetUnits())
     {
         if (!Util::IsMineral(mineral)) continue;
 
-        double dist = Util::Dist(mineral->pos, unit->pos);
+        double dist = Util::Dist(mineral, unit);
 
         if (dist < bestDist)
         {
@@ -199,7 +198,7 @@ CCUnit WorkerData::getMineralToMine(CCUnit unit) const
     return bestMineral;
 }
 
-CCUnit WorkerData::getWorkerDepot(CCUnit unit) const
+Unit WorkerData::getWorkerDepot(const Unit & unit) const
 {
     auto it = m_workerDepotMap.find(unit);
 
@@ -208,10 +207,10 @@ CCUnit WorkerData::getWorkerDepot(CCUnit unit) const
         return it->second;
     }
 
-    return nullptr;
+    return Unit();
 }
 
-int WorkerData::getNumAssignedWorkers(CCUnit unit)
+int WorkerData::getNumAssignedWorkers(const Unit & unit)
 {
     if (Util::IsTownHall(unit))
     {
@@ -243,7 +242,7 @@ int WorkerData::getNumAssignedWorkers(CCUnit unit)
     return 0;
 }
 
-const char * WorkerData::getJobCode(CCUnit unit)
+const char * WorkerData::getJobCode(const Unit & unit)
 {
     const int j = getWorkerJob(unit);
 
@@ -266,11 +265,11 @@ void WorkerData::drawDepotDebugInfo()
         std::stringstream ss;
         ss << "Workers: " << getNumAssignedWorkers(depot);
 
-        m_bot.Map().drawText(depot->pos, ss.str());
+        m_bot.Map().drawText(depot.getPosition(), ss.str());
     }
 }
 
-const std::set<CCUnit> & WorkerData::getWorkers() const
+const std::set<Unit> & WorkerData::getWorkers() const
 {
     return m_workers;
 }

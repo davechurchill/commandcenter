@@ -48,13 +48,13 @@ public:
     const TypeData & Data(const CCUnitType & type) const;
     const TypeData & Data(const sc2::UpgradeID & type) const;
     const TypeData & Data(const BuildType & type) const;
-    const TypeData & Data(CCUnit unit) const;
+    const TypeData & Data(const Unit & unit) const;
     const CCRace & GetPlayerRace(int player) const;
     CCPosition GetStartLocation() const;
 
     int GetMinerals() const;
     int GetGas() const;
-    CCUnit GetUnit(const CCUnitID & tag) const;
+    Unit GetUnit(const CCUnitID & tag) const;
     const std::vector<Unit> & GetUnits() const;
     const std::vector<CCPosition> & GetEnemyStartLocations() const;
 

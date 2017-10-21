@@ -1,7 +1,6 @@
 #include "ProductionManager.h"
 #include "Util.h"
 #include "CCBot.h"
-#include "Micro.h"
 
 ProductionManager::ProductionManager(CCBot & bot)
     : m_bot             (bot)
@@ -42,7 +41,7 @@ void ProductionManager::onFrame()
 }
 
 // on unit destroy
-void ProductionManager::onUnitDestroy(CCUnit unit)
+void ProductionManager::onUnitDestroy(const Unit & unit)
 {
     // TODO: might have to re-do build order if a vital unit died
 }
@@ -62,7 +61,7 @@ void ProductionManager::manageBuildOrderQueue()
     while (!m_queue.isEmpty())
     {
         // this is the unit which can produce the currentItem
-        CCUnit producer = getProducer(currentItem.type);
+        Unit producer = getProducer(currentItem.type);
 
         // check to see if we can make it right now
         bool canMake = canMakeNow(producer, currentItem.type);
@@ -70,7 +69,7 @@ void ProductionManager::manageBuildOrderQueue()
         // TODO: if it's a building and we can't make it yet, predict the worker movement to the location
 
         // if we can make the current item
-        if (producer && canMake)
+        if (producer.isValid() && canMake)
         {
             // create it and remove it from the _queue
             create(producer, currentItem);
@@ -96,20 +95,20 @@ void ProductionManager::manageBuildOrderQueue()
     }
 }
 
-CCUnit ProductionManager::getProducer(const BuildType & type, CCPosition closestTo)
+Unit ProductionManager::getProducer(const BuildType & type, CCPosition closestTo)
 {
     // get all the types of units that cna build this type
     auto & producerTypes = m_bot.Data(type).whatBuilds;
 
     // make a set of all candidate producers
-    std::vector<CCUnit> candidateProducers;
+    std::vector<Unit> candidateProducers;
     for (auto unit : m_bot.UnitInfo().getUnits(Players::Self))
     {
         // reasons a unit can not train the desired type
-        if (std::find(producerTypes.begin(), producerTypes.end(), unit->unit_type) == producerTypes.end()) { continue; }
-        if (unit->build_progress < 1.0f) { continue; }
-        if (m_bot.Data(unit->unit_type).isBuilding && unit->orders.size() > 0) { continue; }
-        if (unit->is_flying) { continue; }
+        if (std::find(producerTypes.begin(), producerTypes.end(), unit.getType()) == producerTypes.end()) { continue; }
+        if (!unit.isCompleted()) { continue; }
+        if (m_bot.Data(unit).isBuilding && unit.isTraining()) { continue; }
+        if (unit.isFlying()) { continue; }
 
         // TODO: if unit is not powered continue
         // TODO: if the type is an addon, some special cases
@@ -122,11 +121,11 @@ CCUnit ProductionManager::getProducer(const BuildType & type, CCPosition closest
     return getClosestUnitToPosition(candidateProducers, closestTo);
 }
 
-CCUnit ProductionManager::getClosestUnitToPosition(const std::vector<CCUnit> & units, CCPosition closestTo)
+Unit ProductionManager::getClosestUnitToPosition(const std::vector<Unit> & units, CCPosition closestTo)
 {
     if (units.size() == 0)
     {
-        return 0;
+        return Unit();
     }
 
     // if we don't care where the unit is return the first one we have
@@ -135,13 +134,13 @@ CCUnit ProductionManager::getClosestUnitToPosition(const std::vector<CCUnit> & u
         return units[0];
     }
 
-    CCUnit closestUnit = nullptr;
+    Unit closestUnit;
     double minDist = std::numeric_limits<double>::max();
 
     for (auto & unit : units)
     {
-        double distance = Util::Dist(unit->pos, closestTo);
-        if (!closestUnit || distance < minDist)
+        double distance = Util::Dist(unit, closestTo);
+        if (!closestUnit.isValid() || distance < minDist)
         {
             closestUnit = unit;
             minDist = distance;
@@ -152,9 +151,9 @@ CCUnit ProductionManager::getClosestUnitToPosition(const std::vector<CCUnit> & u
 }
 
 // this function will check to see if all preconditions are met and then create a unit
-void ProductionManager::create(CCUnit producer, BuildOrderItem & item)
+void ProductionManager::create(const Unit & producer, BuildOrderItem & item)
 {
-    if (!producer)
+    if (!producer.isValid())
     {
         return;
     }
@@ -169,22 +168,23 @@ void ProductionManager::create(CCUnit producer, BuildOrderItem & item)
     // if we're dealing with a non-building unit
     else if (item.type.isUnit())
     {
-        Micro::SmartTrain(producer, item.type.getUnitTypeID(), m_bot);
+        producer.train(item.type.getUnitTypeID());
     }
     else if (item.type.isUpgrade())
     {
-        Micro::SmartAbility(producer, m_bot.Data(item.type.getUpgradeID()).buildAbility, m_bot);
+        // TODO: UPGRADES
+        //Micro::SmartAbility(producer, m_bot.Data(item.type.getUpgradeID()).buildAbility, m_bot);
     }
 }
 
-bool ProductionManager::canMakeNow(CCUnit producer, const BuildType & type)
+bool ProductionManager::canMakeNow(const Unit & producer, const BuildType & type)
 {
-    if (!producer || !meetsReservedResources(type))
+    if (!producer.isValid() || !meetsReservedResources(type))
     {
         return false;
     }
 
-    sc2::AvailableAbilities available_abilities = m_bot.Query()->GetAbilitiesForUnit(producer);
+    sc2::AvailableAbilities available_abilities = m_bot.Query()->GetAbilitiesForUnit(producer.getUnitPtr());
 
     // quick check if the unit can't do anything it certainly can't build the thing we want
     if (available_abilities.abilities.empty())
@@ -242,7 +242,7 @@ void ProductionManager::drawProductionInformation()
 
     for (auto & unit : m_bot.UnitInfo().getUnits(Players::Self))
     {
-        if (unit->build_progress < 1.0f)
+        if (unit.isBeingConstructed())
         {
             //ss << sc2::UnitTypeToName(unit.unit_type) << " " << unit.build_progress << "\n";
         }

@@ -6,7 +6,7 @@
 
 const int NearBaseLocationTileDistance = 20;
 
-BaseLocation::BaseLocation(CCBot & bot, int baseID, const std::vector<CCUnit> & resources)
+BaseLocation::BaseLocation(CCBot & bot, int baseID, const std::vector<Unit> & resources)
     : m_bot(bot)
     , m_baseID               (baseID)
     , m_isStartLocation      (false)
@@ -29,30 +29,30 @@ BaseLocation::BaseLocation(CCBot & bot, int baseID, const std::vector<CCUnit> & 
         if (Util::IsMineral(resource))
         {
             m_minerals.push_back(resource);
-            m_mineralPositions.push_back(resource->pos);
+            m_mineralPositions.push_back(resource.getPosition());
 
             // add the position of the minerals to the center
-            resourceCenterX += resource->pos.x;
-            resourceCenterY += resource->pos.y;
+            resourceCenterX += resource.getPosition().x;
+            resourceCenterY += resource.getPosition().y;
         }
         else
         {
             m_geysers.push_back(resource);
-            m_geyserPositions.push_back(resource->pos);
+            m_geyserPositions.push_back(resource.getPosition());
 
             // pull the resource center toward the geyser if it exists
-            resourceCenterX += resource->pos.x;
-            resourceCenterY += resource->pos.y;
+            resourceCenterX += resource.getPosition().x;
+            resourceCenterY += resource.getPosition().y;
         }
 
         // set the limits of the base location bounding box
         float resWidth = 1;
         float resHeight = 0.5;
 
-        m_left   = std::min(m_left,   resource->pos.x - resWidth);
-        m_right  = std::max(m_right,  resource->pos.x + resWidth);
-        m_top    = std::max(m_top,    resource->pos.y + resHeight);
-        m_bottom = std::min(m_bottom, resource->pos.y - resHeight);
+        m_left   = std::min(m_left,   resource.getPosition().x - resWidth);
+        m_right  = std::max(m_right,  resource.getPosition().x + resWidth);
+        m_top    = std::max(m_top,    resource.getPosition().y + resHeight);
+        m_bottom = std::min(m_bottom, resource.getPosition().y - resHeight);
     }
 
     // calculate the center of the resources
@@ -77,7 +77,7 @@ BaseLocation::BaseLocation(CCBot & bot, int baseID, const std::vector<CCUnit> & 
     // if this base location position is near our own resource depot, it's our start location
     for (auto & unit : m_bot.GetUnits())
     {
-        if (Util::GetPlayer(unit) == Players::Self && Util::IsTownHall(unit) && containsPosition(unit->pos))
+        if (unit.getPlayer() == Players::Self && Util::IsTownHall(unit) && containsPosition(unit.getPosition()))
         {
             m_isPlayerStartLocation[Players::Self] = true;
             m_isStartLocation = true;
@@ -144,12 +144,12 @@ bool BaseLocation::containsPosition(const CCPosition & pos) const
     return getGroundDistance(pos) < NearBaseLocationTileDistance;
 }
 
-const std::vector<CCUnit> & BaseLocation::getGeysers() const
+const std::vector<Unit> & BaseLocation::getGeysers() const
 {
     return m_geysers;
 }
 
-const std::vector<CCUnit> & BaseLocation::getMinerals() const
+const std::vector<Unit> & BaseLocation::getMinerals() const
 {
     return m_minerals;
 }

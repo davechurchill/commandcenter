@@ -246,13 +246,13 @@ CCTilePosition BuildingPlacer::getRefineryPosition()
             continue;
         }
 
-        CCPosition geyserPos(unit->pos);
+        CCPosition geyserPos(unit.getPosition());
 
         // check to see if it's next to one of our depots
         bool nearDepot = false;
         for (auto & unit : m_bot.UnitInfo().getUnits(Players::Self))
         {
-            if (Util::IsTownHall(unit) && Util::Dist(unit->pos, geyserPos) < 10)
+            if (Util::IsTownHall(unit) && Util::Dist(unit, geyserPos) < 10)
             {
                 nearDepot = true;
             }
@@ -260,12 +260,12 @@ CCTilePosition BuildingPlacer::getRefineryPosition()
 
         if (nearDepot)
         {
-            double homeDistance = Util::Dist(unit->pos, homePosition);
+            double homeDistance = Util::Dist(unit, homePosition);
 
             if (homeDistance < minGeyserDistanceFromHome)
             {
                 minGeyserDistanceFromHome = homeDistance;
-                closestGeyser = unit->pos;
+                closestGeyser = unit.getPosition();
             }
         }
     }

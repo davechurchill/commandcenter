@@ -60,10 +60,12 @@ void MapTools::onStart()
         }
     }
 
-    for (auto & unit : m_bot.GetUnits())
+#ifdef SC2API
+    for (auto & unit : m_bot.Observation()->GetUnits())
     {
         m_maxZ = std::max(unit->pos.z, m_maxZ);
     }
+#endif
 
     computeConnectivity();
 }

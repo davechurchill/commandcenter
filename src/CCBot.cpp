@@ -112,9 +112,9 @@ const TypeData & CCBot::Data(const CCUnitType & type) const
     return m_techTree.getData(type);
 }
 
-const TypeData & CCBot::Data(CCUnit unit) const
+const TypeData & CCBot::Data(const Unit & unit) const
 {
-    return m_techTree.getData(unit->unit_type);
+    return m_techTree.getData(unit.getType());
 }
 
 const TypeData & CCBot::Data(const sc2::UpgradeID & type) const
@@ -150,10 +150,10 @@ int CCBot::GetGas() const
 #endif
 }
 
-CCUnit CCBot::GetUnit(const CCUnitID & tag) const
+Unit CCBot::GetUnit(const CCUnitID & tag) const
 {
 #ifdef SC2API
-    return Observation()->GetUnit(tag);
+    return Unit(Observation()->GetUnit(tag), *(CCBot *)this);
 #else
 
 #endif

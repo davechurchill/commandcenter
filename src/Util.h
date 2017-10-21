@@ -35,7 +35,7 @@ namespace Util
     int GetUnitTypeHeight(const CCUnitType type, const CCBot & bot);
     CCUnitType GetTownHall(const CCRace & race);
     CCUnitType GetSupplyProvider(const CCRace & race);
-    CCPosition CalcCenter(const std::vector<CCUnit> & units);
+    CCPosition CalcCenter(const std::vector<Unit> & units);
 
     std::string     GetNameFromUnitType(const CCUnitType & type);
     CCUnitType      GetUnitTypeFromName(const std::string & name, CCBot & bot);

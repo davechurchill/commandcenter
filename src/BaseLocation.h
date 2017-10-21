@@ -2,6 +2,7 @@
 
 #include "Common.h"
 #include "DistanceMap.h"
+#include "Unit.h"
 #include <map>
 #include <vector>
 
@@ -14,8 +15,8 @@ class BaseLocation
 
     CCPosition                  m_depotPosition;
     CCPosition                  m_centerOfResources;
-    std::vector<CCUnit>         m_geysers;
-    std::vector<CCUnit>         m_minerals;
+    std::vector<Unit>           m_geysers;
+    std::vector<Unit>           m_minerals;
 
     std::vector<CCPosition>     m_mineralPositions;
     std::vector<CCPosition>     m_geyserPositions;
@@ -32,7 +33,7 @@ class BaseLocation
     
 public:
 
-    BaseLocation(CCBot & bot, int baseID, const std::vector<CCUnit> & resources);
+    BaseLocation(CCBot & bot, int baseID, const std::vector<Unit> & resources);
     
     int getGroundDistance(const CCPosition & pos) const;
     bool isStartLocation() const;
@@ -41,8 +42,8 @@ public:
     bool containsPosition(const CCPosition & pos) const;
     const CCPosition & getDepotPosition() const;
     const CCPosition & getPosition() const;
-    const std::vector<CCUnit> & getGeysers() const;
-    const std::vector<CCUnit> & getMinerals() const;
+    const std::vector<Unit> & getGeysers() const;
+    const std::vector<Unit> & getMinerals() const;
     bool isOccupiedByPlayer(CCPlayer player) const;
     bool isExplored() const;
     bool isInResourceBox(int x, int y) const;

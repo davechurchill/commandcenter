@@ -44,9 +44,6 @@
     <ClCompile Include="..\src\BotAssert.cpp">
       <Filter>common</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Micro.cpp">
-      <Filter>micro</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\DistanceMap.cpp">
       <Filter>util</Filter>
     </ClCompile>
@@ -146,9 +143,6 @@
     </ClInclude>
     <ClInclude Include="..\src\Common.h">
       <Filter>common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Micro.h">
-      <Filter>micro</Filter>
     </ClInclude>
     <ClInclude Include="..\src\DistanceMap.h">
       <Filter>util</Filter>

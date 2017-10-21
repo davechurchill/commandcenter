@@ -7,7 +7,7 @@ MicroManager::MicroManager(CCBot & bot)
 {
 }
 
-void MicroManager::setUnits(const std::vector<CCUnit> & u)
+void MicroManager::setUnits(const std::vector<Unit> & u)
 {
     m_units = u;
 }
@@ -23,7 +23,7 @@ void MicroManager::execute(const SquadOrder & inputOrder)
     order = inputOrder;
 
     // Discover enemies within region of interest
-    std::set<CCUnit> nearbyEnemies;
+    std::set<Unit> nearbyEnemies;
 
     // if the order is to defend, we only care about units in the radius of the defense
     if (order.getType() == SquadOrderTypes::Defend)
@@ -49,7 +49,7 @@ void MicroManager::execute(const SquadOrder & inputOrder)
 
         for (auto unit : m_units)
         {
-            BOT_ASSERT(unit, "null unit in attack");
+            BOT_ASSERT(unit.isValid(), "null unit in attack");
 
             for (auto & enemyUnit : m_bot.UnitInfo().getUnits(Players::Enemy))
             {
@@ -61,7 +61,7 @@ void MicroManager::execute(const SquadOrder & inputOrder)
         }
     }
 
-    std::vector<CCUnit> targetUnitTags;
+    std::vector<Unit> targetUnitTags;
     std::copy(nearbyEnemies.begin(), nearbyEnemies.end(), std::back_inserter(targetUnitTags));
 
     // the following block of code attacks all units on the way to the order position
@@ -78,10 +78,10 @@ void MicroManager::execute(const SquadOrder & inputOrder)
         else
         {
             // if this is the an attack squad
-            std::vector<CCUnit> workersRemoved;
-            for (auto enemyUnit : targetUnitTags)
+            std::vector<Unit> workersRemoved;
+            for (auto & enemyUnit : targetUnitTags)
             {
-                BOT_ASSERT(enemyUnit, "null enemy unit target");
+                BOT_ASSERT(enemyUnit.isValid(), "null enemy unit target");
 
                 // if its not a worker add it to the targets
                 if (!Util::IsWorker(enemyUnit))
@@ -94,7 +94,7 @@ void MicroManager::execute(const SquadOrder & inputOrder)
                     for (const BaseLocation * enemyBaseLocation : m_bot.Bases().getOccupiedBaseLocations(Players::Enemy))
                     {
                         // only add it if it's in their region
-                        if (enemyBaseLocation->containsPosition(Util::GetPosition(enemyUnit)))
+                        if (enemyBaseLocation->containsPosition(enemyUnit.getPosition()))
                         {
                             workersRemoved.push_back(enemyUnit);
                         }
@@ -108,7 +108,7 @@ void MicroManager::execute(const SquadOrder & inputOrder)
     }
 }
 
-const std::vector<CCUnit> & MicroManager::getUnits() const
+const std::vector<Unit> & MicroManager::getUnits() const
 {
     return m_units;
 }
@@ -121,28 +121,28 @@ void MicroManager::regroup(const CCPosition & regroupPosition) const
     // for each of the units we have
     for (auto unit : m_units)
     {
-        BOT_ASSERT(unit, "null unit in MicroManager regroup");
+        BOT_ASSERT(unit.isValid(), "null unit in MicroManager regroup");
 
-        int unitDistanceFromBase = m_bot.Map().getGroundDistance(unit->pos, ourBasePosition);
+        int unitDistanceFromBase = m_bot.Map().getGroundDistance(unit.getPosition(), ourBasePosition);
 
         // if the unit is outside the regroup area
         if (unitDistanceFromBase > regroupDistanceFromBase)
         {
-            Micro::SmartMove(unit, ourBasePosition, m_bot);
+            unit.move(ourBasePosition);
         }
-        else if (Util::Dist(unit->pos, regroupPosition) > 4)
+        else if (Util::Dist(unit, regroupPosition) > 4)
         {
             // regroup it
-            Micro::SmartMove(unit, regroupPosition, m_bot);
+            unit.move(regroupPosition);
         }
         else
         {
-            Micro::SmartAttackMove(unit, unit->pos, m_bot);
+            unit.attackMove(unit.getPosition());
         }
     }
 }
 
-void MicroManager::trainSubUnits(CCUnit unit) const
+void MicroManager::trainSubUnits(const Unit & unit) const
 {
     // TODO: something here
 }
