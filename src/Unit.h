@@ -15,6 +15,9 @@ public:
     Unit(CCUnit unit, CCBot & bot);
 
     CCUnit getUnitPtr() const;
+    const CCUnitType & getType() const;
+    const TypeData & type() const;
+    const CCRace & getRace() const;
 
     const CCPosition & getPosition() const;
     CCHealth getHitPoints() const;

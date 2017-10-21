@@ -44,69 +44,10 @@ CCRace Util::GetRaceFromString(const std::string & raceIn)
 #endif
 }
 
-CCRace Util::GetRace(CCUnit unit, CCBot & bot)
+bool Util::IsTownHall(const Unit & unit)
 {
-    return GetRace(GetType(unit), bot);
-}
-
-CCRace Util::GetRace(const CCUnitType & type, CCBot & bot)
-{
-#ifdef SC2API
-    return bot.Observation()->GetUnitTypeData()[type].race;
-#else
-    return type.getRace();
-#endif
-}
-
-CCUnitType Util::GetType(CCUnit unit)
-{
-#ifdef SC2API
-    return unit->unit_type;
-#else
-    return unit->getType();
-#endif
-}
-
-CCUnitID Util::GetID(CCUnit unit)
-{
-#ifdef SC2API
-    return unit->tag;
-#else
-    return unit->getID();
-#endif
-}
-
-CCHealth Util::GetHealth(CCUnit unit)
-{
-#ifdef SC2API
-    return unit->health;
-#else
-    return unit->getHitPoints();
-#endif
-}
-
-CCHealth Util::GetShield(CCUnit unit)
-{
-#ifdef SC2API
-    return unit->shield;
-#else
-    return unit->getShields();
-#endif
-}
-
-CCPosition Util::GetPosition(CCUnit unit)
-{
-#ifdef SC2API
-    return unit->pos;
-#else
-    return unit->getPosition();
-#endif
-}
-
-bool Util::IsTownHall(CCUnit unit)
-{
-    BOT_ASSERT(unit, "Unit pointer was null");
-    return IsTownHallType(GetType(unit));
+    BOT_ASSERT(unit.isValid(), "Unit pointer was null");
+    return IsTownHallType(unit.getType());
 }
 
 bool Util::IsTownHallType(const CCUnitType & type)
@@ -129,10 +70,10 @@ bool Util::IsTownHallType(const CCUnitType & type)
 #endif
 }
 
-bool Util::IsRefinery(CCUnit unit)
+bool Util::IsRefinery(const Unit & unit)
 {
-    BOT_ASSERT(unit, "Unit pointer was null");
-    return IsRefineryType(GetType(unit));
+    BOT_ASSERT(unit.isValid(), "Unit pointer was null");
+    return IsRefineryType(unit.getType());
 }
 
 bool Util::IsRefineryType(const CCUnitType & type)
@@ -150,10 +91,10 @@ bool Util::IsRefineryType(const CCUnitType & type)
 #endif
 }
 
-bool Util::IsGeyser(CCUnit unit)
+bool Util::IsGeyser(const Unit & unit)
 {
-    BOT_ASSERT(unit, "Unit pointer was null");
-    return IsGeyserType(GetType(unit));
+    BOT_ASSERT(unit.isValid(), "Unit pointer was null");
+    return IsGeyserType(unit.getType());
 }
 
 bool Util::IsGeyserType(const CCUnitType & type)
@@ -171,10 +112,10 @@ bool Util::IsGeyserType(const CCUnitType & type)
 #endif
 }
 
-bool Util::IsMineral(CCUnit unit)
+bool Util::IsMineral(const Unit & unit)
 {
-    BOT_ASSERT(unit, "Unit pointer was null");
-    return IsMineralType(GetType(unit));
+    BOT_ASSERT(unit.isValid(), "Unit pointer was null");
+    return IsMineralType(unit.getType());
 }
 
 bool Util::IsMineralType(const CCUnitType & type)
@@ -193,10 +134,10 @@ bool Util::IsMineralType(const CCUnitType & type)
 #endif
 }
 
-bool Util::IsWorker(CCUnit unit)
+bool Util::IsWorker(const Unit & unit)
 {
-    BOT_ASSERT(unit, "Unit pointer was null");
-    return IsWorkerType(GetType(unit));
+    BOT_ASSERT(unit.isValid(), "Unit pointer was null");
+    return IsWorkerType(unit.getType());
 }
 
 bool Util::IsWorkerType(const CCUnitType & type)
@@ -243,18 +184,6 @@ CCUnitType Util::GetTownHall(const sc2::Race & race)
 #else
     return race.getResourceDepot();
 #endif
-}
-
-bool Util::IsCompleted(CCUnit unit)
-{
-    BOT_ASSERT(unit, "Unit pointer was null");
-    return unit->build_progress == 1.0f;
-}
-
-bool Util::IsIdle(CCUnit unit)
-{
-    BOT_ASSERT(unit, "Unit pointer was null");
-    return unit->orders.empty();
 }
 
 int Util::GetUnitTypeWidth(const CCUnitType type, const CCBot & bot)
@@ -304,10 +233,10 @@ CCPosition Util::CalcCenter(const std::vector<CCUnit> & units)
     return CCPosition(cx / units.size(), cy / units.size());
 }
 
-bool Util::IsDetector(CCUnit unit)
+bool Util::IsDetector(const Unit & unit)
 {
-    BOT_ASSERT(unit, "Unit pointer was null");
-    return IsDetectorType(unit->unit_type);
+    BOT_ASSERT(unit.isValid(), "Unit pointer was null");
+    return IsDetectorType(unit.getType());
 }
 
 CCTilePosition Util::GetTilePosition(const CCPosition & pos)
@@ -367,27 +296,6 @@ bool Util::IsDetectorType(const CCUnitType & type)
     }
 }
 
-CCPlayer Util::GetPlayer(CCUnit unit)
-{
-    BOT_ASSERT(unit, "Unit pointer was null");
-    if (unit->alliance == sc2::Unit::Alliance::Self)
-    {
-        return 0;
-    }
-
-    if (unit->alliance == sc2::Unit::Alliance::Enemy)
-    {
-        return 1;
-    }
-
-    if (unit->alliance == sc2::Unit::Alliance::Neutral)
-    {
-        return 2;
-    }
-
-    return -1;
-}
-
 bool Util::IsCombatUnitType(const CCUnitType & type, CCBot & bot)
 {
     if (IsWorkerType(type)) { return false; }
@@ -400,16 +308,16 @@ bool Util::IsCombatUnitType(const CCUnitType & type, CCBot & bot)
     return true;
 }
 
-bool Util::IsCombatUnit(CCUnit unit, CCBot & bot)
+bool Util::IsCombatUnit(const Unit & unit, CCBot & bot)
 {
-    BOT_ASSERT(unit, "Unit pointer was null");
-    return IsCombatUnitType(GetType(unit), bot);
+    BOT_ASSERT(unit.isValid(), "Unit pointer was null");
+    return IsCombatUnitType(unit.getType(), bot);
 }
 
-bool Util::IsSupplyProvider(CCUnit unit)
+bool Util::IsSupplyProvider(const Unit & unit)
 {
-    BOT_ASSERT(unit, "Unit pointer was null");
-    return IsSupplyProviderType(unit->unit_type);
+    BOT_ASSERT(unit.isValid(), "Unit pointer was null");
+    return IsSupplyProviderType(unit.getType());
 }
 
 bool Util::IsSupplyProviderType(const CCUnitType & type)
@@ -432,14 +340,14 @@ float Util::Dist(const CCPosition & p1, const CCPosition & p2)
     return sqrtf(Util::DistSq(p1,p2));
 }
 
-float Util::Dist(CCUnit unit, const CCPosition & p2)
+float Util::Dist(const Unit & unit, const CCPosition & p2)
 {
-    return Dist(GetPosition(unit), p2);
+    return Dist(unit.getPosition(), p2);
 }
 
-float Util::Dist(CCUnit unit1, CCUnit unit2)
+float Util::Dist(const Unit & unit1, const Unit & unit2)
 {
-    return Dist(GetPosition(unit1), GetPosition(unit2));
+    return Dist(unit1.getPosition(), unit2.getPosition());
 }
 
 float Util::DistSq(const CCPosition & p1, const CCPosition & p2)
@@ -514,10 +422,11 @@ sc2::AbilityID Util::GetAbilityFromName(const std::string & name, CCBot & bot)
 
 // checks where a given unit can make a given unit type now
 // this is done by iterating its legal abilities for the build command to make the unit
-bool Util::UnitCanBuildTypeNow(CCUnit unit, const CCUnitType & type, CCBot & m_bot)
+bool Util::UnitCanBuildTypeNow(const Unit & unit, const CCUnitType & type, CCBot & m_bot)
 {
-    BOT_ASSERT(unit, "Unit pointer was null");
-    sc2::AvailableAbilities available_abilities = m_bot.Query()->GetAbilitiesForUnit(unit);
+#ifdef SC2API
+    BOT_ASSERT(unit.isValid(), "Unit pointer was null");
+    sc2::AvailableAbilities available_abilities = m_bot.Query()->GetAbilitiesForUnit(unit.getUnitPtr());
     
     // quick check if the unit can't do anything it certainly can't build the thing we want
     if (available_abilities.abilities.empty()) 
@@ -536,6 +445,8 @@ bool Util::UnitCanBuildTypeNow(CCUnit unit, const CCUnitType & type, CCBot & m_b
             }
         }
     }
+#else
 
+#endif
     return false;
 }

@@ -18,6 +18,25 @@ CCUnit Unit::getUnitPtr() const
     return m_unit;
 }
 
+const CCRace & Unit::getRace() const
+{
+#ifdef SC2API
+    return m_bot.Observation()->GetUnitTypeData()[getType()].race;
+#else
+    return getType().getRace();
+#endif
+}
+
+const CCUnitType & Unit::getType() const
+{
+    BOT_ASSERT(isValid(), "Unit is not valid");
+#ifdef SC2API
+    return m_unit->unit_type;
+#else
+    return m_unit->getType();
+#endif
+}
+
 const CCPosition & Unit::getPosition() const
 {
     BOT_ASSERT(isValid(), "Unit is not valid");

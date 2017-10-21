@@ -69,7 +69,7 @@ void CCBot::setUnits()
     Control()->GetObservation();
     for (auto & unit : Observation()->GetUnits())
     {
-        m_allUnits.push_back(unit);    
+        m_allUnits.push_back(Unit(unit, *this));    
     }
 #else
 
@@ -159,7 +159,7 @@ CCUnit CCBot::GetUnit(const CCUnitID & tag) const
 #endif
 }
 
-const std::vector<CCUnit> & CCBot::GetUnits() const
+const std::vector<Unit> & CCBot::GetUnits() const
 {
     return m_allUnits;
 }

@@ -12,6 +12,7 @@
 #include "StrategyManager.h"
 #include "TechTree.h"
 #include "BuildType.h"
+#include "Unit.h"
 
 class CCBot : public sc2::Agent 
 {
@@ -26,7 +27,7 @@ class CCBot : public sc2::Agent
     TechTree                m_techTree;
     GameCommander           m_gameCommander;
 
-    std::vector<CCUnit>     m_allUnits;
+    std::vector<Unit>       m_allUnits;
 
     void setUnits();
     void OnError(const std::vector<sc2::ClientError> & client_errors, 
@@ -54,7 +55,7 @@ public:
     int GetMinerals() const;
     int GetGas() const;
     CCUnit GetUnit(const CCUnitID & tag) const;
-    const std::vector<CCUnit> & GetUnits() const;
+    const std::vector<Unit> & GetUnits() const;
     const std::vector<CCPosition> & GetEnemyStartLocations() const;
 
 #ifdef SC2API
