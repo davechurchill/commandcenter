@@ -55,6 +55,8 @@ namespace Util
     sc2::AbilityID  GetAbilityFromName(const std::string & name, CCBot & bot);
 #endif
 
+    float Dist(CCUnit unit, const CCPosition & p2);
+    float Dist(CCUnit unit1, CCUnit unit2);
     float Dist(const CCPosition & p1, const CCPosition & p2);
     float DistSq(const CCPosition & p1, const CCPosition & p2);
     

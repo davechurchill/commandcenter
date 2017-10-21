@@ -308,6 +308,7 @@
     <ClCompile Include="..\src\SquadOrder.cpp" />
     <ClCompile Include="..\src\StrategyManager.cpp" />
     <ClCompile Include="..\src\TechTree.cpp" />
+    <ClCompile Include="..\src\Unit.cpp" />
     <ClCompile Include="..\src\UnitData.cpp" />
     <ClCompile Include="..\src\UnitInfoManager.cpp" />
     <ClCompile Include="..\src\Util.cpp" />
@@ -345,6 +346,7 @@
     <ClInclude Include="..\src\StrategyManager.h" />
     <ClInclude Include="..\src\TechTree.h" />
     <ClInclude Include="..\src\Timer.hpp" />
+    <ClInclude Include="..\src\Unit.h" />
     <ClInclude Include="..\src\UnitData.h" />
     <ClInclude Include="..\src\UnitInfoManager.h" />
     <ClInclude Include="..\src\Util.h" />

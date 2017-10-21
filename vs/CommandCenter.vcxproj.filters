@@ -97,6 +97,9 @@
     <ClCompile Include="..\src\TechTree.cpp">
       <Filter>util</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Unit.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\BaseLocationManager.h">
@@ -198,6 +201,9 @@
       <Filter>macro</Filter>
     </ClInclude>
     <ClInclude Include="..\src\TechTree.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Unit.h">
       <Filter>util</Filter>
     </ClInclude>
   </ItemGroup>

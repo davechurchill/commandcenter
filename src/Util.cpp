@@ -432,6 +432,16 @@ float Util::Dist(const CCPosition & p1, const CCPosition & p2)
     return sqrtf(Util::DistSq(p1,p2));
 }
 
+float Util::Dist(CCUnit unit, const CCPosition & p2)
+{
+    return Dist(GetPosition(unit), p2);
+}
+
+float Util::Dist(CCUnit unit1, CCUnit unit2)
+{
+    return Dist(GetPosition(unit1), GetPosition(unit2));
+}
+
 float Util::DistSq(const CCPosition & p1, const CCPosition & p2)
 {
     float dx = p1.x - p2.x;

@@ -30,7 +30,7 @@ void MicroManager::execute(const SquadOrder & inputOrder)
     {
         for (auto & enemyUnit : m_bot.UnitInfo().getUnits(Players::Enemy))
         {
-            if (Util::Dist(enemyUnit->pos, order.getPosition()) < order.getRadius())
+            if (Util::Dist(enemyUnit, order.getPosition()) < order.getRadius())
             {
                 nearbyEnemies.insert(enemyUnit);
             }
@@ -41,7 +41,7 @@ void MicroManager::execute(const SquadOrder & inputOrder)
     {
         for (auto & enemyUnit : m_bot.UnitInfo().getUnits(Players::Enemy))
         {
-            if (Util::Dist(enemyUnit->pos, order.getPosition()) < order.getRadius())
+            if (Util::Dist(enemyUnit, order.getPosition()) < order.getRadius())
             {
                 nearbyEnemies.insert(enemyUnit);
             }
@@ -53,7 +53,7 @@ void MicroManager::execute(const SquadOrder & inputOrder)
 
             for (auto & enemyUnit : m_bot.UnitInfo().getUnits(Players::Enemy))
             {
-                if (Util::Dist(enemyUnit->pos, unit->pos) < order.getRadius())
+                if (Util::Dist(enemyUnit, unit) < order.getRadius())
                 {
                     nearbyEnemies.insert(enemyUnit);
                 }
@@ -94,7 +94,7 @@ void MicroManager::execute(const SquadOrder & inputOrder)
                     for (const BaseLocation * enemyBaseLocation : m_bot.Bases().getOccupiedBaseLocations(Players::Enemy))
                     {
                         // only add it if it's in their region
-                        if (enemyBaseLocation->containsPosition(enemyUnit->pos))
+                        if (enemyBaseLocation->containsPosition(Util::GetPosition(enemyUnit)))
                         {
                             workersRemoved.push_back(enemyUnit);
                         }
