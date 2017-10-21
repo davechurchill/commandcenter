@@ -107,14 +107,14 @@ const UnitInfoManager & CCBot::UnitInfo() const
     return m_unitInfo;
 }
 
-const UnitTypeData & CCBot::Data(const CCUnitType & type) const
+const UnitTypeData & CCBot::Data(const UnitType & type) const
 {
     return m_techTree.getData(type);
 }
 
 const UnitTypeData & CCBot::Data(const Unit & unit) const
 {
-    return m_techTree.getData(unit.getAPIUnitType());
+    return m_techTree.getData(unit.getType());
 }
 
 const UnitTypeData & CCBot::Data(const sc2::UpgradeID & type) const

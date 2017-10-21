@@ -25,7 +25,7 @@ void BuildingData::addBuilding(const Building & b)
     _buildings.push_back(b);
 }
 
-bool BuildingData::isBeingBuilt(CCUnitType type)
+bool BuildingData::isBeingBuilt(UnitType type)
 {
     for (auto & b : _buildings)
     {

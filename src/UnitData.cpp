@@ -30,7 +30,7 @@ void UnitData::updateUnit(const Unit & unit)
 
     if (firstSeen)
     {
-        if (std::find(m_numUnits.begin(), m_numUnits.end(), ui.type) == m_numUnits.end())
+        if (m_numUnits.find(ui.type) == m_numUnits.end())
         {
             m_numUnits[ui.type] = 0;
         }
@@ -82,7 +82,7 @@ int UnitData::getMineralsLost() const
 
 int UnitData::getNumUnits(const UnitType & t) const
 {
-    if (std::find(m_numUnits.begin(), m_numUnits.end(), t) == m_numUnits.end())
+    if (m_numUnits.find(t) == m_numUnits.end())
     {
         return 0;
     }
@@ -92,7 +92,7 @@ int UnitData::getNumUnits(const UnitType & t) const
 
 int UnitData::getNumDeadUnits(const UnitType & t) const
 {
-    if (std::find(m_numDeadUnits.begin(), m_numDeadUnits.end(), t) == m_numDeadUnits.end())
+    if (m_numDeadUnits.find(t) == m_numDeadUnits.end())
     {
         return 0;
     }

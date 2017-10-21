@@ -24,9 +24,9 @@ BaseLocation::BaseLocation(CCBot & bot, int baseID, const std::vector<Unit> & re
     float resourceCenterY = 0;
 
     // add each of the resources to its corresponding container
-    for (auto resource : resources)
+    for (auto & resource : resources)
     {
-        if (Util::IsMineral(resource))
+        if (resource.getType().isMineral())
         {
             m_minerals.push_back(resource);
             m_mineralPositions.push_back(resource.getPosition());
@@ -77,7 +77,7 @@ BaseLocation::BaseLocation(CCBot & bot, int baseID, const std::vector<Unit> & re
     // if this base location position is near our own resource depot, it's our start location
     for (auto & unit : m_bot.GetUnits())
     {
-        if (unit.getPlayer() == Players::Self && Util::IsTownHall(unit) && containsPosition(unit.getPosition()))
+        if (unit.getPlayer() == Players::Self && unit.getType().isResourceDepot() && containsPosition(unit.getPosition()))
         {
             m_isPlayerStartLocation[Players::Self] = true;
             m_isStartLocation = true;

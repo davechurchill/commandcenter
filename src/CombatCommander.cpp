@@ -92,9 +92,9 @@ void CombatCommander::updateAttackSquads()
         BOT_ASSERT(unit.isValid(), "null unit in combat units");
 
         // get every unit of a lower priority and put it into the attack squad
-        if (!Util::IsWorker(unit) 
-            && !(unit.getType() == sc2::UNIT_TYPEID::ZERG_OVERLORD) 
-            && !(unit.getType() == sc2::UNIT_TYPEID::ZERG_QUEEN) 
+        if (!unit.getType().isWorker() 
+            && !(unit.getType().getAPIUnitType() == sc2::UNIT_TYPEID::ZERG_OVERLORD) 
+            && !(unit.getType().getAPIUnitType() == sc2::UNIT_TYPEID::ZERG_QUEEN) 
             && m_squadData.canAssignUnitToSquad(unit, mainAttackSquad))
         {
             m_squadData.assignUnitToSquad(unit, mainAttackSquad);
@@ -130,7 +130,7 @@ void CombatCommander::updateScoutDefenseSquad()
     }
 
     // if there's an enemy worker in our region then assign someone to chase him
-    bool assignScoutDefender = (enemyUnitsInRegion.size() == 1) && Util::IsWorker(enemyUnitsInRegion[0]);
+    bool assignScoutDefender = (enemyUnitsInRegion.size() == 1) && enemyUnitsInRegion[0].getType().isWorker();
 
     // if our current squad is empty and we should assign a worker, do it
     if (scoutDefenseSquad.isEmpty() && assignScoutDefender)
@@ -160,7 +160,7 @@ void CombatCommander::updateScoutDefenseSquad()
             BOT_ASSERT(unit.isValid(), "null unit in scoutDefenseSquad");
 
             unit.stop();
-            if (Util::IsWorker(unit))
+            if (unit.getType().isWorker())
             {
                 m_bot.Workers().finishedWithWorker(unit);
             }
@@ -197,7 +197,7 @@ void CombatCommander::updateDefenseSquads()
         for (auto & unit : m_bot.UnitInfo().getUnits(Players::Enemy))
         {
             // if it's an overlord, don't worry about it for defense, we don't care what they see
-            if (unit.getType() == sc2::UNIT_TYPEID::ZERG_OVERLORD)
+            if (unit.getType().getAPIUnitType() == sc2::UNIT_TYPEID::ZERG_OVERLORD)
             {
                 continue;
             }
@@ -213,7 +213,7 @@ void CombatCommander::updateDefenseSquads()
         {
             BOT_ASSERT(unit.isValid(), "null enemyt unit in region");
 
-            if (Util::IsWorker(unit))
+            if (unit.getType().isWorker())
             {
                 enemyUnitsInRegion.erase(std::remove(enemyUnitsInRegion.begin(), enemyUnitsInRegion.end(), unit), enemyUnitsInRegion.end());
                 break;
@@ -415,7 +415,7 @@ CCPosition CombatCommander::getMainAttackLocation()
     // Third choice: Attack visible enemy units that aren't overlords
     for (auto & enemyUnit : m_bot.UnitInfo().getUnits(Players::Enemy))
     {
-        if (enemyUnit.getType() != sc2::UNIT_TYPEID::ZERG_OVERLORD)
+        if (enemyUnit.getType().getAPIUnitType() != sc2::UNIT_TYPEID::ZERG_OVERLORD)
         {
             return enemyUnit.getPosition();
         }
@@ -435,7 +435,7 @@ Unit CombatCommander::findClosestWorkerTo(std::vector<Unit> & unitsToAssign, con
     {
         BOT_ASSERT(unit.isValid(), "unit to assign was null");
 
-        if (!Util::IsWorker(unit))
+        if (!unit.getType().isWorker())
         {
             continue;
         }

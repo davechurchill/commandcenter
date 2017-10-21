@@ -108,9 +108,9 @@ bool GameCommander::shouldSendInitialScout()
 
     switch (m_bot.GetPlayerRace(Players::Self))
     {
-        case sc2::Race::Terran:  return m_bot.UnitInfo().getUnitTypeCount(Players::Self, sc2::UNIT_TYPEID::TERRAN_SUPPLYDEPOT, true) > 0;
-        case sc2::Race::Protoss: return m_bot.UnitInfo().getUnitTypeCount(Players::Self, sc2::UNIT_TYPEID::PROTOSS_PYLON, true) > 0;
-        case sc2::Race::Zerg:    return m_bot.UnitInfo().getUnitTypeCount(Players::Self, sc2::UNIT_TYPEID::ZERG_SPAWNINGPOOL, true) > 0;
+        case sc2::Race::Terran:  return m_bot.UnitInfo().getUnitTypeCount(Players::Self, UnitType(sc2::UNIT_TYPEID::TERRAN_SUPPLYDEPOT, m_bot), true) > 0;
+        case sc2::Race::Protoss: return m_bot.UnitInfo().getUnitTypeCount(Players::Self, UnitType(sc2::UNIT_TYPEID::PROTOSS_PYLON, m_bot), true) > 0;
+        case sc2::Race::Zerg:    return m_bot.UnitInfo().getUnitTypeCount(Players::Self, UnitType(sc2::UNIT_TYPEID::ZERG_SPAWNINGPOOL, m_bot), true) > 0;
         default: return false;
     }
 }
@@ -122,7 +122,7 @@ void GameCommander::setCombatUnits()
     {
         BOT_ASSERT(unit.isValid(), "Have a null unit in our valid units\n");
 
-        if (!isAssigned(unit) && Util::IsCombatUnitType(unit.getType(), m_bot))
+        if (!isAssigned(unit) && unit.getType().isCombatUnit())
         {
             assignUnit(unit, m_combatUnits);
         }

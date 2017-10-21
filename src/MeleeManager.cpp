@@ -23,8 +23,8 @@ void MeleeManager::assignTargets(const std::vector<Unit> & targets)
     {
         if (!target.isValid()) { continue; }
         if (target.isFlying()) { continue; }
-        if (target.getType() == sc2::UNIT_TYPEID::ZERG_EGG) { continue; }
-        if (target.getType() == sc2::UNIT_TYPEID::ZERG_LARVA) { continue; }
+        if (target.getType().getAPIUnitType() == sc2::UNIT_TYPEID::ZERG_EGG) { continue; }
+        if (target.getType().getAPIUnitType() == sc2::UNIT_TYPEID::ZERG_LARVA) { continue; }
 
         meleeUnitTargets.push_back(target);
     }
@@ -106,12 +106,12 @@ int MeleeManager::getAttackPriority(Unit attacker, const Unit & unit)
 {
     BOT_ASSERT(unit.isValid(), "null unit in getAttackPriority");
 
-    if (Util::IsCombatUnit(unit, m_bot))
+    if (unit.getType().isCombatUnit())
     {
         return 10;
     }
 
-    if (Util::IsWorker(unit))
+    if (unit.getType().isWorker())
     {
         return 9;
     }

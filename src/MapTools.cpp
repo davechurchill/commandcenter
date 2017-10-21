@@ -405,7 +405,7 @@ bool MapTools::isBuildable(int tileX, int tileY) const
     return m_buildable[tileX][tileY];
 }
 
-bool MapTools::canBuildTypeAtPosition(int tileX, int tileY, CCUnitType type) const
+bool MapTools::canBuildTypeAtPosition(int tileX, int tileY, const UnitType & type) const
 {
     return m_bot.Query()->Placement(m_bot.Data(type).buildAbility, CCPosition((float)tileX, (float)tileY));
 }

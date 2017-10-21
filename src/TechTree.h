@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Common.h"
+#include "UnitType.h"
 
 class CCBot;
 class BuildType;
@@ -21,15 +22,15 @@ struct UnitTypeData
     bool                            isAddon         = false;
     sc2::AbilityID                  buildAbility    = 0;     // the ability that creates this item
     sc2::AbilityID                  warpAbility     = 0;      // the ability that creates this item via warp-in
-    std::vector<CCUnitType>         whatBuilds;       // any of these units can build the item
-    std::vector<CCUnitType>         requiredUnits;    // owning ONE of these is required to make
+    std::vector<sc2::UnitTypeID>           whatBuilds;       // any of these units can build the item
+    std::vector<sc2::UnitTypeID>           requiredUnits;    // owning ONE of these is required to make
     std::vector<sc2::UpgradeID>     requiredUpgrades; // having ALL of these is required to make
 };
 
 class TechTree
 {
     CCBot & m_bot;
-    std::map<CCUnitType, UnitTypeData> m_unitTypeData;
+    std::map<sc2::UnitTypeID, UnitTypeData> m_unitTypeData;
     std::map<sc2::UpgradeID, UnitTypeData>  m_upgradeData;
 
     void initUnitTypeData();
@@ -42,7 +43,7 @@ public:
     TechTree(CCBot & bot);
     void onStart();
 
-    const UnitTypeData & getData(const CCUnitType & type) const;
+    const UnitTypeData & getData(const UnitType & type) const;
     const UnitTypeData & getData(const sc2::UpgradeID & type)  const;
     const UnitTypeData & getData(const BuildType & type)       const;
 };

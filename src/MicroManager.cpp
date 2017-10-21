@@ -84,7 +84,7 @@ void MicroManager::execute(const SquadOrder & inputOrder)
                 BOT_ASSERT(enemyUnit.isValid(), "null enemy unit target");
 
                 // if its not a worker add it to the targets
-                if (!Util::IsWorker(enemyUnit))
+                if (!enemyUnit.getType().isWorker())
                 {
                     workersRemoved.push_back(enemyUnit);
                 }

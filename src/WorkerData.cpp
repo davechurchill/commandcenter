@@ -18,7 +18,7 @@ void WorkerData::updateAllWorkerData()
     // check all our units and add new workers if we find them
     for (auto & unit : m_bot.UnitInfo().getUnits(Players::Self))
     {
-        if (Util::IsWorker(unit))
+        if (unit.getType().isWorker())
         {
             updateWorker(unit);
         }
@@ -182,9 +182,9 @@ Unit WorkerData::getMineralToMine(const Unit & unit) const
     Unit bestMineral;
     double bestDist = 100000;
 
-    for (auto mineral : m_bot.GetUnits())
+    for (auto & mineral : m_bot.GetUnits())
     {
-        if (!Util::IsMineral(mineral)) continue;
+        if (!mineral.getType().isMineral()) continue;
 
         double dist = Util::Dist(mineral, unit);
 
@@ -212,7 +212,7 @@ Unit WorkerData::getWorkerDepot(const Unit & unit) const
 
 int WorkerData::getNumAssignedWorkers(const Unit & unit)
 {
-    if (Util::IsTownHall(unit))
+    if (unit.getType().isResourceDepot())
     {
         auto it = m_depotWorkerCount.find(unit);
 
@@ -222,7 +222,7 @@ int WorkerData::getNumAssignedWorkers(const Unit & unit)
             return it->second;
         }
     }
-    else if (Util::IsRefinery(unit))
+    else if (unit.getType().isResourceDepot())
     {
         auto it = m_refineryWorkerCount.find(unit);
 

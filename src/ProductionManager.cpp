@@ -105,7 +105,7 @@ Unit ProductionManager::getProducer(const BuildType & type, CCPosition closestTo
     for (auto unit : m_bot.UnitInfo().getUnits(Players::Self))
     {
         // reasons a unit can not train the desired type
-        if (std::find(producerTypes.begin(), producerTypes.end(), unit.getType()) == producerTypes.end()) { continue; }
+        if (std::find(producerTypes.begin(), producerTypes.end(), unit.getType().getAPIUnitType()) == producerTypes.end()) { continue; }
         if (!unit.isCompleted()) { continue; }
         if (m_bot.Data(unit).isBuilding && unit.isTraining()) { continue; }
         if (unit.isFlying()) { continue; }

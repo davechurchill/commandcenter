@@ -4,7 +4,7 @@ Building::Building()
     : desiredPosition   (0,0)
     , finalPosition     (0,0)
     , position          (0,0)
-    , type              (0)
+    , type              ()
     , buildingUnit      ()
     , builderUnit       ()
     , lastOrderFrame    (0)
@@ -14,7 +14,7 @@ Building::Building()
 {} 
 
 // constructor we use most often
-Building::Building(CCUnitType t, CCTilePosition desired)
+Building::Building(UnitType t, CCTilePosition desired)
     : desiredPosition   (desired)
     , finalPosition     (0,0)
     , position          (0,0)

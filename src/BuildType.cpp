@@ -6,7 +6,7 @@ BuildType::BuildType()
     : m_type        (BuildTypes::None)
     , m_name        ("BuildType")
     , m_race        (sc2::Race::Random)
-    , m_unitType    (0)
+    , m_unitType    ()
     , m_upgrade     (0)
 {
 }
@@ -17,7 +17,7 @@ BuildType::BuildType(const std::string & name, CCBot & bot)
     m_name = name;
 
     m_unitType = Util::GetUnitTypeFromName(m_name, bot);
-    if (m_unitType)
+    if (m_unitType.isValid())
     {
         m_type = BuildTypes::Unit;
         return;
@@ -33,7 +33,7 @@ BuildType::BuildType(const std::string & name, CCBot & bot)
     BOT_ASSERT(false, "Could not find BuildType with name: %s", name.c_str());
 }
 
-BuildType::BuildType(const CCUnitType & unitType)
+BuildType::BuildType(const UnitType & unitType)
 {
     m_type          = BuildTypes::Unit;
     m_unitType      = unitType;
@@ -65,7 +65,7 @@ const sc2::Race & BuildType::getRace() const
     return m_race;
 }
 
-const CCUnitType & BuildType::getUnitTypeID() const
+const UnitType & BuildType::getUnitTypeID() const
 {
     return m_unitType;
 }

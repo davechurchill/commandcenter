@@ -21,11 +21,11 @@ void BaseLocationManager::onStart()
     
     // stores each cluster of resources based on some ground distance
     std::vector<std::vector<Unit>> resourceClusters;
-    for (auto mineral : m_bot.GetUnits())
+    for (auto & mineral : m_bot.GetUnits())
     {
         // skip minerals that don't have more than 100 starting minerals
         // these are probably stupid map-blocking minerals to confuse us
-        if (!Util::IsMineral(mineral))
+        if (!mineral.getType().isMineral())
         {
             continue;
         }
@@ -59,7 +59,7 @@ void BaseLocationManager::onStart()
     // add geysers only to existing resource clusters
     for (auto & geyser : m_bot.GetUnits())
     {
-        if (!Util::IsGeyser(geyser))
+        if (!geyser.getType().isGeyser())
         {
             continue;
         }

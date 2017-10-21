@@ -42,7 +42,7 @@ void BuildingManager::onFrame()
     drawBuildingInformation();
 }
 
-bool BuildingManager::isBeingBuilt(CCUnitType type)
+bool BuildingManager::isBeingBuilt(UnitType type)
 {
     for (auto & b : m_buildings)
     {
@@ -96,7 +96,7 @@ void BuildingManager::assignWorkersToUnassignedBuildings()
 
         BOT_ASSERT(!b.builderUnit.isValid(), "Error: Tried to assign a builder to a building that already had one ");
 
-        if (m_debugMode) { printf("Assigning Worker To: %s", sc2::UnitTypeToName(b.type)); }
+        if (m_debugMode) { printf("Assigning Worker To: %s", b.type.getName().c_str()); }
 
         // grab a worker unit from WorkerManager which is closest to this final position
         CCTilePosition testLocation = getBuildingLocation(b);
@@ -116,7 +116,7 @@ void BuildingManager::assignWorkersToUnassignedBuildings()
         }
 
         // reserve this building's space
-        m_buildingPlacer.reserveTiles((int)b.finalPosition.x, (int)b.finalPosition.y, Util::GetUnitTypeWidth(b.type, m_bot), Util::GetUnitTypeHeight(b.type, m_bot));
+        m_buildingPlacer.reserveTiles((int)b.finalPosition.x, (int)b.finalPosition.y, b.type.tileWidth(), b.type.tileHeight());
 
         b.status = BuildingStatus::Assigned;
     }
@@ -171,13 +171,13 @@ void BuildingManager::constructAssignedBuildings()
             else
             {
                 // if it's a refinery, the build command has to be on the geyser unit tag
-                if (Util::IsRefineryType(b.type))
+                if (b.type.isRefinery())
                 {
                     // first we find the geyser at the desired location
                     Unit geyser;
                     for (auto unit : m_bot.GetUnits())
                     {
-                        if (Util::IsGeyser(unit) && Util::Dist(Util::GetPosition(b.finalPosition), unit.getPosition()) < 3)
+                        if (unit.getType().isGeyser() && Util::Dist(Util::GetPosition(b.finalPosition), unit.getPosition()) < 3)
                         {
                             geyser = unit;
                             break;
@@ -261,7 +261,7 @@ void BuildingManager::checkForStartedConstruction()
                 b.status = BuildingStatus::UnderConstruction;
 
                 // free this space
-                m_buildingPlacer.freeTiles((int)b.finalPosition.x, (int)b.finalPosition.y, Util::GetUnitTypeWidth(b.type, m_bot), Util::GetUnitTypeHeight(b.type, m_bot));
+                m_buildingPlacer.freeTiles((int)b.finalPosition.x, (int)b.finalPosition.y, b.type.tileWidth(), b.type.tileHeight());
 
                 // only one building will match
                 break;
@@ -304,7 +304,7 @@ void BuildingManager::checkForCompletedBuildings()
 }
 
 // add a new building to be constructed
-void BuildingManager::addBuildingTask(const CCUnitType & type, const CCTilePosition & desiredPosition)
+void BuildingManager::addBuildingTask(const UnitType & type, const CCTilePosition & desiredPosition)
 {
     m_reservedMinerals  += m_bot.Data(type).mineralCost;
     m_reservedGas	    += m_bot.Data(type).gasCost;
@@ -368,32 +368,32 @@ void BuildingManager::drawBuildingInformation()
         
         if (b.status == BuildingStatus::Unassigned)
         {
-            ss << "Unassigned " << sc2::UnitTypeToName(b.type) << "    " << getBuildingWorkerCode(b) << "\n";
+            ss << "Unassigned " << b.type.getName() << "    " << getBuildingWorkerCode(b) << "\n";
         }
         else if (b.status == BuildingStatus::Assigned)
         {
-            ss << "Assigned " << sc2::UnitTypeToName(b.type) << "    " << b.builderUnit.getID() << " " << getBuildingWorkerCode(b) << " (" << b.finalPosition.x << "," << b.finalPosition.y << ")\n";
+            ss << "Assigned " << b.type.getName() << "    " << b.builderUnit.getID() << " " << getBuildingWorkerCode(b) << " (" << b.finalPosition.x << "," << b.finalPosition.y << ")\n";
 
             int x1 = b.finalPosition.x;
             int y1 = b.finalPosition.y;
-            int x2 = b.finalPosition.x + Util::GetUnitTypeWidth(b.type, m_bot);
-            int y2 = b.finalPosition.y + Util::GetUnitTypeHeight(b.type, m_bot);
+            int x2 = b.finalPosition.x + b.type.tileWidth();
+            int y2 = b.finalPosition.y + b.type.tileHeight();
 
             m_bot.Map().drawSquare((float)x1, (float)y1, (float)x2, (float)y2, CCColor(255, 0, 0));
             //m_bot.Map().drawLine(b.finalPosition, m_bot.GetUnit(b.builderUnitTag)->pos, CCColors::Yellow);
         }
         else if (b.status == BuildingStatus::UnderConstruction)
         {
-            ss << "Constructing " << sc2::UnitTypeToName(b.type) << "    " << b.builderUnit.getID() << " " << b.buildingUnit.getID() << " " << getBuildingWorkerCode(b) << "\n";
+            ss << "Constructing " << b.type.getName() << "    " << b.builderUnit.getID() << " " << b.buildingUnit.getID() << " " << getBuildingWorkerCode(b) << "\n";
         }
     }
 
     m_bot.Map().drawTextScreen(CCPosition(0.05f, 0.05f), ss.str());
 }
 
-std::vector<CCUnitType> BuildingManager::buildingsQueued() const
+std::vector<UnitType> BuildingManager::buildingsQueued() const
 {
-    std::vector<CCUnitType> buildingsQueued;
+    std::vector<UnitType> buildingsQueued;
 
     for (const auto & b : m_buildings)
     {
@@ -408,16 +408,16 @@ std::vector<CCUnitType> BuildingManager::buildingsQueued() const
 
 CCTilePosition BuildingManager::getBuildingLocation(const Building & b)
 {
-    size_t numPylons = m_bot.UnitInfo().getUnitTypeCount(Players::Self, Util::GetSupplyProvider(m_bot.GetPlayerRace(Players::Self)), true);
+    size_t numPylons = m_bot.UnitInfo().getUnitTypeCount(Players::Self, Util::GetSupplyProvider(m_bot.GetPlayerRace(Players::Self), m_bot), true);
 
     // TODO: if requires psi and we have no pylons return 0
 
-    if (Util::IsRefineryType(b.type))
+    if (b.type.isRefinery())
     {
         return m_buildingPlacer.getRefineryPosition();
     }
 
-    if (Util::IsTownHallType(b.type))
+    if (b.type.isResourceDepot())
     {
         // TODO: fix this so we can actually expand
         //return m_bot.Bases().getNextExpansion(Players::Self);

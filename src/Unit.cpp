@@ -24,6 +24,12 @@ const sc2::Unit * Unit::getUnitPtr() const
     return m_unit;
 }
 
+const sc2::UnitTypeID & Unit::getAPIUnitType() const
+{
+    BOT_ASSERT(isValid(), "Unit is not valid");
+    return m_unit->unit_type;
+}
+
 #else
 Unit::Unit(const BWAPI::Unit unit, CCBot & bot)
     : m_bot(&bot)
@@ -37,6 +43,12 @@ Unit::Unit(const BWAPI::Unit unit, CCBot & bot)
 const BWAPI::Unit Unit::getUnitPtr() const
 {
     return m_unit;
+}
+
+const BWAPI::UnitType & Unit::getAPIUnitType() const
+{
+    BOT_ASSERT(isValid(), "Unit is not valid");
+    return m_unit->getType();
 }
 
 #endif
@@ -55,15 +67,6 @@ const UnitType & Unit::getType() const
     return m_unitType;
 }
 
-const CCUnitType & Unit::getAPIUnitType() const
-{
-    BOT_ASSERT(isValid(), "Unit is not valid");
-#ifdef SC2API
-    return m_unit->unit_type;
-#else
-    return m_unit->getType();
-#endif
-}
 
 CCPosition Unit::getPosition() const
 {
@@ -313,7 +316,7 @@ void Unit::repair(const Unit & target) const
     rightClick(target);
 }
 
-void Unit::build(const CCUnitType & buildingType, CCTilePosition pos) const
+void Unit::build(const UnitType & buildingType, CCTilePosition pos) const
 {
     BOT_ASSERT(isValid(), "Unit is not valid");
 #ifdef SC2API
@@ -323,7 +326,7 @@ void Unit::build(const CCUnitType & buildingType, CCTilePosition pos) const
 #endif
 }
 
-void Unit::buildTarget(const CCUnitType & buildingType, const Unit & target) const
+void Unit::buildTarget(const UnitType & buildingType, const Unit & target) const
 {
     BOT_ASSERT(isValid(), "Unit is not valid");
 #ifdef SC2API
@@ -333,7 +336,7 @@ void Unit::buildTarget(const CCUnitType & buildingType, const Unit & target) con
 #endif
 }
 
-void Unit::train(const CCUnitType & type) const
+void Unit::train(const UnitType & type) const
 {
     BOT_ASSERT(isValid(), "Unit is not valid");
 #ifdef SC2API

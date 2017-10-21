@@ -44,42 +44,33 @@ CCRace Util::GetRaceFromString(const std::string & raceIn)
 #endif
 }
 
-CCUnitType Util::GetSupplyProvider(const CCRace & race)
+UnitType Util::GetSupplyProvider(const CCRace & race, CCBot & bot)
 {
 #ifdef SC2API
     switch (race) 
     {
-        case sc2::Race::Terran: return sc2::UNIT_TYPEID::TERRAN_SUPPLYDEPOT;
-        case sc2::Race::Protoss: return sc2::UNIT_TYPEID::PROTOSS_PYLON;
-        case sc2::Race::Zerg: return sc2::UNIT_TYPEID::ZERG_OVERLORD;
-        default: return 0;
+        case sc2::Race::Terran: return UnitType(sc2::UNIT_TYPEID::TERRAN_SUPPLYDEPOT, bot);
+        case sc2::Race::Protoss: return UnitType(sc2::UNIT_TYPEID::PROTOSS_PYLON, bot);
+        case sc2::Race::Zerg: return UnitType(sc2::UNIT_TYPEID::ZERG_OVERLORD, bot);
+        default: return UnitType();
     }
 #else
     return race.getSupplyProvider();
 #endif
 }
 
-CCUnitType Util::GetTownHall(const sc2::Race & race)
+UnitType Util::GetTownHall(const CCRace & race, CCBot & bot)
 {
 #ifdef SC2API
     switch (race) 
     {
-        case sc2::Race::Terran: return sc2::UNIT_TYPEID::TERRAN_COMMANDCENTER;
-        case sc2::Race::Protoss: return sc2::UNIT_TYPEID::PROTOSS_NEXUS;
-        case sc2::Race::Zerg: return sc2::UNIT_TYPEID::ZERG_HATCHERY;
-        default: return 0;
+        case sc2::Race::Terran: return UnitType(sc2::UNIT_TYPEID::TERRAN_COMMANDCENTER, bot);
+        case sc2::Race::Protoss: return UnitType(sc2::UNIT_TYPEID::PROTOSS_NEXUS, bot);
+        case sc2::Race::Zerg: return UnitType(sc2::UNIT_TYPEID::ZERG_HATCHERY, bot);
+        default: return UnitType();
     }
 #else
     return race.getResourceDepot();
-#endif
-}
-
-std::string Util::GetNameFromUnitType(const CCUnitType & type)
-{
-#ifdef SC2API
-    return sc2::UnitTypeToName(type);
-#else
-    return type.getName();
 #endif
 }
 
@@ -144,21 +135,21 @@ float Util::DistSq(const CCPosition & p1, const CCPosition & p2)
     return dx*dx + dy*dy;
 }
 
-CCUnitType Util::GetUnitTypeFromName(const std::string & name, CCBot & bot)
+UnitType Util::GetUnitTypeFromName(const std::string & name, CCBot & bot)
 {
 #ifdef SC2API
     for (const sc2::UnitTypeData & data : bot.Observation()->GetUnitTypeData())
     {
         if (name == data.name)
         {
-            return data.unit_type_id;
+            return UnitType(data.unit_type_id, bot);
         }
     }
 #else
 
 #endif
 
-    return 0;
+    return UnitType();
 }
 
 sc2::UpgradeID Util::GetUpgradeFromName(const std::string & name, CCBot & bot)
@@ -208,7 +199,7 @@ sc2::AbilityID Util::GetAbilityFromName(const std::string & name, CCBot & bot)
 
 // checks where a given unit can make a given unit type now
 // this is done by iterating its legal abilities for the build command to make the unit
-bool Util::UnitCanBuildTypeNow(const Unit & unit, const CCUnitType & type, CCBot & m_bot)
+bool Util::UnitCanBuildTypeNow(const Unit & unit, const UnitType & type, CCBot & m_bot)
 {
 #ifdef SC2API
     BOT_ASSERT(unit.isValid(), "Unit pointer was null");

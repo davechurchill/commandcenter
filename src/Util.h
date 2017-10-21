@@ -1,24 +1,24 @@
 #pragma once
 
 #include "Common.h"
+#include "UnitType.h"
 
 class CCBot;
 class Unit;
 
 namespace Util
 {
-    CCRace      GetRaceFromString(const std::string & str);
-    CCTilePosition GetTilePosition(const CCPosition & pos);
-    CCPosition GetPosition(const CCTilePosition & tile);
-    std::string GetStringFromRace(const CCRace & race);
+    CCRace          GetRaceFromString(const std::string & str);
+    CCTilePosition  GetTilePosition(const CCPosition & pos);
+    CCPosition      GetPosition(const CCTilePosition & tile);
+    std::string     GetStringFromRace(const CCRace & race);
 
-    bool UnitCanBuildTypeNow(const Unit & unit, const CCUnitType & type, CCBot & m_bot);
-    CCUnitType GetTownHall(const CCRace & race);
-    CCUnitType GetSupplyProvider(const CCRace & race);
-    CCPosition CalcCenter(const std::vector<Unit> & units);
+    bool            UnitCanBuildTypeNow(const Unit & unit, const UnitType & type, CCBot & m_bot);
+    UnitType        GetTownHall(const CCRace & race, CCBot & bot);
+    UnitType        GetSupplyProvider(const CCRace & race, CCBot & bot);
+    CCPosition      CalcCenter(const std::vector<Unit> & units);
 
-    std::string     GetNameFromUnitType(const CCUnitType & type);
-    CCUnitType      GetUnitTypeFromName(const std::string & name, CCBot & bot);
+    UnitType        GetUnitTypeFromName(const std::string & name, CCBot & bot);
     sc2::UpgradeID  GetUpgradeFromName(const std::string & name, CCBot & bot);
 
 #ifdef SC2API

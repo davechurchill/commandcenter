@@ -179,13 +179,13 @@ void UnitInfoManager::drawSelectedUnitDebugInfo()
 }
 
 // passing in a unit type of 0 returns a count of all units
-size_t UnitInfoManager::getUnitTypeCount(CCPlayer player, CCUnitType type, bool completed) const
+size_t UnitInfoManager::getUnitTypeCount(CCPlayer player, UnitType type, bool completed) const
 {
     size_t count = 0;
 
     for (auto & unit : getUnits(player))
     {
-        if ((!type || type == unit.getType()) && (!completed || unit.isCompleted()))
+        if ((!type.isValid() || type == unit.getType()) && (!completed || unit.isCompleted()))
         {
             count++;
         }
@@ -203,25 +203,27 @@ void UnitInfoManager::drawUnitInformation(float x,float y) const
 
     std::stringstream ss;
 
-    // for each unit in the queue
-    for (int t(0); t < 255; t++)
-    {
-        int numUnits =      m_unitData.at(Players::Self).getNumUnits(t);
-        int numDeadUnits =  m_unitData.at(Players::Enemy).getNumDeadUnits(t);
+    // TODO: move this to unitData
 
-        // if there exist units in the vector
-        if (numUnits > 0)
-        {
-            ss << numUnits << "   " << numDeadUnits << "   " << sc2::UnitTypeToName(t) << "\n";
-        }
-    }
-    
-    for (auto & kv : getUnitData(Players::Enemy).getUnitInfoMap())
-    {
-        m_bot.Map().drawCircle(kv.second.lastPosition, 0.5f);
-        m_bot.Map().drawText(kv.second.lastPosition, sc2::UnitTypeToName(kv.second.type));
-    }
-    
+    //// for each unit in the queue
+    //for (auto & kv : m_)
+    //{
+    //    int numUnits =      m_unitData.at(Players::Self).getNumUnits(t);
+    //    int numDeadUnits =  m_unitData.at(Players::Enemy).getNumDeadUnits(t);
+
+    //    // if there exist units in the vector
+    //    if (numUnits > 0)
+    //    {
+    //        ss << numUnits << "   " << numDeadUnits << "   " << sc2::UnitTypeToName(t) << "\n";
+    //    }
+    //}
+    //
+    //for (auto & kv : getUnitData(Players::Enemy).getUnitInfoMap())
+    //{
+    //    m_bot.Map().drawCircle(kv.second.lastPosition, 0.5f);
+    //    m_bot.Map().drawText(kv.second.lastPosition, sc2::UnitTypeToName(kv.second.type));
+    //}
+    //
 }
 
 void UnitInfoManager::updateUnit(const Unit & unit)
@@ -235,7 +237,7 @@ bool UnitInfoManager::isValidUnit(const Unit & unit)
     if (!unit.isValid()) { return false; }
 
     // if it's a weird unit, don't bother
-    if (unit.getType() == sc2::UNIT_TYPEID::ZERG_EGG || unit.getType() == sc2::UNIT_TYPEID::ZERG_LARVA)
+    if (unit.getType().getAPIUnitType() == sc2::UNIT_TYPEID::ZERG_EGG || unit.getType().getAPIUnitType() == sc2::UNIT_TYPEID::ZERG_LARVA)
     {
         return false;
     }
@@ -260,7 +262,7 @@ void UnitInfoManager::getNearbyForce(std::vector<UnitInfo> & unitInfo, CCPositio
 
         // if it's a combat unit we care about
         // and it's finished! 
-        if (Util::IsCombatUnitType(ui.type, m_bot) && Util::Dist(ui.lastPosition,p) <= radius)
+        if (ui.type.isCombatUnit() && Util::Dist(ui.lastPosition,p) <= radius)
         {
             // add it to the vector
             unitInfo.push_back(ui);

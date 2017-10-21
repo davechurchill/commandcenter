@@ -22,8 +22,8 @@ void RangedManager::assignTargets(const std::vector<Unit> & targets)
     for (auto target : targets)
     {
         if (!target.isValid()) { continue; }
-        if (target.getType() == sc2::UNIT_TYPEID::ZERG_EGG) { continue; }
-        if (target.getType() == sc2::UNIT_TYPEID::ZERG_LARVA) { continue; }
+        if (target.getType().getAPIUnitType() == sc2::UNIT_TYPEID::ZERG_EGG) { continue; }
+        if (target.getType().getAPIUnitType() == sc2::UNIT_TYPEID::ZERG_LARVA) { continue; }
 
         rangedUnitTargets.push_back(target);
     }
@@ -106,12 +106,12 @@ int RangedManager::getAttackPriority(const Unit & attacker, const Unit & target)
 {
     BOT_ASSERT(target.isValid(), "null unit in getAttackPriority");
 
-    if (Util::IsCombatUnit(target, m_bot))
+    if (target.getType().isCombatUnit())
     {
         return 10;
     }
 
-    if (Util::IsWorker(target))
+    if (target.getType().isWorker())
     {
         return 9;
     }

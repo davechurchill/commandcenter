@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Common.h"
+#include "UnitType.h"
 
 namespace BuildTypes
 {
@@ -13,7 +14,7 @@ class BuildType
     size_t          m_type;
     std::string     m_name;
     sc2::Race       m_race;
-    CCUnitType m_unitType;
+    UnitType        m_unitType;
     sc2::UpgradeID  m_upgrade;
     
 
@@ -21,7 +22,7 @@ public:
 
     BuildType();
     BuildType(const std::string & name, CCBot & bot);
-    BuildType(const CCUnitType & unitType);
+    BuildType(const UnitType & unitType);
     BuildType(const sc2::UpgradeID & upgradeType);
 
     bool    isUnit()        const;
@@ -30,6 +31,6 @@ public:
     const size_t &          getBuildType()  const;
     const std::string &     getName()       const;
     const sc2::Race &       getRace()       const;
-    const CCUnitType & getUnitTypeID() const;
+    const UnitType & getUnitTypeID() const;
     const sc2::UpgradeID &  getUpgradeID()  const;
 };

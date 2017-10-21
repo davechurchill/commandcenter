@@ -34,14 +34,14 @@ public:
 
     void                onStart();
     void                onFrame();
-    void                addBuildingTask(const CCUnitType & type, const CCTilePosition & desiredPosition);
+    void                addBuildingTask(const UnitType & type, const CCTilePosition & desiredPosition);
     void                drawBuildingInformation();
     CCTilePosition      getBuildingLocation(const Building & b);
 
     int                 getReservedMinerals();
     int                 getReservedGas();
 
-    bool                isBeingBuilt(CCUnitType type);
+    bool                isBeingBuilt(UnitType type);
 
-    std::vector<CCUnitType> buildingsQueued() const;
+    std::vector<UnitType> buildingsQueued() const;
 };

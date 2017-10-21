@@ -25,7 +25,7 @@ void SquadData::clearSquadData()
         {
             BOT_ASSERT(unit.isValid(), "null unit");
 
-            if (Util::IsWorker(unit))
+            if (unit.getType().isWorker())
             {
                 m_bot.Workers().finishedWithWorker(unit);
             }
@@ -49,7 +49,7 @@ void SquadData::removeSquad(const std::string & squadName)
     {
         BOT_ASSERT(unit.isValid(), "null unit");
 
-        if (Util::IsWorker(unit))
+        if (unit.getType().isWorker())
         {
             m_bot.Workers().finishedWithWorker(unit);
         }

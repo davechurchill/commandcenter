@@ -45,7 +45,7 @@ public:
     const MapTools & Map() const;
     const UnitInfoManager & UnitInfo() const;
     const StrategyManager & Strategy() const;
-    const UnitTypeData & Data(const CCUnitType & type) const;
+    const UnitTypeData & Data(const UnitType & type) const;
     const UnitTypeData & Data(const sc2::UpgradeID & type) const;
     const UnitTypeData & Data(const BuildType & type) const;
     const UnitTypeData & Data(const Unit & unit) const;

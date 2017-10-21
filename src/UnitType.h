@@ -29,8 +29,10 @@ public:
     bool operator < (const UnitType & rhs) const;
     bool operator == (const UnitType & rhs) const;
 
+    std::string getName() const;
     CCRace getRace() const;
     
+    bool isValid() const;
     bool isBuilding() const;
     bool isCombatUnit() const;
     bool isSupplyProvider() const;

@@ -45,6 +45,20 @@ bool UnitType::operator == (const UnitType & rhs) const
     return m_type == rhs.m_type;
 }
 
+bool UnitType::isValid() const
+{
+    return m_type != 0;
+}
+
+std::string UnitType::getName() const
+{
+#ifdef SC2API
+    return sc2::UnitTypeToName(m_type);
+#else
+    return m_type.getName();
+#endif
+}
+
 CCRace UnitType::getRace() const
 {
 #ifdef SC2API
@@ -220,7 +234,7 @@ float UnitType::getAttackRange() const
 int UnitType::tileWidth() const
 {
 #ifdef SC2API
-    return (int)(2 * m_bot->Observation()->GetAbilityData()[m_bot->Data(m_type).buildAbility].footprint_radius);
+    return (int)(2 * m_bot->Observation()->GetAbilityData()[m_bot->Data(*this).buildAbility].footprint_radius);
 #else
     return m_type.tileWidth();
 #endif
@@ -229,7 +243,7 @@ int UnitType::tileWidth() const
 int UnitType::tileHeight() const
 {
 #ifdef SC2API
-    return (int)(2 * m_bot->Observation()->GetAbilityData()[m_bot->Data(m_type).buildAbility].footprint_radius);
+    return (int)(2 * m_bot->Observation()->GetAbilityData()[m_bot->Data(*this).buildAbility].footprint_radius);
 #else
     return m_type.tileHeight();
 #endif
@@ -238,7 +252,7 @@ int UnitType::tileHeight() const
 bool UnitType::isAddon() const
 {
 #ifdef SC2API
-    return m_bot->Data(m_type).isAddon;
+    return m_bot->Data(*this).isAddon;
 #else
     return m_type.isAddon();
 #endif
@@ -247,7 +261,7 @@ bool UnitType::isAddon() const
 bool UnitType::isBuilding() const
 {
 #ifdef SC2API
-    return m_bot->Data(m_type).isBuilding;
+    return m_bot->Data(*this).isBuilding;
 #else
     return m_type.isBuilding();
 #endif
@@ -256,7 +270,7 @@ bool UnitType::isBuilding() const
 int UnitType::supplyProvided() const
 {
 #ifdef SC2API
-    return m_bot->Observation()->GetUnitTypeData()[m_type].food_provided;
+    return (int)m_bot->Observation()->GetUnitTypeData()[m_type].food_provided;
 #else
     return m_type.supplyProvided();
 #endif
@@ -265,7 +279,7 @@ int UnitType::supplyProvided() const
 int UnitType::supplyRequired() const
 {
 #ifdef SC2API
-    return m_bot->Observation()->GetUnitTypeData()[m_type].food_required;
+    return (int)m_bot->Observation()->GetUnitTypeData()[m_type].food_required;
 #else
     return m_type.supplyRequired();
 #endif

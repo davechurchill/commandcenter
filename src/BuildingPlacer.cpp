@@ -30,9 +30,9 @@ bool BuildingPlacer::canBuildHere(int bx, int by, const Building & b) const
     }
 
     // check the reserve map
-    for (int x = bx; x < bx + Util::GetUnitTypeWidth(b.type, m_bot); x++)
+    for (int x = bx; x < bx + b.type.tileWidth(); x++)
     {
-        for (int y = by; y < by + Util::GetUnitTypeHeight(b.type, m_bot); y++)
+        for (int y = by; y < by + b.type.tileHeight(); y++)
         {
             if (!m_bot.Map().isValidTile(x, y) || m_reserveMap[x][y])
             {
@@ -53,7 +53,7 @@ bool BuildingPlacer::canBuildHere(int bx, int by, const Building & b) const
 //returns true if we can build this type of unit here with the specified amount of space.
 bool BuildingPlacer::canBuildHereWithSpace(int bx, int by, const Building & b, int buildDist) const
 {
-    CCUnitType type = b.type;
+    UnitType type = b.type;
 
     //if we can't build here, we of course can't build here with space
     if (!canBuildHere(bx, by, b))
@@ -62,8 +62,8 @@ bool BuildingPlacer::canBuildHereWithSpace(int bx, int by, const Building & b, i
     }
 
     // height and width of the building
-    int width  = Util::GetUnitTypeWidth(b.type, m_bot);
-    int height = Util::GetUnitTypeHeight(b.type, m_bot);
+    int width  = b.type.tileWidth();
+    int height = b.type.tileHeight();
 
     // TODO: make sure we leave space for add-ons. These types of units can have addons:
 
@@ -86,7 +86,7 @@ bool BuildingPlacer::canBuildHereWithSpace(int bx, int by, const Building & b, i
     {
         for (int y = starty; y < endy; y++)
         {
-            if (!Util::IsRefineryType(b.type))
+            if (!b.type.isRefinery())
             {
                 if (!buildable(b, x, y) || m_reserveMap[x][y])
                 {
@@ -129,10 +129,10 @@ CCTilePosition BuildingPlacer::getBuildLocationNear(const Building & b, int buil
     return CCTilePosition(0, 0);
 }
 
-bool BuildingPlacer::tileOverlapsBaseLocation(int x, int y, CCUnitType type) const
+bool BuildingPlacer::tileOverlapsBaseLocation(int x, int y, UnitType type) const
 {
     // if it's a resource depot we don't care if it overlaps
-    if (Util::IsTownHallType(type))
+    if (type.isResourceDepot())
     {
         return false;
     }
@@ -140,8 +140,8 @@ bool BuildingPlacer::tileOverlapsBaseLocation(int x, int y, CCUnitType type) con
     // dimensions of the proposed location
     int tx1 = x;
     int ty1 = y;
-    int tx2 = tx1 + Util::GetUnitTypeWidth(type, m_bot);
-    int ty2 = ty1 + Util::GetUnitTypeHeight(type, m_bot);
+    int tx2 = tx1 + type.tileWidth();
+    int ty2 = ty1 + type.tileHeight();
 
     // for each base location
     for (const BaseLocation * base : m_bot.Bases().getBaseLocations())
@@ -149,8 +149,8 @@ bool BuildingPlacer::tileOverlapsBaseLocation(int x, int y, CCUnitType type) con
         // dimensions of the base location
         int bx1 = (int)base->getDepotPosition().x;
         int by1 = (int)base->getDepotPosition().y;
-        int bx2 = bx1 + Util::GetUnitTypeWidth(Util::GetTownHall(m_bot.GetPlayerRace(Players::Self)), m_bot);
-        int by2 = by1 + Util::GetUnitTypeHeight(Util::GetTownHall(m_bot.GetPlayerRace(Players::Self)), m_bot);
+        int bx2 = bx1 + Util::GetTownHall(m_bot.GetPlayerRace(Players::Self), m_bot).tileWidth();
+        int by2 = by1 + Util::GetTownHall(m_bot.GetPlayerRace(Players::Self), m_bot).tileHeight();
 
         // conditions for non-overlap are easy
         bool noOverlap = (tx2 < bx1) || (tx1 > bx2) || (ty2 < by1) || (ty1 > by2);
@@ -241,7 +241,7 @@ CCTilePosition BuildingPlacer::getRefineryPosition()
 
     for (auto & unit : m_bot.GetUnits())
     {
-        if (!Util::IsGeyser(unit))
+        if (!unit.getType().isGeyser())
         {
             continue;
         }
@@ -252,7 +252,7 @@ CCTilePosition BuildingPlacer::getRefineryPosition()
         bool nearDepot = false;
         for (auto & unit : m_bot.UnitInfo().getUnits(Players::Self))
         {
-            if (Util::IsTownHall(unit) && Util::Dist(unit, geyserPos) < 10)
+            if (unit.getType().isResourceDepot() && Util::Dist(unit, geyserPos) < 10)
             {
                 nearDepot = true;
             }

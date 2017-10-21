@@ -3,7 +3,7 @@
 #include "Common.h"
 #include "BuildOrder.h"
 
-typedef std::pair<CCUnitType, size_t>  UnitPair;
+typedef std::pair<UnitType, size_t>  UnitPair;
 typedef std::vector<UnitPair>               UnitPairVector;
 
 class CCBot;

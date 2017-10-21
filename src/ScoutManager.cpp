@@ -154,7 +154,7 @@ Unit ScoutManager::closestEnemyWorkerTo(const CCPosition & pos) const
     // for each enemy worker
     for (auto & unit : m_bot.UnitInfo().getUnits(Players::Enemy))
     {
-        if (Util::IsWorker(unit))
+        if (unit.getType().isWorker())
         {
             float dist = Util::Dist(unit, m_scoutUnit);
 
@@ -172,7 +172,7 @@ bool ScoutManager::enemyWorkerInRadiusOf(const CCPosition & pos) const
 {
     for (auto & unit : m_bot.UnitInfo().getUnits(Players::Enemy))
     {
-        if (Util::IsWorker(unit) && Util::Dist(unit, pos) < 10)
+        if (unit.getType().isWorker() && Util::Dist(unit, pos) < 10)
         {
             return true;
         }

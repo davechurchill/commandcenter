@@ -45,7 +45,7 @@ void WorkerManager::handleGasWorkers()
     for (auto & unit : m_bot.UnitInfo().getUnits(Players::Self))
     {
         // if that unit is a refinery
-        if (Util::IsRefinery(unit) && unit.isCompleted())
+        if (unit.getType().isRefinery() && unit.isCompleted())
         {
             // get the number of workers currently assigned to it
             int numAssigned = m_workerData.getNumAssignedWorkers(unit);
@@ -139,7 +139,7 @@ Unit WorkerManager::getClosestDepot(Unit worker) const
     {
         if (!unit.isValid()) { continue; }
 
-        if (Util::IsTownHall(unit) && unit.isCompleted())
+        if (unit.getType().isResourceDepot() && unit.isCompleted())
         {
             double distance = Util::Dist(unit, worker);
             if (!closestDepot.isValid() || distance < closestDistance)

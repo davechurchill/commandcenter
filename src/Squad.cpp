@@ -116,22 +116,22 @@ void Squad::addUnitsToMicroManagers()
     {
         BOT_ASSERT(unit.isValid(), "null unit in addUnitsToMicroManagers()");
 
-        if (unit.getType() == sc2::UNIT_TYPEID::TERRAN_SIEGETANK || unit.getType() == sc2::UNIT_TYPEID::TERRAN_SIEGETANKSIEGED)
+        if (unit.getType().getAPIUnitType() == sc2::UNIT_TYPEID::TERRAN_SIEGETANK || unit.getType().getAPIUnitType() == sc2::UNIT_TYPEID::TERRAN_SIEGETANKSIEGED)
         {
             tankUnits.push_back(unit);
         }
         // TODO: detectors
-        else if (Util::IsDetector(unit) && !m_bot.Data(unit).isBuilding)
+        else if (unit.getType().isDetector() && !unit.getType().isBuilding())
         {
             detectorUnits.push_back(unit);
         }
         // select ranged _units
-        else if (Util::GetAttackRange(unit.getType(), m_bot) >= 1.5f)
+        else if (unit.getType().getAttackRange() >= 1.5f)
         {
             rangedUnits.push_back(unit);
         }
         // select melee _units
-        else if (Util::GetAttackRange(unit.getType(), m_bot) < 1.5f)
+        else if (unit.getType().getAttackRange() < 1.5f)
         {
             meleeUnits.push_back(unit);
         }
@@ -165,7 +165,7 @@ void Squad::clear()
     {
         BOT_ASSERT(unit.isValid(), "null unit in squad clear");
 
-        if (Util::IsWorker(unit))
+        if (unit.getType().isWorker())
         {
             m_bot.Workers().finishedWithWorker(unit);
         }

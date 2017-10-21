@@ -2,6 +2,7 @@
 
 #include "Common.h"
 #include "Unit.h"
+#include "UnitType.h"
 
 namespace BuildingStatus
 {
@@ -12,10 +13,10 @@ class Building
 {
 public:
 
-    CCTilePosition    desiredPosition;
-    CCTilePosition    finalPosition;
-    CCTilePosition    position;
-    CCUnitType type;
+    CCTilePosition  desiredPosition;
+    CCTilePosition  finalPosition;
+    CCTilePosition  position;
+    UnitType        type;
     Unit            buildingUnit;
     Unit            builderUnit;
     size_t          status;
@@ -26,7 +27,7 @@ public:
     Building();
 
     // constructor we use most often
-    Building(CCUnitType t, CCTilePosition desired);
+    Building(UnitType t, CCTilePosition desired);
 
     // equals operator
     bool operator == (const Building & b);

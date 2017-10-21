@@ -14,8 +14,6 @@
 
 #ifdef SC2API
     #include "sc2api/sc2_api.h"
-    //typedef const sc2::Unit *   CCUnit;
-    typedef sc2::UnitTypeID     CCUnitType;
     typedef sc2::Point2D        CCPosition;
     typedef sc2::Point2DI       CCTilePosition;
     typedef float               CCPositionType;
@@ -26,8 +24,6 @@
     
 #else
     #include "BWAPI.h"
-    //typedef BWAPI::Unit         CCUnit;
-    typedef BWAPI::UnitType     CCUnitType;
     typedef BWAPI::Position     CCPosition;
     typedef BWAPI::TilePosition CCTilePosition;
     typedef int                 CCPositionType;
