@@ -109,17 +109,8 @@
     <ClCompile Include="..\src\FocusFireFiniteStateMachine.cpp">
       <Filter>micro\FSMs\FocusFireFSM</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\PullBackFSMState.cpp">
-      <Filter>micro\FSMs\FocusFireFSM</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\ShouldPullBackTransition.cpp">
       <Filter>micro\FSMs\FocusFireFSM</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\FocusFireFSM.cpp">
-      <Filter>micro\FSMs\FocusFireFSM</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\KitingFSM.cpp">
-      <Filter>micro\FSMs\KitingFSM</Filter>
     </ClCompile>
     <ClCompile Include="..\src\KitingFiniteStateMachine.cpp">
       <Filter>micro\FSMs\KitingFSM</Filter>
@@ -135,6 +126,9 @@
     </ClCompile>
     <ClCompile Include="..\src\ShouldAttackTransition.cpp">
       <Filter>micro\FSMs\KitingFSM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\PullBackFSMState.cpp">
+      <Filter>micro\FSMs\FocusFireFSM</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

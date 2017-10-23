@@ -2,7 +2,7 @@
 #include "Util.h"
 #include "CCBot.h"
 #include "Behavior.h"
-
+#include <algorithm>
 
 RangedManager::RangedManager(CCBot & bot)
     : MicroManager(bot)
@@ -123,13 +123,9 @@ float RangedManager::getAttackPriority(const sc2::Unit * attacker, const sc2::Un
         for (sc2::Weapon & weapon : unitTypeData.weapons)
         {
             float weaponDps = weapon.attacks * weapon.damage_ * (1 / weapon.speed);
-            if (weaponDps > dps)
-                dps = weaponDps;
+            dps = std::max(weaponDps, dps);
         }
-        return dps * remainingHealth;
-        /*if (unit->unit_type == sc2::UNIT_TYPEID::ZERG_BANELING)
-            return 11;
-        return 10;*/
+        return 5 + (dps * remainingHealth);
     }
 
     if (Util::IsWorker(target))
@@ -149,7 +145,7 @@ bool RangedManager::isTargetRanged(const sc2::Unit * target)
     float maxRange = 0.f;
 
     for (sc2::Weapon & weapon : unitTypeData.weapons)
-        if (weapon.range > maxRange) maxRange = weapon.range;
+        maxRange = std::max(maxRange, weapon.range);
     return maxRange > 1.f;
 }
 

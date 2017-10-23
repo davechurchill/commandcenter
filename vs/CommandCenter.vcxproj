@@ -298,11 +298,9 @@
     <ClCompile Include="..\src\FireClosestFSMState.cpp" />
     <ClCompile Include="..\src\FleeFSMState.cpp" />
     <ClCompile Include="..\src\FocusFireFiniteStateMachine.cpp" />
-    <ClCompile Include="..\src\FocusFireFSM.cpp" />
     <ClCompile Include="..\src\GameCommander.cpp" />
     <ClCompile Include="..\src\JSONTools.cpp" />
     <ClCompile Include="..\src\KitingFiniteStateMachine.cpp" />
-    <ClCompile Include="..\src\KitingFSM.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\MapTools.cpp" />
     <ClCompile Include="..\src\MeleeManager.cpp" />

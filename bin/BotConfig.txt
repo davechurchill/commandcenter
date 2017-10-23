@@ -9,9 +9,9 @@
     "Game Info" :
     {
         "BotRace"                   : "Terran",
-        "EnemyDifficulty"           : 2,
+        "EnemyDifficulty"           : 1,
         "EnemyRace"                 : "Zerg",
-        "MapFile"                   : "DefeatMarines.SC2Map",
+        "MapFile"                   : "InterloperLE.SC2Map",
         "StepSize"                  : 1
     },
         

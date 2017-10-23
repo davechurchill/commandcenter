@@ -3,6 +3,7 @@
 #include "DonePullBackTransition.h"
 #include "CCBot.h"
 #include "Util.h"
+#include <algorithm>
 
 PullBackFSMState::PullBackFSMState(const sc2::Unit * unit, const sc2::Unit * target)
 {
@@ -11,12 +12,11 @@ PullBackFSMState::PullBackFSMState(const sc2::Unit * unit, const sc2::Unit * tar
 }
 
 void PullBackFSMState::onEnter(const std::vector<const sc2::Unit*> * targets, CCBot* bot)
-{   
-    auto targetWeapons = bot->Observation()->GetUnitTypeData()[m_target->unit_type].weapons;    
+{
+    auto targetWeapons = bot->Observation()->GetUnitTypeData()[m_target->unit_type].weapons;
     float targetRange = 0.f;
-    for (auto weapon : targetWeapons)
-        if (weapon.range > targetRange) targetRange = weapon.range;
-   
+    for (auto weapon : targetWeapons) targetRange = std::max(weapon.range, targetRange);
+
     sc2::Point2D closestTarget = targets->at(0)->pos;
     for (auto target : *targets)
         if (Util::Dist(target->pos, m_unit->pos) < Util::Dist(closestTarget, m_unit->pos))
