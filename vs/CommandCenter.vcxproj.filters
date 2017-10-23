@@ -97,6 +97,39 @@
     <ClCompile Include="..\src\TechTree.cpp">
       <Filter>util</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\FiniteStateMachine.cpp">
+      <Filter>micro\FSMs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\DonePullBackTransition.cpp">
+      <Filter>micro\FSMs\FocusFireFSM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\FireClosestFSMState.cpp">
+      <Filter>micro\FSMs\FocusFireFSM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\FocusFireFiniteStateMachine.cpp">
+      <Filter>micro\FSMs\FocusFireFSM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ShouldPullBackTransition.cpp">
+      <Filter>micro\FSMs\FocusFireFSM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\KitingFiniteStateMachine.cpp">
+      <Filter>micro\FSMs\KitingFSM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\FleeFSMState.cpp">
+      <Filter>micro\FSMs\KitingFSM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\AttackFSMState.cpp">
+      <Filter>micro\FSMs\KitingFSM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ShouldFleeTransition.cpp">
+      <Filter>micro\FSMs\KitingFSM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ShouldAttackTransition.cpp">
+      <Filter>micro\FSMs\KitingFSM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\PullBackFSMState.cpp">
+      <Filter>micro\FSMs\FocusFireFSM</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\BaseLocationManager.h">
@@ -203,6 +236,46 @@
     <ClInclude Include="..\src\Behavior.h">
       <Filter>util</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="..\src\FiniteStateMachine.h">
+      <Filter>micro\FSMs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\DonePullBackTransition.h">
+      <Filter>micro\FSMs\FocusFireFSM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\FireClosestFSMState.h">
+      <Filter>micro\FSMs\FocusFireFSM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\FocusFireFiniteStateMachine.h">
+      <Filter>micro\FSMs\FocusFireFSM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\PullBackFSMState.h">
+      <Filter>micro\FSMs\FocusFireFSM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ShouldPullBackTransition.h">
+      <Filter>micro\FSMs\FocusFireFSM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\FocusFireFSM.h">
+      <Filter>micro\FSMs\FocusFireFSM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\KitingFSM.h">
+      <Filter>micro\FSMs\KitingFSM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\KitingFiniteStateMachine.h">
+      <Filter>micro\FSMs\KitingFSM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\FleeFSMState.h">
+      <Filter>micro\FSMs\KitingFSM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\AttackFSMState.h">
+      <Filter>micro\FSMs\KitingFSM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ShouldFleeTransition.h">
+      <Filter>micro\FSMs\KitingFSM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ShouldAttackTransition.h">
+      <Filter>micro\FSMs\KitingFSM</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="global">
@@ -220,5 +293,17 @@
     <Filter Include="micro">
       <UniqueIdentifier>{9829f5c0-728d-4121-8884-bf1fddd88a87}</UniqueIdentifier>
     </Filter>
+    <Filter Include="micro\FSMs">
+      <UniqueIdentifier>{9ece38aa-6c86-410a-b06c-ee706c5b2de2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micro\FSMs\FocusFireFSM">
+      <UniqueIdentifier>{cf421e21-3eaa-4b26-a2fc-ef7b340be898}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micro\FSMs\KitingFSM">
+      <UniqueIdentifier>{488af303-796a-4c83-bd3a-e2bef7453438}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="CommandCenter.rc" />
   </ItemGroup>
 </Project>

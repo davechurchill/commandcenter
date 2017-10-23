@@ -419,7 +419,7 @@ sc2::Point2D MapTools::getLeastRecentlySeenPosition() const
     int minSeen = std::numeric_limits<int>::max();
     sc2::Point2D leastSeen(0.0f, 0.0f);
     const BaseLocation * baseLocation = m_bot.Bases().getPlayerStartingBaseLocation(Players::Self);
-
+	if (baseLocation == nullptr) return leastSeen;
     for (auto & tile : baseLocation->getClosestTiles())
     {
         BOT_ASSERT(isValid(tile), "How is this tile not valid?");

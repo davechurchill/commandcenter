@@ -41,31 +41,34 @@ void Micro::SmartRepair(const sc2::Unit * unit, const sc2::Unit * target, CCBot 
     bot.Actions()->UnitCommand(unit, sc2::ABILITY_ID::SMART, target);
 }
 
-void Micro::SmartKiteTarget(const sc2::Unit * rangedUnit, const sc2::Unit * target, CCBot & bot)
+void Micro::SmartKiteTarget(const sc2::Unit * rangedUnit, const sc2::Unit * target, CCBot & bot, std::map<sc2::Tag, KitingFiniteStateMachine*> &state)
 {
     BOT_ASSERT(rangedUnit != nullptr, "RangedUnit is null");
     BOT_ASSERT(target != nullptr, "Target is null");
-    sc2::UnitTypeData unitTypeData = bot.Observation()->GetUnitTypeData()[rangedUnit->unit_type];
 
-    // use the correct weapon range regardless of target type
-    float range(Util::GetAttackRangeForTarget(rangedUnit, target, bot));
-    bool kite(true);
-    float dist(Util::Dist(rangedUnit->pos, target->pos));
-    float timeToEnter = std::max(0.f, (dist - range) / unitTypeData.movement_speed);
-
-    kite = Util::IsCombatUnitType(target->unit_type, bot) && !(timeToEnter >= rangedUnit->weapon_cooldown);
-
-    if (kite)
-    {
-        // if we can't shoot, run away
-        sc2::Point2D fleePosition(rangedUnit->pos - target->pos + rangedUnit->pos);
-        Micro::SmartMove(rangedUnit, fleePosition, bot);
+    KitingFiniteStateMachine* stateMachine;
+    if (state.find(rangedUnit->tag) == state.end()) {
+        stateMachine = new KitingFiniteStateMachine(rangedUnit, target);
     }
     else
-    {
-        // otherwise shoot
-        Micro::SmartAttackUnit(rangedUnit, target, bot);
-    }
+        stateMachine = state[rangedUnit->tag];
+
+    stateMachine->update(target, &bot);
+    state.insert_or_assign(rangedUnit->tag, stateMachine);
+}
+
+void Micro::SmartFocusFire(const sc2::Unit * rangedUnit, const sc2::Unit * target, const std::vector<const sc2::Unit *> * targets, CCBot & bot, std::map<sc2::Tag, FocusFireFiniteStateMachine*> &state, std::map<sc2::Tag, float> &unitHealth)
+{
+    BOT_ASSERT(rangedUnit != nullptr, "RangedUnit is null");
+    BOT_ASSERT(target != nullptr, "Target is null");
+
+    FocusFireFiniteStateMachine* stateMachine;
+    if (state.find(rangedUnit->tag) == state.end())
+        stateMachine = new FocusFireFiniteStateMachine(rangedUnit, target, targets, &bot);
+    else stateMachine = state[rangedUnit->tag];
+    
+    stateMachine->update(target, targets, &unitHealth, &bot);
+    state.insert_or_assign(rangedUnit->tag, stateMachine);
 }
 
 void Micro::SmartBuild(const sc2::Unit * builder, const sc2::UnitTypeID & buildingType, sc2::Point2D pos, CCBot & bot)

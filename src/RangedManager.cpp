@@ -2,35 +2,7 @@
 #include "Util.h"
 #include "CCBot.h"
 #include "Behavior.h"
-
-// TODO: BEHAVIORS TO IMPLEMENT
-/*
-- search enemies
-- Focus fire w / o overkill
-- kiting
-- send injured units to back
-- flee
-*/
-
-/*
-Le BT ressemblerait  quelque chose comme:
-BehaviorTree* bt = BehaviorTreeBuilder()
-    .sequence() // attack
-        .sequence()
-            .condition(EnemyInSight)
-        .condition(EnemyInRange)
-            .selector()
-            .condition(IsEnemyMelee)
-                .action(Kite)
-            .condition(IsUnitHurt)
-                .sequence()
-                    .action(SendToBack)
-                    .action(Focus)
-            .action(Focus)
-    .sequence()
-        .action(search)
-    .end();
-*/
+#include <algorithm>
 
 RangedManager::RangedManager(CCBot & bot)
     : MicroManager(bot)
@@ -40,7 +12,7 @@ RangedManager::RangedManager(CCBot & bot)
 
 void RangedManager::executeMicro(const std::vector<const sc2::Unit *> & targets)
 {
-	// build bt tree here
+    // build bt tree here
     assignTargets(targets);
 }
 
@@ -58,7 +30,6 @@ void RangedManager::assignTargets(const std::vector<const sc2::Unit *> & targets
 
         rangedUnitTargets.push_back(target);
     }
-
     // for each rangedUnit
     for (auto rangedUnit : rangedUnits)
     {
@@ -72,10 +43,14 @@ void RangedManager::assignTargets(const std::vector<const sc2::Unit *> & targets
                 // find the best target for this rangedUnit
                 const sc2::Unit * target = getTarget(rangedUnit, rangedUnitTargets);
 
-                // attack it
-                if (m_bot.Config().KiteWithRangedUnits)
+                if (isTargetRanged(target))
                 {
-                    Micro::SmartKiteTarget(rangedUnit, target, m_bot);
+                    Micro::SmartFocusFire(rangedUnit, target, &rangedUnitTargets, m_bot, m_focusFireStates, m_unitHealth);
+                }
+                // attack it
+                else if (m_bot.Config().KiteWithRangedUnits)
+                {
+                    Micro::SmartKiteTarget(rangedUnit, target, m_bot, m_kittingStates);
                 }
                 else
                 {
@@ -117,7 +92,11 @@ const sc2::Unit * RangedManager::getTarget(const sc2::Unit * rangedUnit, const s
         BOT_ASSERT(targetUnit, "null target unit in getTarget");
 
         int priority = getAttackPriority(rangedUnit, targetUnit);
-        float distance = Util::Dist(rangedUnit->pos, targetUnit->pos);
+        float distance = 0;
+        if (isTargetRanged(targetUnit))
+            distance = Util::Dist(Util::CalcCenter(getUnits()), targetUnit->pos);
+        else
+            distance = Util::Dist(rangedUnit->pos, targetUnit->pos);
 
         // if it's a higher priority, or it's closer, set it
         if (!closestTarget || (priority > highPriority) || (priority == highPriority && distance < closestDist))
@@ -132,31 +111,41 @@ const sc2::Unit * RangedManager::getTarget(const sc2::Unit * rangedUnit, const s
 }
 
 // TODO: instead of returning an hardcoded int, calculate a threat score based on dps, distance and other factors
-float RangedManager::getAttackPriority(const sc2::Unit * attacker, const sc2::Unit * unit)
+float RangedManager::getAttackPriority(const sc2::Unit * attacker, const sc2::Unit * target)
 {
-    BOT_ASSERT(unit, "null unit in getAttackPriority");
+    BOT_ASSERT(target, "null unit in getAttackPriority");
 
-    if (Util::IsCombatUnit(unit, m_bot))
+    if (Util::IsCombatUnit(target, m_bot))
     {
-        sc2::UnitTypeData unitTypeData = Util::GetUnitTypeDataFromUnitTypeId(unit->unit_type, m_bot);
+        float remainingHealth = 1 - (target->health / target->health_max);
+        sc2::UnitTypeData unitTypeData = Util::GetUnitTypeDataFromUnitTypeId(target->unit_type, m_bot);
         float dps = 0.f;
         for (sc2::Weapon & weapon : unitTypeData.weapons)
         {
             float weaponDps = weapon.attacks * weapon.damage_ * (1 / weapon.speed);
-            if (weaponDps > dps)
-                dps = weaponDps;
+            dps = std::max(weaponDps, dps);
         }
-        return dps;
-        /*if (unit->unit_type == sc2::UNIT_TYPEID::ZERG_BANELING)
-            return 11;
-        return 10;*/
+        return 5 + (dps * remainingHealth);
     }
 
-    if (Util::IsWorker(unit))
+    if (Util::IsWorker(target))
     {
         return 2;
     }
 
     return 1;
+}
+
+// according to http://wiki.teamliquid.net/starcraft2/Range
+// the maximum range of a melee unit is 1 (ultralisk)
+bool RangedManager::isTargetRanged(const sc2::Unit * target)
+{
+    BOT_ASSERT(target, "target is null");
+    sc2::UnitTypeData unitTypeData = Util::GetUnitTypeDataFromUnitTypeId(target->unit_type, m_bot);
+    float maxRange = 0.f;
+
+    for (sc2::Weapon & weapon : unitTypeData.weapons)
+        maxRange = std::max(maxRange, weapon.range);
+    return maxRange > 1.f;
 }
 
