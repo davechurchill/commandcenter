@@ -11,7 +11,7 @@
         "BotRace"                   : "Terran",
         "EnemyDifficulty"           : 1,
         "EnemyRace"                 : "Zerg",
-        "MapFile"                   : "InterloperLE.SC2Map",
+        "MapFile"                   : "DefeatZerglingsAndBanelings.SC2Map",
         "StepSize"                  : 1
     },
         

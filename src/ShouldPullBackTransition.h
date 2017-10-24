@@ -11,7 +11,7 @@ private:
 
 public:
     ShouldPullBackTransition(const sc2::Unit * unit, const sc2::Unit * target, FocusFireFSMState* nextState);
-    bool isValid(std::map<sc2::Tag, float> *, CCBot*);
+    bool isValid(std::unordered_map<sc2::Tag, float> *, CCBot*);
     FocusFireFSMState* getNextState();
     void onTransition();
 };

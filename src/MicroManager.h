@@ -42,8 +42,8 @@ public:
     void execute(const SquadOrder & order);
     void regroup(const sc2::Point2D & regroupPosition) const;
 
-    std::map<sc2::Tag, FocusFireFiniteStateMachine*> m_focusFireStates;
-    std::map<sc2::Tag, KitingFiniteStateMachine*> m_kittingStates;
-    std::map<sc2::Tag, float> m_unitHealth;
+    std::unordered_map<sc2::Tag, FocusFireFiniteStateMachine*> m_focusFireStates;
+    std::unordered_map<sc2::Tag, KitingFiniteStateMachine*> m_kittingStates;
+    std::unordered_map<sc2::Tag, float> m_unitHealth;
 
 };

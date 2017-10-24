@@ -9,7 +9,7 @@ ShouldPullBackTransition::ShouldPullBackTransition(const sc2::Unit * unit, const
     m_nextState = nextState;
 }
 
-bool ShouldPullBackTransition::isValid(std::map<sc2::Tag, float> * unitHealth, CCBot* bot)
+bool ShouldPullBackTransition::isValid(std::unordered_map<sc2::Tag, float> * unitHealth, CCBot* bot)
 {
     auto targetWeapons = bot->Observation()->GetUnitTypeData()[m_target->unit_type].weapons;
     float damage = 0.f;
