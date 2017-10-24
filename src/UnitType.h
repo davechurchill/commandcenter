@@ -19,11 +19,13 @@ public:
     UnitType();
 
 #ifdef SC2API
-    UnitType(sc2::UnitTypeID type, CCBot & bot);
+    UnitType(const sc2::UnitTypeID & type, CCBot & bot);
     sc2::UnitTypeID getAPIUnitType() const;
+    bool is(const sc2::UnitTypeID & type) const;
 #else
-    UnitType(const BWAPI::Unit type, CCBot & bot);
+    UnitType(const BWAPI::UnitType & type, CCBot & bot);
     BWAPI::UnitType getAPIUnitType() const;
+    bool is(const BWAPI::UnitType & type) const;
 #endif
 
     bool operator < (const UnitType & rhs) const;
@@ -50,4 +52,13 @@ public:
     int tileHeight() const;
     int supplyProvided() const;
     int supplyRequired() const;
+
+    static UnitType GetUnitTypeFromName(const std::string & name, CCBot & bot);
+
+    // lazy functions to let me know if this type is a special type
+    bool isOverlord() const;
+    bool isLarva() const;
+    bool isEgg() const;
+    bool isQueen() const;
+    bool isTank() const;
 };

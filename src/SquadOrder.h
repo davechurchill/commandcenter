@@ -12,7 +12,7 @@ class SquadOrder
 {
     size_t          m_type;
     float           m_radius;
-    CCPosition    m_position;
+    CCPosition      m_position;
     std::string     m_status;
 
 public:

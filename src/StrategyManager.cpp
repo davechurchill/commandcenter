@@ -2,14 +2,14 @@
 #include "CCBot.h"
 #include "JSONTools.h"
 #include "Util.h"
-#include "BuildType.h"
+#include "MetaType.h"
 
 Strategy::Strategy()
 {
 
 }
 
-Strategy::Strategy(const std::string & name, const sc2::Race & race, const BuildOrder & buildOrder)
+Strategy::Strategy(const std::string & name, const CCRace & race, const BuildOrder & buildOrder)
     : m_name(name)
     , m_race(race)
     , m_buildOrder(buildOrder)
@@ -90,7 +90,7 @@ void StrategyManager::onEnd(const bool isWinner)
 
 void StrategyManager::readStrategyFile(const std::string & filename)
 {
-    sc2::Race race = m_bot.GetPlayerRace(Players::Self);
+    CCRace race = m_bot.GetPlayerRace(Players::Self);
     std::string ourRace = Util::GetStringFromRace(race);
     std::string config = JSONTools::ReadFile(filename);
     rapidjson::Document doc;
@@ -148,7 +148,7 @@ void StrategyManager::readStrategyFile(const std::string & filename)
                 const std::string &         name = itr->name.GetString();
                 const rapidjson::Value &    val  = itr->value;
 
-                sc2::Race strategyRace;
+                CCRace strategyRace;
                 if (val.HasMember("Race") && val["Race"].IsString())
                 {
                     strategyRace = Util::GetRaceFromString(val["Race"].GetString());
@@ -159,7 +159,7 @@ void StrategyManager::readStrategyFile(const std::string & filename)
                     continue;
                 }
 
-                BuildOrder buildOrder(strategyRace);
+                BuildOrder buildOrder;
                 if (val.HasMember("OpeningBuildOrder") && val["OpeningBuildOrder"].IsArray())
                 {
                     const rapidjson::Value & build = val["OpeningBuildOrder"];
@@ -168,8 +168,8 @@ void StrategyManager::readStrategyFile(const std::string & filename)
                     {
                         if (build[b].IsString())
                         {
-                            BuildType buildType(build[b].GetString(), m_bot);
-                            buildOrder.add(buildType);
+                            MetaType MetaType(build[b].GetString(), m_bot);
+                            buildOrder.add(MetaType);
                         }
                         else
                         {

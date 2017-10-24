@@ -14,9 +14,9 @@ class ProductionManager
     BuildingManager m_buildingManager;
     BuildOrderQueue m_queue;
 
-    Unit getClosestUnitToPosition(const std::vector<Unit> & units, CCPosition closestTo);
-    bool    meetsReservedResources(const BuildType & type);
-    bool    canMakeNow(const Unit & producer, const BuildType & type);
+    Unit    getClosestUnitToPosition(const std::vector<Unit> & units, CCPosition closestTo);
+    bool    meetsReservedResources(const MetaType & type);
+    bool    canMakeNow(const Unit & producer, const MetaType & type);
     bool    detectBuildOrderDeadlock();
     void    setBuildOrder(const BuildOrder & buildOrder);
     void    create(const Unit & producer, BuildOrderItem & item);
@@ -33,5 +33,5 @@ public:
     void    onUnitDestroy(const Unit & unit);
     void    drawProductionInformation();
 
-    Unit getProducer(const BuildType & type, CCPosition closestTo = CCPosition(0, 0));
+    Unit getProducer(const MetaType & type, CCPosition closestTo = CCPosition(0, 0));
 };

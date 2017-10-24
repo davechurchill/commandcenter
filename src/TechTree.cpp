@@ -1,7 +1,7 @@
 #include "TechTree.h"
 #include "Util.h"
 #include "CCBot.h"
-#include "BuildType.h"
+#include "MetaType.h"
 #include "Timer.hpp"
 
 TechTree::TechTree(CCBot & bot)
@@ -17,6 +17,7 @@ void TechTree::onStart()
     outputJSON("TechTree.json");
 }
 
+#ifdef SC2API
 void TechTree::initUnitTypeData()
 {
     m_upgradeData[0] = UnitTypeData();
@@ -258,47 +259,59 @@ void TechTree::initUpgradeData()
     m_upgradeData[sc2::UPGRADE_ID::ZERGMISSILEWEAPONSLEVEL2] =          { sc2::Race::Zerg, 150, 150, 0, 3040, false, false, false, false, false, false, false, sc2::ABILITY_ID::RESEARCH_ZERGMISSILEWEAPONSLEVEL2, 0, { sc2::UNIT_TYPEID::ZERG_EVOLUTIONCHAMBER }, { sc2::UNIT_TYPEID::ZERG_LAIR, sc2::UNIT_TYPEID::ZERG_HIVE }, {sc2::UPGRADE_ID::ZERGMISSILEWEAPONSLEVEL1} };
     m_upgradeData[sc2::UPGRADE_ID::ZERGMISSILEWEAPONSLEVEL3] =          { sc2::Race::Zerg, 200, 200, 0, 3520, false, false, false, false, false, false, false, sc2::ABILITY_ID::RESEARCH_ZERGMISSILEWEAPONSLEVEL3, 0, { sc2::UNIT_TYPEID::ZERG_EVOLUTIONCHAMBER }, { sc2::UNIT_TYPEID::ZERG_HIVE }, {sc2::UPGRADE_ID::ZERGMISSILEWEAPONSLEVEL2} };
 }
+#else
+void TechTree::initUpgradeData()
+{
+
+}
+
+void TechTree::initUnitTypeData()
+{
+
+}
+#endif
 
 const UnitTypeData & TechTree::getData(const UnitType & type) const
 {
-    if (m_unitTypeData.find(type.getAPIUnitType()) == m_unitTypeData.end())
+    if (m_unitTypeData.find(type) == m_unitTypeData.end())
     {
-        //std::cout << "WARNING: Unit type not found: " << sc2::UnitTypeToName(type) << "\n";
-        return m_unitTypeData.at(0);
+        std::cout << "WARNING: Unit type not found: " << type.getName() << "\n";
+        return m_unitTypeData.begin()->second;
     }
 
-    return m_unitTypeData.at(type.getAPIUnitType());
+    return m_unitTypeData.at(type);
 }
 
-const UnitTypeData & TechTree::getData(const sc2::UpgradeID & type)  const
+const UnitTypeData & TechTree::getData(const CCUpgrade & type)  const
 {
     if (m_upgradeData.find(type) == m_upgradeData.end())
     {
         //std::cout << "WARNING: Upgrade not found: " << sc2::UpgradeIDToName(type) << "\n";
-        return m_unitTypeData.at(0);
+        return m_unitTypeData.begin()->second;
     }
 
     return m_upgradeData.at(type);
 }
 
-const UnitTypeData & TechTree::getData(const BuildType & type) const
+const UnitTypeData & TechTree::getData(const MetaType & type) const
 {
-    if (type.getBuildType() == BuildTypes::Unit)
+    if (type.getMetaType() == MetaTypes::Unit)
     {
-        return getData(type.getUnitTypeID());
+        return getData(type.getUnitType());
     }
-    else if (type.getBuildType() == BuildTypes::Upgrade)
+    else if (type.getMetaType() == MetaTypes::Upgrade)
     {
-        return getData(type.getUpgradeID());
+        return getData(type.getUpgrade());
     }
     
     BOT_ASSERT(false, "Can't getData this type: %s", type.getName().c_str());
 
-    return m_unitTypeData.at(0);
+    return m_unitTypeData.begin()->second;
 }
 
 void TechTree::outputJSON(const std::string & filename) const
 {
+#ifdef SC2API
     std::ofstream out(filename);
     out << "{\n";
     std::string q = "\"";
@@ -351,4 +364,7 @@ void TechTree::outputJSON(const std::string & filename) const
 
     out << "}";
     out.close();
+#else
+
+#endif
 }

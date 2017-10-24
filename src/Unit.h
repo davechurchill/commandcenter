@@ -14,7 +14,7 @@ class Unit
 #ifdef SC2API
     const sc2::Unit * m_unit;
 #else
-    const BWAPI::Unit m_unit;
+    BWAPI::Unit m_unit;
 #endif
 
 public:
@@ -54,6 +54,7 @@ public:
     bool isBurrowed() const;
     bool isValid() const;
     bool isTraining() const;
+    bool isConstructing(const UnitType & type) const;
 
     void stop           () const;
     void attackUnit     (const Unit & target) const;

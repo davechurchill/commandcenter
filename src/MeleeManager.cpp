@@ -23,8 +23,8 @@ void MeleeManager::assignTargets(const std::vector<Unit> & targets)
     {
         if (!target.isValid()) { continue; }
         if (target.isFlying()) { continue; }
-        if (target.getType().getAPIUnitType() == sc2::UNIT_TYPEID::ZERG_EGG) { continue; }
-        if (target.getType().getAPIUnitType() == sc2::UNIT_TYPEID::ZERG_LARVA) { continue; }
+        if (target.getType().isEgg()) { continue; }
+        if (target.getType().isLarva()) { continue; }
 
         meleeUnitTargets.push_back(target);
     }

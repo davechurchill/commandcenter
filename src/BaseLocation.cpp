@@ -65,7 +65,7 @@ BaseLocation::BaseLocation(CCBot & bot, int baseID, const std::vector<Unit> & re
     m_distanceMap = m_bot.Map().getDistanceMap(m_centerOfResources);
 
     // check to see if this is a start location for the map
-    for (auto & pos : m_bot.Observation()->GetGameInfo().enemy_start_locations)
+    for (auto & pos : m_bot.GetStartLocations())
     {
         if (containsPosition(pos))
         {

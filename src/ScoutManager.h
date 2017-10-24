@@ -16,8 +16,8 @@ class ScoutManager
     float           m_previousScoutHP;
 
     bool            enemyWorkerInRadiusOf(const CCPosition & pos) const;
-    CCPosition    getFleePosition() const;
-    Unit closestEnemyWorkerTo(const CCPosition & pos) const;
+    CCPosition      getFleePosition() const;
+    Unit            closestEnemyWorkerTo(const CCPosition & pos) const;
     void            moveScouts();
     void            drawScoutInformation();
 

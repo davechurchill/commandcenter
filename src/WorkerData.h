@@ -13,14 +13,14 @@ class WorkerData
 {
     CCBot & m_bot;
 
-    std::set<Unit>         m_workers;
-    std::set<Unit>         m_depots;
-    std::map<int, int>                  m_workerJobCount;
-    std::map<Unit, int>    m_workerJobMap;
-    std::map<Unit, int>    m_refineryWorkerCount;
-    std::map<Unit, int>    m_depotWorkerCount;
-    std::map<Unit, Unit>  m_workerRefineryMap;
-    std::map<Unit, Unit>  m_workerDepotMap;
+    std::set<Unit>          m_workers;
+    std::set<Unit>          m_depots;
+    std::map<int, int>      m_workerJobCount;
+    std::map<Unit, int>     m_workerJobMap;
+    std::map<Unit, int>     m_refineryWorkerCount;
+    std::map<Unit, int>     m_depotWorkerCount;
+    std::map<Unit, Unit>    m_workerRefineryMap;
+    std::map<Unit, Unit>    m_workerDepotMap;
 
     void clearPreviousJob(const Unit & unit);
 
@@ -37,8 +37,8 @@ public:
     int     getWorkerJobCount(int job) const;
     int     getNumAssignedWorkers(const Unit & unit);
     int     getWorkerJob(const Unit & unit) const;
-    Unit getMineralToMine(const Unit & unit) const;
-    Unit getWorkerDepot(const Unit & unit) const;
+    Unit    getMineralToMine(const Unit & unit) const;
+    Unit    getWorkerDepot(const Unit & unit) const;
     const char * getJobCode(const Unit & unit);
     const std::set<Unit> & getWorkers() const;
 };

@@ -23,7 +23,7 @@ struct UnitInfo
         : id(0)
         , lastHealth(0)
         , player(-1)
-        , lastPosition(sc2::Point3D(0, 0, 0))
+        , lastPosition(0, 0)
         , progress(1.0)
     {
 

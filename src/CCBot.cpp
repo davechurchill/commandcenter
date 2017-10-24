@@ -16,7 +16,7 @@ CCBot::CCBot()
 void CCBot::OnGameStart() 
 {
     m_config.readConfigFile();
-    
+
 #ifdef SC2API
     // get my race
     auto playerID = Observation()->GetPlayerID();
@@ -31,8 +31,15 @@ void CCBot::OnGameStart()
             m_playerRace[Players::Enemy] = playerInfo.race_requested;
         }
     }
-#else
 
+    // set the base locations on the map
+
+     m_bot.Observation()->GetGameInfo().enemy_start_locations
+#else
+    for (auto & loc : BWAPI::Broodwar->getStartLocations())
+    {
+        m_baseLocations.push_back(BWAPI::Position(loc));
+    }
 #endif
     
     setUnits();
@@ -117,12 +124,12 @@ const UnitTypeData & CCBot::Data(const Unit & unit) const
     return m_techTree.getData(unit.getType());
 }
 
-const UnitTypeData & CCBot::Data(const sc2::UpgradeID & type) const
+const UnitTypeData & CCBot::Data(const CCUpgrade & type) const
 {
     return m_techTree.getData(type);
 }
 
-const UnitTypeData & CCBot::Data(const BuildType & type) const
+const UnitTypeData & CCBot::Data(const MetaType & type) const
 {
     return m_techTree.getData(type);
 }
@@ -137,7 +144,7 @@ int CCBot::GetMinerals() const
 #ifdef SC2API
     return Observation()->GetMinerals();
 #else
-
+    return BWAPI::Broodwar->self()->minerals();
 #endif
 }
 
@@ -146,7 +153,7 @@ int CCBot::GetGas() const
 #ifdef SC2API
     return Observation()->GetVespene();
 #else
-    
+    return BWAPI::Broodwar->self()->gas();
 #endif
 }
 
@@ -155,7 +162,7 @@ Unit CCBot::GetUnit(const CCUnitID & tag) const
 #ifdef SC2API
     return Unit(Observation()->GetUnit(tag), *(CCBot *)this);
 #else
-
+    return Unit(BWAPI::Broodwar->getUnit(tag), *(CCBot *)this);
 #endif
 }
 
@@ -169,17 +176,13 @@ CCPosition CCBot::GetStartLocation() const
 #ifdef SC2API
     return Observation()->GetStartLocation();
 #else
-
+    return BWAPI::Position(BWAPI::Broodwar->self()->getStartLocation());
 #endif
 }
 
-const std::vector<CCPosition> & CCBot::GetEnemyStartLocations() const
+const std::vector<CCPosition> & CCBot::GetStartLocations() const
 {
-#ifdef SC2API
-    return Observation()->GetGameInfo().enemy_start_locations;
-#else
-
-#endif
+    return m_baseLocations;
 }
 
 #ifdef SC2API

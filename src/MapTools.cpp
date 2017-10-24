@@ -155,7 +155,7 @@ bool MapTools::isExplored(int tileX, int tileY) const
     sc2::Visibility vis = m_bot.Observation()->GetVisibility(CCPosition(tileX + HALF_TILE, tileY + HALF_TILE));
     return vis == sc2::Visibility::Fogged || vis == sc2::Visibility::Visible;
 #else
-    BWAPI::Broodwar->isExplored(tileX, tileY);
+    return BWAPI::Broodwar->isExplored(tileX, tileY);
 #endif
 }
 
@@ -166,7 +166,7 @@ bool MapTools::isVisible(int tileX, int tileY) const
 #ifdef SC2API
     return m_bot.Observation()->GetVisibility(CCPosition(tileX + HALF_TILE, tileY + HALF_TILE)) == sc2::Visibility::Visible;
 #else
-    return BWAPI::Broodwar->isVisible(BWAPI::TilePosition(pos));
+    return BWAPI::Broodwar->isVisible(BWAPI::TilePosition(tileX, tileY));
 #endif
 }
 
@@ -183,7 +183,7 @@ bool MapTools::isPowered(int tileX, int tileY) const
 
     return false;
 #else
-
+    return BWAPI::Broodwar->hasPower(BWAPI::TilePosition(tileX, tileY));
 #endif
 }
 
@@ -405,9 +405,13 @@ bool MapTools::isBuildable(int tileX, int tileY) const
     return m_buildable[tileX][tileY];
 }
 
-bool MapTools::canBuildTypeAtPosition(int tileX, int tileY, const UnitType & type) const
+bool MapTools::canMetaTypeAtPosition(int tileX, int tileY, const UnitType & type) const
 {
+#ifdef SC2API
     return m_bot.Query()->Placement(m_bot.Data(type).buildAbility, CCPosition((float)tileX, (float)tileY));
+#else
+    return BWAPI::Broodwar->canBuildHere(BWAPI::TilePosition(tileX, tileY), type.getAPIUnitType());
+#endif
 }
 
 bool MapTools::isBuildable(const CCTilePosition & tile) const
@@ -509,7 +513,18 @@ bool MapTools::canWalk(int tileX, int tileY)
     bool decodedPlacement = encodedPlacement == 255 ? false : true;
     return decodedPlacement;
 #else
-    // BWAPI
+    for (int i=0; i<4; ++i)
+    {
+        for (int j=0; j<4; ++j)
+        {
+            if (!BWAPI::Broodwar->isWalkable(tileX*4 + i, tileY*4 + j))
+            {
+                return false;
+            }
+        }
+    }
+
+    return true;
 #endif
 }
 
@@ -528,7 +543,7 @@ bool MapTools::canBuild(int tileX, int tileY)
     bool decodedPlacement = encodedPlacement == 255 ? true : false;
     return decodedPlacement;
 #else
-
+    return BWAPI::Broodwar->isBuildable(BWAPI::TilePosition(tileX, tileY));
 #endif
 }
 

@@ -22,8 +22,8 @@ void RangedManager::assignTargets(const std::vector<Unit> & targets)
     for (auto target : targets)
     {
         if (!target.isValid()) { continue; }
-        if (target.getType().getAPIUnitType() == sc2::UNIT_TYPEID::ZERG_EGG) { continue; }
-        if (target.getType().getAPIUnitType() == sc2::UNIT_TYPEID::ZERG_LARVA) { continue; }
+        if (target.getType().isEgg()) { continue; }
+        if (target.getType().isLarva()) { continue; }
 
         rangedUnitTargets.push_back(target);
     }

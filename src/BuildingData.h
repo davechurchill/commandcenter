@@ -13,8 +13,8 @@ public:
 
     std::vector<Building> & getBuildings();
 
-    void        addBuilding(const Building & b);
-    void        removeBuilding(const Building & b);
-    void        removeBuildings(const std::vector<Building> & buildings);
-    bool        isBeingBuilt(UnitType type);
+    void addBuilding(const Building & b);
+    void removeBuilding(const Building & b);
+    void removeBuildings(const std::vector<Building> & buildings);
+    bool isBeingBuilt(UnitType type);
 };

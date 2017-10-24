@@ -95,7 +95,7 @@ void BuildOrderQueue::queueItem(const BuildOrderItem & b)
     m_lowestPriority  = (b.priority < m_lowestPriority)  ? b.priority : m_lowestPriority;
 }
 
-void BuildOrderQueue::queueAsHighestPriority(const BuildType & type, bool blocking)
+void BuildOrderQueue::queueAsHighestPriority(const MetaType & type, bool blocking)
 {
     // the new priority will be higher
     int newPriority = m_highestPriority + m_defaultPrioritySpacing;
@@ -104,7 +104,7 @@ void BuildOrderQueue::queueAsHighestPriority(const BuildType & type, bool blocki
     queueItem(BuildOrderItem(type, newPriority, blocking));
 }
 
-void BuildOrderQueue::queueAsLowestPriority(const BuildType & type, bool blocking)
+void BuildOrderQueue::queueAsLowestPriority(const MetaType & type, bool blocking)
 {
     // the new priority will be higher
     int newPriority = m_lowestPriority - m_defaultPrioritySpacing;
@@ -158,7 +158,7 @@ std::string BuildOrderQueue::getQueueInformation() const
     // for each unit in the queue
     for (size_t i(0); i<reps; i++)
     {
-        const BuildType & type = m_queue[m_queue.size() - 1 - i].type;
+        const MetaType & type = m_queue[m_queue.size() - 1 - i].type;
         ss << type.getName() << "\n";
     }
 
@@ -166,7 +166,7 @@ std::string BuildOrderQueue::getQueueInformation() const
 }
 
 
-BuildOrderItem::BuildOrderItem(const BuildType & t, int p, bool b)
+BuildOrderItem::BuildOrderItem(const MetaType & t, int p, bool b)
     : type(t)
     , priority(p)
     , blocking(b)

@@ -10,14 +10,14 @@
 #include <string>
 #include <array>
 
-#define SC2API
+//#define SC2API
 
 #ifdef SC2API
     #include "sc2api/sc2_api.h"
     typedef sc2::Point2D        CCPosition;
     typedef sc2::Point2DI       CCTilePosition;
-    typedef float               CCPositionType;
     typedef sc2::Color          CCColor;
+    typedef sc2::UpgradID       CCUpgrade;
     typedef sc2::Tag            CCUnitID;
     typedef sc2::Race           CCRace;
     typedef float               CCHealth;
@@ -26,9 +26,9 @@
     #include "BWAPI.h"
     typedef BWAPI::Position     CCPosition;
     typedef BWAPI::TilePosition CCTilePosition;
-    typedef int                 CCPositionType;
     typedef BWAPI::Color        CCColor;
     typedef BWAPI::Race         CCRace;
+    typedef BWAPI::UpgradeType  CCUpgrade;
     typedef int                 CCUnitID;
     typedef int                 CCHealth;
 #endif

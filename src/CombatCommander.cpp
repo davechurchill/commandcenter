@@ -93,8 +93,8 @@ void CombatCommander::updateAttackSquads()
 
         // get every unit of a lower priority and put it into the attack squad
         if (!unit.getType().isWorker() 
-            && !(unit.getType().getAPIUnitType() == sc2::UNIT_TYPEID::ZERG_OVERLORD) 
-            && !(unit.getType().getAPIUnitType() == sc2::UNIT_TYPEID::ZERG_QUEEN) 
+            && !(unit.getType().isOverlord()) 
+            && !(unit.getType().isQueen()) 
             && m_squadData.canAssignUnitToSquad(unit, mainAttackSquad))
         {
             m_squadData.assignUnitToSquad(unit, mainAttackSquad);
@@ -197,7 +197,7 @@ void CombatCommander::updateDefenseSquads()
         for (auto & unit : m_bot.UnitInfo().getUnits(Players::Enemy))
         {
             // if it's an overlord, don't worry about it for defense, we don't care what they see
-            if (unit.getType().getAPIUnitType() == sc2::UNIT_TYPEID::ZERG_OVERLORD)
+            if (unit.getType().isOverlord())
             {
                 continue;
             }
@@ -415,7 +415,7 @@ CCPosition CombatCommander::getMainAttackLocation()
     // Third choice: Attack visible enemy units that aren't overlords
     for (auto & enemyUnit : m_bot.UnitInfo().getUnits(Players::Enemy))
     {
-        if (enemyUnit.getType().getAPIUnitType() != sc2::UNIT_TYPEID::ZERG_OVERLORD)
+        if (!enemyUnit.getType().isOverlord())
         {
             return enemyUnit.getPosition();
         }

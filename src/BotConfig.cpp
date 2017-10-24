@@ -132,29 +132,3 @@ void BotConfig::readConfigFile()
         JSONTools::ReadBool("UseAutoObserver", module, UsingAutoObserver);
     }
 }
-
-sc2::Race BotConfig::GetRace(const std::string & raceName)
-{
-    if (raceName == "Protoss")
-    {
-        return sc2::Race::Protoss;
-    }
-
-    if (raceName == "Terran")
-    {
-        return sc2::Race::Terran;
-    }
-
-    if (raceName == "Zerg")
-    {
-        return sc2::Race::Zerg;
-    }
-
-    if (raceName == "Random")
-    {
-        return sc2::Race::Random;
-    }
-
-    BOT_ASSERT(false, "Race not found: %s", raceName.c_str());
-    return sc2::Race::Random;
-}

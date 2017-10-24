@@ -116,7 +116,7 @@ void Squad::addUnitsToMicroManagers()
     {
         BOT_ASSERT(unit.isValid(), "null unit in addUnitsToMicroManagers()");
 
-        if (unit.getType().getAPIUnitType() == sc2::UNIT_TYPEID::TERRAN_SIEGETANK || unit.getType().getAPIUnitType() == sc2::UNIT_TYPEID::TERRAN_SIEGETANKSIEGED)
+        if (unit.getType().isTank())
         {
             tankUnits.push_back(unit);
         }

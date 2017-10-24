@@ -84,7 +84,7 @@ CCHealth Unit::getHitPoints() const
 #ifdef SC2API
     return m_unit->health;
 #else
-    return m_unit->currentHealth();
+    return m_unit->getHitPoints();
 #endif
 }
 
@@ -114,7 +114,8 @@ float Unit::getBuildPercentage() const
 #ifdef SC2API
     return m_unit->build_progress;
 #else
-    // BWAPI
+    if (getType().isBuilding()) { return m_unit->getRemainingBuildTime() / getType().getAPIUnitType().buildTime(); }
+    else { return m_unit->getRemainingTrainTime() / getType().getAPIUnitType().buildTime(); }
 #endif
 }
 
@@ -267,7 +268,7 @@ void Unit::attackUnit(const Unit & target) const
 #ifdef SC2API
     m_bot->Actions()->UnitCommand(m_unit, sc2::ABILITY_ID::ATTACK_ATTACK, target.getUnitPtr());
 #else
-    m_unit->attackUnit(target.getUnitPtr());
+    m_unit->attack(target.getUnitPtr());
 #endif
 }
 
@@ -322,7 +323,7 @@ void Unit::build(const UnitType & buildingType, CCTilePosition pos) const
 #ifdef SC2API
     m_bot->Actions()->UnitCommand(m_unit, m_bot->Data(buildingType).buildAbility, Util::GetPosition(pos));
 #else
-    m_unit->build(buildingType, pos);
+    m_unit->build(buildingType.getAPIUnitType(), pos);
 #endif
 }
 
@@ -342,6 +343,16 @@ void Unit::train(const UnitType & type) const
 #ifdef SC2API
     m_bot->Actions()->UnitCommand(m_unit, m_bot->Data(type).buildAbility);
 #else
-    m_unit->train(type);
+    m_unit->train(type.getAPIUnitType());
+#endif
+}
+
+bool Unit::isConstructing(const UnitType & type) const
+{
+#ifdef SC2API
+    sc2::AbilityID buildAbility = m_bot.Data(b.type).buildAbility;
+    return (getUnitPtr()->orders.size() > 0) && (builderUnit.getUnitPtr()->orders[0].ability_id == buildAbility);
+#else
+    return m_unit->isConstructing();
 #endif
 }

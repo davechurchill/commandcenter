@@ -65,7 +65,7 @@ public:
     bool    isExplored(const CCPosition & pos) const;
     bool    isExplored(const CCTilePosition & pos) const;
     bool    isVisible(int tileX, int tileY) const;
-    bool    canBuildTypeAtPosition(int tileX, int tileY, const UnitType & type) const;
+    bool    canMetaTypeAtPosition(int tileX, int tileY, const UnitType & type) const;
 
     const   DistanceMap & getDistanceMap(const CCTilePosition & tile) const;
     const   DistanceMap & getDistanceMap(const CCPosition & tile) const;

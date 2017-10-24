@@ -4,7 +4,6 @@
 
 class BotConfig
 {
-    sc2::Race GetRace(const std::string & raceName);
 
 public:
 

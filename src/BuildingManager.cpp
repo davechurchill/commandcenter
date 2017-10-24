@@ -133,13 +133,13 @@ void BuildingManager::constructAssignedBuildings()
         }
 
         // TODO: not sure if this is the correct way to tell if the building is constructing
-        sc2::AbilityID buildAbility = m_bot.Data(b.type).buildAbility;
+        //sc2::AbilityID buildAbility = m_bot.Data(b.type).buildAbility;
         Unit builderUnit = b.builderUnit;
 
         bool isConstructing = false;
 
         // if we're zerg and the builder unit is null, we assume it morphed into the building
-        if (m_bot.GetPlayerRace(Players::Self) == sc2::Race::Zerg)
+        if (Util::IsZerg(m_bot.GetPlayerRace(Players::Self)))
         {
             if (!builderUnit.isValid())
             {
@@ -149,8 +149,8 @@ void BuildingManager::constructAssignedBuildings()
         else
         {
             BOT_ASSERT(builderUnit.isValid(), "null builder unit");
-            // BWAPI
-            isConstructing = (builderUnit.getUnitPtr()->orders.size() > 0) && (builderUnit.getUnitPtr()->orders[0].ability_id == buildAbility);
+
+            isConstructing = builderUnit.isConstructing(b.type);
         }
 
         // if that worker is not currently constructing
@@ -247,11 +247,11 @@ void BuildingManager::checkForStartedConstruction()
                 b.buildingUnit = buildingStarted;
 
                 // if we are zerg, the buildingUnit now becomes nullptr since it's destroyed
-                if (m_bot.GetPlayerRace(Players::Self) == sc2::Race::Zerg)
+                if (Util::IsZerg(m_bot.GetPlayerRace(Players::Self)))
                 {
                     b.builderUnit = Unit();
                 }
-                else if (m_bot.GetPlayerRace(Players::Self) == sc2::Race::Protoss)
+                else if (Util::IsProtoss(m_bot.GetPlayerRace(Players::Self)))
                 {
                     m_bot.Workers().finishedWithWorker(b.builderUnit);
                     b.builderUnit = Unit();
@@ -290,7 +290,7 @@ void BuildingManager::checkForCompletedBuildings()
         if (b.buildingUnit.isCompleted())
         {
             // if we are terran, give the worker back to worker manager
-            if (m_bot.GetPlayerRace(Players::Self) == sc2::Race::Terran)
+            if (Util::IsTerran(m_bot.GetPlayerRace(Players::Self)))
             {
                 m_bot.Workers().finishedWithWorker(b.builderUnit);
             }

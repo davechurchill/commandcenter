@@ -106,6 +106,7 @@ bool GameCommander::shouldSendInitialScout()
 {
     return true;
 
+#ifdef SC2API
     switch (m_bot.GetPlayerRace(Players::Self))
     {
         case sc2::Race::Terran:  return m_bot.UnitInfo().getUnitTypeCount(Players::Self, UnitType(sc2::UNIT_TYPEID::TERRAN_SUPPLYDEPOT, m_bot), true) > 0;
@@ -113,6 +114,9 @@ bool GameCommander::shouldSendInitialScout()
         case sc2::Race::Zerg:    return m_bot.UnitInfo().getUnitTypeCount(Players::Self, UnitType(sc2::UNIT_TYPEID::ZERG_SPAWNINGPOOL, m_bot), true) > 0;
         default: return false;
     }
+#else
+
+#endif
 }
 
 // sets combat units to be passed to CombatCommander

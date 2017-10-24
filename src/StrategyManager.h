@@ -11,21 +11,21 @@ class CCBot;
 struct Strategy
 {
     std::string m_name;
-    sc2::Race   m_race;
+    CCRace      m_race;
     int         m_wins;
     int         m_losses;
     BuildOrder  m_buildOrder;
 
     Strategy();
-    Strategy(const std::string & name, const sc2::Race & race, const BuildOrder & buildOrder);
+    Strategy(const std::string & name, const CCRace & race, const BuildOrder & buildOrder);
 };
 
 class StrategyManager
 {
     CCBot & m_bot;
 
-    sc2::Race					    m_selfRace;
-    sc2::Race					    m_enemyRace;
+    CCRace                          m_selfRace;
+    CCRace                          m_enemyRace;
     std::map<std::string, Strategy> m_strategies;
     int                             m_totalGamesPlayed;
     const BuildOrder                m_emptyBuildOrder;

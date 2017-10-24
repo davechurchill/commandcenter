@@ -88,9 +88,6 @@
     <ClCompile Include="..\src\CombatCommander.cpp">
       <Filter>micro</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\BuildType.cpp">
-      <Filter>macro</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\TechTree.cpp">
       <Filter>util</Filter>
     </ClCompile>
@@ -99,6 +96,9 @@
     </ClCompile>
     <ClCompile Include="..\src\UnitType.cpp">
       <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\MetaType.cpp">
+      <Filter>macro</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -194,9 +194,6 @@
     <ClInclude Include="..\src\CombatCommander.h">
       <Filter>micro</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\BuildType.h">
-      <Filter>macro</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\TechTree.h">
       <Filter>util</Filter>
     </ClInclude>
@@ -205,6 +202,9 @@
     </ClInclude>
     <ClInclude Include="..\src\UnitType.h">
       <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\MetaType.h">
+      <Filter>macro</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

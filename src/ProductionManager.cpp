@@ -95,7 +95,7 @@ void ProductionManager::manageBuildOrderQueue()
     }
 }
 
-Unit ProductionManager::getProducer(const BuildType & type, CCPosition closestTo)
+Unit ProductionManager::getProducer(const MetaType & type, CCPosition closestTo)
 {
     // get all the types of units that cna build this type
     auto & producerTypes = m_bot.Data(type).whatBuilds;
@@ -105,7 +105,7 @@ Unit ProductionManager::getProducer(const BuildType & type, CCPosition closestTo
     for (auto unit : m_bot.UnitInfo().getUnits(Players::Self))
     {
         // reasons a unit can not train the desired type
-        if (std::find(producerTypes.begin(), producerTypes.end(), unit.getType().getAPIUnitType()) == producerTypes.end()) { continue; }
+        if (std::find(producerTypes.begin(), producerTypes.end(), unit.getType()) == producerTypes.end()) { continue; }
         if (!unit.isCompleted()) { continue; }
         if (m_bot.Data(unit).isBuilding && unit.isTraining()) { continue; }
         if (unit.isFlying()) { continue; }
@@ -163,12 +163,12 @@ void ProductionManager::create(const Unit & producer, BuildOrderItem & item)
     if (m_bot.Data(item.type).isBuilding)
     {
         // send the building task to the building manager
-        m_buildingManager.addBuildingTask(item.type.getUnitTypeID(), Util::GetTilePosition(m_bot.GetStartLocation()));
+        m_buildingManager.addBuildingTask(item.type.getUnitType(), Util::GetTilePosition(m_bot.GetStartLocation()));
     }
     // if we're dealing with a non-building unit
     else if (item.type.isUnit())
     {
-        producer.train(item.type.getUnitTypeID());
+        producer.train(item.type.getUnitType());
     }
     else if (item.type.isUpgrade())
     {
@@ -177,13 +177,14 @@ void ProductionManager::create(const Unit & producer, BuildOrderItem & item)
     }
 }
 
-bool ProductionManager::canMakeNow(const Unit & producer, const BuildType & type)
+bool ProductionManager::canMakeNow(const Unit & producer, const MetaType & type)
 {
     if (!producer.isValid() || !meetsReservedResources(type))
     {
         return false;
     }
 
+#ifdef SC2API
     sc2::AvailableAbilities available_abilities = m_bot.Query()->GetAbilitiesForUnit(producer.getUnitPtr());
 
     // quick check if the unit can't do anything it certainly can't build the thing we want
@@ -194,10 +195,10 @@ bool ProductionManager::canMakeNow(const Unit & producer, const BuildType & type
     else
     {
         // check to see if one of the unit's available abilities matches the build ability type
-        sc2::AbilityID buildTypeAbility = m_bot.Data(type).buildAbility;
+        sc2::AbilityID MetaTypeAbility = m_bot.Data(type).buildAbility;
         for (const sc2::AvailableAbility & available_ability : available_abilities.abilities)
         {
-            if (available_ability.ability_id == buildTypeAbility)
+            if (available_ability.ability_id == MetaTypeAbility)
             {
                 return true;
             }
@@ -205,6 +206,30 @@ bool ProductionManager::canMakeNow(const Unit & producer, const BuildType & type
     }
 
     return false;
+#else
+    bool canMake = meetsReservedResources(type);
+	if (canMake)
+	{
+		/*if (type.isUnit())
+		{
+			canMake = BWAPI::Broodwar->canMake(type.getUnitType(), producer);
+		}
+		else if (type.isTech())
+		{
+			canMake = BWAPI::Broodwar->canResearch(type.getTechType(), producer);
+		}
+		else if (type.isUpgrade())
+		{
+			canMake = BWAPI::Broodwar->canUpgrade(type.getUpgradeType(), producer);
+		}
+		else
+		{	
+			BOT_ASSERT(false, "Unknown type");
+		}*/
+	}
+
+	return canMake;
+#endif
 }
 
 bool ProductionManager::detectBuildOrderDeadlock()
@@ -224,7 +249,7 @@ int ProductionManager::getFreeGas()
 }
 
 // return whether or not we meet resources, including building reserves
-bool ProductionManager::meetsReservedResources(const BuildType & type)
+bool ProductionManager::meetsReservedResources(const MetaType & type)
 {
     // return whether or not we meet the resources
     return (m_bot.Data(type).mineralCost <= getFreeMinerals()) && (m_bot.Data(type).gasCost <= getFreeGas());

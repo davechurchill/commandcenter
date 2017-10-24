@@ -10,7 +10,6 @@ std::string Util::GetStringFromRace(const CCRace & race)
     else if (race == sc2::Race::Zerg)    { return "Zerg"; }
     else if (race == sc2::Race::Random)  { return "Random"; }
 #else
-    BWAPI::Race race = type.getRace();
     if      (race == BWAPI::Races::Terran)  { return "Terran"; }
     else if (race == BWAPI::Races::Protoss) { return "Protoss"; }
     else if (race == BWAPI::Races::Zerg)    { return "Zerg"; }
@@ -55,7 +54,7 @@ UnitType Util::GetSupplyProvider(const CCRace & race, CCBot & bot)
         default: return UnitType();
     }
 #else
-    return race.getSupplyProvider();
+    return UnitType(race.getSupplyProvider(), bot);
 #endif
 }
 
@@ -70,7 +69,7 @@ UnitType Util::GetTownHall(const CCRace & race, CCBot & bot)
         default: return UnitType();
     }
 #else
-    return race.getResourceDepot();
+    return UnitType(race.getResourceDepot(), bot);
 #endif
 }
 
@@ -92,6 +91,33 @@ CCPosition Util::CalcCenter(const std::vector<Unit> & units)
     }
 
     return CCPosition(cx / units.size(), cy / units.size());
+}
+
+bool Util::IsZerg(const CCRace & race)
+{
+#ifdef SC2API
+    return race == sc2::Races::Zerg;
+#else
+    return race == BWAPI::Races::Zerg;
+#endif
+}
+
+bool Util::IsProtoss(const CCRace & race)
+{
+#ifdef SC2API
+    return race == sc2::Races::Protoss;
+#else
+    return race == BWAPI::Races::Protoss;
+#endif
+}
+
+bool Util::IsTerran(const CCRace & race)
+{
+#ifdef SC2API
+    return race == sc2::Races::Terran;
+#else
+    return race == BWAPI::Races::Terran;
+#endif
 }
 
 CCTilePosition Util::GetTilePosition(const CCPosition & pos)
@@ -135,40 +161,6 @@ float Util::DistSq(const CCPosition & p1, const CCPosition & p2)
     return dx*dx + dy*dy;
 }
 
-UnitType Util::GetUnitTypeFromName(const std::string & name, CCBot & bot)
-{
-#ifdef SC2API
-    for (const sc2::UnitTypeData & data : bot.Observation()->GetUnitTypeData())
-    {
-        if (name == data.name)
-        {
-            return UnitType(data.unit_type_id, bot);
-        }
-    }
-#else
-
-#endif
-
-    return UnitType();
-}
-
-sc2::UpgradeID Util::GetUpgradeFromName(const std::string & name, CCBot & bot)
-{
-#ifdef SC2API
-    for (const sc2::UpgradeData & data : bot.Observation()->GetUpgradeData())
-    {
-        if (name == data.name)
-        {
-            return data.upgrade_id;
-        }
-    }
-
-    return 0;
-#else
-
-#endif
-}
-
 #ifdef SC2API
 sc2::BuffID Util::GetBuffFromName(const std::string & name, CCBot & bot)
 {
@@ -199,7 +191,7 @@ sc2::AbilityID Util::GetAbilityFromName(const std::string & name, CCBot & bot)
 
 // checks where a given unit can make a given unit type now
 // this is done by iterating its legal abilities for the build command to make the unit
-bool Util::UnitCanBuildTypeNow(const Unit & unit, const UnitType & type, CCBot & m_bot)
+bool Util::UnitCanMetaTypeNow(const Unit & unit, const UnitType & type, CCBot & m_bot)
 {
 #ifdef SC2API
     BOT_ASSERT(unit.isValid(), "Unit pointer was null");
@@ -213,10 +205,10 @@ bool Util::UnitCanBuildTypeNow(const Unit & unit, const UnitType & type, CCBot &
     else 
     {
         // check to see if one of the unit's available abilities matches the build ability type
-        sc2::AbilityID buildTypeAbility = m_bot.Data(type).buildAbility;
+        sc2::AbilityID MetaTypeAbility = m_bot.Data(type).buildAbility;
         for (const sc2::AvailableAbility & available_ability : available_abilities.abilities) 
         {
-            if (available_ability.ability_id == buildTypeAbility)
+            if (available_ability.ability_id == MetaTypeAbility)
             {
                 return true;
             }

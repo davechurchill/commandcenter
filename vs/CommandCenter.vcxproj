@@ -86,8 +86,8 @@
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</GenerateManifest>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LibraryPath>C:\Libraries\SC2AI\sc2api_precompiled\lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>C:\Libraries\SC2AI\sc2api_precompiled\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Libraries\SC2AI\sc2api_precompiled\lib;C:\Libraries\BWAPI_420\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Libraries\SC2AI\sc2api_precompiled\include;C:\Libraries\BWAPI_420\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LibraryPath>C:\Libraries\SC2AI\sc2api_precompiled\lib;$(LibraryPath)</LibraryPath>
@@ -125,7 +125,7 @@
     </Midl>
     <Link>
       <AdditionalOptions>%(AdditionalOptions)  /machine:x64 /ignore:4099</AdditionalOptions>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;sc2apid.lib;sc2libd.lib;sc2utilsd.lib;sc2rendererd.lib;sc2protocold.lib;libprotobufd.lib;civetweb.lib;winmm.lib;imm32.lib;version.lib;dinput8.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;sc2apid.lib;sc2libd.lib;sc2utilsd.lib;sc2rendererd.lib;sc2protocold.lib;libprotobufd.lib;civetweb.lib;winmm.lib;imm32.lib;version.lib;dinput8.lib;BWAPId.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>Debug</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -297,7 +297,7 @@
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\MapTools.cpp" />
     <ClCompile Include="..\src\MeleeManager.cpp" />
-    <ClCompile Include="..\src\BuildType.cpp" />
+    <ClCompile Include="..\src\MetaType.cpp" />
     <ClCompile Include="..\src\MicroManager.cpp" />
     <ClCompile Include="..\src\ProductionManager.cpp" />
     <ClCompile Include="..\src\RangedManager.cpp" />
@@ -334,7 +334,7 @@
     <ClInclude Include="..\src\JSONTools.h" />
     <ClInclude Include="..\src\MapTools.h" />
     <ClInclude Include="..\src\MeleeManager.h" />
-    <ClInclude Include="..\src\BuildType.h" />
+    <ClInclude Include="..\src\MetaType.h" />
     <ClInclude Include="..\src\MicroManager.h" />
     <ClInclude Include="..\src\ProductionManager.h" />
     <ClInclude Include="..\src\RangedManager.h" />

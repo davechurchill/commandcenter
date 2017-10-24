@@ -53,14 +53,14 @@ const std::vector<Unit> & UnitInfoManager::getUnits(CCPlayer player) const
     return m_units.at(player);
 }
 
-static std::string GetAbilityText(sc2::AbilityID ability_id) {
-    std::string str;
-    str += sc2::AbilityTypeToName(ability_id);
-    str += " (";
-    str += std::to_string(uint32_t(ability_id));
-    str += ")";
-    return str;
-}
+//static std::string GetAbilityText(sc2::AbilityID ability_id) {
+//    std::string str;
+//    str += sc2::AbilityTypeToName(ability_id);
+//    str += " (";
+//    str += std::to_string(uint32_t(ability_id));
+//    str += ")";
+//    return str;
+//}
 
 void UnitInfoManager::drawSelectedUnitDebugInfo()
 {
@@ -237,7 +237,7 @@ bool UnitInfoManager::isValidUnit(const Unit & unit)
     if (!unit.isValid()) { return false; }
 
     // if it's a weird unit, don't bother
-    if (unit.getType().getAPIUnitType() == sc2::UNIT_TYPEID::ZERG_EGG || unit.getType().getAPIUnitType() == sc2::UNIT_TYPEID::ZERG_LARVA)
+    if (unit.getType().isEgg() || unit.getType().isLarva())
     {
         return false;
     }
