@@ -96,7 +96,7 @@ CCPosition Util::CalcCenter(const std::vector<Unit> & units)
 bool Util::IsZerg(const CCRace & race)
 {
 #ifdef SC2API
-    return race == sc2::Races::Zerg;
+    return race == sc2::Race::Zerg;
 #else
     return race == BWAPI::Races::Zerg;
 #endif
@@ -105,7 +105,7 @@ bool Util::IsZerg(const CCRace & race)
 bool Util::IsProtoss(const CCRace & race)
 {
 #ifdef SC2API
-    return race == sc2::Races::Protoss;
+    return race == sc2::Race::Protoss;
 #else
     return race == BWAPI::Races::Protoss;
 #endif
@@ -114,7 +114,7 @@ bool Util::IsProtoss(const CCRace & race)
 bool Util::IsTerran(const CCRace & race)
 {
 #ifdef SC2API
-    return race == sc2::Races::Terran;
+    return race == sc2::Race::Terran;
 #else
     return race == BWAPI::Races::Terran;
 #endif

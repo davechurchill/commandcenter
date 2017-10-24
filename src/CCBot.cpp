@@ -34,7 +34,7 @@ void CCBot::OnGameStart()
 
     // set the base locations on the map
 
-     m_bot.Observation()->GetGameInfo().enemy_start_locations
+     //m_bot.Observation()->GetGameInfo().enemy_start_locations
 #else
     for (auto & loc : BWAPI::Broodwar->getStartLocations())
     {

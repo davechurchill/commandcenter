@@ -350,8 +350,8 @@ void Unit::train(const UnitType & type) const
 bool Unit::isConstructing(const UnitType & type) const
 {
 #ifdef SC2API
-    sc2::AbilityID buildAbility = m_bot.Data(b.type).buildAbility;
-    return (getUnitPtr()->orders.size() > 0) && (builderUnit.getUnitPtr()->orders[0].ability_id == buildAbility);
+    sc2::AbilityID buildAbility = m_bot->Data(type).buildAbility;
+    return (getUnitPtr()->orders.size() > 0) && (getUnitPtr()->orders[0].ability_id == buildAbility);
 #else
     return m_unit->isConstructing();
 #endif

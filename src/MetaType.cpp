@@ -87,6 +87,13 @@ MetaType::MetaType(const std::string & name, CCBot & bot)
 
     BOT_ASSERT(false, "Could not find MetaType with name: %s", name.c_str());
 }
+
+MetaType::MetaType (const BWAPI::TechType & t) 
+    : m_tech(t)
+    , m_type(MetaTypes::Tech) 
+    , m_race(t.getRace())
+{
+}
 #endif
 
 
