@@ -43,6 +43,15 @@ CCRace Util::GetRaceFromString(const std::string & raceIn)
 #endif
 }
 
+CCPositionType Util::TileToPosition(float tile)
+{
+#ifdef SC2API
+    return tile;
+#else
+    return (int)(tile * 32);
+#endif
+}
+
 UnitType Util::GetSupplyProvider(const CCRace & race, CCBot & bot)
 {
 #ifdef SC2API
@@ -77,11 +86,11 @@ CCPosition Util::CalcCenter(const std::vector<Unit> & units)
 {
     if (units.empty())
     {
-        return CCPosition(0.0f,0.0f);
+        return CCPosition(0, 0);
     }
 
-    float cx = 0.0f;
-    float cy = 0.0f;
+    CCPositionType cx = 0;
+    CCPositionType cy = 0;
 
     for (auto & unit : units)
     {
@@ -140,7 +149,7 @@ CCPosition Util::GetPosition(const CCTilePosition & tile)
 
 float Util::Dist(const CCPosition & p1, const CCPosition & p2)
 {
-    return sqrtf(Util::DistSq(p1,p2));
+    return sqrtf((float)Util::DistSq(p1,p2));
 }
 
 float Util::Dist(const Unit & unit, const CCPosition & p2)
@@ -153,10 +162,10 @@ float Util::Dist(const Unit & unit1, const Unit & unit2)
     return Dist(unit1.getPosition(), unit2.getPosition());
 }
 
-float Util::DistSq(const CCPosition & p1, const CCPosition & p2)
+CCPositionType Util::DistSq(const CCPosition & p1, const CCPosition & p2)
 {
-    float dx = p1.x - p2.x;
-    float dy = p1.y - p2.y;
+    CCPositionType dx = p1.x - p2.x;
+    CCPositionType dy = p1.y - p2.y;
 
     return dx*dx + dy*dy;
 }

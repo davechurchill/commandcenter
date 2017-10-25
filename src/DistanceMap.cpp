@@ -82,7 +82,7 @@ void DistanceMap::draw(CCBot & bot) const
         auto & tile = m_sortedTiles[i];
         int dist = getDistance(tile);
 
-        CCPosition textPos(tile.x + 0.5f, tile.y + 0.5f);
+        CCPosition textPos(tile.x + Util::TileToPosition(0.5), tile.y + Util::TileToPosition(0.5));
         std::stringstream ss;
         ss << dist;
 

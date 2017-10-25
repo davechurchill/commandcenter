@@ -92,6 +92,7 @@ MetaType::MetaType (const BWAPI::TechType & t)
     : m_tech(t)
     , m_type(MetaTypes::Tech) 
     , m_race(t.getRace())
+    , m_name(t.getName())
 {
 }
 #endif
@@ -101,12 +102,16 @@ MetaType::MetaType(const UnitType & unitType)
 {
     m_type          = MetaTypes::Unit;
     m_unitType      = unitType;
+    m_race          = unitType.getRace();
+    m_name          = unitType.getName();
 }
 
 MetaType::MetaType(const CCUpgrade & upgradeType)
 {
     m_type          = MetaTypes::Upgrade;
     m_upgrade       = upgradeType;
+    m_race          = upgradeType.getRace();
+    m_name          = upgradeType.getName();
 }
 
 const size_t & MetaType::getMetaType() const

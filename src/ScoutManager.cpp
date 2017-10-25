@@ -8,7 +8,7 @@ ScoutManager::ScoutManager(CCBot & bot)
     , m_numScouts       (0)
     , m_scoutUnderAttack(false)
     , m_scoutStatus     ("None")
-    , m_previousScoutHP (0.0f)
+    , m_previousScoutHP (0)
 {
 }
 
@@ -45,7 +45,7 @@ void ScoutManager::drawScoutInformation()
     std::stringstream ss;
     ss << "Scout Info: " << m_scoutStatus;
 
-    m_bot.Map().drawTextScreen(CCPosition(0.1f, 0.6f), ss.str());
+    m_bot.Map().drawTextScreen(0.1f, 0.6f, ss.str());
 }
 
 void ScoutManager::moveScouts()

@@ -47,15 +47,15 @@ public:
     int     height() const;
     float   terrainHeight(float x, float y) const;
 
-    void    drawLine(float x1, float y1, float x2, float y2, const CCColor & color = CCColor(255, 255, 255)) const;
-    void    drawLine(const CCPosition & min, const CCPosition max, const CCColor & color = CCColor(255, 255, 255)) const;
-    void    drawSquare(float x1, float y1, float x2, float y2, const CCColor & color = CCColor(255, 255, 255)) const;
-    void    drawBox(float x1, float y1, float x2, float y2, const CCColor & color = CCColor(255, 255, 255)) const;
-    void    drawBox(const CCPosition & min, const CCPosition max, const CCColor & color = CCColor(255, 255, 255)) const;
-    void    drawCircle(float x1, float x2, float radius, const CCColor & color = CCColor(255, 255, 255)) const;
-    void    drawCircle(const CCPosition & pos, float radius, const CCColor & color = CCColor(255, 255, 255)) const;
+    void    drawLine(CCPositionType x1, CCPositionType y1, CCPositionType x2, CCPositionType y2, const CCColor & color = CCColor(255, 255, 255)) const;
+    void    drawLine(const CCPosition & p1, const CCPosition & p2, const CCColor & color = CCColor(255, 255, 255)) const;
+    void    drawSquare(CCPositionType x1, CCPositionType y1, CCPositionType x2, CCPositionType y2, const CCColor & color = CCColor(255, 255, 255)) const;
+    void    drawBox(CCPositionType x1, CCPositionType y1, CCPositionType x2, CCPositionType y2, const CCColor & color = CCColor(255, 255, 255)) const;
+    void    drawBox(const CCPosition & tl, const CCPosition & br, const CCColor & color = CCColor(255, 255, 255)) const;
+    void    drawCircle(CCPositionType x1, CCPositionType x2, CCPositionType radius, const CCColor & color = CCColor(255, 255, 255)) const;
+    void    drawCircle(const CCPosition & pos, CCPositionType radius, const CCColor & color = CCColor(255, 255, 255)) const;
     void    drawText(const CCPosition & pos, const std::string & str, const CCColor & color = CCColor(255, 255, 255)) const;
-    void    drawTextScreen(const CCPosition & pos, const std::string & str, const CCColor & color = CCColor(255, 255, 255)) const;
+    void    drawTextScreen(float xPerc, float yPerc, const std::string & str, const CCColor & color = CCColor(255, 255, 255)) const;
     
     bool    isValidTile(int tileX, int tileY) const;
     bool    isValidTile(const CCTilePosition & tile) const;

@@ -47,11 +47,13 @@ public:
     bool canAttack() const;
     bool canMove() const;
     bool isAddon() const;
-    float getAttackRange() const;
+    CCPositionType getAttackRange() const;
     int tileWidth() const;
     int tileHeight() const;
     int supplyProvided() const;
     int supplyRequired() const;
+
+    const std::vector<UnitType> & whatBuilds() const;
 
     static UnitType GetUnitTypeFromName(const std::string & name, CCBot & bot);
 

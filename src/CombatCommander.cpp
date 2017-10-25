@@ -25,7 +25,7 @@ void CombatCommander::onStart()
     m_squadData.addSquad("Idle", Squad("Idle", idleOrder, IdlePriority, m_bot));
 
     // the main attack squad that will pressure the enemy's closest base location
-    SquadOrder mainAttackOrder(SquadOrderTypes::Attack, CCPosition(0.0f, 0.0f), 25, "Attack Enemy Base");
+    SquadOrder mainAttackOrder(SquadOrderTypes::Attack, CCPosition(0, 0), 25, "Attack Enemy Base");
     m_squadData.addSquad("MainAttack", Squad("MainAttack", mainAttackOrder, AttackPriority, m_bot));
 
     // the scout defense squad will handle chasing the enemy worker scout
@@ -62,7 +62,7 @@ bool CombatCommander::shouldWeStartAttacking()
 {
     // TODO: make this more clever
     // For now: start attacking when we have more than 10 combat units
-    return m_combatUnits.size() >= m_bot.Config().CombatUnitsForAttack;
+    return (int)m_combatUnits.size() >= m_bot.Config().CombatUnitsForAttack;
 }
 
 void CombatCommander::updateIdleSquad()

@@ -228,10 +228,10 @@ void BuildingManager::checkForStartedConstruction()
             }
 
             // check if the positions match
-            float dx = b.finalPosition.x - buildingStarted.getPosition().x;
-            float dy = b.finalPosition.y - buildingStarted.getPosition().y;
+            CCPositionType dx = b.finalPosition.x - buildingStarted.getPosition().x;
+            CCPositionType dy = b.finalPosition.y - buildingStarted.getPosition().y;
 
-            if (dx*dx + dy*dy < 1)
+            if (dx*dx + dy*dy < Util::TileToPosition(1))
             {
                 if (b.buildingUnit.isValid())
                 {
@@ -374,12 +374,12 @@ void BuildingManager::drawBuildingInformation()
         {
             ss << "Assigned " << b.type.getName() << "    " << b.builderUnit.getID() << " " << getBuildingWorkerCode(b) << " (" << b.finalPosition.x << "," << b.finalPosition.y << ")\n";
 
-            int x1 = b.finalPosition.x;
-            int y1 = b.finalPosition.y;
-            int x2 = b.finalPosition.x + b.type.tileWidth();
-            int y2 = b.finalPosition.y + b.type.tileHeight();
+            CCPositionType x1 = b.finalPosition.x;
+            CCPositionType y1 = b.finalPosition.y;
+            CCPositionType x2 = b.finalPosition.x + b.type.tileWidth();
+            CCPositionType y2 = b.finalPosition.y + b.type.tileHeight();
 
-            m_bot.Map().drawSquare((float)x1, (float)y1, (float)x2, (float)y2, CCColor(255, 0, 0));
+            m_bot.Map().drawSquare(x1, y1, x2, y2, CCColor(255, 0, 0));
             //m_bot.Map().drawLine(b.finalPosition, m_bot.GetUnit(b.builderUnitTag)->pos, CCColors::Yellow);
         }
         else if (b.status == BuildingStatus::UnderConstruction)
@@ -388,7 +388,7 @@ void BuildingManager::drawBuildingInformation()
         }
     }
 
-    m_bot.Map().drawTextScreen(CCPosition(0.05f, 0.05f), ss.str());
+    m_bot.Map().drawTextScreen(0.05f, 0.05f, ss.str());
 }
 
 std::vector<UnitType> BuildingManager::buildingsQueued() const

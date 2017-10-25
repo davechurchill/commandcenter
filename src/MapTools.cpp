@@ -50,13 +50,13 @@ void MapTools::onStart()
     m_terrainHeight  = vvf(m_width, std::vector<float>(m_height, 0.0f));
 
     // Set the boolean grid data from the Map
-    for (int x(0); x < m_width; ++x)
+    for (CCPositionType x(0); x < m_width; ++x)
     {
-        for (int y(0); y < m_height; ++y)
+        for (CCPositionType y(0); y < m_height; ++y)
         {
             m_buildable[x][y]       = canBuild(x, y);
             m_walkable[x][y]        = m_buildable[x][y] || canWalk(x, y);
-            m_terrainHeight[x][y]   = terainHeight(CCPosition((float)x, (float)y));
+            m_terrainHeight[x][y]   = terainHeight(CCPosition(x, y));
         }
     }
 
@@ -287,25 +287,25 @@ void MapTools::draw() const
 #endif
 }
 
-void MapTools::drawLine(float x1, float y1, float x2, float y2, const CCColor & color) const
+void MapTools::drawLine(CCPositionType x1, CCPositionType y1, CCPositionType x2, CCPositionType y2, const CCColor & color) const
 {
 #ifdef SC2API
     m_bot.Debug()->DebugLineOut(sc2::Point3D(x1, y1, m_maxZ + 0.2f), sc2::Point3D(x2, y2, m_maxZ + 0.2f), color);
 #else
-    // BWAPI
+    BWAPI::Broodwar->drawLineMap(BWAPI::Position(x1, y1), BWAPI::Position(x2, y2), color);
 #endif
 }
 
-void MapTools::drawLine(const CCPosition & min, const CCPosition max, const CCColor & color) const
+void MapTools::drawLine(const CCPosition & p1, const CCPosition & p2, const CCColor & color) const
 {
 #ifdef SC2API
-    m_bot.Debug()->DebugLineOut(sc2::Point3D(min.x, min.y, m_maxZ + 0.2f), sc2::Point3D(max.x, max.y, m_maxZ + 0.2f), color);
+    m_bot.Debug()->DebugLineOut(sc2::Point3D(p1.x, p1.y, m_maxZ + 0.2f), sc2::Point3D(p2.x, p2.y, m_maxZ + 0.2f), color);
 #else
-    // BWAPI
+    BWAPI::Broodwar->drawLineMap(p1, p2, color);
 #endif
 }
 
-void MapTools::drawSquare(float x1, float y1, float x2, float y2, const CCColor & color) const
+void MapTools::drawSquare(CCPositionType x1, CCPositionType y1, CCPositionType x2, CCPositionType y2, const CCColor & color) const
 {
 #ifdef SC2API
     m_bot.Debug()->DebugLineOut(sc2::Point3D(x1, y1, m_maxZ), sc2::Point3D(x1+1, y1, m_maxZ), color);
@@ -313,43 +313,43 @@ void MapTools::drawSquare(float x1, float y1, float x2, float y2, const CCColor 
     m_bot.Debug()->DebugLineOut(sc2::Point3D(x1+1, y1+1, m_maxZ), sc2::Point3D(x1+1, y1, m_maxZ), color);
     m_bot.Debug()->DebugLineOut(sc2::Point3D(x1+1, y1+1, m_maxZ), sc2::Point3D(x1, y1+1, m_maxZ), color);
 #else
-
+    BWAPI::Broodwar->drawBoxMap(BWAPI::Position(x1, y2), BWAPI::Position(x2, y1), color);
 #endif
 }
 
-void MapTools::drawBox(float x1, float y1, float x2, float y2, const CCColor & color) const
+void MapTools::drawBox(CCPositionType x1, CCPositionType y1, CCPositionType x2, CCPositionType y2, const CCColor & color) const
 {
 #ifdef SC2API
     m_bot.Debug()->DebugBoxOut(sc2::Point3D(x1, y1, m_maxZ + 2.0f), sc2::Point3D(x2, y2, m_maxZ-5.0f), color);
 #else
-
+    BWAPI::Broodwar->drawBoxMap(BWAPI::Position(x1, y2), BWAPI::Position(x2, y1), color);
 #endif
 }
 
-void MapTools::drawBox(const CCPosition & min, const CCPosition max, const CCColor & color) const
+void MapTools::drawBox(const CCPosition & tl, const CCPosition & br, const CCColor & color) const
 {
 #ifdef SC2API
     m_bot.Debug()->DebugBoxOut(sc2::Point3D(min.x, min.y, m_maxZ + 2.0f), sc2::Point3D(max.x, max.y, m_maxZ-5.0f), color);
 #else
-
+    BWAPI::Broodwar->drawBoxMap(tl, br, color);
 #endif
 }
 
-void MapTools::drawCircle(const CCPosition & pos, float radius, const CCColor & color) const
+void MapTools::drawCircle(const CCPosition & pos, CCPositionType radius, const CCColor & color) const
 {
 #ifdef SC2API
     m_bot.Debug()->DebugSphereOut(sc2::Point3D(pos.x, pos.y, m_maxZ), radius, color);
 #else
-
+    BWAPI::Broodwar->drawCircleMap(pos, radius, color);
 #endif
 }
 
-void MapTools::drawCircle(float x, float y, float radius, const CCColor & color) const
+void MapTools::drawCircle(CCPositionType x, CCPositionType y, CCPositionType radius, const CCColor & color) const
 {
 #ifdef SC2API
     m_bot.Debug()->DebugSphereOut(sc2::Point3D(x, y, m_maxZ), radius, color);
 #else
-
+    BWAPI::Broodwar->drawCircleMap(BWAPI::Position(x, y), radius, color);
 #endif
 }
 
@@ -359,16 +359,16 @@ void MapTools::drawText(const CCPosition & pos, const std::string & str, const C
 #ifdef SC2API
     m_bot.Debug()->DebugTextOut(str, sc2::Point3D(pos.x, pos.y, m_maxZ), color);
 #else
-
+    BWAPI::Broodwar->drawTextMap(pos, str.c_str());
 #endif
 }
 
-void MapTools::drawTextScreen(const CCPosition & pos, const std::string & str, const CCColor & color) const
+void MapTools::drawTextScreen(float xPerc, float yPerc, const std::string & str, const CCColor & color) const
 {
 #ifdef SC2API
     m_bot.Debug()->DebugTextOut(str, pos, color);
 #else
-
+    BWAPI::Broodwar->drawTextScreen(BWAPI::Position((int)(640*xPerc), (int)(480*yPerc)), str.c_str());
 #endif
 }
 

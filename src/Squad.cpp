@@ -193,10 +193,10 @@ CCPosition Squad::calcCenter() const
 {
     if (m_units.empty())
     {
-        return CCPosition(0.0f,0.0f);
+        return CCPosition(0, 0);
     }
 
-    CCPosition sum(0,0);
+    CCPosition sum(0, 0);
     for (auto unit: m_units)
     {
         BOT_ASSERT(unit.isValid(), "null unit in squad calcCenter");
@@ -208,7 +208,7 @@ CCPosition Squad::calcCenter() const
 
 CCPosition Squad::calcRegroupPosition() const
 {
-    CCPosition regroup(0.0f,0.0f);
+    CCPosition regroup(0, 0);
 
     float minDist = std::numeric_limits<float>::max();
 

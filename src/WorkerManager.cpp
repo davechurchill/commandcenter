@@ -238,7 +238,7 @@ void WorkerManager::drawWorkerInformation()
         ss << m_workerData.getJobCode(worker) << " " << worker.getID() << "\n";
     }
 
-    m_bot.Map().drawTextScreen(CCPosition(0.75f, 0.2f), ss.str());
+    m_bot.Map().drawTextScreen(0.75f, 0.2f, ss.str());
 }
 
 bool WorkerManager::isFree(Unit worker) const

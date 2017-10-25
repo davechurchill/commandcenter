@@ -112,7 +112,7 @@ void SquadData::drawSquadInformation()
         }
     }
 
-    m_bot.Map().drawTextScreen(CCPosition(0.5f, 0.2f), ss.str(), CCColor(255, 0, 0));
+    m_bot.Map().drawTextScreen(0.5f, 0.2f, ss.str(), CCColor(255, 0, 0));
 }
 
 void SquadData::verifySquadUniqueMembership()

@@ -19,6 +19,7 @@
     typedef sc2::Tag            CCUnitID;
     typedef sc2::Race           CCRace;
     typedef float               CCHealth;
+    typedef float               CCPositionType;
     
 #else
     #include "BWAPI.h"
@@ -29,10 +30,11 @@
     typedef BWAPI::UpgradeType  CCUpgrade;
     typedef int                 CCUnitID;
     typedef int                 CCHealth;
+    typedef int                 CCPositionType;
 #endif
     
 typedef size_t CCPlayer;
 namespace Players
 {
-    enum {Self = 0u, Enemy = 1u, Neutral = 2u, Size = 3u};
+    enum {Self = 0u, Enemy = 1u, Neutral = 2u, Size = 3u, None = 4u};
 }

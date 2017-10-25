@@ -25,10 +25,10 @@ class BaseLocation
     std::map<CCPlayer, bool>    m_isPlayerStartLocation;
         
     int                         m_baseID;
-    float                       m_left;
-    float                       m_right;
-    float                       m_top;
-    float                       m_bottom;
+    CCPositionType              m_left;
+    CCPositionType              m_right;
+    CCPositionType              m_top;
+    CCPositionType              m_bottom;
     bool                        m_isStartLocation;
     
 public:

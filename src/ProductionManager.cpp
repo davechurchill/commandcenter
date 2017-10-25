@@ -275,5 +275,5 @@ void ProductionManager::drawProductionInformation()
 
     ss << m_queue.getQueueInformation();
 
-    m_bot.Map().drawTextScreen(CCPosition(0.01f, 0.01f), ss.str(), CCColor(255, 255, 0));
+    m_bot.Map().drawTextScreen(0.01f, 0.01f, ss.str(), CCColor(255, 255, 0));
 }

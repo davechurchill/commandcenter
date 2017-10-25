@@ -18,22 +18,7 @@ void CCBot::OnGameStart()
     m_config.readConfigFile();
 
 #ifdef SC2API
-    // get my race
-    auto playerID = Observation()->GetPlayerID();
-    for (auto & playerInfo : Observation()->GetGameInfo().player_info)
-    {
-        if (playerInfo.player_id == playerID)
-        {
-            m_playerRace[Players::Self] = playerInfo.race_actual;
-        }
-        else
-        {
-            m_playerRace[Players::Enemy] = playerInfo.race_requested;
-        }
-    }
-
-    // set the base locations on the map
-
+   
      //m_bot.Observation()->GetGameInfo().enemy_start_locations
 #else
     for (auto & loc : BWAPI::Broodwar->getStartLocations())
@@ -79,14 +64,41 @@ void CCBot::setUnits()
         m_allUnits.push_back(Unit(unit, *this));    
     }
 #else
-
+    for (auto & unit : BWAPI::Broodwar->getAllUnits())
+    {
+        m_allUnits.push_back(Unit(unit, *this));
+    }
 #endif
 }
 
-const CCRace & CCBot::GetPlayerRace(int player) const
+CCRace CCBot::GetPlayerRace(int player) const
 {
+#ifdef SC2API
+    auto playerID = Observation()->GetPlayerID();
+    for (auto & playerInfo : Observation()->GetGameInfo().player_info)
+    {
+        if (playerInfo.player_id == playerID)
+        {
+            m_playerRace[Players::Self] = playerInfo.race_actual;
+        }
+        else
+        {
+            m_playerRace[Players::Enemy] = playerInfo.race_requested;
+        }
+    }
+#else
+    if (player == Players::Self)
+    {
+        return BWAPI::Broodwar->self()->getRace();
+    }
+    else
+    {
+        return BWAPI::Broodwar->enemy()->getRace();
+    }
+#endif
+
     BOT_ASSERT(player == Players::Self || player == Players::Enemy, "invalid player for GetPlayerRace");
-    return m_playerRace[player];
+    return Players::None;
 }
 
 BotConfig & CCBot::Config()
@@ -114,22 +126,22 @@ const UnitInfoManager & CCBot::UnitInfo() const
     return m_unitInfo;
 }
 
-const UnitTypeData & CCBot::Data(const UnitType & type) const
+const TypeData & CCBot::Data(const UnitType & type) const
 {
     return m_techTree.getData(type);
 }
 
-const UnitTypeData & CCBot::Data(const Unit & unit) const
+const TypeData & CCBot::Data(const Unit & unit) const
 {
     return m_techTree.getData(unit.getType());
 }
 
-const UnitTypeData & CCBot::Data(const CCUpgrade & type) const
+const TypeData & CCBot::Data(const CCUpgrade & type) const
 {
     return m_techTree.getData(type);
 }
 
-const UnitTypeData & CCBot::Data(const MetaType & type) const
+const TypeData & CCBot::Data(const MetaType & type) const
 {
     return m_techTree.getData(type);
 }

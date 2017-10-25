@@ -114,8 +114,8 @@ float Unit::getBuildPercentage() const
 #ifdef SC2API
     return m_unit->build_progress;
 #else
-    if (getType().isBuilding()) { return m_unit->getRemainingBuildTime() / getType().getAPIUnitType().buildTime(); }
-    else { return m_unit->getRemainingTrainTime() / getType().getAPIUnitType().buildTime(); }
+    if (getType().isBuilding()) { return m_unit->getRemainingBuildTime() / (float)getType().getAPIUnitType().buildTime(); }
+    else { return m_unit->getRemainingTrainTime() / (float)getType().getAPIUnitType().buildTime(); }
 #endif
 }
 

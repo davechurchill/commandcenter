@@ -13,7 +13,7 @@ class ScoutManager
     std::string     m_scoutStatus;
     int             m_numScouts;
     bool            m_scoutUnderAttack;
-    float           m_previousScoutHP;
+    CCHealth        m_previousScoutHP;
 
     bool            enemyWorkerInRadiusOf(const CCPosition & pos) const;
     CCPosition      getFleePosition() const;

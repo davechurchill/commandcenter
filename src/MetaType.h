@@ -38,6 +38,8 @@ public:
     const UnitType &        getUnitType() const;
     const CCUpgrade &       getUpgrade()  const;
 
+    std::vector<UnitType>   whatBuilds;
+
 #ifndef SC2API
     MetaType(const BWAPI::TechType & tech);
     const BWAPI::TechType & getTechType() const;

@@ -17,7 +17,7 @@ void BaseLocationManager::onStart()
     
     // a BaseLocation will be anything where there are minerals to mine
     // so we will first look over all minerals and cluster them based on some distance
-    const int clusterDistance = 14;
+    const int clusterDistance = Util::TileToPosition(12);
     
     // stores each cluster of resources based on some ground distance
     std::vector<std::vector<Unit>> resourceClusters;
@@ -29,6 +29,11 @@ void BaseLocationManager::onStart()
         {
             continue;
         }
+
+#ifndef SC2API
+        // for BWAPI we have to eliminate minerals that have low resource counts
+        if (mineral.getUnitPtr()->getResources() < 100) { continue; }
+#endif
 
         bool foundCluster = false;
         for (auto & cluster : resourceClusters)
@@ -111,17 +116,17 @@ void BaseLocationManager::onStart()
     }
 
     // construct the map of tile positions to base locations
-    for (float x=0; x < m_bot.Map().width(); ++x)
+    for (int x=0; x < m_bot.Map().width(); ++x)
     {
         for (int y=0; y < m_bot.Map().height(); ++y)
         {
             for (auto & baseLocation : m_baseLocationData)
             {
-                CCPosition pos(x + 0.5f, y + 0.5f);
+                CCPosition pos(Util::TileToPosition(x + 0.5f), Util::TileToPosition(y + 0.5f));
 
                 if (baseLocation.containsPosition(pos))
                 {
-                    m_tileBaseLocations[(int)x][(int)y] = &baseLocation;
+                    m_tileBaseLocations[x][y] = &baseLocation;
                     
                     break;
                 }
@@ -149,7 +154,7 @@ void BaseLocationManager::onFrame()
     for (auto & unit : m_bot.UnitInfo().getUnits(Players::Self))
     {
         // we only care about buildings on the ground
-        if (!m_bot.Data(unit).isBuilding || unit.isFlying())
+        if (!unit.getType().isBuilding() || unit.isFlying())
         {
             continue;
         }
@@ -340,5 +345,5 @@ CCPosition BaseLocationManager::getNextExpansion(int player) const
         }
     }
 
-    return closestBase ? closestBase->getDepotPosition() : CCPosition(0.0f, 0.0f);
+    return closestBase ? closestBase->getDepotPosition() : CCPosition(0, 0);
 }

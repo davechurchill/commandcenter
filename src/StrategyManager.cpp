@@ -101,10 +101,16 @@ void StrategyManager::readStrategyFile(const std::string & filename)
         return;
     }
 
+#ifdef SC2API
+    const char * strategyObject = "SC2API Strategy";
+#else
+    const char * strategyObject = "BWAPI Strategy";
+#endif
+
     // Parse the Strategy Options
-    if (doc.HasMember("Strategy") && doc["Strategy"].IsObject())
+    if (doc.HasMember(strategyObject) && doc[strategyObject].IsObject())
     {
-        const rapidjson::Value & strategy = doc["Strategy"];
+        const rapidjson::Value & strategy = doc[strategyObject];
 
         // read in the various strategic elements
         JSONTools::ReadBool("ScoutHarassEnemy", strategy, m_bot.Config().ScoutHarassEnemy);

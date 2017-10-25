@@ -181,11 +181,11 @@ bool BuildingPlacer::buildable(const Building & b, int x, int y) const
 
 void BuildingPlacer::reserveTiles(int bx, int by, int width, int height)
 {
-    size_t rwidth = m_reserveMap.size();
-    size_t rheight = m_reserveMap[0].size();
-    for (size_t x = bx; x < bx + width && x < rwidth; x++)
+    int rwidth = (int)m_reserveMap.size();
+    int rheight = (int)m_reserveMap[0].size();
+    for (int x = bx; x < bx + width && x < rwidth; x++)
     {
-        for (size_t y = by; y < by + height && y < rheight; y++)
+        for (int y = by; y < by + height && y < rheight; y++)
         {
             m_reserveMap[x][y] = true;
         }
@@ -208,12 +208,12 @@ void BuildingPlacer::drawReservedTiles()
         {
             if (m_reserveMap[x][y] || isInResourceBox(x, y))
             {
-                int x1 = x*32 + 8;
-                int y1 = y*32 + 8;
-                int x2 = (x+1)*32 - 8;
-                int y2 = (y+1)*32 - 8;
+                CCPositionType x1 = Util::TileToPosition(x + 1.25f);
+                CCPositionType y1 = Util::TileToPosition(y + 1.25f);
+                CCPositionType x2 = Util::TileToPosition(x + 1.75f);
+                CCPositionType y2 = Util::TileToPosition(y + 1.75f);
 
-                m_bot.Map().drawBox((float)x1, (float)y1, (float)x2, (float)y2, CCColor(255, 255, 0));
+                m_bot.Map().drawBox(x1, y1, x2, y2, CCColor(255, 255, 0));
             }
         }
     }

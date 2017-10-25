@@ -104,8 +104,6 @@ void GameCommander::setScoutUnits()
 
 bool GameCommander::shouldSendInitialScout()
 {
-    return true;
-
 #ifdef SC2API
     switch (m_bot.GetPlayerRace(Players::Self))
     {
@@ -115,7 +113,14 @@ bool GameCommander::shouldSendInitialScout()
         default: return false;
     }
 #else
-
+    if (m_bot.GetPlayerRace(Players::Self) == BWAPI::Races::Zerg)
+    {
+        return m_bot.UnitInfo().getUnitTypeCount(Players::Self, UnitType(BWAPI::UnitTypes::Zerg_Spawning_Pool, m_bot), true) > 0;
+    }
+    else
+    {
+        return m_bot.UnitInfo().getUnitTypeCount(Players::Self, UnitType(m_bot.GetPlayerRace(Players::Self).getSupplyProvider(), m_bot), true) > 0;
+    }
 #endif
 }
 

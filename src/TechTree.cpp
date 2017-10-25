@@ -17,10 +17,11 @@ void TechTree::onStart()
     outputJSON("TechTree.json");
 }
 
+
 #ifdef SC2API
 void TechTree::initUnitTypeData()
 {
-    m_upgradeData[0] = UnitTypeData();
+    m_unitTypeData[0] = UnitTypeData();
 
     // Protoss Buildings                                                                                  unit  bld   wrk    rfn    sup    hall   add
     m_unitTypeData[UnitType(sc2::UNIT_TYPEID::PROTOSS_PYLONOVERCHARGED, m_bot)] =        { sc2::Race::Protoss, 0, 0, 0, 0, true, true, false, false,  true, false, false, sc2::ABILITY_ID::EFFECT_PHOTONOVERCHARGE, 0, { UnitType(sc2::UNIT_TYPEID::PROTOSS_MOTHERSHIPCORE, m_bot), UnitType(sc2::UNIT_TYPEID::PROTOSS_PYLON, m_bot) }, {}, {} }; 
@@ -262,7 +263,39 @@ void TechTree::initUpgradeData()
 #else
 void TechTree::initUpgradeData()
 {
+    
+    m_unitTypeData[UnitType(BWAPI::UnitTypes::None, m_bot)] = TypeData();
 
+    for (auto & type : BWAPI::UnitTypes::allUnitTypes())
+    {
+        TypeData typeData;
+
+        typeData.race = type.getRace();
+        typeData.mineralCost = type.mineralPrice();
+        typeData.gasCost = type.gasPrice();
+        typeData.supplyCost = type.supplyRequired();
+        typeData.buildTime = type.buildTime();
+        typeData.isUnit = true;
+        typeData.isBuilding = type.isBuilding();
+        typeData.isWorker = type.isWorker();
+        typeData.isRefinery = type.isRefinery();
+        typeData.isSupplyProvider = type.supplyProvided() > 0 && !type.isResourceDepot();
+        typeData.isResourceDepot = type.isResourceDepot();
+        typeData.isAddon = type.isAddon();
+
+        std::vector<UnitType> whatBuilds;
+        whatBuilds.push_back(UnitType(type.whatBuilds().first, m_bot));
+        typeData.whatBuilds = whatBuilds;
+
+        std::vector<UnitType> requiredUnits;
+        for (auto & req : type.requiredUnits())
+        {
+            requiredUnits.push_back(UnitType(req.first, m_bot));
+        }
+        typeData.requiredUnits = requiredUnits;
+
+        m_unitTypeData[UnitType(type, m_bot)] = typeData;
+    }
 }
 
 void TechTree::initUnitTypeData()
@@ -271,7 +304,7 @@ void TechTree::initUnitTypeData()
 }
 #endif
 
-const UnitTypeData & TechTree::getData(const UnitType & type) const
+const TypeData & TechTree::getData(const UnitType & type) const
 {
     if (m_unitTypeData.find(type) == m_unitTypeData.end())
     {
@@ -282,7 +315,7 @@ const UnitTypeData & TechTree::getData(const UnitType & type) const
     return m_unitTypeData.at(type);
 }
 
-const UnitTypeData & TechTree::getData(const CCUpgrade & type)  const
+const TypeData & TechTree::getData(const CCUpgrade & type)  const
 {
     if (m_upgradeData.find(type) == m_upgradeData.end())
     {
@@ -293,7 +326,7 @@ const UnitTypeData & TechTree::getData(const CCUpgrade & type)  const
     return m_upgradeData.at(type);
 }
 
-const UnitTypeData & TechTree::getData(const MetaType & type) const
+const TypeData & TechTree::getData(const MetaType & type) const
 {
     if (type.getMetaType() == MetaTypes::Unit)
     {
