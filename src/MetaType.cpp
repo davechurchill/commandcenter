@@ -72,7 +72,7 @@ MetaType::MetaType(const std::string & name, CCBot & bot)
         std::replace(typeName.begin(), typeName.end(), '_', ' ');
         if (typeName == inputName)
         {
-            *this = MetaType(techType);
+            *this = MetaType(techType, bot);
             return;
         }
     }
@@ -83,7 +83,7 @@ MetaType::MetaType(const std::string & name, CCBot & bot)
         std::replace(typeName.begin(), typeName.end(), '_', ' ');
         if (typeName == inputName)
         {
-            *this = MetaType(upgradeType);
+            *this = MetaType(upgradeType, bot);
             return;
         }
     }

@@ -17,9 +17,13 @@ void CCBot::OnGameStart()
 {
     m_config.readConfigFile();
 
+    // add all the possible start locations on the map
 #ifdef SC2API
-   
-     //m_bot.Observation()->GetGameInfo().enemy_start_locations
+    for (auto & loc : Observation()->GetGameInfo().enemy_start_locations)
+    {
+        m_baseLocations.push_back(loc);
+    }
+    m_baseLocations.push_back(Observation()->GetStartLocation());
 #else
     for (auto & loc : BWAPI::Broodwar->getStartLocations())
     {

@@ -222,7 +222,7 @@ int WorkerData::getNumAssignedWorkers(const Unit & unit)
             return it->second;
         }
     }
-    else if (unit.getType().isResourceDepot())
+    else if (unit.getType().isRefinery())
     {
         auto it = m_refineryWorkerCount.find(unit);
 

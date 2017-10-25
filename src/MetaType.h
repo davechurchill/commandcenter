@@ -42,7 +42,7 @@ public:
     std::vector<UnitType>   whatBuilds;
 
 #ifndef SC2API
-    MetaType(const BWAPI::TechType & tech);
+    MetaType(const BWAPI::TechType & tech, CCBot & bot);
     const BWAPI::TechType & getTechType() const;
 #endif
 };
