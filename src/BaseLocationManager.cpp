@@ -17,7 +17,7 @@ void BaseLocationManager::onStart()
     
     // a BaseLocation will be anything where there are minerals to mine
     // so we will first look over all minerals and cluster them based on some distance
-    const int clusterDistance = Util::TileToPosition(12);
+    const CCPositionType clusterDistance = Util::TileToPosition(12);
     
     // stores each cluster of resources based on some ground distance
     std::vector<std::vector<Unit>> resourceClusters;

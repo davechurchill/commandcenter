@@ -79,13 +79,12 @@ CCRace CCBot::GetPlayerRace(int player) const
     {
         if (playerInfo.player_id == playerID)
         {
-            m_playerRace[Players::Self] = playerInfo.race_actual;
-        }
-        else
-        {
-            m_playerRace[Players::Enemy] = playerInfo.race_requested;
+            return playerInfo.race_actual;
         }
     }
+
+    BOT_ASSERT(false, "Didn't find player to get their race");
+    return sc2::Race::Random;
 #else
     if (player == Players::Self)
     {
@@ -96,9 +95,6 @@ CCRace CCBot::GetPlayerRace(int player) const
         return BWAPI::Broodwar->enemy()->getRace();
     }
 #endif
-
-    BOT_ASSERT(player == Players::Self || player == Players::Enemy, "invalid player for GetPlayerRace");
-    return Players::None;
 }
 
 BotConfig & CCBot::Config()

@@ -72,7 +72,7 @@ std::string UnitType::getName() const
 CCRace UnitType::getRace() const
 {
 #ifdef SC2API
-    return m_bot->Observation()->GetTypeData()[m_type].race;
+    return m_bot->Observation()->GetUnitTypeData()[m_type].race;
 #else
     return m_type.getRace();
 #endif
@@ -218,7 +218,7 @@ bool UnitType::isWorker() const
 CCPositionType UnitType::getAttackRange() const
 {
 #ifdef SC2API
-    auto & weapons = m_bot->Observation()->GetTypeData()[m_type].weapons;
+    auto & weapons = m_bot->Observation()->GetUnitTypeData()[m_type].weapons;
     
     if (weapons.empty())
     {
@@ -280,7 +280,7 @@ bool UnitType::isBuilding() const
 int UnitType::supplyProvided() const
 {
 #ifdef SC2API
-    return (int)m_bot->Observation()->GetTypeData()[m_type].food_provided;
+    return (int)m_bot->Observation()->GetUnitTypeData()[m_type].food_provided;
 #else
     return m_type.supplyProvided();
 #endif
@@ -289,7 +289,7 @@ int UnitType::supplyProvided() const
 int UnitType::supplyRequired() const
 {
 #ifdef SC2API
-    return (int)m_bot->Observation()->GetTypeData()[m_type].food_required;
+    return (int)m_bot->Observation()->GetUnitTypeData()[m_type].food_required;
 #else
     return m_type.supplyRequired();
 #endif
@@ -298,7 +298,7 @@ int UnitType::supplyRequired() const
 UnitType UnitType::GetUnitTypeFromName(const std::string & name, CCBot & bot)
 {
 #ifdef SC2API
-    for (const sc2::TypeData & data : bot.Observation()->GetTypeData())
+    for (const sc2::UnitTypeData & data : bot.Observation()->GetUnitTypeData())
     {
         if (name == data.name)
         {

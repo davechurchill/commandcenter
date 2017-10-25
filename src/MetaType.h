@@ -11,6 +11,7 @@ namespace MetaTypes
 class CCBot;
 class MetaType
 {
+    CCBot *         m_bot;
     size_t          m_type;
     std::string     m_name;
     CCRace          m_race;
@@ -25,8 +26,8 @@ public:
 
     MetaType();
     MetaType(const std::string & name, CCBot & bot);
-    MetaType(const UnitType & unitType);
-    MetaType(const CCUpgrade & upgradeType);
+    MetaType(const UnitType & unitType, CCBot & bot);
+    MetaType(const CCUpgrade & upgradeType, CCBot & bot);
 
     bool    isUnit()        const;
     bool    isUpgrade()     const;

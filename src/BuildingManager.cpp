@@ -374,12 +374,12 @@ void BuildingManager::drawBuildingInformation()
         {
             ss << "Assigned " << b.type.getName() << "    " << b.builderUnit.getID() << " " << getBuildingWorkerCode(b) << " (" << b.finalPosition.x << "," << b.finalPosition.y << ")\n";
 
-            CCPositionType x1 = b.finalPosition.x;
-            CCPositionType y1 = b.finalPosition.y;
-            CCPositionType x2 = b.finalPosition.x + b.type.tileWidth();
-            CCPositionType y2 = b.finalPosition.y + b.type.tileHeight();
+            int x1 = b.finalPosition.x;
+            int y1 = b.finalPosition.y;
+            int x2 = b.finalPosition.x + b.type.tileWidth();
+            int y2 = b.finalPosition.y + b.type.tileHeight();
 
-            m_bot.Map().drawSquare(x1, y1, x2, y2, CCColor(255, 0, 0));
+            m_bot.Map().drawSquare((CCPositionType)x1, (CCPositionType)y1, (CCPositionType)x2, (CCPositionType)y2, CCColor(255, 0, 0));
             //m_bot.Map().drawLine(b.finalPosition, m_bot.GetUnit(b.builderUnitTag)->pos, CCColors::Yellow);
         }
         else if (b.status == BuildingStatus::UnderConstruction)

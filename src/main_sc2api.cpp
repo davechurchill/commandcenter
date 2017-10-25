@@ -5,6 +5,7 @@
 #include "Util.h"
 
 #include "sc2utils/sc2_manage_process.h"
+#include "sc2api/sc2_api.h"
 
 int main(int argc, char* argv[]) 
 {
@@ -65,8 +66,8 @@ int main(int argc, char* argv[])
     coordinator.SetRealtime(false);
 
     coordinator.SetParticipants({
-        CreateParticipant(Util::GetRaceFromString(botRaceString), &bot),
-        CreateComputer(Util::GetRaceFromString(enemyRaceString), enemyDifficulty)
+        sc2::CreateParticipant(Util::GetRaceFromString(botRaceString), &bot),
+        sc2::CreateComputer(Util::GetRaceFromString(enemyRaceString), enemyDifficulty)
     });
 
     // Start the game.

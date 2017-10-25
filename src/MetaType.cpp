@@ -3,7 +3,8 @@
 #include "CCBot.h"
 
 MetaType::MetaType()
-    : m_type        (MetaTypes::None)
+    : m_bot         (nullptr)
+    , m_type        (MetaTypes::None)
     , m_name        ("MetaType")
     , m_unitType    ()
     , m_upgrade     ()
@@ -14,6 +15,7 @@ MetaType::MetaType()
 MetaType::MetaType(const std::string & name, CCBot & bot)
     : MetaType()
 {
+    m_bot = &bot;
     m_name = name;
 
     m_unitType = UnitType::GetUnitTypeFromName(m_name, bot);
@@ -37,9 +39,10 @@ MetaType::MetaType(const std::string & name, CCBot & bot)
 }
 #else
    MetaType::MetaType(const std::string & name, CCBot & bot)
-    : m_type(MetaTypes::None) 
-    , m_race(BWAPI::Races::None)
+    : MetaType()
 {
+    m_bot = &bot;
+
     std::string inputName(name);
     std::replace(inputName.begin(), inputName.end(), '_', ' ');
 
@@ -50,7 +53,7 @@ MetaType::MetaType(const std::string & name, CCBot & bot)
         std::replace(typeName.begin(), typeName.end(), '_', ' ');
         if (typeName == inputName)
         {
-            *this = MetaType(UnitType(unitType, bot));
+            *this = MetaType(UnitType(unitType, bot), bot);
             return;
         }
 
@@ -58,7 +61,7 @@ MetaType::MetaType(const std::string & name, CCBot & bot)
         const std::string & raceName = unitType.getRace().getName();
         if ((typeName.length() > raceName.length()) && (typeName.compare(raceName.length() + 1, typeName.length(), inputName) == 0))
         {
-            *this = MetaType(UnitType(unitType, bot));
+            *this = MetaType(UnitType(unitType, bot), bot);
             return;
         }
     }
@@ -88,30 +91,39 @@ MetaType::MetaType(const std::string & name, CCBot & bot)
     BOT_ASSERT(false, "Could not find MetaType with name: %s", name.c_str());
 }
 
-MetaType::MetaType (const BWAPI::TechType & t) 
+MetaType::MetaType(const BWAPI::TechType & t, CCBot & bot) 
     : m_tech(t)
     , m_type(MetaTypes::Tech) 
     , m_race(t.getRace())
     , m_name(t.getName())
+    , m_bot(&bot)
 {
 }
 #endif
 
 
-MetaType::MetaType(const UnitType & unitType)
+MetaType::MetaType(const UnitType & unitType, CCBot & bot)
 {
+    m_bot           = &bot;
     m_type          = MetaTypes::Unit;
     m_unitType      = unitType;
     m_race          = unitType.getRace();
     m_name          = unitType.getName();
 }
 
-MetaType::MetaType(const CCUpgrade & upgradeType)
+MetaType::MetaType(const CCUpgrade & upgradeType, CCBot & bot)
 {
+    m_bot           = &bot;
     m_type          = MetaTypes::Upgrade;
     m_upgrade       = upgradeType;
+
+#ifdef SC2API
+    m_race          = m_bot->GetPlayerRace(Players::Self);
+    m_name          = sc2::UpgradeIDToName(upgradeType);
+#else
     m_race          = upgradeType.getRace();
     m_name          = upgradeType.getName();
+#endif
 }
 
 const size_t & MetaType::getMetaType() const

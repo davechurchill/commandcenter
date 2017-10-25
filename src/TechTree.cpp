@@ -21,7 +21,7 @@ void TechTree::onStart()
 #ifdef SC2API
 void TechTree::initUnitTypeData()
 {
-    m_unitTypeData[0] = UnitTypeData();
+    m_unitTypeData[UnitType(0, m_bot)] = TypeData();
 
     // Protoss Buildings                                                                                  unit  bld   wrk    rfn    sup    hall   add
     m_unitTypeData[UnitType(sc2::UNIT_TYPEID::PROTOSS_PYLONOVERCHARGED, m_bot)] =        { sc2::Race::Protoss, 0, 0, 0, 0, true, true, false, false,  true, false, false, sc2::ABILITY_ID::EFFECT_PHOTONOVERCHARGE, 0, { UnitType(sc2::UNIT_TYPEID::PROTOSS_MOTHERSHIPCORE, m_bot), UnitType(sc2::UNIT_TYPEID::PROTOSS_PYLON, m_bot) }, {}, {} }; 
@@ -167,7 +167,7 @@ void TechTree::initUnitTypeData()
 void TechTree::initUpgradeData()
 {
     // 0 data for null / error return
-    m_upgradeData[0] = UnitTypeData();
+    m_upgradeData[0] = TypeData();
 
     // Terran Upgrades
     m_upgradeData[sc2::UPGRADE_ID::BANSHEECLOAK] =                      { sc2::Race::Terran, 100, 100, 0, 1760, false, false, false, false, false, false, false, sc2::ABILITY_ID::RESEARCH_BANSHEECLOAKINGFIELD, 0, { UnitType(sc2::UNIT_TYPEID::TERRAN_SCV, m_bot) }, {}, {} };

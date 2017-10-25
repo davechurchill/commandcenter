@@ -50,13 +50,13 @@ void MapTools::onStart()
     m_terrainHeight  = vvf(m_width, std::vector<float>(m_height, 0.0f));
 
     // Set the boolean grid data from the Map
-    for (CCPositionType x(0); x < m_width; ++x)
+    for (int x(0); x < m_width; ++x)
     {
-        for (CCPositionType y(0); y < m_height; ++y)
+        for (int y(0); y < m_height; ++y)
         {
             m_buildable[x][y]       = canBuild(x, y);
             m_walkable[x][y]        = m_buildable[x][y] || canWalk(x, y);
-            m_terrainHeight[x][y]   = terainHeight(CCPosition(x, y));
+            m_terrainHeight[x][y]   = terainHeight(CCPosition((CCPositionType)x, (CCPositionType)y));
         }
     }
 
@@ -329,7 +329,7 @@ void MapTools::drawBox(CCPositionType x1, CCPositionType y1, CCPositionType x2, 
 void MapTools::drawBox(const CCPosition & tl, const CCPosition & br, const CCColor & color) const
 {
 #ifdef SC2API
-    m_bot.Debug()->DebugBoxOut(sc2::Point3D(min.x, min.y, m_maxZ + 2.0f), sc2::Point3D(max.x, max.y, m_maxZ-5.0f), color);
+    m_bot.Debug()->DebugBoxOut(sc2::Point3D(tl.x, tl.y, m_maxZ + 2.0f), sc2::Point3D(br.x, br.y, m_maxZ-5.0f), color);
 #else
     BWAPI::Broodwar->drawBoxMap(tl, br, color);
 #endif
@@ -366,7 +366,7 @@ void MapTools::drawText(const CCPosition & pos, const std::string & str, const C
 void MapTools::drawTextScreen(float xPerc, float yPerc, const std::string & str, const CCColor & color) const
 {
 #ifdef SC2API
-    m_bot.Debug()->DebugTextOut(str, pos, color);
+    m_bot.Debug()->DebugTextOut(str, CCPosition(xPerc, yPerc), color);
 #else
     BWAPI::Broodwar->drawTextScreen(BWAPI::Position((int)(640*xPerc), (int)(480*yPerc)), str.c_str());
 #endif
