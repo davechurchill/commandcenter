@@ -10,7 +10,7 @@ private:
     sc2::Point2D m_position;
 public:
     DonePullBackTransition(const sc2::Unit * rangedUnit, sc2::Point2D position, FocusFireFSMState* nextState);
-    bool isValid(std::map<sc2::Tag, float> *, CCBot*);
+    bool isValid(std::unordered_map<sc2::Tag, float> *, CCBot*);
     FocusFireFSMState* getNextState();
     void onTransition();
 };

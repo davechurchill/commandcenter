@@ -12,7 +12,7 @@ FocusFireFiniteStateMachine::FocusFireFiniteStateMachine(const sc2::Unit * unit,
     activeState->onEnter(targets, bot);
 }
 
-void FocusFireFiniteStateMachine::update(const sc2::Unit * target, const std::vector<const sc2::Unit*> * targets, std::map<sc2::Tag, float> * unitHealth, CCBot* bot)
+void FocusFireFiniteStateMachine::update(const sc2::Unit * target, const std::vector<const sc2::Unit*> * targets, std::unordered_map<sc2::Tag, float> * unitHealth, CCBot* bot)
 {
     for (auto transition : activeState->getTransitions())
     {

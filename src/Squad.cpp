@@ -80,12 +80,14 @@ void Squad::setAllUnits()
 {
     // clean up the _units vector just in case one of them died
     std::set<const sc2::Unit *> goodUnits;
+
     for (auto unit : m_units)
     {
         if (!unit) { continue; }
         if (unit->build_progress < 1.0f) { continue; }
         if (unit->health <= 0) { continue; }
-        
+        if (!unit->is_alive) { continue; }
+
         goodUnits.insert(unit);
     }
 
