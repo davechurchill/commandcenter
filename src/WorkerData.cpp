@@ -18,7 +18,7 @@ void WorkerData::updateAllWorkerData()
     // check all our units and add new workers if we find them
     for (auto & unit : m_bot.UnitInfo().getUnits(Players::Self))
     {
-        if (unit.getType().isWorker())
+        if (unit.getType().isWorker() && unit.isCompleted())
         {
             updateWorker(unit);
         }

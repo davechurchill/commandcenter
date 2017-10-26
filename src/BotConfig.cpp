@@ -18,6 +18,11 @@ BotConfig::BotConfig()
     FoundEnemySpecificStrategy          = false;
     UsingAutoObserver                   = false;
 
+    SetLocalSpeed                       = 10;
+    SetFrameSkip                        = 0;
+    UserInput                           = true;
+    CompleteMapInformation              = false;
+
     DrawGameInfo                        = true;
     DrawProductionInfo                  = true;
     DrawTileInfo                        = false;
@@ -92,6 +97,16 @@ void BotConfig::readConfigFile()
         JSONTools::ReadBool("KiteWithRangedUnits", micro, KiteWithRangedUnits);
         JSONTools::ReadBool("ScoutHarassEnemy", micro, ScoutHarassEnemy);
         JSONTools::ReadInt("CombatUnitsForAttack", micro, CombatUnitsForAttack);
+    }
+
+    // Parse the BWAPI Options
+    if (doc.HasMember("BWAPI") && doc["BWAPI"].IsObject())
+    {
+        const rapidjson::Value & bwapi = doc["BWAPI"];
+        JSONTools::ReadInt("SetLocalSpeed", bwapi, SetLocalSpeed);
+        JSONTools::ReadInt("SetFrameSkip", bwapi, SetFrameSkip);
+        JSONTools::ReadBool("UserInput", bwapi, UserInput);
+        JSONTools::ReadBool("CompleteMapInformation", bwapi, CompleteMapInformation);
     }
 
     // Parse the Macro Options

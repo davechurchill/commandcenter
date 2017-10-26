@@ -70,14 +70,17 @@ void WorkerManager::handleIdleWorkers()
     {
         if (!worker.isValid()) { continue; }
 
-        // if it's a scout, don't handle it here
-        if (m_workerData.getWorkerJob(worker) == WorkerJobs::Scout)
-        {
-            continue;
-        }
+        bool isIdle = worker.isIdle();
+        if (worker.isIdle() && 
+			(m_workerData.getWorkerJob(worker) != WorkerJobs::Build) && 
+			(m_workerData.getWorkerJob(worker) != WorkerJobs::Move) &&
+			(m_workerData.getWorkerJob(worker) != WorkerJobs::Scout)) 
+		{
+			m_workerData.setWorkerJob(worker, WorkerJobs::Idle);
+		}
 
         // if it is idle
-        if (worker.isIdle() || m_workerData.getWorkerJob(worker) == WorkerJobs::Idle)
+        if (m_workerData.getWorkerJob(worker) == WorkerJobs::Idle)
         {
             setMineralWorker(worker);
         }
@@ -211,7 +214,10 @@ void WorkerManager::drawResourceDebugInfo()
     {
         if (!worker.isValid()) { continue; }
 
-        m_bot.Map().drawText(worker.getPosition(), m_workerData.getJobCode(worker));
+        if (worker.isIdle())
+        {
+            m_bot.Map().drawText(worker.getPosition(), m_workerData.getJobCode(worker));
+        }
 
         auto depot = m_workerData.getWorkerDepot(worker);
         if (depot.isValid())
@@ -236,6 +242,8 @@ void WorkerManager::drawWorkerInformation()
     for (auto & worker : m_workerData.getWorkers())
     {
         ss << m_workerData.getJobCode(worker) << " " << worker.getID() << "\n";
+
+        m_bot.Map().drawText(worker.getPosition(), m_workerData.getJobCode(worker));
     }
 
     m_bot.Map().drawTextScreen(0.75f, 0.2f, ss.str());

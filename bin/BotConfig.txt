@@ -6,7 +6,15 @@
         "PrintInfoOnStart"          : false
     },
 
-    "Game Info" :
+    "BWAPI" : 
+    {
+        "SetLocalSpeed"             : 5,
+        "SetFrameSkip"              : 0,
+        "UserInput"                 : true,
+        "CompleteMapInformation"    : false
+    },
+    
+    "SC2API" :
     {
         "BotRace"                   : "Zerg",
         "EnemyDifficulty"           : 2,
@@ -37,14 +45,14 @@
         "DrawTileInfo"              : false,
         "DrawWalkableSectors"       : false,
         "DrawScoutInfo"             : false,
-        "DrawEnemyUnitInfo"         : false,
+        "DrawEnemyUnitInfo"         : true,
         "DrawResourceInfo"          : false,
         "DrawUnitTargetInfo"        : false,
         "DrawLastSeenTileInfo"      : false,
         "DrawSquadInfo"             : false,
-        "DrawWorkerInfo"            : false,
-        "DrawBuildingInfo"          : false,
-        "DrawReservedBuildingTiles" : false
+        "DrawWorkerInfo"            : true,
+        "DrawBuildingInfo"          : true,
+        "DrawReservedBuildingTiles" : true
     },
     
     "Modules" :

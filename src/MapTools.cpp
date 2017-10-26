@@ -305,16 +305,16 @@ void MapTools::drawLine(const CCPosition & p1, const CCPosition & p2, const CCCo
 #endif
 }
 
-void MapTools::drawSquare(CCPositionType x1, CCPositionType y1, CCPositionType x2, CCPositionType y2, const CCColor & color) const
+void MapTools::drawTile(int tileX, int tileY, const CCColor & color) const
 {
-#ifdef SC2API
-    m_bot.Debug()->DebugLineOut(sc2::Point3D(x1, y1, m_maxZ), sc2::Point3D(x1+1, y1, m_maxZ), color);
-    m_bot.Debug()->DebugLineOut(sc2::Point3D(x1, y1, m_maxZ), sc2::Point3D(x1, y1+1, m_maxZ), color);
-    m_bot.Debug()->DebugLineOut(sc2::Point3D(x1+1, y1+1, m_maxZ), sc2::Point3D(x1+1, y1, m_maxZ), color);
-    m_bot.Debug()->DebugLineOut(sc2::Point3D(x1+1, y1+1, m_maxZ), sc2::Point3D(x1, y1+1, m_maxZ), color);
-#else
-    BWAPI::Broodwar->drawBoxMap(BWAPI::Position(x1, y2), BWAPI::Position(x2, y1), color);
-#endif
+    CCPositionType px = Util::TileToPosition((float)tileX);
+    CCPositionType py = Util::TileToPosition((float)tileY);
+    CCPositionType d  = Util::TileToPosition(1.0f);
+
+    drawLine(px,     py,     px + d, py,     color);
+    drawLine(px + d, py,     px + d, py + d, color);
+    drawLine(px + d, py + d, px,     py + d, color);
+    drawLine(px,     py + d, px,     py,     color);
 }
 
 void MapTools::drawBox(CCPositionType x1, CCPositionType y1, CCPositionType x2, CCPositionType y2, const CCColor & color) const
@@ -322,7 +322,10 @@ void MapTools::drawBox(CCPositionType x1, CCPositionType y1, CCPositionType x2, 
 #ifdef SC2API
     m_bot.Debug()->DebugBoxOut(sc2::Point3D(x1, y1, m_maxZ + 2.0f), sc2::Point3D(x2, y2, m_maxZ-5.0f), color);
 #else
-    BWAPI::Broodwar->drawBoxMap(BWAPI::Position(x1, y2), BWAPI::Position(x2, y1), color);
+    drawLine(x1, y1, x1, y2, color);
+    drawLine(x1, y2, x2, y2, color);
+    drawLine(x2, y2, x2, y1, color);
+    drawLine(x2, y1, x1, y1, color);
 #endif
 }
 
@@ -331,7 +334,7 @@ void MapTools::drawBox(const CCPosition & tl, const CCPosition & br, const CCCol
 #ifdef SC2API
     m_bot.Debug()->DebugBoxOut(sc2::Point3D(tl.x, tl.y, m_maxZ + 2.0f), sc2::Point3D(br.x, br.y, m_maxZ-5.0f), color);
 #else
-    BWAPI::Broodwar->drawBoxMap(tl, br, color);
+    drawBox(tl.x, tl.y, br.x, br.y, color);
 #endif
 }
 

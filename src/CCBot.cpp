@@ -29,6 +29,20 @@ void CCBot::OnGameStart()
     {
         m_baseLocations.push_back(BWAPI::Position(loc));
     }
+
+    // set the BWAPI game flags
+    BWAPI::Broodwar->setLocalSpeed(m_config.SetLocalSpeed);
+    BWAPI::Broodwar->setFrameSkip(m_config.SetFrameSkip);
+    
+    if (m_config.CompleteMapInformation)
+    {
+        BWAPI::Broodwar->enableFlag(BWAPI::Flag::CompleteMapInformation);
+    }
+
+    if (m_config.UserInput)
+    {
+        BWAPI::Broodwar->enableFlag(BWAPI::Flag::UserInput);
+    }
 #endif
     
     setUnits();

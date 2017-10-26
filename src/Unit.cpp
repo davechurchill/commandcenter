@@ -78,6 +78,16 @@ CCPosition Unit::getPosition() const
 #endif
 }
 
+CCTilePosition Unit::getTilePosition() const
+{
+    BOT_ASSERT(isValid(), "Unit is not valid");
+#ifdef SC2API
+    return Util::GetTilePosition(m_unit->pos);
+#else
+    return m_unit->getTilePosition();
+#endif
+}
+
 CCHealth Unit::getHitPoints() const
 {
     BOT_ASSERT(isValid(), "Unit is not valid");
@@ -232,7 +242,7 @@ bool Unit::isIdle() const
 #ifdef SC2API
     return m_unit->orders.empty();
 #else
-    return m_unit->isIdle();
+    return m_unit->isIdle() && !m_unit->isMoving() && !m_unit->isGatheringMinerals() && !m_unit->isGatheringGas();
 #endif
 }
 
@@ -319,6 +329,7 @@ void Unit::repair(const Unit & target) const
 
 void Unit::build(const UnitType & buildingType, CCTilePosition pos) const
 {
+    BOT_ASSERT(m_bot->Map().isConnected(getTilePosition(), pos), "Error: Build Position is not connected to worker");
     BOT_ASSERT(isValid(), "Unit is not valid");
 #ifdef SC2API
     m_bot->Actions()->UnitCommand(m_unit, m_bot->Data(buildingType).buildAbility, Util::GetPosition(pos));

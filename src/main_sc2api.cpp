@@ -39,9 +39,9 @@ int main(int argc, char* argv[])
     int stepSize = 1;
     sc2::Difficulty enemyDifficulty = sc2::Difficulty::Easy;
 
-    if (doc.HasMember("Game Info") && doc["Game Info"].IsObject())
+    if (doc.HasMember("SC2API") && doc["SC2API"].IsObject())
     {
-        const rapidjson::Value & info = doc["Game Info"];
+        const rapidjson::Value & info = doc["SC2API"];
         JSONTools::ReadString("BotRace", info, botRaceString);
         JSONTools::ReadString("EnemyRace", info, enemyRaceString);
         JSONTools::ReadString("MapFile", info, mapString);

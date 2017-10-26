@@ -37,6 +37,7 @@ public:
     const UnitType & getType() const;
 
     CCPosition getPosition() const;
+    CCTilePosition getTilePosition() const;
     CCHealth getHitPoints() const;
     CCHealth getShields() const;
     CCHealth getEnergy() const;

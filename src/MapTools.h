@@ -49,7 +49,7 @@ public:
 
     void    drawLine(CCPositionType x1, CCPositionType y1, CCPositionType x2, CCPositionType y2, const CCColor & color = CCColor(255, 255, 255)) const;
     void    drawLine(const CCPosition & p1, const CCPosition & p2, const CCColor & color = CCColor(255, 255, 255)) const;
-    void    drawSquare(CCPositionType x1, CCPositionType y1, CCPositionType x2, CCPositionType y2, const CCColor & color = CCColor(255, 255, 255)) const;
+    void    drawTile(int tileX, int tileY, const CCColor & color = CCColor(255, 255, 255)) const;
     void    drawBox(CCPositionType x1, CCPositionType y1, CCPositionType x2, CCPositionType y2, const CCColor & color = CCColor(255, 255, 255)) const;
     void    drawBox(const CCPosition & tl, const CCPosition & br, const CCColor & color = CCColor(255, 255, 255)) const;
     void    drawCircle(CCPositionType x1, CCPositionType x2, CCPositionType radius, const CCColor & color = CCColor(255, 255, 255)) const;

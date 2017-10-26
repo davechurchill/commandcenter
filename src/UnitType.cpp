@@ -295,6 +295,24 @@ int UnitType::supplyRequired() const
 #endif
 }
 
+int UnitType::mineralPrice() const
+{
+#ifdef SC2API
+    return (int)m_bot->Observation()->GetUnitTypeData()[m_type].mineral_cost;
+#else
+    return m_type.mineralPrice();
+#endif
+}
+
+int UnitType::gasPrice() const
+{
+#ifdef SC2API
+    return (int)m_bot->Observation()->GetUnitTypeData()[m_type].vespene_cost;
+#else
+    return m_type.gasPrice();
+#endif
+}
+
 UnitType UnitType::GetUnitTypeFromName(const std::string & name, CCBot & bot)
 {
 #ifdef SC2API

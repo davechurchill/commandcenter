@@ -213,7 +213,7 @@ void BuildingManager::checkForStartedConstruction()
     for (auto buildingStarted : m_bot.UnitInfo().getUnits(Players::Self))
     {
         // filter out units which aren't buildings under construction
-        if (!m_bot.Data(buildingStarted).isBuilding || !buildingStarted.isBeingConstructed())
+        if (!buildingStarted.getType().isBuilding() || !buildingStarted.isBeingConstructed())
         {
             continue;
         }
@@ -228,10 +228,10 @@ void BuildingManager::checkForStartedConstruction()
             }
 
             // check if the positions match
-            CCPositionType dx = b.finalPosition.x - buildingStarted.getPosition().x;
-            CCPositionType dy = b.finalPosition.y - buildingStarted.getPosition().y;
+            CCPositionType dx = b.finalPosition.x - buildingStarted.getTilePosition().x;
+            CCPositionType dy = b.finalPosition.y - buildingStarted.getTilePosition().y;
 
-            if (dx*dx + dy*dy < Util::TileToPosition(1))
+            if (dx*dx + dy*dy < Util::TileToPosition(1.0f))
             {
                 if (b.buildingUnit.isValid())
                 {
@@ -239,8 +239,8 @@ void BuildingManager::checkForStartedConstruction()
                 }
 
                 // the resources should now be spent, so unreserve them
-                m_reservedMinerals -= m_bot.Data(buildingStarted).mineralCost;
-                m_reservedGas      -= m_bot.Data(buildingStarted).gasCost;
+                m_reservedMinerals -= buildingStarted.getType().mineralPrice();
+                m_reservedGas      -= buildingStarted.getType().gasPrice();
                 
                 // flag it as started and set the buildingUnit
                 b.underConstruction = true;
@@ -379,16 +379,16 @@ void BuildingManager::drawBuildingInformation()
             int x2 = b.finalPosition.x + b.type.tileWidth();
             int y2 = b.finalPosition.y + b.type.tileHeight();
 
-            m_bot.Map().drawSquare((CCPositionType)x1, (CCPositionType)y1, (CCPositionType)x2, (CCPositionType)y2, CCColor(255, 0, 0));
+            m_bot.Map().drawBox((CCPositionType)x1, (CCPositionType)y1, (CCPositionType)x2, (CCPositionType)y2, CCColor(255, 0, 0));
             //m_bot.Map().drawLine(b.finalPosition, m_bot.GetUnit(b.builderUnitTag)->pos, CCColors::Yellow);
         }
         else if (b.status == BuildingStatus::UnderConstruction)
         {
-            ss << "Constructing " << b.type.getName() << "    " << b.builderUnit.getID() << " " << b.buildingUnit.getID() << " " << getBuildingWorkerCode(b) << "\n";
+            ss << "Constructing " << b.type.getName() << "    " << getBuildingWorkerCode(b) << "\n";
         }
     }
 
-    m_bot.Map().drawTextScreen(0.05f, 0.05f, ss.str());
+    m_bot.Map().drawTextScreen(0.3f, 0.05f, ss.str());
 }
 
 std::vector<UnitType> BuildingManager::buildingsQueued() const

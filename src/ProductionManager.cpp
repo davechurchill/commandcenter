@@ -163,6 +163,7 @@ void ProductionManager::create(const Unit & producer, BuildOrderItem & item)
     if (m_bot.Data(item.type).isBuilding)
     {
         // send the building task to the building manager
+
         m_buildingManager.addBuildingTask(item.type.getUnitType(), Util::GetTilePosition(m_bot.GetStartLocation()));
     }
     // if we're dealing with a non-building unit
@@ -210,22 +211,22 @@ bool ProductionManager::canMakeNow(const Unit & producer, const MetaType & type)
     bool canMake = meetsReservedResources(type);
 	if (canMake)
 	{
-		/*if (type.isUnit())
+		if (type.isUnit())
 		{
-			canMake = BWAPI::Broodwar->canMake(type.getUnitType(), producer);
+			canMake = BWAPI::Broodwar->canMake(type.getUnitType().getAPIUnitType(), producer.getUnitPtr());
 		}
 		else if (type.isTech())
 		{
-			canMake = BWAPI::Broodwar->canResearch(type.getTechType(), producer);
+			canMake = BWAPI::Broodwar->canResearch(type.getTechType(), producer.getUnitPtr());
 		}
 		else if (type.isUpgrade())
 		{
-			canMake = BWAPI::Broodwar->canUpgrade(type.getUpgradeType(), producer);
+			canMake = BWAPI::Broodwar->canUpgrade(type.getUpgrade(), producer.getUnitPtr());
 		}
 		else
 		{	
 			BOT_ASSERT(false, "Unknown type");
-		}*/
+		}
 	}
 
 	return canMake;
@@ -252,6 +253,7 @@ int ProductionManager::getFreeGas()
 bool ProductionManager::meetsReservedResources(const MetaType & type)
 {
     // return whether or not we meet the resources
+
     return (m_bot.Data(type).mineralCost <= getFreeMinerals()) && (m_bot.Data(type).gasCost <= getFreeGas());
 }
 

@@ -17,7 +17,6 @@ void BuildingPlacer::onStart()
 
 bool BuildingPlacer::isInResourceBox(int x, int y) const
 {
-    return false;
     return m_bot.Bases().getPlayerStartingBaseLocation(Players::Self)->isInResourceBox(x, y);
 }
 
@@ -208,12 +207,7 @@ void BuildingPlacer::drawReservedTiles()
         {
             if (m_reserveMap[x][y] || isInResourceBox(x, y))
             {
-                CCPositionType x1 = Util::TileToPosition(x + 1.25f);
-                CCPositionType y1 = Util::TileToPosition(y + 1.25f);
-                CCPositionType x2 = Util::TileToPosition(x + 1.75f);
-                CCPositionType y2 = Util::TileToPosition(y + 1.75f);
-
-                m_bot.Map().drawBox(x1, y1, x2, y2, CCColor(255, 255, 0));
+                m_bot.Map().drawTile(x, y, CCColor(255, 255, 0));
             }
         }
     }

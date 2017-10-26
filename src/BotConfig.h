@@ -17,6 +17,11 @@ public:
     std::string Authors;
     bool PrintInfoOnStart;
     std::string BotMode;
+
+    int SetLocalSpeed;
+    int SetFrameSkip;
+    bool UserInput;
+    bool CompleteMapInformation;
     
     std::string StrategyName;
     std::string ReadDir;

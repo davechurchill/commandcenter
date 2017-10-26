@@ -52,6 +52,8 @@ public:
     int tileHeight() const;
     int supplyProvided() const;
     int supplyRequired() const;
+    int mineralPrice() const;
+    int gasPrice() const;
 
     const std::vector<UnitType> & whatBuilds() const;
 
