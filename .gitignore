@@ -8,7 +8,6 @@ cmake_install.cmake
 .vscode/
 vs/.vs/
 vs/commandcenter
-vs/*.user
 
 bin/CommandCenter
 bin/*.exe
