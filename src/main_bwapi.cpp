@@ -4,6 +4,8 @@
 #include "JSONTools.h"
 #include "Util.h"
 
+#ifndef SC2API
+
 #include <BWAPI/Client.h>
 
 void UAlbertaBot_BWAPIReconnect() 
@@ -98,3 +100,5 @@ int main(int argc, char * argv[])
 
 	return 0;
 }
+
+#endif

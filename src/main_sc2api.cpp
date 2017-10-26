@@ -4,6 +4,8 @@
 #include "JSONTools.h"
 #include "Util.h"
 
+#ifdef SC2API
+
 #include "sc2utils/sc2_manage_process.h"
 #include "sc2api/sc2_api.h"
 
@@ -82,3 +84,5 @@ int main(int argc, char* argv[])
 
     return 0;
 }
+
+#endif

@@ -278,7 +278,7 @@ void MapTools::draw() const
                     color = sc2::Colors::Yellow;
                 }
 
-                drawSquare(x, y, x+1, y+1, color);
+                drawTile((int)x, (int)y, color);
             }
         }
     }

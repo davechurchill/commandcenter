@@ -228,8 +228,8 @@ void BuildingManager::checkForStartedConstruction()
             }
 
             // check if the positions match
-            CCPositionType dx = b.finalPosition.x - buildingStarted.getTilePosition().x;
-            CCPositionType dy = b.finalPosition.y - buildingStarted.getTilePosition().y;
+            int dx = b.finalPosition.x - buildingStarted.getTilePosition().x;
+            int dy = b.finalPosition.y - buildingStarted.getTilePosition().y;
 
             if (dx*dx + dy*dy < Util::TileToPosition(1.0f))
             {

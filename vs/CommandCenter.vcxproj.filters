@@ -117,6 +117,7 @@
       <Filter>micro</Filter>
     </ClCompile>
     <ClCompile Include="..\src\main_sc2api.cpp" />
+    <ClCompile Include="..\src\main_bwapi.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\BotAssert.h">
