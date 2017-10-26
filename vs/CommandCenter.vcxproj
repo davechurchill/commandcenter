@@ -9,28 +9,12 @@
       <Configuration>Debug</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="MinSizeRel|Win32">
-      <Configuration>MinSizeRel</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release|x64">
       <Configuration>Release</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="MinSizeRel|x64">
-      <Configuration>MinSizeRel</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="RelWithDebInfo|Win32">
-      <Configuration>RelWithDebInfo</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="RelWithDebInfo|x64">
-      <Configuration>RelWithDebInfo</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
@@ -143,30 +127,6 @@
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseOfMfc>false</UseOfMfc>
-    <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseOfMfc>false</UseOfMfc>
-    <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseOfMfc>false</UseOfMfc>
-    <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseOfMfc>false</UseOfMfc>
-    <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
-  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
@@ -196,26 +156,6 @@
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateManifest>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</GenerateManifest>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Libraries\SC2AI\SC2API\s2client-api\build\bin\MinSizeRel\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Intermediate_bot.dir\MinSizeRel\</IntDir>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Intermediate_bot</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Intermediate_bot</TargetName>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.exe</TargetExt>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">.exe</TargetExt>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkIncremental>
-    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">true</GenerateManifest>
-    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">true</GenerateManifest>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Libraries\SC2AI\SC2API\s2client-api\build\bin\RelWithDebInfo\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Intermediate_bot.dir\RelWithDebInfo\</IntDir>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Intermediate_bot</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Intermediate_bot</TargetName>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.exe</TargetExt>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">.exe</TargetExt>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">true</LinkIncremental>
-    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</GenerateManifest>
-    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">true</GenerateManifest>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LibraryPath>C:\Libraries\SC2AI\sc2api_precompiled\lib;$(LibraryPath)</LibraryPath>
@@ -256,10 +196,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_SCL_SECURE_NO_WARNINGS;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Libraries\SC2AI\SC2API\s2client-api\examples\..\include;C:\Libraries\SC2AI\SC2API\s2client-api\examples\common;C:\Libraries\SC2AI\SC2API\s2client-api\build\generated;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\rabbitmq-c\librabbitmq;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\SDL-mirror\include;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\protobuf\src;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\civetweb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Libraries\SC2AI\SC2API\s2client-api\examples\..\include;C:\Libraries\SC2AI\SC2API\s2client-api\examples\common;C:\Libraries\SC2AI\SC2API\s2client-api\build\generated;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\rabbitmq-c\librabbitmq;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\SDL-mirror\include;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\protobuf\src;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\civetweb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -272,7 +212,7 @@
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>Debug</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImportLibrary>C:/Libraries/SC2AI/SC2API/s2client-api/build/bin/Intermediate_bot.lib</ImportLibrary>
+      <ImportLibrary></ImportLibrary>
       <ProgramDataBaseFile>
       </ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
@@ -304,10 +244,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_SCL_SECURE_NO_WARNINGS;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Libraries\SC2AI\SC2API\s2client-api\examples\..\include;C:\Libraries\SC2AI\SC2API\s2client-api\examples\common;C:\Libraries\SC2AI\SC2API\s2client-api\build\generated;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\rabbitmq-c\librabbitmq;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\SDL-mirror\include;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\protobuf\src;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\civetweb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Libraries\SC2AI\SC2API\s2client-api\examples\..\include;C:\Libraries\SC2AI\SC2API\s2client-api\examples\common;C:\Libraries\SC2AI\SC2API\s2client-api\build\generated;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\rabbitmq-c\librabbitmq;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\SDL-mirror\include;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\protobuf\src;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\civetweb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -356,10 +296,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_SCL_SECURE_NO_WARNINGS;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Libraries\SC2AI\SC2API\s2client-api\examples\..\include;C:\Libraries\SC2AI\SC2API\s2client-api\examples\common;C:\Libraries\SC2AI\SC2API\s2client-api\build\generated;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\rabbitmq-c\librabbitmq;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\SDL-mirror\include;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\protobuf\src;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\civetweb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Libraries\SC2AI\SC2API\s2client-api\examples\..\include;C:\Libraries\SC2AI\SC2API\s2client-api\examples\common;C:\Libraries\SC2AI\SC2API\s2client-api\build\generated;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\rabbitmq-c\librabbitmq;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\SDL-mirror\include;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\protobuf\src;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\civetweb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -372,8 +312,8 @@
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>No</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImportLibrary>C:/Libraries/SC2AI/SC2API/s2client-api/build/bin/Intermediate_bot.lib</ImportLibrary>
-      <ProgramDataBaseFile>C:/Libraries/SC2AI/SC2API/s2client-api/build/bin/Intermediate_bot.pdb</ProgramDataBaseFile>
+      <ImportLibrary></ImportLibrary>
+      <ProgramDataBaseFile></ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
       <Version>
       </Version>
@@ -406,10 +346,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_SCL_SECURE_NO_WARNINGS;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Libraries\SC2AI\SC2API\s2client-api\examples\..\include;C:\Libraries\SC2AI\SC2API\s2client-api\examples\common;C:\Libraries\SC2AI\SC2API\s2client-api\build\generated;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\rabbitmq-c\librabbitmq;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\SDL-mirror\include;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\protobuf\src;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\civetweb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Libraries\SC2AI\SC2API\s2client-api\examples\..\include;C:\Libraries\SC2AI\SC2API\s2client-api\examples\common;C:\Libraries\SC2AI\SC2API\s2client-api\build\generated;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\rabbitmq-c\librabbitmq;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\SDL-mirror\include;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\protobuf\src;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\civetweb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -428,184 +368,6 @@
       <Version>
       </Version>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
-    </Link>
-    <ProjectReference>
-      <LinkLibraryDependencies>false</LinkLibraryDependencies>
-    </ProjectReference>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
-    <ClCompile>
-      <AdditionalIncludeDirectories>C:\Libraries\SC2AI\SC2API\s2client-api\examples\..\include;C:\Libraries\SC2AI\SC2API\s2client-api\examples\common;C:\Libraries\SC2AI\SC2API\s2client-api\build\generated;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\rabbitmq-c\librabbitmq;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\SDL-mirror\include;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\protobuf\src;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\civetweb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AssemblerListingLocation>MinSizeRel/</AssemblerListingLocation>
-      <CompileAs>CompileAsCpp</CompileAs>
-      <ExceptionHandling>Sync</ExceptionHandling>
-      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <Optimization>MinSpace</Optimization>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_SCL_SECURE_NO_WARNINGS;CMAKE_INTDIR="MinSizeRel";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ObjectFileName>$(IntDir)</ObjectFileName>
-      <DebugInformationFormat>
-      </DebugInformationFormat>
-    </ClCompile>
-    <ResourceCompile>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_SCL_SECURE_NO_WARNINGS;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Libraries\SC2AI\SC2API\s2client-api\examples\..\include;C:\Libraries\SC2AI\SC2API\s2client-api\examples\common;C:\Libraries\SC2AI\SC2API\s2client-api\build\generated;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\rabbitmq-c\librabbitmq;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\SDL-mirror\include;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\protobuf\src;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\civetweb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ResourceCompile>
-    <Midl>
-      <AdditionalIncludeDirectories>C:\Libraries\SC2AI\SC2API\s2client-api\examples\..\include;C:\Libraries\SC2AI\SC2API\s2client-api\examples\common;C:\Libraries\SC2AI\SC2API\s2client-api\build\generated;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\rabbitmq-c\librabbitmq;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\SDL-mirror\include;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\protobuf\src;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\civetweb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
-      <HeaderFileName>%(Filename).h</HeaderFileName>
-      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
-      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
-      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
-    </Midl>
-    <Link>
-      <AdditionalOptions>%(AdditionalOptions)  /machine:x64</AdditionalOptions>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;..\bin\MinSizeRel\sc2api.lib;..\bin\MinSizeRel\sc2lib.lib;..\bin\MinSizeRel\utils.lib;..\bin\MinSizeRel\renderer.lib;..\bin\MinSizeRel\sc2api.lib;..\bin\MinSizeRel\sc2protocol.lib;..\bin\MinSizeRel\libprotobuf.lib;..\bin\MinSizeRel\civetweb.lib;..\bin\MinSizeRel\SDL2.lib;user32.lib;gdi32.lib;winmm.lib;imm32.lib;ole32.lib;oleaut32.lib;version.lib;uuid.lib;dinput8.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>No</GenerateDebugInformation>
-      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImportLibrary>C:/Libraries/SC2AI/SC2API/s2client-api/build/bin/MinSizeRel/Intermediate_bot.lib</ImportLibrary>
-      <ProgramDataBaseFile>C:/Libraries/SC2AI/SC2API/s2client-api/build/bin/MinSizeRel/Intermediate_bot.pdb</ProgramDataBaseFile>
-      <SubSystem>Console</SubSystem>
-      <Version>
-      </Version>
-    </Link>
-    <ProjectReference>
-      <LinkLibraryDependencies>false</LinkLibraryDependencies>
-    </ProjectReference>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">
-    <ClCompile>
-      <AdditionalIncludeDirectories>C:\Libraries\SC2AI\SC2API\s2client-api\examples\..\include;C:\Libraries\SC2AI\SC2API\s2client-api\examples\common;C:\Libraries\SC2AI\SC2API\s2client-api\build\generated;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\rabbitmq-c\librabbitmq;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\SDL-mirror\include;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\protobuf\src;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\civetweb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AssemblerListingLocation>MinSizeRel/</AssemblerListingLocation>
-      <CompileAs>CompileAsCpp</CompileAs>
-      <ExceptionHandling>Sync</ExceptionHandling>
-      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <Optimization>MinSpace</Optimization>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_SCL_SECURE_NO_WARNINGS;CMAKE_INTDIR="MinSizeRel";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ObjectFileName>$(IntDir)</ObjectFileName>
-      <DebugInformationFormat>
-      </DebugInformationFormat>
-    </ClCompile>
-    <ResourceCompile>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_SCL_SECURE_NO_WARNINGS;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Libraries\SC2AI\SC2API\s2client-api\examples\..\include;C:\Libraries\SC2AI\SC2API\s2client-api\examples\common;C:\Libraries\SC2AI\SC2API\s2client-api\build\generated;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\rabbitmq-c\librabbitmq;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\SDL-mirror\include;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\protobuf\src;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\civetweb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ResourceCompile>
-    <Midl>
-      <AdditionalIncludeDirectories>C:\Libraries\SC2AI\SC2API\s2client-api\examples\..\include;C:\Libraries\SC2AI\SC2API\s2client-api\examples\common;C:\Libraries\SC2AI\SC2API\s2client-api\build\generated;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\rabbitmq-c\librabbitmq;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\SDL-mirror\include;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\protobuf\src;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\civetweb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
-      <HeaderFileName>%(Filename).h</HeaderFileName>
-      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
-      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
-      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
-    </Midl>
-    <Link>
-      <AdditionalOptions>%(AdditionalOptions)  /machine:x64</AdditionalOptions>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;..\bin\MinSizeRel\sc2api.lib;..\bin\MinSizeRel\sc2lib.lib;..\bin\MinSizeRel\utils.lib;..\bin\MinSizeRel\renderer.lib;..\bin\MinSizeRel\sc2api.lib;..\bin\MinSizeRel\sc2protocol.lib;..\bin\MinSizeRel\libprotobuf.lib;..\bin\MinSizeRel\civetweb.lib;..\bin\MinSizeRel\SDL2.lib;user32.lib;gdi32.lib;winmm.lib;imm32.lib;ole32.lib;oleaut32.lib;version.lib;uuid.lib;dinput8.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>No</GenerateDebugInformation>
-      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImportLibrary>C:/Libraries/SC2AI/SC2API/s2client-api/build/bin/MinSizeRel/Intermediate_bot.lib</ImportLibrary>
-      <ProgramDataBaseFile>C:/Libraries/SC2AI/SC2API/s2client-api/build/bin/MinSizeRel/Intermediate_bot.pdb</ProgramDataBaseFile>
-      <SubSystem>Console</SubSystem>
-      <Version>
-      </Version>
-    </Link>
-    <ProjectReference>
-      <LinkLibraryDependencies>false</LinkLibraryDependencies>
-    </ProjectReference>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
-    <ClCompile>
-      <AdditionalIncludeDirectories>C:\Libraries\SC2AI\SC2API\s2client-api\examples\..\include;C:\Libraries\SC2AI\SC2API\s2client-api\examples\common;C:\Libraries\SC2AI\SC2API\s2client-api\build\generated;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\rabbitmq-c\librabbitmq;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\SDL-mirror\include;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\protobuf\src;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\civetweb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AssemblerListingLocation>RelWithDebInfo/</AssemblerListingLocation>
-      <CompileAs>CompileAsCpp</CompileAs>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <ExceptionHandling>Sync</ExceptionHandling>
-      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <Optimization>MaxSpeed</Optimization>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_SCL_SECURE_NO_WARNINGS;CMAKE_INTDIR="RelWithDebInfo";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ObjectFileName>$(IntDir)</ObjectFileName>
-    </ClCompile>
-    <ResourceCompile>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_SCL_SECURE_NO_WARNINGS;CMAKE_INTDIR=\"RelWithDebInfo\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Libraries\SC2AI\SC2API\s2client-api\examples\..\include;C:\Libraries\SC2AI\SC2API\s2client-api\examples\common;C:\Libraries\SC2AI\SC2API\s2client-api\build\generated;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\rabbitmq-c\librabbitmq;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\SDL-mirror\include;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\protobuf\src;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\civetweb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ResourceCompile>
-    <Midl>
-      <AdditionalIncludeDirectories>C:\Libraries\SC2AI\SC2API\s2client-api\examples\..\include;C:\Libraries\SC2AI\SC2API\s2client-api\examples\common;C:\Libraries\SC2AI\SC2API\s2client-api\build\generated;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\rabbitmq-c\librabbitmq;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\SDL-mirror\include;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\protobuf\src;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\civetweb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
-      <HeaderFileName>%(Filename).h</HeaderFileName>
-      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
-      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
-      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
-    </Midl>
-    <Link>
-      <AdditionalOptions>%(AdditionalOptions)  /machine:x64</AdditionalOptions>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;..\bin\RelWithDebInfo\sc2api.lib;..\bin\RelWithDebInfo\sc2lib.lib;..\bin\RelWithDebInfo\utils.lib;..\bin\RelWithDebInfo\renderer.lib;..\bin\RelWithDebInfo\sc2api.lib;..\bin\RelWithDebInfo\sc2protocol.lib;..\bin\RelWithDebInfo\libprotobuf.lib;..\bin\RelWithDebInfo\civetweb.lib;..\bin\RelWithDebInfo\SDL2.lib;user32.lib;gdi32.lib;winmm.lib;imm32.lib;ole32.lib;oleaut32.lib;version.lib;uuid.lib;dinput8.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>Debug</GenerateDebugInformation>
-      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImportLibrary>C:/Libraries/SC2AI/SC2API/s2client-api/build/bin/RelWithDebInfo/Intermediate_bot.lib</ImportLibrary>
-      <ProgramDataBaseFile>C:/Libraries/SC2AI/SC2API/s2client-api/build/bin/RelWithDebInfo/Intermediate_bot.pdb</ProgramDataBaseFile>
-      <SubSystem>Console</SubSystem>
-      <Version>
-      </Version>
-    </Link>
-    <ProjectReference>
-      <LinkLibraryDependencies>false</LinkLibraryDependencies>
-    </ProjectReference>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">
-    <ClCompile>
-      <AdditionalIncludeDirectories>C:\Libraries\SC2AI\SC2API\s2client-api\examples\..\include;C:\Libraries\SC2AI\SC2API\s2client-api\examples\common;C:\Libraries\SC2AI\SC2API\s2client-api\build\generated;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\rabbitmq-c\librabbitmq;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\SDL-mirror\include;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\protobuf\src;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\civetweb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AssemblerListingLocation>RelWithDebInfo/</AssemblerListingLocation>
-      <CompileAs>CompileAsCpp</CompileAs>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <ExceptionHandling>Sync</ExceptionHandling>
-      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <Optimization>MaxSpeed</Optimization>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_SCL_SECURE_NO_WARNINGS;CMAKE_INTDIR="RelWithDebInfo";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ObjectFileName>$(IntDir)</ObjectFileName>
-    </ClCompile>
-    <ResourceCompile>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_SCL_SECURE_NO_WARNINGS;CMAKE_INTDIR=\"RelWithDebInfo\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Libraries\SC2AI\SC2API\s2client-api\examples\..\include;C:\Libraries\SC2AI\SC2API\s2client-api\examples\common;C:\Libraries\SC2AI\SC2API\s2client-api\build\generated;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\rabbitmq-c\librabbitmq;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\SDL-mirror\include;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\protobuf\src;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\civetweb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ResourceCompile>
-    <Midl>
-      <AdditionalIncludeDirectories>C:\Libraries\SC2AI\SC2API\s2client-api\examples\..\include;C:\Libraries\SC2AI\SC2API\s2client-api\examples\common;C:\Libraries\SC2AI\SC2API\s2client-api\build\generated;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\rabbitmq-c\librabbitmq;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\SDL-mirror\include;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\protobuf\src;C:\Libraries\SC2AI\SC2API\s2client-api\contrib\civetweb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
-      <HeaderFileName>%(Filename).h</HeaderFileName>
-      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
-      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
-      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
-    </Midl>
-    <Link>
-      <AdditionalOptions>%(AdditionalOptions)  /machine:x64</AdditionalOptions>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;..\bin\RelWithDebInfo\sc2api.lib;..\bin\RelWithDebInfo\sc2lib.lib;..\bin\RelWithDebInfo\utils.lib;..\bin\RelWithDebInfo\renderer.lib;..\bin\RelWithDebInfo\sc2api.lib;..\bin\RelWithDebInfo\sc2protocol.lib;..\bin\RelWithDebInfo\libprotobuf.lib;..\bin\RelWithDebInfo\civetweb.lib;..\bin\RelWithDebInfo\SDL2.lib;user32.lib;gdi32.lib;winmm.lib;imm32.lib;ole32.lib;oleaut32.lib;version.lib;uuid.lib;dinput8.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>Debug</GenerateDebugInformation>
-      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImportLibrary>C:/Libraries/SC2AI/SC2API/s2client-api/build/bin/RelWithDebInfo/Intermediate_bot.lib</ImportLibrary>
-      <ProgramDataBaseFile>C:/Libraries/SC2AI/SC2API/s2client-api/build/bin/RelWithDebInfo/Intermediate_bot.pdb</ProgramDataBaseFile>
-      <SubSystem>Console</SubSystem>
-      <Version>
-      </Version>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>

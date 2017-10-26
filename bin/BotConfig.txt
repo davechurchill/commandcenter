@@ -45,14 +45,14 @@
         "DrawTileInfo"              : false,
         "DrawWalkableSectors"       : false,
         "DrawScoutInfo"             : false,
-        "DrawEnemyUnitInfo"         : true,
+        "DrawEnemyUnitInfo"         : false,
         "DrawResourceInfo"          : false,
         "DrawUnitTargetInfo"        : false,
         "DrawLastSeenTileInfo"      : false,
         "DrawSquadInfo"             : false,
-        "DrawWorkerInfo"            : true,
-        "DrawBuildingInfo"          : true,
-        "DrawReservedBuildingTiles" : true
+        "DrawWorkerInfo"            : false,
+        "DrawBuildingInfo"          : false,
+        "DrawReservedBuildingTiles" : false
     },
     
     "Modules" :
