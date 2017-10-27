@@ -34,8 +34,7 @@
     <ClCompile Include="..\src\DistanceMap.cpp" />
     <ClCompile Include="..\src\GameCommander.cpp" />
     <ClCompile Include="..\src\JSONTools.cpp" />
-    <ClCompile Include="..\src\main_bwapi.cpp" />
-    <ClCompile Include="..\src\main_sc2api.cpp" />
+    <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\MapTools.cpp" />
     <ClCompile Include="..\src\MeleeManager.cpp" />
     <ClCompile Include="..\src\MetaType.cpp" />
