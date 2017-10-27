@@ -19,7 +19,7 @@ void TechTree::onStart()
 
 void TechTree::initUnitTypeData()
 {
-    m_upgradeData[0] = TypeData();
+    m_unitTypeData[0] = TypeData();
 
     // Protoss Buildings                                                                                  unit  bld   wrk    rfn    sup    hall   add
     m_unitTypeData[sc2::UNIT_TYPEID::PROTOSS_PYLONOVERCHARGED] =        { sc2::Race::Protoss, 0, 0, 0, 0, true, true, false, false,  true, false, false, sc2::ABILITY_ID::EFFECT_PHOTONOVERCHARGE, 0, { sc2::UNIT_TYPEID::PROTOSS_MOTHERSHIPCORE, sc2::UNIT_TYPEID::PROTOSS_PYLON }, {}, {} }; 
