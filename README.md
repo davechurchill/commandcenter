@@ -2,6 +2,8 @@
 
 CommandCenter is a StarCraft AI bot that can play both StarCraft: Broodwar and StarCraft 2.
 
+![CommandCenter Screenshot](https://i.imgur.com/8J4oexT.jpg)
+
 CommandCenter is written in C++ using [BWAPI](https://github.com/bwapi/bwapi) and Blizzard's [StarCraft II AI API](https://github.com/Blizzard/s2client-api). It provides many wrapper functions around both APIs that allow it to perform the same functionality in both games via the same source code. It is written by [David Churchill](http://www.cs.mun.ca/~dchurchill/), Assistant Professor of [Computer Science](https://www.cs.mun.ca/) at Memorial University, and organizer of the [AIIDE StarCraft AI Competition](http://www.cs.mun.ca/~dchurchill/starcraftaicomp/).
 
 CommandCenter is based on the architecture of [UAlbertaBot](https://github.com/davechurchill/ualbertabot/wiki), and is intended to be an easy to use architecture for you to quickly modify, play with, and build your own bot. The bot itself does not contain much in the way of hard-coded strategy or tactics, however it provides a good starting point for you to implement your own strategies for any race. 
