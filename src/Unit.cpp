@@ -242,7 +242,7 @@ bool Unit::isIdle() const
 #ifdef SC2API
     return m_unit->orders.empty();
 #else
-    return m_unit->isIdle();
+    return m_unit->isIdle() && !m_unit->isMoving() && !m_unit->isGatheringGas() && !m_unit->isGatheringMinerals();
 #endif
 }
 
