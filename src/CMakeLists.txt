@@ -1,6 +1,9 @@
 # All the source files for the bot.
 file(GLOB BOT_SOURCES "*.cpp" "*.h" "*.hpp")
 
+# Enable compilation of the SC2 version of the bot.
+add_definitions(-DSC2API)
+
 include_directories(SYSTEM "${SC2Api_INCLUDE_DIRS}")
 
 # Show more warnings at compiletime.
