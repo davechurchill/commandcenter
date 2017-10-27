@@ -171,6 +171,18 @@ sc2::Point2D Util::CalcCenter(const std::vector<const sc2::Unit *> & units)
     return sc2::Point2D(cx / units.size(), cy / units.size());
 }
 
+void Util::Normalize(sc2::Point2D& point)
+{
+    float norm = sqrt(pow(point.x, 2) + pow(point.y, 2));
+    point /= norm;
+}
+
+sc2::Point2D Util::Normalized(const sc2::Point2D& point)
+{
+    float norm = sqrt(pow(point.x, 2) + pow(point.y, 2));
+    return sc2::Point2D(point.x / norm, point.y / norm);
+}
+
 bool Util::IsDetector(const sc2::Unit * unit)
 {
     BOT_ASSERT(unit, "Unit pointer was null");
@@ -298,6 +310,32 @@ float Util::DistSq(const sc2::Point2D & p1, const sc2::Point2D & p2)
     float dy = p1.y - p2.y;
 
     return dx*dx + dy*dy;
+}
+
+sc2::Point2D Util::CalcLinearRegression(const std::vector<const sc2::Unit *> & units)
+{
+    float sumX = 0, sumY = 0, sumXSqr = 0, sumXY = 0, avgX, avgY, numerator, denominator, slope;
+    int size = units.size();
+    for (auto unit : units)
+    {
+        sumX += unit->pos.x;
+        sumY += unit->pos.y;
+        sumXSqr += pow(unit->pos.x, 2);
+        sumXY += unit->pos.x * unit->pos.y;
+    }
+    avgX = sumX / size;
+    avgY = sumY / size;
+    denominator = size * sumXSqr - pow(sumX, 2);
+    if (denominator == 0.f)
+        return sc2::Point2D(0, 1);
+    numerator = size * sumXY - sumX * sumY;
+    slope = numerator / denominator;
+    return Util::Normalized(sc2::Point2D(1, slope));
+}
+
+sc2::Point2D Util::CalcPerpendicularVector(const sc2::Point2D & vector)
+{
+    return sc2::Point2D(vector.y, -vector.x);
 }
 
 bool Util::Pathable(const sc2::GameInfo & info, const sc2::Point2D & point) 

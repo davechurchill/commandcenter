@@ -22,9 +22,8 @@ void PullBackFSMState::onEnter(const std::vector<const sc2::Unit*> * targets, CC
         if (Util::Dist(target->pos, m_unit->pos) < Util::Dist(closestTarget, m_unit->pos))
             closestTarget = target->pos;
 
-    sc2::Point2D direction = m_unit->pos - ((closestTarget + Util::CalcCenter(*targets)) / 2);
-    float norm = sqrt(pow(direction.x, 2) + pow(direction.y, 2));
-    direction /= norm; // normalized
+    sc2::Point2D direction = m_unit->pos - closestTarget;// ((closestTarget + Util::CalcCenter(*targets)) / 2);
+    Util::Normalize(direction);
     m_position = (direction * (targetRange + 2.f)) + closestTarget;
 
     FocusFireFSMState* fireClosest = new FireClosestFSMState(m_unit, m_target);

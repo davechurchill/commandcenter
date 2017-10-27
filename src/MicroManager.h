@@ -45,5 +45,5 @@ public:
     std::unordered_map<sc2::Tag, FocusFireFiniteStateMachine*> m_focusFireStates;
     std::unordered_map<sc2::Tag, KitingFiniteStateMachine*> m_kittingStates;
     std::unordered_map<sc2::Tag, float> m_unitHealth;
-
+    bool m_rallied;
 };

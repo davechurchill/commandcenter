@@ -7,7 +7,7 @@
 RangedManager::RangedManager(CCBot & bot)
     : MicroManager(bot)
 {
-
+    m_rallied = false;
 }
 
 void RangedManager::executeMicro(const std::vector<const sc2::Unit *> & targets)
@@ -30,16 +30,68 @@ void RangedManager::assignTargets(const std::vector<const sc2::Unit *> & targets
 
         rangedUnitTargets.push_back(target);
     }
-    // for each rangedUnit
-    for (auto rangedUnit : rangedUnits)
+    // if the order is to attack or defend
+    if (order.getType() == SquadOrderTypes::Attack || order.getType() == SquadOrderTypes::Defend)
     {
-        BOT_ASSERT(rangedUnit, "ranged unit is null");
-
-        // if the order is to attack or defend
-        if (order.getType() == SquadOrderTypes::Attack || order.getType() == SquadOrderTypes::Defend)
+        if (!rangedUnitTargets.empty())
         {
-            if (!rangedUnitTargets.empty())
+            sc2::Point2D targetCenterPoint = Util::CalcCenter(rangedUnitTargets);
+            sc2::Point2D unitCenterPoint = Util::CalcCenter(rangedUnits);
+            //reset the rallied state if units are too far from enemy units
+            if (m_rallied)
+                m_rallied = Util::Dist(unitCenterPoint, targetCenterPoint) < 10;
+            if (!m_rallied)
             {
+                //calculate a line that define the shape of the enemy group
+                sc2::Point2D targetsShape = Util::CalcLinearRegression(rangedUnitTargets);
+                //calculate the perpendicular vectors to find the front of the enemy group
+                sc2::Point2D direction = Util::CalcPerpendicularVector(targetsShape);
+                sc2::Point2D oppositeDirection(-direction.x, -direction.y);
+                //make sure the perpendicular vector is in the right direction
+                if (Util::Dist(targetCenterPoint + direction, unitCenterPoint) > Util::Dist(targetCenterPoint + oppositeDirection, unitCenterPoint))
+                    direction = oppositeDirection;
+                //the rally point is set 8 meters in front of the enemy units
+                sc2::Point2D rallyPoint = targetCenterPoint + direction * 8;
+                bool allUnitsPlaced(true);
+                float hardcodedSpaceBetweenUnits = 2.5f;
+                for (int i = 0; i < rangedUnits.size(); i++)
+                {
+                    auto unit = rangedUnits.at(i);
+                    if (Util::Dist(unit->pos, targetCenterPoint) < 7)
+                    {
+                        allUnitsPlaced = true;
+                        break;
+                    }
+                    float radius = unit->radius;
+                    sc2::Point2D unitRallyPoint;
+                    if (i % 2 == 0)
+                    {
+                        unitRallyPoint = rallyPoint + targetsShape * (i / 2) * radius * hardcodedSpaceBetweenUnits;
+                    }
+                    else
+                    {
+                        unitRallyPoint = rallyPoint - targetsShape * ((i + 1) / 2) * radius * hardcodedSpaceBetweenUnits;
+                    }
+                    m_bot.Actions()->UnitCommand(unit, sc2::ABILITY_ID::MOVE, unitRallyPoint);
+                    if (Util::Dist(unit->pos, unitRallyPoint) > 0.5f)
+                    {
+                        //flag as not placed only if position is within map bounds
+                        //if(unitRallyPoint.x > 0 && unitRallyPoint.x < m_bot.Map().width() && unitRallyPoint.y > 0 && unitRallyPoint.y < m_bot.Map().height())
+                        //hardcoded for minigame maps because the Map infos are incoherent with the positions of the units
+                        if(unitRallyPoint.x > 20 && unitRallyPoint.x < 35 && unitRallyPoint.y > 20 && unitRallyPoint.y < 35)
+                            allUnitsPlaced = false;
+                    }
+                }
+                if (!allUnitsPlaced)
+                    return;
+                m_rallied = true;
+            }
+
+            // for each rangedUnit
+            for (auto rangedUnit : rangedUnits)
+            {
+                BOT_ASSERT(rangedUnit, "ranged unit is null");
+
                 // find the best target for this rangedUnit
                 const sc2::Unit * target = getTarget(rangedUnit, rangedUnitTargets);
 
@@ -57,9 +109,15 @@ void RangedManager::assignTargets(const std::vector<const sc2::Unit *> & targets
                     Micro::SmartAttackUnit(rangedUnit, target, m_bot);
                 }
             }
-            // if there are no targets
-            else
+        }
+        // if there are no targets
+        else
+        {
+            // for each rangedUnit
+            for (auto rangedUnit : rangedUnits)
             {
+                BOT_ASSERT(rangedUnit, "ranged unit is null");
+
                 // if we're not near the order position
                 if (Util::Dist(rangedUnit->pos, order.getPosition()) > 4)
                 {
