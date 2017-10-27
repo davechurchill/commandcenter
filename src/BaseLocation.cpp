@@ -114,9 +114,11 @@ void BaseLocation::setPlayerOccupying(CCPlayer player, bool occupying)
     }
 }
 
-bool BaseLocation::isInResourceBox(int x, int y) const
+bool BaseLocation::isInResourceBox(int tileX, int tileY) const
 {
-    return x >= m_left && x < m_right && y < m_top && y >= m_bottom;
+    CCPositionType px = Util::TileToPosition((float)tileX);
+    CCPositionType py = Util::TileToPosition((float)tileY);
+    return px >= m_left && px < m_right && py < m_top && py >= m_bottom;
 }
 
 bool BaseLocation::isOccupiedByPlayer(CCPlayer player) const
@@ -228,15 +230,6 @@ void BaseLocation::draw()
     {
         m_bot.Map().drawCircle(m_depotPosition, radius, CCColor(255, 0, 0));
     }
-    
-    CCPositionType ccWidth = Util::TileToPosition(5.0f);
-    CCPositionType ccHeight = Util::TileToPosition(5.0f);
-    CCPosition boxtl = m_depotPosition - CCPosition(ccWidth/2, -ccHeight/2);
-    CCPosition boxbr = m_depotPosition + CCPosition(ccWidth/2, -ccHeight/2);
-
-    m_bot.Map().drawBox(boxtl.x, boxtl.y, boxbr.x, boxbr.y, CCColor(255, 0, 0));
-
-    //m_distanceMap.draw(m_bot);
 }
 
 bool BaseLocation::isMineralOnly() const

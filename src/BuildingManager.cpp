@@ -100,7 +100,7 @@ void BuildingManager::assignWorkersToUnassignedBuildings()
 
         // grab a worker unit from WorkerManager which is closest to this final position
         CCTilePosition testLocation = getBuildingLocation(b);
-        if (!m_bot.Map().isValidTile(testLocation))
+        if (!m_bot.Map().isValidTile(testLocation) || (testLocation.x == 0 && testLocation.y == 0))
         {
             continue;
         }

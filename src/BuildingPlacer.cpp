@@ -15,15 +15,15 @@ void BuildingPlacer::onStart()
     m_reserveMap = std::vector< std::vector<bool> >(m_bot.Map().width(), std::vector<bool>(m_bot.Map().height(), false));
 }
 
-bool BuildingPlacer::isInResourceBox(int x, int y) const
+bool BuildingPlacer::isInResourceBox(int tileX, int tileY) const
 {
-    return m_bot.Bases().getPlayerStartingBaseLocation(Players::Self)->isInResourceBox(x, y);
+    return m_bot.Bases().getPlayerStartingBaseLocation(Players::Self)->isInResourceBox(tileX, tileY);
 }
 
 // makes final checks to see if a building can be built at a certain location
 bool BuildingPlacer::canBuildHere(int bx, int by, const Building & b) const
 {
-    if (isInResourceBox(by, by))
+    if (isInResourceBox(bx, by))
     {
         return false;
     }
@@ -109,11 +109,11 @@ CCTilePosition BuildingPlacer::getBuildLocationNear(const Building & b, int buil
     double ms1 = t.getElapsedTimeInMilliSec();
 
     // iterate through the list until we've found a suitable location
-    for (size_t i(0); i < closestToBuilding.size(); ++i)
+    for (size_t i(0); i < closestToBuilding.size() && i < 1000; ++i)
     {
         auto & pos = closestToBuilding[i];
 
-        if (canBuildHereWithSpace((int)pos.x, (int)pos.y, b, buildDist))
+        if (canBuildHereWithSpace(pos.x, pos.y, b, buildDist))
         {
             double ms = t.getElapsedTimeInMilliSec();
             //printf("Building Placer Took %d iterations, lasting %lf ms @ %lf iterations/ms, %lf setup ms\n", (int)i, ms, (i / ms), ms1);
@@ -123,7 +123,7 @@ CCTilePosition BuildingPlacer::getBuildLocationNear(const Building & b, int buil
     }
 
     double ms = t.getElapsedTimeInMilliSec();
-    //printf("Building Placer Took %lf ms\n", ms);
+    //printf("Building Placer Failure: %s - Took %lf ms\n", b.type.getName().c_str(), ms);
 
     return CCTilePosition(0, 0);
 }

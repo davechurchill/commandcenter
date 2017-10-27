@@ -55,6 +55,7 @@ void MapTools::onStart()
         for (int y(0); y < m_height; ++y)
         {
             m_buildable[x][y]       = canBuild(x, y);
+            m_depotBuildable[x][y]  = canBuild(x, y);
             m_walkable[x][y]        = m_buildable[x][y] || canWalk(x, y);
             m_terrainHeight[x][y]   = terainHeight(CCPosition((CCPositionType)x, (CCPositionType)y));
         }
@@ -65,6 +66,42 @@ void MapTools::onStart()
     {
         m_maxZ = std::max(unit->pos.z, m_maxZ);
     }
+
+#else
+    // set tiles that static resources are on as unbuildable
+    for (auto & resource : BWAPI::Broodwar->getStaticNeutralUnits())
+    {
+        if (!resource->getType().isResourceContainer())
+        {
+            continue;
+        }
+
+        int tileX = resource->getTilePosition().x;
+        int tileY = resource->getTilePosition().y;
+
+        for (int x=tileX; x<tileX+resource->getType().tileWidth(); ++x)
+        {
+            for (int y=tileY; y<tileY+resource->getType().tileHeight(); ++y)
+            {
+                m_buildable[x][y] = false;
+
+                // depots can't be built within 3 tiles of any resource
+                for (int rx=-3; rx<=3; rx++)
+                {
+                    for (int ry=-3; ry<=3; ry++)
+                    {
+                        if (!BWAPI::TilePosition(x+rx, y+ry).isValid())
+                        {
+                            continue;
+                        }
+
+                        m_depotBuildable[x+rx][y+ry] = false;
+                    }
+                }
+            }
+        }
+    }
+
 #endif
 
     computeConnectivity();
@@ -250,43 +287,6 @@ bool MapTools::isValidPosition(const CCPosition & pos) const
     return isValidTile(Util::GetTilePosition(pos));
 }
 
-void MapTools::draw() const
-{
-#ifdef SC2API
-    CCPosition camera = m_bot.Observation()->GetCameraPos();
-    for (float x = camera.x - 16.0f; x < camera.x + 16.0f; ++x)
-    {
-        for (float y = camera.y - 16.0f; y < camera.y + 16.0f; ++y)
-        {
-            if (!isValidTile((int)x, (int)y))
-            {
-                continue;
-            }
-
-            if (m_bot.Config().DrawWalkableSectors)
-            {
-                std::stringstream ss;
-                ss << getSectorNumber((int)x, (int)y);
-                drawText(sc2::Point2D(x + 0.5f, y + 0.5f), ss.str(), sc2::Colors::Yellow);
-            }
-
-            if (m_bot.Config().DrawTileInfo)
-            {
-                CCColor color = isWalkable((int)x, (int)y) ? sc2::Colors::Green : sc2::Colors::Red;
-                if (isWalkable((int)x, (int)y) && !isBuildable((int)x, (int)y))
-                {
-                    color = sc2::Colors::Yellow;
-                }
-
-                drawTile((int)x, (int)y, color);
-            }
-        }
-    }
-#else
-
-#endif
-}
-
 void MapTools::drawLine(CCPositionType x1, CCPositionType y1, CCPositionType x2, CCPositionType y2, const CCColor & color) const
 {
 #ifdef SC2API
@@ -307,9 +307,9 @@ void MapTools::drawLine(const CCPosition & p1, const CCPosition & p2, const CCCo
 
 void MapTools::drawTile(int tileX, int tileY, const CCColor & color) const
 {
-    CCPositionType px = Util::TileToPosition((float)tileX);
-    CCPositionType py = Util::TileToPosition((float)tileY);
-    CCPositionType d  = Util::TileToPosition(1.0f);
+    CCPositionType px = Util::TileToPosition((float)tileX) + Util::TileToPosition(0.1f);
+    CCPositionType py = Util::TileToPosition((float)tileY) + Util::TileToPosition(0.1f);
+    CCPositionType d  = Util::TileToPosition(0.8f);
 
     drawLine(px,     py,     px + d, py,     color);
     drawLine(px + d, py,     px + d, py + d, color);
@@ -567,4 +567,49 @@ float MapTools::terainHeight(const CCPosition & point)
 #else
     return 0;
 #endif
+}
+
+
+void MapTools::draw() const
+{
+#ifdef SC2API
+    CCPosition camera = m_bot.Observation()->GetCameraPos();
+    int sx = (int)(camera.x - 12.0f);
+    int sy = (int)(camera.y - 8.0f);
+    int ex = sx + 24;
+    int ey = sy + 16;
+
+#else
+    BWAPI::TilePosition screen(BWAPI::Broodwar->getScreenPosition());
+    int sx = screen.x;
+    int sy = screen.y;
+    int ex = sx + 20;
+    int ey = sy + 15;
+#endif
+
+    for (int x = sx; x < ex; ++x)
+    {
+        for (int y = sy; y < ey; y++)
+        {
+            if (!isValidTile((int)x, (int)y))
+            {
+                continue;
+            }
+
+            if (m_bot.Config().DrawWalkableSectors)
+            {
+                std::stringstream ss;
+                ss << getSectorNumber(x, y);
+                drawText(CCPosition(Util::TileToPosition(x + 0.5f), Util::TileToPosition(y + 0.5f)), ss.str());
+            }
+
+            if (m_bot.Config().DrawTileInfo)
+            {
+                CCColor color = isWalkable(x, y) ? CCColor(0, 255, 0) : CCColor(255, 0, 0);
+                if (isWalkable(x, y) && !isBuildable(x, y)) { color = CCColor(255, 255, 0); }
+                if (isBuildable(x, y) && !isDepotBuildableTile(x, y)) { color = CCColor(127, 255, 255); }
+                drawTile(x, y, color);
+            }
+        }
+    }
 }
