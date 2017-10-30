@@ -95,6 +95,7 @@ $ make
 $ cd ../
 
 # Install SC2 API headers
+$ sudo mkdir -p /opt/local/include
 $ sudo cp -R include/sc2api /opt/local/include
 $ sudo cp -R include/sc2utils /opt/local/include
 $ sudo cp -R build/generated/s2clientprotocol /opt/local/include
@@ -103,7 +104,7 @@ $ sudo cp -R build/generated/s2clientprotocol /opt/local/include
 $ sudo cp -R contrib/protobuf/src/google /opt/local/include/sc2api
 
 # Install SC2 API libraries
-$ sudo mkdir /opt/local/lib/sc2api
+$ sudo mkdir -p /opt/local/lib/sc2api
 $ sudo cp build/bin/libcivetweb.a /opt/local/lib/sc2api
 $ sudo cp build/bin/libprotobuf.a /opt/local/lib/sc2api
 $ sudo cp build/bin/libsc2api.a /opt/local/lib/sc2api
