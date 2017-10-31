@@ -15,7 +15,8 @@
 
 int main(int argc, char* argv[]) 
 {
-    BehaviorTreeBuilder::test2(); return 0;
+    BehaviorTreeBuilder::test(); 
+    return 0;
 
     sc2::Coordinator coordinator;
     if (!coordinator.LoadSettings(argc, argv)) 

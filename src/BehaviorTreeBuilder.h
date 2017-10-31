@@ -8,32 +8,38 @@
 class BehaviorTreeBuilder {
 
 protected:
-    Behavior* m_currentNode;
-    std::stack<Composite*> m_parentNode;
+    Composite* m_currentNode;
+    std::vector<Composite*> m_parentNode;
+    BehaviorTreeBuilder* addAction(Behavior* child)
+    {
+        m_currentNode->addChild(child);
+        return this;
+    }
     BehaviorTreeBuilder* addChild(Composite* child)
     {
-        if (!m_parentNode.empty()) m_parentNode.top()->addChild(child);
-        m_parentNode.push(child);
+        m_parentNode.push_back(child);
+        m_currentNode = m_parentNode.back();
         return this;
     }
 
 public:
     virtual ~BehaviorTreeBuilder() {}
-
+    BehaviorTreeBuilder() {}
+    BehaviorTreeBuilder(std::vector<Composite*> parentNode) {
+        m_parentNode = parentNode;
+    }
     BehaviorTreeBuilder* action(Behavior* action)
     {
-        assert(!m_parentNode.empty());
-        m_parentNode.top()->addChild(action);
-        return this;
+        return addAction(action);
     }
 
-    BehaviorTreeBuilder* condition(bool pred)  { 
-        return action(&ConditionAction(pred));  
+    BehaviorTreeBuilder* condition(ConditionAction * cond) {
+        return addAction(cond);
     }
 
-    BehaviorTreeBuilder* sequence()  { return addChild(&Sequence()); }
-    BehaviorTreeBuilder* selector() { return addChild(&Selector()); }
-    BehaviorTreeBuilder* activeSelector() { return addChild(&ActiveSelector()); }
+    BehaviorTreeBuilder* sequence(Sequence * seq) { return addChild(seq); }
+    BehaviorTreeBuilder* selector(Selector * sel) { return addChild(sel); }
+    BehaviorTreeBuilder* activeSelector(ActiveSelector * actSel) { return addChild(actSel); }
     BehaviorTreeBuilder* parallel(Parallel::Policy forSuccess, Parallel::Policy forFailure) { return addChild(&Parallel(forSuccess, forFailure)); }
 
     Behavior* build()
@@ -42,48 +48,54 @@ public:
         return m_currentNode;
     }
 
-    BehaviorTreeBuilder* end() 
+    BehaviorTree* end()
     {
-        m_currentNode = m_parentNode.top();
-        return this;
+        return new RangedBehaviorTree(m_currentNode);
     }
 
     static void test() {
         ActionVerbose FireAtPlayer("FireAtPlayer"), MoveTowardsPlayer("MoveTowardsPlayer"), MoveToPlayersLastKnownPosition("MoveToPlayersLastKnownPosition"),
             LookAround("LookAround"), MoveToRandomPosition("MoveToRandomPosition");
 
-        ActionVerbose IsPlayerVisible("IsPlayerVisible"), IsPlayerInRange("IsPlayerInRange"), HaveWeGotASuspectedLocation("HaveWeGotASuspectedLocation");
-
-        BehaviorTreeBuilder* bt = BehaviorTreeBuilder()
-        .activeSelector()
-        ->sequence()
+        ConditionAction IsPlayerVisible("IsPlayerVisible"), IsPlayerInRange("IsPlayerInRange"), HaveWeGotASuspectedLocation("HaveWeGotASuspectedLocation");
+        Sequence seq = Sequence();
+        ActiveSelector actSel = ActiveSelector();
+            BehaviorTree* bt = BehaviorTreeBuilder()
+            .activeSelector(&actSel)
+            ->sequence(&seq)
             ->condition(&IsPlayerVisible)
-            ->activeSelector()
-                ->sequence()
-                    ->condition(&IsPlayerInRange)
-                        ->action(&FireAtPlayer)
-                ->action(&MoveTowardsPlayer)
-        ->sequence()
+            ->activeSelector(&actSel)
+            ->sequence(&seq)
+            ->condition(&IsPlayerInRange)
+            ->action(&FireAtPlayer)
+            ->action(&MoveTowardsPlayer)
+            ->sequence(&seq)
             ->condition(&HaveWeGotASuspectedLocation)
             ->action(&MoveToPlayersLastKnownPosition)
             ->action(&LookAround)
-        ->sequence()
+            ->sequence(&seq)
             ->action(&MoveToRandomPosition)
             ->action(&LookAround)
-        ->end();
+            ->end();
+
+        bt->tick();
+
     }
 
-    
+
     static void test2() {
         ActionVerbose FireAtPlayer("FireAtPlayer"), MoveTowardsPlayer("MoveTowardsPlayer"), MoveToPlayersLastKnownPosition("MoveToPlayersLastKnownPosition"),
             LookAround("LookAround"), MoveToRandomPosition("MoveToRandomPosition");
+        Sequence seq = Sequence();
 
         ActionVerbose IsPlayerVisible("IsPlayerVisible"), IsPlayerInRange("IsPlayerInRange"), HaveWeGotASuspectedLocation("HaveWeGotASuspectedLocation");
 
-        BehaviorTreeBuilder* bt = BehaviorTreeBuilder()
-        .sequence()
+        BehaviorTree* bt = BehaviorTreeBuilder()
+            .sequence(&seq)
             ->action(&MoveToRandomPosition)
-        ->end();
+            ->end();
+
+        bt->tick();
     }
 };
 

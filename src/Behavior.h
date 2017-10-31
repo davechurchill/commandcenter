@@ -86,8 +86,8 @@ class Composite : public Behavior
 {
 public:
 	void addChild(Behavior* child) { m_Children.push_back(child); }
-	void removeChild(Behavior*);
-	void clearChildren();
+    void removeChild(Behavior*) { };
+    void clearChildren() { };
 protected:
 	typedef std::vector<Behavior*> Behaviors;
 	Behaviors m_Children;
@@ -269,14 +269,35 @@ protected:
 	}
 };
 
+class BehaviorTree
+{
+protected:
+    Behavior* m_pRoot;
+public:
+    virtual void tick() {};
+};
+
 class ActionVerbose : public Behavior {
 private:
     std::string name;
 public:
     ActionVerbose(const std::string n) : name(n) {}
 private:
-    virtual Status update() override {
+    Status update() {
         std::cout << name << " succeeded." << std::endl;
         return Status::BH_SUCCESS;
     }
 };
+
+class RangedBehaviorTree : public BehaviorTree
+{
+public:
+    RangedBehaviorTree(Behavior* b)
+    {
+        m_pRoot = b;
+    }
+    void tick() {
+        m_pRoot->tick();
+    }
+};
+

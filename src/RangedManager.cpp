@@ -2,6 +2,7 @@
 #include "Util.h"
 #include "CCBot.h"
 #include "Behavior.h"
+#include "BehaviorTreeBuilder.h"
 #include <algorithm>
 
 RangedManager::RangedManager(CCBot & bot)
