@@ -236,9 +236,9 @@ float MapTools::terrainHeight(float x, float y) const
 
 int MapTools::getGroundDistance(const CCPosition & src, const CCPosition & dest) const
 {
-    if (_allMaps.size() > 50)
+    if (m_allMaps.size() > 50)
     {
-        _allMaps.clear();
+        m_allMaps.clear();
     }
 
     return getDistanceMap(dest).getDistance(src);
@@ -253,13 +253,13 @@ const DistanceMap & MapTools::getDistanceMap(const CCTilePosition & tile) const
 {
     std::pair<int,int> pairTile(tile.x, tile.y);
 
-    if (_allMaps.find(pairTile) == _allMaps.end())
+    if (m_allMaps.find(pairTile) == m_allMaps.end())
     {
-        _allMaps[pairTile] = DistanceMap();
-        _allMaps[pairTile].computeDistanceMap(m_bot, tile);
+        m_allMaps[pairTile] = DistanceMap();
+        m_allMaps[pairTile].computeDistanceMap(m_bot, tile);
     }
 
-    return _allMaps[pairTile];
+    return m_allMaps[pairTile];
 }
 
 int MapTools::getSectorNumber(int x, int y) const
@@ -408,7 +408,7 @@ bool MapTools::isBuildable(int tileX, int tileY) const
     return m_buildable[tileX][tileY];
 }
 
-bool MapTools::canMetaTypeAtPosition(int tileX, int tileY, const UnitType & type) const
+bool MapTools::canBuildTypeAtPosition(int tileX, int tileY, const UnitType & type) const
 {
 #ifdef SC2API
     return m_bot.Query()->Placement(m_bot.Data(type).buildAbility, CCPosition((float)tileX, (float)tileY));

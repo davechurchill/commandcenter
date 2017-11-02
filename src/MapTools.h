@@ -16,7 +16,7 @@ class MapTools
     
 
     // a cache of already computed distance maps, which is mutable since it only acts as a cache
-    mutable std::map<std::pair<int,int>, DistanceMap>   _allMaps;   
+    mutable std::map<std::pair<int,int>, DistanceMap>   m_allMaps;   
 
     std::vector<std::vector<bool>>  m_walkable;         // whether a tile is buildable (includes static resources)
     std::vector<std::vector<bool>>  m_buildable;        // whether a tile is buildable (includes static resources)
@@ -65,7 +65,7 @@ public:
     bool    isExplored(const CCPosition & pos) const;
     bool    isExplored(const CCTilePosition & pos) const;
     bool    isVisible(int tileX, int tileY) const;
-    bool    canMetaTypeAtPosition(int tileX, int tileY, const UnitType & type) const;
+    bool    canBuildTypeAtPosition(int tileX, int tileY, const UnitType & type) const;
 
     const   DistanceMap & getDistanceMap(const CCTilePosition & tile) const;
     const   DistanceMap & getDistanceMap(const CCPosition & tile) const;

@@ -168,7 +168,7 @@ bool BuildingPlacer::tileOverlapsBaseLocation(int x, int y, UnitType type) const
 bool BuildingPlacer::buildable(const Building & b, int x, int y) const
 {
     // TODO: does this take units on the map into account?
-    if (!m_bot.Map().isValidTile(x, y) || !m_bot.Map().canMetaTypeAtPosition(x, y, b.type))
+    if (!m_bot.Map().isValidTile(x, y) || !m_bot.Map().canBuildTypeAtPosition(x, y, b.type))
     {
         return false;
     }

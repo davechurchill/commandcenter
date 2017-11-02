@@ -230,6 +230,8 @@ void BaseLocation::draw()
     {
         m_bot.Map().drawCircle(m_depotPosition, radius, CCColor(255, 0, 0));
     }
+
+    //m_distanceMap.draw(m_bot);
 }
 
 bool BaseLocation::isMineralOnly() const
