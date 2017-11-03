@@ -153,14 +153,14 @@ void TechTree::initUnitTypeData()
     m_unitTypeData[UnitType(sc2::UNIT_TYPEID::ZERG_EGG, m_bot)] =                        { sc2::Race::Zerg, 0, 0, 2, 0, true, false, false, false, false, false, false, 0, 0, { UnitType() }, { UnitType() }, {} };
 
     // Set the Mineral / Gas cost of each unit
+    auto & data = m_bot.Observation()->GetUnitTypeData();
+
     for (auto & kv : m_unitTypeData)
     {
         if (!kv.first.isValid()) { continue; }
-        
-        auto & data = m_bot.Observation()->GetUnitTypeData();
 
-        kv.second.mineralCost = m_bot.Observation()->GetUnitTypeData()[kv.first.getAPIUnitType()].mineral_cost;
-        kv.second.gasCost     = m_bot.Observation()->GetUnitTypeData()[kv.first.getAPIUnitType()].vespene_cost;
+        kv.second.mineralCost = data[kv.first.getAPIUnitType()].mineral_cost;
+        kv.second.gasCost     = data[kv.first.getAPIUnitType()].vespene_cost;
     }
 }
 
