@@ -5,11 +5,10 @@ class PullBackFSMState : public FocusFireFSMState
 {
 private:
     const sc2::Unit * m_unit;
-    const sc2::Unit * m_target;
     sc2::Point2D m_position;
     std::vector<FocusFireFSMTransition*> transitions;
 public:
-    PullBackFSMState(const sc2::Unit * unit, const sc2::Unit * target);
+    PullBackFSMState(const sc2::Unit * unit);
     void onEnter(const std::vector<const sc2::Unit*> *, CCBot*);
     void onUpdate(const sc2::Unit * target, CCBot*);
     void onExit();

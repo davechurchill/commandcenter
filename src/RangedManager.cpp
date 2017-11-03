@@ -35,7 +35,7 @@ void RangedManager::assignTargets(const std::vector<const sc2::Unit *> & targets
     {
         if (!rangedUnitTargets.empty())
         {
-            sc2::Point2D targetCenterPoint = Util::CalcCenter(rangedUnitTargets);
+            /*sc2::Point2D targetCenterPoint = Util::CalcCenter(rangedUnitTargets);
             sc2::Point2D unitCenterPoint = Util::CalcCenter(rangedUnits);
             //reset the rallied state if units are too far from enemy units
             if (m_rallied)
@@ -85,7 +85,7 @@ void RangedManager::assignTargets(const std::vector<const sc2::Unit *> & targets
                 if (!allUnitsPlaced)
                     return;
                 m_rallied = true;
-            }
+            }*/
 
             // for each rangedUnit
             for (auto rangedUnit : rangedUnits)

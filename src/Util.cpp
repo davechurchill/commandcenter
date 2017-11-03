@@ -222,7 +222,8 @@ float Util::GetAttackRangeForTarget(const sc2::Unit * unit, const sc2::Unit * ta
 		if ((weapon.type == sc2::Weapon::TargetType::Any || weapon.type == expectedWeaponType))
 			maxRange = weapon.range;
 	}
-	return maxRange;
+    //for some strange reason, units are actually able to reach targets farther than their range
+	return maxRange + 2;
 }
 
 float Util::GetMaxAttackRangeForTargets(const sc2::Unit * unit, const std::vector<const sc2::Unit *> & targets, CCBot & bot)
@@ -235,6 +236,31 @@ float Util::GetMaxAttackRangeForTargets(const sc2::Unit * unit, const std::vecto
             maxRange = range;
     }
     return maxRange;
+}
+
+float Util::GetAttackDamageForTarget(const sc2::Unit * unit, const sc2::Unit * target, CCBot & bot)
+{
+    sc2::UnitTypeData unitTypeData = GetUnitTypeDataFromUnitTypeId(unit->unit_type, bot);
+    sc2::UnitTypeData targetTypeData = GetUnitTypeDataFromUnitTypeId(target->unit_type, bot);
+    sc2::Weapon::TargetType expectedWeaponType = target->is_flying ? sc2::Weapon::TargetType::Air : sc2::Weapon::TargetType::Ground;
+    float damage = 0.f;
+    for (auto weapon : unitTypeData.weapons)
+    {
+        if (weapon.type == sc2::Weapon::TargetType::Any || weapon.type == expectedWeaponType)
+        {
+            float weaponDamage = weapon.damage_;
+            for (auto damageBonus : weapon.damage_bonus)
+            {
+                if (std::find(targetTypeData.attributes.begin(), targetTypeData.attributes.end(), damageBonus.attribute) != targetTypeData.attributes.end())
+                    weaponDamage += damageBonus.bonus;
+            }
+            weaponDamage -= targetTypeData.armor;
+            weaponDamage *= weapon.attacks;
+            if (weaponDamage > damage)
+                damage = weaponDamage;
+        }
+    }
+    return damage;
 }
 
 bool Util::IsDetectorType(const sc2::UnitTypeID & type)
@@ -468,15 +494,7 @@ sc2::UnitTypeID Util::GetUnitTypeIDFromName(const std::string & name, CCBot & bo
 
 sc2::UnitTypeData Util::GetUnitTypeDataFromUnitTypeId(const sc2::UnitTypeID unitTypeId, CCBot & bot)
 {
-    for (const sc2::UnitTypeData & data : bot.Observation()->GetUnitTypeData())
-    {
-        if (data.unit_type_id == unitTypeId)
-        {
-            return data;
-        }
-    }
-
-    return sc2::UnitTypeData();
+    return bot.Observation()->GetUnitTypeData()[unitTypeId];
 }
 
 sc2::UpgradeID Util::GetUpgradeIDFromName(const std::string & name, CCBot & bot)

@@ -2,14 +2,13 @@
 #include "Util.h"
 #include "CCBot.h"
 
-ShouldPullBackTransition::ShouldPullBackTransition(const sc2::Unit * unit, const sc2::Unit * target, FocusFireFSMState* nextState)
+ShouldPullBackTransition::ShouldPullBackTransition(const sc2::Unit * unit, FocusFireFSMState* nextState)
 {
     m_unit = unit;
-    m_target = target;
     m_nextState = nextState;
 }
 
-bool ShouldPullBackTransition::isValid(const std::vector<const sc2::Unit*> * units, std::unordered_map<sc2::Tag, float> * unitHealth, CCBot* bot)
+bool ShouldPullBackTransition::isValid(const sc2::Unit * target, const std::vector<const sc2::Unit*> * units, std::unordered_map<sc2::Tag, float> * unitHealth, CCBot* bot)
 {
     //update health in the health map
     if (unitHealth->find(m_unit->tag) == unitHealth->end())
@@ -17,21 +16,19 @@ bool ShouldPullBackTransition::isValid(const std::vector<const sc2::Unit*> * uni
     float previousHealth = unitHealth->at(m_unit->tag);
     unitHealth->insert_or_assign(m_unit->tag, m_unit->health);
 
-    auto targetWeapons = bot->Observation()->GetUnitTypeData()[m_target->unit_type].weapons;
-    float damage = 0.f;
-    for (auto weapon : targetWeapons)
-        if (weapon.damage_ > damage) damage = weapon.damage_;
+    float damage = Util::GetAttackDamageForTarget(target, m_unit, *bot);
+    float unitdamage = Util::GetAttackDamageForTarget(m_unit, target, *bot);
 
     //condition 1: if this unit would get killed by 1 attack from the target and there is no other unit closer to the target, this unit should back
     if (m_unit->health <= damage)
     {
-        float dist = Util::Dist(m_unit->pos, m_target->pos);
-        if (dist <= Util::GetAttackRangeForTarget(m_unit, m_target, *bot))
+        float dist = Util::Dist(m_unit->pos, target->pos);
+        if (dist <= Util::GetAttackRangeForTarget(target, m_unit, *bot))
         {
             bool otherUnitCloser = false;
             for (const sc2::Unit* unit : *units)
             {
-                if (unit != m_unit && Util::Dist(unit->pos, m_target->pos) < dist)
+                if (unit != m_unit && Util::Dist(unit->pos, target->pos) < dist)
                 {
                     //no need to pull back, since another unit is closer to target
                     otherUnitCloser = true;

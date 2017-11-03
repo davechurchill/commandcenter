@@ -6,10 +6,9 @@ class FireClosestFSMState : public FocusFireFSMState
 {
 private:
     const sc2::Unit * m_unit;
-    const sc2::Unit * m_target;
     std::vector<FocusFireFSMTransition*> transitions;
 public:
-    FireClosestFSMState(const sc2::Unit * unit, const sc2::Unit * target);
+    FireClosestFSMState(const sc2::Unit * unit);
     void onEnter(const std::vector<const sc2::Unit*> *, CCBot*);
     void onUpdate(const sc2::Unit * target, CCBot*);
     void onExit();
