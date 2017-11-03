@@ -14,5 +14,5 @@ class FocusFireFSMTransition : public FSMTransition
 {
 public:
     virtual FocusFireFSMState* getNextState() { return nullptr; };
-    virtual bool isValid(std::unordered_map<sc2::Tag, float> *, CCBot*) { return false; };
+    virtual bool isValid(const std::vector<const sc2::Unit*> *units, std::unordered_map<sc2::Tag, float> *, CCBot*) { return false; };
 };

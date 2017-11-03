@@ -225,6 +225,18 @@ float Util::GetAttackRangeForTarget(const sc2::Unit * unit, const sc2::Unit * ta
 	return maxRange;
 }
 
+float Util::GetMaxAttackRangeForTargets(const sc2::Unit * unit, const std::vector<const sc2::Unit *> & targets, CCBot & bot)
+{
+    float maxRange = 0.f;
+    for (const sc2::Unit * target : targets)
+    {
+        float range = GetAttackRangeForTarget(unit, target, bot);
+        if (range > maxRange)
+            maxRange = range;
+    }
+    return maxRange;
+}
+
 bool Util::IsDetectorType(const sc2::UnitTypeID & type)
 {
     switch (type.ToType())

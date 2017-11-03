@@ -50,14 +50,17 @@ void RangedManager::assignTargets(const std::vector<const sc2::Unit *> & targets
                 //make sure the perpendicular vector is in the right direction
                 if (Util::Dist(targetCenterPoint + direction, unitCenterPoint) > Util::Dist(targetCenterPoint + oppositeDirection, unitCenterPoint))
                     direction = oppositeDirection;
-                //the rally point is set 8 meters in front of the enemy units
-                sc2::Point2D rallyPoint = targetCenterPoint + direction * 8;
+                float unitRange = Util::GetAttackRange(rangedUnits.at(0)->unit_type, m_bot);
+                float maxTargetsRange = Util::GetMaxAttackRangeForTargets(rangedUnits.at(0), targets, m_bot);
+                float maxRange = std::max(unitRange, maxTargetsRange);
+                //the rally point is set a little bit farther than the max range between our units and enemy units in front of the enemy units
+                sc2::Point2D rallyPoint = targetCenterPoint + direction * (maxRange + 2);
                 bool allUnitsPlaced(true);
                 float hardcodedSpaceBetweenUnits = 2.5f;
                 for (int i = 0; i < rangedUnits.size(); i++)
                 {
                     auto unit = rangedUnits.at(i);
-                    if (Util::Dist(unit->pos, targetCenterPoint) < 7)
+                    if (Util::Dist(unit->pos, targetCenterPoint) < maxRange + 1)
                     {
                         allUnitsPlaced = true;
                         break;
@@ -73,13 +76,10 @@ void RangedManager::assignTargets(const std::vector<const sc2::Unit *> & targets
                         unitRallyPoint = rallyPoint - targetsShape * ((i + 1) / 2) * radius * hardcodedSpaceBetweenUnits;
                     }
                     m_bot.Actions()->UnitCommand(unit, sc2::ABILITY_ID::MOVE, unitRallyPoint);
-                    if (Util::Dist(unit->pos, unitRallyPoint) > 0.5f)
+                    //flag as not placed only if tile is walkable and unit is too far
+                    if (m_bot.Map().isWalkable(unitRallyPoint) && Util::Dist(unit->pos, unitRallyPoint) > 0.5f)
                     {
-                        //flag as not placed only if position is within map bounds
-                        //if(unitRallyPoint.x > 0 && unitRallyPoint.x < m_bot.Map().width() && unitRallyPoint.y > 0 && unitRallyPoint.y < m_bot.Map().height())
-                        //hardcoded for minigame maps because the Map infos are incoherent with the positions of the units
-                        if(unitRallyPoint.x > 20 && unitRallyPoint.x < 35 && unitRallyPoint.y > 20 && unitRallyPoint.y < 35)
-                            allUnitsPlaced = false;
+                        allUnitsPlaced = false;
                     }
                 }
                 if (!allUnitsPlaced)
@@ -97,7 +97,7 @@ void RangedManager::assignTargets(const std::vector<const sc2::Unit *> & targets
 
                 if (isTargetRanged(target))
                 {
-                    Micro::SmartFocusFire(rangedUnit, target, &rangedUnitTargets, m_bot, m_focusFireStates, m_unitHealth);
+                    Micro::SmartFocusFire(rangedUnit, target, &rangedUnitTargets, m_bot, m_focusFireStates, &rangedUnits, m_unitHealth);
                 }
                 // attack it
                 else if (m_bot.Config().KiteWithRangedUnits)

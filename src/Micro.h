@@ -18,9 +18,10 @@ namespace Micro
 	void SmartFocusFire     (
         const sc2::Unit * rangedUnit,
         const sc2::Unit * target, 
-        const std::vector<const sc2::Unit *> *, 
+        const std::vector<const sc2::Unit *> * targets, 
         CCBot & bot, 
         std::unordered_map<sc2::Tag, FocusFireFiniteStateMachine*> &states,
+        const std::vector<const sc2::Unit *> * units,
         std::unordered_map<sc2::Tag, float> &unitHealth
     );
     void SmartBuild         (const sc2::Unit * builder,   const sc2::UnitTypeID & buildingType, sc2::Point2D pos, CCBot & bot);

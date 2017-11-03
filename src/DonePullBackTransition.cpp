@@ -9,7 +9,7 @@ DonePullBackTransition::DonePullBackTransition(const sc2::Unit * unit, sc2::Poin
     m_position = position;
 }
 
-bool DonePullBackTransition::isValid(std::unordered_map<sc2::Tag, float> *, CCBot*)
+bool DonePullBackTransition::isValid(const std::vector<const sc2::Unit*> * units, std::unordered_map<sc2::Tag, float> *, CCBot*)
 {
     bool done(false);
     done = m_position == m_unit->pos;
@@ -18,6 +18,7 @@ bool DonePullBackTransition::isValid(std::unordered_map<sc2::Tag, float> *, CCBo
     else
         return false;
 }
+
 FocusFireFSMState* DonePullBackTransition::getNextState()
 {
     return m_nextState;

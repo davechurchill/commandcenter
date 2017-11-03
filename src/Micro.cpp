@@ -57,7 +57,7 @@ void Micro::SmartKiteTarget(const sc2::Unit * rangedUnit, const sc2::Unit * targ
     state.insert_or_assign(rangedUnit->tag, stateMachine);
 }
 
-void Micro::SmartFocusFire(const sc2::Unit * rangedUnit, const sc2::Unit * target, const std::vector<const sc2::Unit *> * targets, CCBot & bot, std::unordered_map<sc2::Tag, FocusFireFiniteStateMachine*> &state, std::unordered_map<sc2::Tag, float> &unitHealth)
+void Micro::SmartFocusFire(const sc2::Unit * rangedUnit, const sc2::Unit * target, const std::vector<const sc2::Unit *> * targets, CCBot & bot, std::unordered_map<sc2::Tag, FocusFireFiniteStateMachine*> &state, const std::vector<const sc2::Unit *> * units, std::unordered_map<sc2::Tag, float> &unitHealth)
 {
     BOT_ASSERT(rangedUnit != nullptr, "RangedUnit is null");
     BOT_ASSERT(target != nullptr, "Target is null");
@@ -67,7 +67,7 @@ void Micro::SmartFocusFire(const sc2::Unit * rangedUnit, const sc2::Unit * targe
         stateMachine = new FocusFireFiniteStateMachine(rangedUnit, target, targets, &bot);
     else stateMachine = state[rangedUnit->tag];
     
-    stateMachine->update(target, targets, &unitHealth, &bot);
+    stateMachine->update(target, targets, units, &unitHealth, &bot);
     state.insert_or_assign(rangedUnit->tag, stateMachine);
 }
 
