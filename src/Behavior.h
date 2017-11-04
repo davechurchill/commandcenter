@@ -49,6 +49,7 @@ protected:
     bool condition;
 
 public:
+    ConditionAction() {}
     ConditionAction(bool pred) : condition(pred) {}
     virtual Status update() override { return condition ? Status::BH_SUCCESS : Status::BH_FAILURE; }
 };
@@ -267,37 +268,5 @@ protected:
 		}
 		return result;
 	}
-};
-
-class BehaviorTree
-{
-protected:
-    Behavior* m_pRoot;
-public:
-    virtual void tick() {};
-};
-
-class ActionVerbose : public Behavior {
-private:
-    std::string name;
-public:
-    ActionVerbose(const std::string n) : name(n) {}
-private:
-    Status update() {
-        std::cout << name << " succeeded." << std::endl;
-        return Status::BH_SUCCESS;
-    }
-};
-
-class RangedBehaviorTree : public BehaviorTree
-{
-public:
-    RangedBehaviorTree(Behavior* b)
-    {
-        m_pRoot = b;
-    }
-    void tick() {
-        m_pRoot->tick();
-    }
 };
 

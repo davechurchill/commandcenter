@@ -360,6 +360,7 @@
     <ClInclude Include="..\src\MicroManager.h" />
     <ClInclude Include="..\src\ProductionManager.h" />
     <ClInclude Include="..\src\PullBackFSMState.h" />
+    <ClInclude Include="..\src\RangedActions.h" />
     <ClInclude Include="..\src\RangedManager.h" />
     <ClInclude Include="..\src\ScoutManager.h" />
     <ClInclude Include="..\src\ShouldAttackTransition.h" />

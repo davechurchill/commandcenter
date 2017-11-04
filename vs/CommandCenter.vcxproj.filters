@@ -279,6 +279,9 @@
     <ClInclude Include="..\src\ShouldAttackTransition.h">
       <Filter>micro\FSMs\KitingFSM</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\RangedActions.h">
+      <Filter>micro\BT</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="global">
@@ -307,6 +310,9 @@
     </Filter>
     <Filter Include="micro\FSMs\KitingFSM">
       <UniqueIdentifier>{488af303-796a-4c83-bd3a-e2bef7453438}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micro\BT">
+      <UniqueIdentifier>{2f717fb1-4e0b-4a83-8bae-c37e7aa660fb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

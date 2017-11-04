@@ -11,13 +11,8 @@
 
 #include "CCBot.h"
 
-#include "..\src\BehaviorTreeBuilder.h"
-
 int main(int argc, char* argv[]) 
 {
-    BehaviorTreeBuilder::test(); 
-    return 0;
-
     sc2::Coordinator coordinator;
     if (!coordinator.LoadSettings(argc, argv)) 
     {

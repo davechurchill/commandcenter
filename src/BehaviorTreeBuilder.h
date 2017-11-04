@@ -5,97 +5,112 @@
 #include <assert.h>
 #include "Behavior.h"
 
+class BehaviorTree
+{
+protected:
+    Behavior* m_pRoot;
+public:
+    BehaviorTree(Behavior* b)
+    {
+        m_pRoot = b;
+    }
+    void tick() {
+        m_pRoot->tick();
+    }
+};
+
+// from https://michaelyagidotcom.wordpress.com/behavior-tree-builder/
+template <class parent_type>
+class NodeBuilder;
+
+template <class parent_type>
+class LeafBuilder {
+public:
+    LeafBuilder(parent_type* parent, Behavior* leaf) :
+        m_parent(parent),
+        m_leaf(leaf) {}
+
+    parent_type& end()
+    {
+        return *m_parent;
+    }
+private:
+    parent_type* m_parent;
+    Behavior* m_leaf;
+};
+
+template <class parent_type>
+class NodeBuilder {
+public:
+    NodeBuilder(parent_type* parent, Composite* node):
+        m_parent(parent),
+        m_node(node) {}
+
+    LeafBuilder<NodeBuilder<parent_type>> action(Behavior * action) {
+        m_node->addChild(action);
+        return LeafBuilder<NodeBuilder<parent_type>>(this, action);
+    }
+
+    LeafBuilder<NodeBuilder<parent_type>> condition(Behavior * condition) {
+        m_node->addChild(condition);
+        return LeafBuilder<NodeBuilder<parent_type>>(this, condition);
+    }
+
+    NodeBuilder<NodeBuilder<parent_type>> selector() {
+        Selector* selector = new Selector();
+        m_node->addChild(selector);
+        return NodeBuilder<NodeBuilder<parent_type>>(this, selector);
+    }
+
+    NodeBuilder<NodeBuilder<parent_type>> sequence() {
+        Sequence* sequence = new Sequence();
+        m_node->addChild(sequence);
+        return NodeBuilder<NodeBuilder<parent_type>>(this, sequence);
+    }
+
+    parent_type& end()
+    {
+        return *m_parent;
+    }
+
+private:
+    parent_type* m_parent;
+    Composite* m_node;
+};
+
 class BehaviorTreeBuilder {
 
 protected:
-    Composite* m_currentNode;
-    std::vector<Composite*> m_parentNode;
-    BehaviorTreeBuilder* addAction(Behavior* child)
-    {
-        m_currentNode->addChild(child);
-        return this;
-    }
-    BehaviorTreeBuilder* addChild(Composite* child)
-    {
-        m_parentNode.push_back(child);
-        m_currentNode = m_parentNode.back();
-        return this;
-    }
+    Behavior* m_parentNode;
 
 public:
     virtual ~BehaviorTreeBuilder() {}
     BehaviorTreeBuilder() {}
-    BehaviorTreeBuilder(std::vector<Composite*> parentNode) {
-        m_parentNode = parentNode;
-    }
-    BehaviorTreeBuilder* action(Behavior* action)
-    {
-        return addAction(action);
+
+    LeafBuilder<BehaviorTreeBuilder> action(Behavior * action) {
+        m_parentNode = action;
+        return LeafBuilder<BehaviorTreeBuilder>(this, action);
     }
 
-    BehaviorTreeBuilder* condition(ConditionAction * cond) {
-        return addAction(cond);
+    LeafBuilder<BehaviorTreeBuilder> condition(Behavior * condition) {
+        m_parentNode = condition;
+        return LeafBuilder<BehaviorTreeBuilder>(this, condition);
     }
 
-    BehaviorTreeBuilder* sequence(Sequence * seq) { return addChild(seq); }
-    BehaviorTreeBuilder* selector(Selector * sel) { return addChild(sel); }
-    BehaviorTreeBuilder* activeSelector(ActiveSelector * actSel) { return addChild(actSel); }
-    BehaviorTreeBuilder* parallel(Parallel::Policy forSuccess, Parallel::Policy forFailure) { return addChild(&Parallel(forSuccess, forFailure)); }
-
-    Behavior* build()
-    {
-        assert(m_currentNode != nullptr);
-        return m_currentNode;
+    NodeBuilder<BehaviorTreeBuilder> sequence() {
+        Sequence* sequence = new Sequence();
+        m_parentNode = sequence;
+        return NodeBuilder<BehaviorTreeBuilder>(this, sequence);
+    }
+    NodeBuilder<BehaviorTreeBuilder> selector() {
+        Selector* selector = new Selector();
+        m_parentNode = selector;
+        return NodeBuilder<BehaviorTreeBuilder>(this, selector);
     }
 
     BehaviorTree* end()
     {
-        return new RangedBehaviorTree(m_currentNode);
-    }
-
-    static void test() {
-        ActionVerbose FireAtPlayer("FireAtPlayer"), MoveTowardsPlayer("MoveTowardsPlayer"), MoveToPlayersLastKnownPosition("MoveToPlayersLastKnownPosition"),
-            LookAround("LookAround"), MoveToRandomPosition("MoveToRandomPosition");
-
-        ConditionAction IsPlayerVisible("IsPlayerVisible"), IsPlayerInRange("IsPlayerInRange"), HaveWeGotASuspectedLocation("HaveWeGotASuspectedLocation");
-        Sequence seq = Sequence();
-        ActiveSelector actSel = ActiveSelector();
-            BehaviorTree* bt = BehaviorTreeBuilder()
-            .activeSelector(&actSel)
-            ->sequence(&seq)
-            ->condition(&IsPlayerVisible)
-            ->activeSelector(&actSel)
-            ->sequence(&seq)
-            ->condition(&IsPlayerInRange)
-            ->action(&FireAtPlayer)
-            ->action(&MoveTowardsPlayer)
-            ->sequence(&seq)
-            ->condition(&HaveWeGotASuspectedLocation)
-            ->action(&MoveToPlayersLastKnownPosition)
-            ->action(&LookAround)
-            ->sequence(&seq)
-            ->action(&MoveToRandomPosition)
-            ->action(&LookAround)
-            ->end();
-
-        bt->tick();
-
-    }
-
-
-    static void test2() {
-        ActionVerbose FireAtPlayer("FireAtPlayer"), MoveTowardsPlayer("MoveTowardsPlayer"), MoveToPlayersLastKnownPosition("MoveToPlayersLastKnownPosition"),
-            LookAround("LookAround"), MoveToRandomPosition("MoveToRandomPosition");
-        Sequence seq = Sequence();
-
-        ActionVerbose IsPlayerVisible("IsPlayerVisible"), IsPlayerInRange("IsPlayerInRange"), HaveWeGotASuspectedLocation("HaveWeGotASuspectedLocation");
-
-        BehaviorTree* bt = BehaviorTreeBuilder()
-            .sequence(&seq)
-            ->action(&MoveToRandomPosition)
-            ->end();
-
-        bt->tick();
-    }
+        return new BehaviorTree(m_parentNode);
+    }   
 };
 
