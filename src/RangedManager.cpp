@@ -1,14 +1,14 @@
 #include "RangedManager.h"
 #include "Util.h"
 #include "CCBot.h"
-#include "Behavior.h"
+#include "BehaviorTreeBuilder.h"
+#include "RangedActions.h"
 #include <algorithm>
+
 
 RangedManager::RangedManager(CCBot & bot)
     : MicroManager(bot)
-{
-
-}
+{ }
 
 void RangedManager::executeMicro(const std::vector<const sc2::Unit *> & targets)
 {
@@ -35,44 +35,43 @@ void RangedManager::assignTargets(const std::vector<const sc2::Unit *> & targets
     {
         BOT_ASSERT(rangedUnit, "ranged unit is null");
 
-        // if the order is to attack or defend
-        if (order.getType() == SquadOrderTypes::Attack || order.getType() == SquadOrderTypes::Defend)
-        {
-            if (!rangedUnitTargets.empty())
-            {
-                // find the best target for this rangedUnit
-                const sc2::Unit * target = getTarget(rangedUnit, rangedUnitTargets);
+        const sc2::Unit * target = nullptr;
+        const sc2::Unit * mineral = nullptr;
+        sc2::Point2D mineralPos;
 
-                if (isTargetRanged(target))
-                {
-                    Micro::SmartFocusFire(rangedUnit, target, &rangedUnitTargets, m_bot, m_focusFireStates, m_unitHealth);
-                }
-                // attack it
-                else if (m_bot.Config().KiteWithRangedUnits)
-                {
-                    Micro::SmartKiteTarget(rangedUnit, target, m_bot, m_kittingStates);
-                }
-                else
-                {
-                    Micro::SmartAttackUnit(rangedUnit, target, m_bot);
-                }
-            }
-            // if there are no targets
-            else
-            {
-                // if we're not near the order position
-                if (Util::Dist(rangedUnit->pos, order.getPosition()) > 4)
-                {
-                    // move to it
-                    Micro::SmartMove(rangedUnit, order.getPosition(), m_bot);
-                }
-            }
-        }
+        ConditionAction isEnemyInSight(rangedUnitTargets.size() > 0 && (target = getTarget(rangedUnit, rangedUnitTargets)) != nullptr),
+            isMineralInSight((mineral = getClosestMineral(rangedUnit)) != nullptr),
+            isEnemyRanged(target != nullptr && isTargetRanged(target));
 
-        if (m_bot.Config().DrawUnitTargetInfo)
-        {
-            // TODO: draw the line to the unit's target
-        }
+        if (mineral == nullptr) mineralPos = sc2::Point2D(0, 0);
+        else mineralPos = mineral->pos;
+
+        FocusFireAction focusFireAction(rangedUnit, target, &rangedUnitTargets, m_bot, m_focusFireStates, m_unitHealth);
+        KiteAction kiteAction(rangedUnit, target, m_bot, m_kittingStates);
+        GoToMineralShardAction goToMineralShardAction(rangedUnit, mineralPos, m_bot);
+        GoToObjectiveAction goToObjectiveAction(rangedUnit, order.getPosition(), m_bot);
+
+        BehaviorTree* bt = BehaviorTreeBuilder()
+            .selector()
+            .sequence()
+            .condition(&isEnemyInSight).end()
+            .selector()
+            .sequence()
+            .condition(&isEnemyRanged).end()
+            .action(&focusFireAction).end()
+            .end()
+            .action(&kiteAction).end()
+            .end()
+            .end()
+            .sequence()
+            .condition(&isMineralInSight).end()
+            .action(&goToMineralShardAction).end()
+            .end()
+            .action(&goToObjectiveAction).end()
+            .end()
+            .end();
+
+        bt->tick();
     }
 }
 
@@ -91,7 +90,7 @@ const sc2::Unit * RangedManager::getTarget(const sc2::Unit * rangedUnit, const s
     {
         BOT_ASSERT(targetUnit, "null target unit in getTarget");
 
-        int priority = getAttackPriority(rangedUnit, targetUnit);
+        float priority = getAttackPriority(rangedUnit, targetUnit);
         float distance = 0;
         if (isTargetRanged(targetUnit))
             distance = Util::Dist(Util::CalcCenter(getUnits()), targetUnit->pos);
@@ -147,5 +146,20 @@ bool RangedManager::isTargetRanged(const sc2::Unit * target)
     for (sc2::Weapon & weapon : unitTypeData.weapons)
         maxRange = std::max(maxRange, weapon.range);
     return maxRange > 1.f;
+}
+
+const sc2::Unit * RangedManager::getClosestMineral(const sc2::Unit * unit) {
+    const sc2::Unit * closestShard = nullptr;
+    auto potentialMinerals = m_bot.Observation()->GetUnits(sc2::Unit::Alliance::Neutral);
+    for (auto mineral : potentialMinerals)
+    {
+        if (closestShard == nullptr && mineral->is_on_screen) {
+            closestShard = mineral;
+        }
+        else if (mineral->unit_type == 1680 && Util::Dist(mineral->pos, unit->pos) < Util::Dist(closestShard->pos, unit->pos) && mineral->is_on_screen) {
+            closestShard = mineral;
+        }
+    }
+    return closestShard;
 }
 

@@ -328,6 +328,7 @@
   <ItemGroup>
     <ClInclude Include="..\src\AttackFSMState.h" />
     <ClInclude Include="..\src\Behavior.h" />
+    <ClInclude Include="..\src\BehaviorTreeBuilder.h" />
     <ClInclude Include="..\src\CCBot.h" />
     <ClInclude Include="..\src\BaseLocation.h" />
     <ClInclude Include="..\src\BaseLocationManager.h" />
@@ -359,6 +360,7 @@
     <ClInclude Include="..\src\MicroManager.h" />
     <ClInclude Include="..\src\ProductionManager.h" />
     <ClInclude Include="..\src\PullBackFSMState.h" />
+    <ClInclude Include="..\src\RangedActions.h" />
     <ClInclude Include="..\src\RangedManager.h" />
     <ClInclude Include="..\src\ScoutManager.h" />
     <ClInclude Include="..\src\ShouldAttackTransition.h" />

@@ -9,9 +9,9 @@
     "Game Info" :
     {
         "BotRace"                   : "Terran",
-        "EnemyDifficulty"           : 1,
+        "EnemyDifficulty"           : 8,
         "EnemyRace"                 : "Zerg",
-        "MapFile"                   : "DefeatZerglingsAndBanelings.SC2Map",
+        "MapFile"                   : "DefeatRoaches.SC2Map",
         "StepSize"                  : 1
     },
         
