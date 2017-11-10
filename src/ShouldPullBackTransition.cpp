@@ -19,6 +19,20 @@ bool ShouldPullBackTransition::isValid(const sc2::Unit * target, const std::vect
     float damage = Util::GetAttackDamageForTarget(target, m_unit, *bot);
     float unitdamage = Util::GetAttackDamageForTarget(m_unit, target, *bot);
 
+    bool healthierUnit = false;
+    for (const sc2::Unit* unit : *units)
+    {
+        if (unit != m_unit && unit->health > m_unit->health)
+        {
+            healthierUnit = true;
+            break;
+        }
+    }
+
+    //it is useless to back if none of our units can soak up the damage
+    if (!healthierUnit)
+        return false;
+
     //condition 1: if this unit would get killed by 1 attack from the target and there is no other unit closer to the target, this unit should back
     if (m_unit->health <= damage)
     {
@@ -28,7 +42,8 @@ bool ShouldPullBackTransition::isValid(const sc2::Unit * target, const std::vect
             bool otherUnitCloser = false;
             for (const sc2::Unit* unit : *units)
             {
-                if (unit != m_unit && Util::Dist(unit->pos, target->pos) < dist)
+                //0.2f is a buffer, because an enemy unit might not target the closest unit when both are almost at the same distance
+                if (unit != m_unit && Util::Dist(unit->pos, target->pos) + 0.2f < dist)
                 {
                     //no need to pull back, since another unit is closer to target
                     otherUnitCloser = true;
