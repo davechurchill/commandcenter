@@ -115,7 +115,7 @@ float RangedManager::getAttackPriority(const sc2::Unit * attacker, const sc2::Un
 
     if (Util::IsCombatUnit(target, m_bot))
     {
-        float remainingHealth = 1 - (target->health / target->health_max);
+        float remainingHealth = 1 - ((target->health + target->shield) / target->health_max);
         sc2::UnitTypeData unitTypeData = Util::GetUnitTypeDataFromUnitTypeId(target->unit_type, m_bot);
         float dps = 0.f;
         for (sc2::Weapon & weapon : unitTypeData.weapons)
