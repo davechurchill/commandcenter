@@ -1,6 +1,5 @@
 #include "Common.h"
 #include "CCBot.h"
-#include "rapidjson/document.h"
 #include "JSONTools.h"
 #include "Util.h"
 
@@ -18,7 +17,6 @@ int main(int argc, char* argv[])
         return 1;
     }
     
-    rapidjson::Document doc;
     std::string config = JSONTools::ReadFile("BotConfig.txt");
     if (config.length() == 0)
     {
@@ -27,13 +25,16 @@ int main(int argc, char* argv[])
         exit(-1);
     }
 
-    bool parsingFailed = doc.Parse(config.c_str()).HasParseError();
-    if (parsingFailed)
+    std::ifstream file("BotConfig.txt");
+    json j;
+    file >> j;
+
+    /*if (parsingFailed)
     {
         std::cerr << "Config file could not be parsed, and is required for starting the bot\n";
         std::cerr << "Please read the instructions and try again\n";
         exit(-1);
-    }
+    }*/
 
     std::string botRaceString;
     std::string enemyRaceString;
@@ -41,9 +42,9 @@ int main(int argc, char* argv[])
     int stepSize = 1;
     sc2::Difficulty enemyDifficulty = sc2::Difficulty::Easy;
 
-    if (doc.HasMember("SC2API") && doc["SC2API"].IsObject())
+    if (j.count("SC2API") && j["SC2API"].is_object())
     {
-        const rapidjson::Value & info = doc["SC2API"];
+        const json & info = j["SC2API"];
         JSONTools::ReadString("BotRace", info, botRaceString);
         JSONTools::ReadString("EnemyRace", info, enemyRaceString);
         JSONTools::ReadString("MapFile", info, mapString);

@@ -92,14 +92,10 @@ void StrategyManager::readStrategyFile(const std::string & filename)
 {
     CCRace race = m_bot.GetPlayerRace(Players::Self);
     std::string ourRace = Util::GetStringFromRace(race);
-    std::string config = JSONTools::ReadFile(filename);
-    rapidjson::Document doc;
-    bool parsingFailed = doc.Parse(config.c_str()).HasParseError();
-    if (parsingFailed)
-    {
-        std::cerr << "ParseStrategy could not find file: " << filename << ", shutting down.\n";
-        return;
-    }
+
+    std::ifstream file(filename);
+    json j;
+    file >> j;
 
 #ifdef SC2API
     const char * strategyObject = "SC2API Strategy";
@@ -108,9 +104,9 @@ void StrategyManager::readStrategyFile(const std::string & filename)
 #endif
 
     // Parse the Strategy Options
-    if (doc.HasMember(strategyObject) && doc[strategyObject].IsObject())
+    if (j.count(strategyObject) && j[strategyObject].is_object())
     {
-        const rapidjson::Value & strategy = doc[strategyObject];
+        const json & strategy = j[strategyObject];
 
         // read in the various strategic elements
         JSONTools::ReadBool("ScoutHarassEnemy", strategy, m_bot.Config().ScoutHarassEnemy);
@@ -118,46 +114,48 @@ void StrategyManager::readStrategyFile(const std::string & filename)
         JSONTools::ReadString("WriteDirectory", strategy, m_bot.Config().WriteDir);
 
         // if we have set a strategy for the current race, use it
-        if (strategy.HasMember(ourRace.c_str()) && strategy[ourRace.c_str()].IsString())
+        if (strategy.count(ourRace.c_str()) && strategy[ourRace.c_str()].is_string())
         {
-            m_bot.Config().StrategyName = strategy[ourRace.c_str()].GetString();
+            m_bot.Config().StrategyName = strategy[ourRace.c_str()].get<std::string>();
         }
 
         // check if we are using an enemy specific strategy
         JSONTools::ReadBool("UseEnemySpecificStrategy", strategy, m_bot.Config().UseEnemySpecificStrategy);
-        if (m_bot.Config().UseEnemySpecificStrategy && strategy.HasMember("EnemySpecificStrategy") && strategy["EnemySpecificStrategy"].IsObject())
+        if (m_bot.Config().UseEnemySpecificStrategy && strategy.count("EnemySpecificStrategy") && strategy["EnemySpecificStrategy"].is_object())
         {
             // TODO: Figure out enemy name
             const std::string enemyName = "ENEMY NAME";
-            const rapidjson::Value & specific = strategy["EnemySpecificStrategy"];
+            const json & specific = strategy["EnemySpecificStrategy"];
 
             // check to see if our current enemy name is listed anywhere in the specific strategies
-            if (specific.HasMember(enemyName.c_str()) && specific[enemyName.c_str()].IsObject())
+            if (specific.count(enemyName.c_str()) && specific[enemyName.c_str()].is_object())
             {
-                const rapidjson::Value & enemyStrategies = specific[enemyName.c_str()];
+                const json & enemyStrategies = specific[enemyName.c_str()];
 
                 // if that enemy has a strategy listed for our current race, use it
-                if (enemyStrategies.HasMember(ourRace.c_str()) && enemyStrategies[ourRace.c_str()].IsString())
+                if (enemyStrategies.count(ourRace.c_str()) && enemyStrategies[ourRace.c_str()].is_string())
                 {
-                    m_bot.Config().StrategyName = enemyStrategies[ourRace.c_str()].GetString();
+                    m_bot.Config().StrategyName = enemyStrategies[ourRace.c_str()].get<std::string>();
                     m_bot.Config().FoundEnemySpecificStrategy = true;
                 }
             }
         }
 
         // Parse all the Strategies
-        if (strategy.HasMember("Strategies") && strategy["Strategies"].IsObject())
+        if (strategy.count("Strategies") && strategy["Strategies"].is_object())
         {
-            const rapidjson::Value & strategies = strategy["Strategies"];
-            for (auto itr = strategies.MemberBegin(); itr != strategies.MemberEnd(); ++itr)
+            const json & strategies = strategy["Strategies"];
+            for (auto it = strategies.begin(); it != strategies.end(); ++it) 
             {
-                const std::string &         name = itr->name.GetString();
-                const rapidjson::Value &    val  = itr->value;
+                const std::string & name = it.key();
+                const json & val = it.value();
+
+                std::cout << val << "\n";
 
                 CCRace strategyRace;
-                if (val.HasMember("Race") && val["Race"].IsString())
+                if (val.count("Race") && val["Race"].is_string())
                 {
-                    strategyRace = Util::GetRaceFromString(val["Race"].GetString());
+                    strategyRace = Util::GetRaceFromString(val["Race"].get<std::string>());
                 }
                 else
                 {
@@ -166,15 +164,15 @@ void StrategyManager::readStrategyFile(const std::string & filename)
                 }
 
                 BuildOrder buildOrder;
-                if (val.HasMember("OpeningBuildOrder") && val["OpeningBuildOrder"].IsArray())
+                if (val.count("OpeningBuildOrder") && val["OpeningBuildOrder"].is_array())
                 {
-                    const rapidjson::Value & build = val["OpeningBuildOrder"];
+                    const json & build = val["OpeningBuildOrder"];
 
-                    for (rapidjson::SizeType b(0); b < build.Size(); ++b)
+                    for (size_t b(0); b < build.size(); b++)
                     {
-                        if (build[b].IsString())
+                        if (build[b].is_string())
                         {
-                            MetaType MetaType(build[b].GetString(), m_bot);
+                            MetaType MetaType(build[b].get<std::string>(), m_bot);
                             buildOrder.add(MetaType);
                         }
                         else

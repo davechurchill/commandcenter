@@ -9,6 +9,9 @@
 #include <streambuf>
 #include <string>
 #include <array>
+#include "json/json.hpp"
+
+using json = nlohmann::json;
 
 #ifdef SC2API
     #include "sc2api/sc2_api.h"

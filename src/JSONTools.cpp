@@ -3,23 +3,24 @@
 
 namespace JSONTools
 {
-    void ReadBool(const char * key, const rapidjson::Value & value, bool & dest)
+    void JSONTools::ReadBool(const char * key, const json & j, bool & dest)
     {
-        if (value.HasMember(key))
+        if (j.count(key))
         {
-            BOT_ASSERT(value[key].IsBool(), "%s should be a bool", key);
-            dest = value[key].GetBool();
+            BOT_ASSERT(j[key].is_boolean(), "%s should be a bool", key);
+            dest = j[key];
         }
     }
 
-    void ReadString(const char * key, const rapidjson::Value & value, std::string & dest)
+    void JSONTools::ReadString(const char * key, const json & j, std::string & dest)
     {
-        if (value.HasMember(key))
+        if (j.count(key))
         {
-            BOT_ASSERT(value[key].IsString(), "%s should be a string", key);
-            dest = value[key].GetString();
+            BOT_ASSERT(j[key].is_string(), "%s should be a string", key);
+            dest = j[key].get<std::string>();
         }
     }
+
 
     std::string ReadFile(const std::string & filename)
     {

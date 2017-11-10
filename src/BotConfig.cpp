@@ -1,5 +1,4 @@
 #include "BotConfig.h"
-#include "rapidjson/document.h"
 #include "JSONTools.h"
 #include <iostream>
 
@@ -54,10 +53,7 @@ BotConfig::BotConfig()
 
 void BotConfig::readConfigFile()
 {
-    rapidjson::Document doc;
-
     std::string config = JSONTools::ReadFile(ConfigFileLocation);
-
     if (config.length() == 0)
     {
         std::cerr << "Error: Config File Not Found or is Empty\n";
@@ -69,8 +65,11 @@ void BotConfig::readConfigFile()
         return;
     }
 
-    bool parsingFailed = doc.Parse(config.c_str()).HasParseError();
-    if (parsingFailed)
+    std::ifstream file(ConfigFileLocation);
+    json j;
+    file >> j;
+
+    /*if (parsingFailed)
     {
         std::cerr << "Error: Config File Found, but could not be parsed\n";
         std::cerr << "Config Filename: " << ConfigFileLocation << "\n";
@@ -79,30 +78,30 @@ void BotConfig::readConfigFile()
         std::cerr << "You can change the config file location in Config::ConfigFile::ConfigFileLocation\n";
         ConfigFileParsed = false;
         return;
-    }
+    }*/
 
     // Parse the Bot Info
-    if (doc.HasMember("Bot Info") && doc["Bot Info"].IsObject())
+    if (j.count("Bot Info") && j["Bot Info"].is_object())
     {
-        const rapidjson::Value & info = doc["Bot Info"];
+        const json & info = j["Bot Info"];
         JSONTools::ReadString("BotName", info, BotName);
         JSONTools::ReadString("Authors", info, Authors);
         JSONTools::ReadBool("PrintInfoOnStart", info, PrintInfoOnStart);
     }
 
     // Parse the Micro Options
-    if (doc.HasMember("Micro") && doc["Micro"].IsObject())
+    if (j.count("Micro") && j["Micro"].is_object())
     {
-        const rapidjson::Value & micro = doc["Micro"];
+        const json & micro = j["Micro"];
         JSONTools::ReadBool("KiteWithRangedUnits", micro, KiteWithRangedUnits);
         JSONTools::ReadBool("ScoutHarassEnemy", micro, ScoutHarassEnemy);
         JSONTools::ReadInt("CombatUnitsForAttack", micro, CombatUnitsForAttack);
     }
 
     // Parse the BWAPI Options
-    if (doc.HasMember("BWAPI") && doc["BWAPI"].IsObject())
+    if (j.count("BWAPI") && j["BWAPI"].is_object())
     {
-        const rapidjson::Value & bwapi = doc["BWAPI"];
+        const json & bwapi = j["BWAPI"];
         JSONTools::ReadInt("SetLocalSpeed", bwapi, SetLocalSpeed);
         JSONTools::ReadInt("SetFrameSkip", bwapi, SetFrameSkip);
         JSONTools::ReadBool("UserInput", bwapi, UserInput);
@@ -110,18 +109,18 @@ void BotConfig::readConfigFile()
     }
 
     // Parse the Macro Options
-    if (doc.HasMember("Macro") && doc["Macro"].IsObject())
+    if (j.count("Macro") && j["Macro"].is_object())
     {
-        const rapidjson::Value & macro = doc["Macro"];
+        const json & macro = j["Macro"];
         JSONTools::ReadInt("BuildingSpacing", macro, BuildingSpacing);
         JSONTools::ReadInt("PylongSpacing", macro, PylonSpacing);
         JSONTools::ReadInt("WorkersPerRefinery", macro, WorkersPerRefinery);
     }
 
     // Parse the Debug Options
-    if (doc.HasMember("Debug") && doc["Debug"].IsObject())
+    if (j.count("Debug") && j["Debug"].is_object())
     {
-        const rapidjson::Value & debug = doc["Debug"];
+        const json & debug = j["Debug"];
         JSONTools::ReadBool("DrawGameInfo",             debug, DrawGameInfo);
         JSONTools::ReadBool("DrawTileInfo",             debug, DrawTileInfo);
         JSONTools::ReadBool("DrawBaseLocationInfo",     debug, DrawBaseLocationInfo);
@@ -140,9 +139,9 @@ void BotConfig::readConfigFile()
     }
 
     // Parse the Module Options
-    if (doc.HasMember("Modules") && doc["Modules"].IsObject())
+    if (j.count("Modules") && j["Modules"].is_object())
     {
-        const rapidjson::Value & module = doc["Modules"];
+        const json & module = j["Modules"];
 
         JSONTools::ReadBool("UseAutoObserver", module, UsingAutoObserver);
     }
