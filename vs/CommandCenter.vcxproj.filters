@@ -117,6 +117,9 @@
       <Filter>micro</Filter>
     </ClCompile>
     <ClCompile Include="..\src\main.cpp" />
+    <ClCompile Include="..\src\Condition.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\BotAssert.h">
@@ -222,6 +225,9 @@
     </ClInclude>
     <ClInclude Include="..\src\SquadOrder.h">
       <Filter>micro</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Condition.h">
+      <Filter>util</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,38 +1,39 @@
 #pragma once
 
 #include "Common.h"
-#include "rapidjson/rapidjson.h"
-#include "rapidjson/document.h"
 
-namespace MCDS
+class CCBot;
+
+namespace ConditionTypes
 {
+    enum { Unary, BinaryComp, BinaryBool, BinaryInt, Invalid };
+}
 
-class CardType;
+namespace ConditionOperators
+{
+    enum { LT, GT, EQ, NEQ, LTE, GTE, OR, AND, PLUS, MINUS, MULT, DIV, Invalid };
+}
+
 class Condition
 {
-    
+    CCBot *     m_bot;
+    int         m_type;
+    int         m_player;
+    Condition * m_lhs;
+    Condition * m_rhs;
+    int         m_op;
+    std::string m_strValue;
+    int         m_intValue;
+        
+    static int GetOperator(const std::string & op);
+    static int GetPlayer(const std::string & op);
+    static int GetType(const std::string & op);
+
 public:
 
-    std::string         _cardName;
-    mutable CardID      _typeID;
-    HealthType          _healthAtMost;
-    bool                _isTech;
-    bool                _notBlocking;
-    bool                _hasHealthCondition;
-
     Condition();
-    Condition(const rapidjson::Value & value);
+    Condition(const json & j, CCBot & bot);
     
-    const std::string toString() const;
-    const CardType & getType() const;
-    const CardID & getTypeID() const;
-    const bool isTech() const;
-    const bool isNotBlocking() const;
-    const bool hasCardType() const;
-    const bool hasHealthCondition() const;
-    const HealthType getHealthAtMost() const;
-
-    bool operator == (const Condition & rhs) const;
+    bool eval() const;
+    int intEval() const;
 };
-
-}

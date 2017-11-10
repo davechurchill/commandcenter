@@ -31,6 +31,7 @@
     <ClCompile Include="..\src\BuildOrderQueue.cpp" />
     <ClCompile Include="..\src\CCBot.cpp" />
     <ClCompile Include="..\src\CombatCommander.cpp" />
+    <ClCompile Include="..\src\Condition.cpp" />
     <ClCompile Include="..\src\DistanceMap.cpp" />
     <ClCompile Include="..\src\GameCommander.cpp" />
     <ClCompile Include="..\src\JSONTools.cpp" />
@@ -69,6 +70,7 @@
     <ClInclude Include="..\src\CCBot.h" />
     <ClInclude Include="..\src\CombatCommander.h" />
     <ClInclude Include="..\src\Common.h" />
+    <ClInclude Include="..\src\Condition.h" />
     <ClInclude Include="..\src\DistanceMap.h" />
     <ClInclude Include="..\src\GameCommander.h" />
     <ClInclude Include="..\src\JSONTools.h" />
