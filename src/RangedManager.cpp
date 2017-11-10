@@ -1,14 +1,13 @@
 #include "RangedManager.h"
 #include "Util.h"
 #include "CCBot.h"
-#include "Behavior.h"
+#include "BehaviorTreeBuilder.h"
+#include "RangedActions.h"
 #include <algorithm>
 
-RangedManager::RangedManager(CCBot & bot)
-    : MicroManager(bot)
-{
-    m_rallied = false;
-}
+
+RangedManager::RangedManager(CCBot & bot) : MicroManager(bot)
+{ }
 
 void RangedManager::executeMicro(const std::vector<const sc2::Unit *> & targets)
 {
@@ -30,107 +29,48 @@ void RangedManager::assignTargets(const std::vector<const sc2::Unit *> & targets
 
         rangedUnitTargets.push_back(target);
     }
-    // if the order is to attack or defend
-    if (order.getType() == SquadOrderTypes::Attack || order.getType() == SquadOrderTypes::Defend)
+    // for each rangedUnit
+    for (auto rangedUnit : rangedUnits)
     {
-        if (!rangedUnitTargets.empty())
-        {
-            /*sc2::Point2D targetCenterPoint = Util::CalcCenter(rangedUnitTargets);
-            sc2::Point2D unitCenterPoint = Util::CalcCenter(rangedUnits);
-            //reset the rallied state if units are too far from enemy units
-            if (m_rallied)
-                m_rallied = Util::Dist(unitCenterPoint, targetCenterPoint) < 10;
-            if (!m_rallied)
-            {
-                //calculate a line that define the shape of the enemy group
-                sc2::Point2D targetsShape = Util::CalcLinearRegression(rangedUnitTargets);
-                //calculate the perpendicular vectors to find the front of the enemy group
-                sc2::Point2D direction = Util::CalcPerpendicularVector(targetsShape);
-                sc2::Point2D oppositeDirection(-direction.x, -direction.y);
-                //make sure the perpendicular vector is in the right direction
-                if (Util::Dist(targetCenterPoint + direction, unitCenterPoint) > Util::Dist(targetCenterPoint + oppositeDirection, unitCenterPoint))
-                    direction = oppositeDirection;
-                float unitRange = Util::GetAttackRange(rangedUnits.at(0)->unit_type, m_bot);
-                float maxTargetsRange = Util::GetMaxAttackRangeForTargets(rangedUnits.at(0), targets, m_bot);
-                float maxRange = std::max(unitRange, maxTargetsRange);
-                //the rally point is set a little bit farther than the max range between our units and enemy units in front of the enemy units
-                sc2::Point2D rallyPoint = targetCenterPoint + direction * (maxRange + 2);
-                bool allUnitsPlaced(true);
-                float hardcodedSpaceBetweenUnits = 2.5f;
-                for (int i = 0; i < rangedUnits.size(); i++)
-                {
-                    auto unit = rangedUnits.at(i);
-                    if (Util::Dist(unit->pos, targetCenterPoint) < maxRange + 1)
-                    {
-                        allUnitsPlaced = true;
-                        break;
-                    }
-                    float radius = unit->radius;
-                    sc2::Point2D unitRallyPoint;
-                    if (i % 2 == 0)
-                    {
-                        unitRallyPoint = rallyPoint + targetsShape * (i / 2) * radius * hardcodedSpaceBetweenUnits;
-                    }
-                    else
-                    {
-                        unitRallyPoint = rallyPoint - targetsShape * ((i + 1) / 2) * radius * hardcodedSpaceBetweenUnits;
-                    }
-                    m_bot.Actions()->UnitCommand(unit, sc2::ABILITY_ID::MOVE, unitRallyPoint);
-                    //flag as not placed only if tile is walkable and unit is too far
-                    if (m_bot.Map().isWalkable(unitRallyPoint) && Util::Dist(unit->pos, unitRallyPoint) > 0.5f)
-                    {
-                        allUnitsPlaced = false;
-                    }
-                }
-                if (!allUnitsPlaced)
-                    return;
-                m_rallied = true;
-            }*/
+        BOT_ASSERT(rangedUnit, "ranged unit is null");
+        
+        const sc2::Unit * target = nullptr;
+        const sc2::Unit * mineral = nullptr;
+        sc2::Point2D mineralPos;
 
-            // for each rangedUnit
-            for (auto rangedUnit : rangedUnits)
-            {
-                BOT_ASSERT(rangedUnit, "ranged unit is null");
+        ConditionAction isEnemyInSight(rangedUnitTargets.size() > 0 && (target = getTarget(rangedUnit, rangedUnitTargets)) != nullptr),
+            isMineralInSight((mineral = getClosestMineral(rangedUnit)) != nullptr),
+            isEnemyRanged(target != nullptr && isTargetRanged(target));
 
-                // find the best target for this rangedUnit
-                const sc2::Unit * target = getTarget(rangedUnit, rangedUnitTargets);
+        if (mineral == nullptr) mineralPos = sc2::Point2D(0, 0);
+        else mineralPos = mineral->pos;
 
-                if (isTargetRanged(target))
-                {
-                    Micro::SmartFocusFire(rangedUnit, target, &rangedUnitTargets, m_bot, m_focusFireStates, &rangedUnits, m_unitHealth);
-                }
-                // attack it
-                else if (m_bot.Config().KiteWithRangedUnits)
-                {
-                    Micro::SmartKiteTarget(rangedUnit, target, m_bot, m_kittingStates);
-                }
-                else
-                {
-                    Micro::SmartAttackUnit(rangedUnit, target, m_bot);
-                }
-            }
-        }
-        // if there are no targets
-        else
-        {
-            // for each rangedUnit
-            for (auto rangedUnit : rangedUnits)
-            {
-                BOT_ASSERT(rangedUnit, "ranged unit is null");
+        FocusFireAction focusFireAction(rangedUnit, target, &rangedUnitTargets, m_bot, m_focusFireStates, &rangedUnits, m_unitHealth);
+        KiteAction kiteAction(rangedUnit, target, m_bot, m_kittingStates);
+        GoToMineralShardAction goToMineralShardAction(rangedUnit, mineralPos, m_bot);
+        GoToObjectiveAction goToObjectiveAction(rangedUnit, order.getPosition(), m_bot);
 
-                // if we're not near the order position
-                if (Util::Dist(rangedUnit->pos, order.getPosition()) > 4)
-                {
-                    // move to it
-                    Micro::SmartMove(rangedUnit, order.getPosition(), m_bot);
-                }
-            }
-        }
+        BehaviorTree* bt = BehaviorTreeBuilder()
+            .selector()
+            .sequence()
+            .condition(&isEnemyInSight).end()
+            .selector()
+            .sequence()
+            .condition(&isEnemyRanged).end()
+            .action(&focusFireAction).end()
+            .end()
+            .action(&kiteAction).end()
+            .end()
+            .end()
+            .sequence()
+            .condition(&isMineralInSight).end()
+            .action(&goToMineralShardAction).end()
+            .end()
+            .action(&goToObjectiveAction).end()
+            .end()
+            .end();
 
-        if (m_bot.Config().DrawUnitTargetInfo)
-        {
-            // TODO: draw the line to the unit's target
-        }
+        bt->tick();
     }
 }
 
@@ -149,7 +89,7 @@ const sc2::Unit * RangedManager::getTarget(const sc2::Unit * rangedUnit, const s
     {
         BOT_ASSERT(targetUnit, "null target unit in getTarget");
 
-        int priority = getAttackPriority(rangedUnit, targetUnit);
+        float priority = getAttackPriority(rangedUnit, targetUnit);
         float distance = 0;
         if (isTargetRanged(targetUnit))
             distance = Util::Dist(Util::CalcCenter(getUnits()), targetUnit->pos);
@@ -205,5 +145,20 @@ bool RangedManager::isTargetRanged(const sc2::Unit * target)
     for (sc2::Weapon & weapon : unitTypeData.weapons)
         maxRange = std::max(maxRange, weapon.range);
     return maxRange > 1.f;
+}
+
+const sc2::Unit * RangedManager::getClosestMineral(const sc2::Unit * unit) {
+    const sc2::Unit * closestShard = nullptr;
+    auto potentialMinerals = m_bot.Observation()->GetUnits(sc2::Unit::Alliance::Neutral);
+    for (auto mineral : potentialMinerals)
+    {
+        if (closestShard == nullptr && mineral->is_on_screen) {
+            closestShard = mineral;
+        }
+        else if (mineral->unit_type == 1680 && Util::Dist(mineral->pos, unit->pos) < Util::Dist(closestShard->pos, unit->pos) && mineral->is_on_screen) {
+            closestShard = mineral;
+        }
+    }
+    return closestShard;
 }
 

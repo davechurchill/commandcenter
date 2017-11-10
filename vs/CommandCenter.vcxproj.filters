@@ -234,7 +234,10 @@
       <Filter>util</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Behavior.h">
-      <Filter>util</Filter>
+      <Filter>behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\BehaviorTreeBuilder.h">
+      <Filter>behavior</Filter>
     </ClInclude>
     <ClInclude Include="resource.h" />
     <ClInclude Include="..\src\FiniteStateMachine.h">
@@ -276,6 +279,9 @@
     <ClInclude Include="..\src\ShouldAttackTransition.h">
       <Filter>micro\FSMs\KitingFSM</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\RangedActions.h">
+      <Filter>micro\BT</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="global">
@@ -293,6 +299,9 @@
     <Filter Include="micro">
       <UniqueIdentifier>{9829f5c0-728d-4121-8884-bf1fddd88a87}</UniqueIdentifier>
     </Filter>
+    <Filter Include="behavior">
+      <UniqueIdentifier>{b5b36603-ed22-40f9-9d56-89b05e6c623c}</UniqueIdentifier>
+    </Filter>
     <Filter Include="micro\FSMs">
       <UniqueIdentifier>{9ece38aa-6c86-410a-b06c-ee706c5b2de2}</UniqueIdentifier>
     </Filter>
@@ -301,6 +310,9 @@
     </Filter>
     <Filter Include="micro\FSMs\KitingFSM">
       <UniqueIdentifier>{488af303-796a-4c83-bd3a-e2bef7453438}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micro\BT">
+      <UniqueIdentifier>{2f717fb1-4e0b-4a83-8bae-c37e7aa660fb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

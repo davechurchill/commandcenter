@@ -49,6 +49,7 @@ namespace Util
     sc2::Point2D    CalcCenter(const std::vector<const sc2::Unit *> & units);
     void            Normalize(sc2::Point2D& point);
     sc2::Point2D    Normalized(const sc2::Point2D& point);
+    float           GetDotProduct(const sc2::Point2D& v1, const sc2::Point2D& v2);
     sc2::UnitTypeData GetUnitTypeDataFromUnitTypeId(const sc2::UnitTypeID unitTypeId, CCBot & bot);
 
     sc2::UnitTypeID GetUnitTypeIDFromName(const std::string & name, CCBot & bot);

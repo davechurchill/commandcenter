@@ -183,6 +183,13 @@ sc2::Point2D Util::Normalized(const sc2::Point2D& point)
     return sc2::Point2D(point.x / norm, point.y / norm);
 }
 
+float Util::GetDotProduct(const sc2::Point2D& v1, const sc2::Point2D& v2)
+{
+    sc2::Point2D v1n = Normalized(v1);
+    sc2::Point2D v2n = Normalized(v2);
+    return v1n.x * v2n.x + v1n.y * v2n.y;
+}
+
 bool Util::IsDetector(const sc2::Unit * unit)
 {
     BOT_ASSERT(unit, "Unit pointer was null");
