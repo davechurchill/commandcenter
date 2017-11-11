@@ -39,7 +39,6 @@ BotConfig::BotConfig()
 
     KiteWithRangedUnits                 = true;
     ScoutHarassEnemy                    = true;
-    CombatUnitsForAttack                = 12;
 
     ColorLineTarget                     = CCColor(255, 255, 255);
     ColorLineMineral                    = CCColor(0, 128, 128);
@@ -95,7 +94,6 @@ void BotConfig::readConfigFile()
         const json & micro = j["Micro"];
         JSONTools::ReadBool("KiteWithRangedUnits", micro, KiteWithRangedUnits);
         JSONTools::ReadBool("ScoutHarassEnemy", micro, ScoutHarassEnemy);
-        JSONTools::ReadInt("CombatUnitsForAttack", micro, CombatUnitsForAttack);
     }
 
     // Parse the BWAPI Options

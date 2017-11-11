@@ -9,12 +9,14 @@ Strategy::Strategy()
 
 }
 
-Strategy::Strategy(const std::string & name, const CCRace & race, const BuildOrder & buildOrder)
-    : m_name(name)
-    , m_race(race)
-    , m_buildOrder(buildOrder)
-    , m_wins(0)
-    , m_losses(0)
+Strategy::Strategy(const std::string & name, const CCRace & race, const BuildOrder & buildOrder, const Condition & scoutCondition, const Condition & attackCondition)
+    : m_name            (name)
+    , m_race            (race)
+    , m_buildOrder      (buildOrder)
+    , m_wins            (0)
+    , m_losses          (0)
+    , m_scoutCondition  (scoutCondition)
+    , m_attackCondition (attackCondition)
 {
 
 }
@@ -36,20 +38,28 @@ void StrategyManager::onFrame()
 
 }
 
+const Strategy & StrategyManager::getCurrentStrategy() const
+{
+    auto strategy = m_strategies.find(m_bot.Config().StrategyName);
+
+    BOT_ASSERT(strategy != m_strategies.end(), "Couldn't find Strategy corresponding to strategy name: %s", m_bot.Config().StrategyName.c_str());
+
+    return (*strategy).second;
+}
+
 const BuildOrder & StrategyManager::getOpeningBookBuildOrder() const
 {
-    auto buildOrderIt = m_strategies.find(m_bot.Config().StrategyName);
+    return getCurrentStrategy().m_buildOrder;
+}
 
-    // look for the build order in the build order map
-    if (buildOrderIt != std::end(m_strategies))
-    {
-        return (*buildOrderIt).second.m_buildOrder;
-    }
-    else
-    {
-        BOT_ASSERT(false, "Strategy not found: %s, returning empty initial build order", m_bot.Config().StrategyName.c_str());
-        return m_emptyBuildOrder;
-    }
+bool StrategyManager::scoutConditionIsMet() const
+{
+    return getCurrentStrategy().m_scoutCondition.eval();
+}
+
+bool StrategyManager::attackConditionIsMet() const
+{
+    return getCurrentStrategy().m_attackCondition.eval();
 }
 
 bool StrategyManager::shouldExpandNow() const
@@ -148,42 +158,35 @@ void StrategyManager::readStrategyFile(const std::string & filename)
             for (auto it = strategies.begin(); it != strategies.end(); ++it) 
             {
                 const std::string & name = it.key();
-                const json & val = it.value();
-
-                std::cout << val << "\n";
-
-                CCRace strategyRace;
-                if (val.count("Race") && val["Race"].is_string())
-                {
-                    strategyRace = Util::GetRaceFromString(val["Race"].get<std::string>());
-                }
-                else
-                {
-                    BOT_ASSERT(false, "Strategy must have a Race string: %s", name.c_str());
-                    continue;
-                }
-
+                const json & val = it.value();              
+                
+                BOT_ASSERT(val.count("Race") && val["Race"].is_string(), "Strategy is missing a Race string");
+                CCRace strategyRace = Util::GetRaceFromString(val["Race"].get<std::string>());
+                
+                BOT_ASSERT(val.count("OpeningBuildOrder") && val["OpeningBuildOrder"].is_array(), "Strategy is missing an OpeningBuildOrder arrau");
                 BuildOrder buildOrder;
-                if (val.count("OpeningBuildOrder") && val["OpeningBuildOrder"].is_array())
+                const json & build = val["OpeningBuildOrder"];
+                for (size_t b(0); b < build.size(); b++)
                 {
-                    const json & build = val["OpeningBuildOrder"];
-
-                    for (size_t b(0); b < build.size(); b++)
+                    if (build[b].is_string())
                     {
-                        if (build[b].is_string())
-                        {
-                            MetaType MetaType(build[b].get<std::string>(), m_bot);
-                            buildOrder.add(MetaType);
-                        }
-                        else
-                        {
-                            BOT_ASSERT(false, "Build order item must be a string %s", name.c_str());
-                            continue;
-                        }
+                        MetaType MetaType(build[b].get<std::string>(), m_bot);
+                        buildOrder.add(MetaType);
+                    }
+                    else
+                    {
+                        BOT_ASSERT(false, "Build order item must be a string %s", name.c_str());
+                        continue;
                     }
                 }
 
-                addStrategy(name, Strategy(name, strategyRace, buildOrder));
+                BOT_ASSERT(val.count("ScoutCondition") && val["ScoutCondition"].is_array(), "Strategy is missing a ScoutCondition array");
+                Condition scoutCondition(val["ScoutCondition"], m_bot);
+                
+                BOT_ASSERT(val.count("AttackCondition") && val["AttackCondition"].is_array(), "Strategy is missing an AttackCondition array");
+                Condition attackCondition(val["AttackCondition"], m_bot);
+
+                addStrategy(name, Strategy(name, strategyRace, buildOrder, scoutCondition, attackCondition));
             }
         }
     }

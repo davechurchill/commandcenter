@@ -140,6 +140,15 @@ const UnitInfoManager & CCBot::UnitInfo() const
     return m_unitInfo;
 }
 
+int CCBot::GetCurrentFrame() const
+{
+#ifdef SC2API
+    return (int)Observation()->GetGameLoop();
+#else
+    return BWAPI::Broodwar->getFrameCount();
+#endif
+}
+
 const TypeData & CCBot::Data(const UnitType & type) const
 {
     return m_techTree.getData(type);

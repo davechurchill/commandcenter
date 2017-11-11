@@ -94,34 +94,13 @@ void GameCommander::setScoutUnits()
                 assignUnit(workerScout, m_scoutUnits);
                 m_initialScoutSet = true;
             }
-            else
-            {
-                
-            }
         }
     }
 }
 
 bool GameCommander::shouldSendInitialScout()
 {
-#ifdef SC2API
-    switch (m_bot.GetPlayerRace(Players::Self))
-    {
-        case sc2::Race::Terran:  return m_bot.UnitInfo().getUnitTypeCount(Players::Self, UnitType(sc2::UNIT_TYPEID::TERRAN_SUPPLYDEPOT, m_bot), true) > 0;
-        case sc2::Race::Protoss: return m_bot.UnitInfo().getUnitTypeCount(Players::Self, UnitType(sc2::UNIT_TYPEID::PROTOSS_PYLON, m_bot), true) > 0;
-        case sc2::Race::Zerg:    return m_bot.UnitInfo().getUnitTypeCount(Players::Self, UnitType(sc2::UNIT_TYPEID::ZERG_SPAWNINGPOOL, m_bot), true) > 0;
-        default: return false;
-    }
-#else
-    if (m_bot.GetPlayerRace(Players::Self) == BWAPI::Races::Zerg)
-    {
-        return m_bot.UnitInfo().getUnitTypeCount(Players::Self, UnitType(BWAPI::UnitTypes::Zerg_Spawning_Pool, m_bot), true) > 0;
-    }
-    else
-    {
-        return m_bot.UnitInfo().getUnitTypeCount(Players::Self, UnitType(m_bot.GetPlayerRace(Players::Self).getSupplyProvider(), m_bot), true) > 0;
-    }
-#endif
+    return m_bot.Strategy().scoutConditionIsMet();
 }
 
 // sets combat units to be passed to CombatCommander

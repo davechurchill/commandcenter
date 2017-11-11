@@ -16,6 +16,7 @@ Condition::Condition(const json & j, CCBot & bot)
     : Condition()
 {
     m_bot = &bot;
+    m_json = j;
 
     BOT_ASSERT(j.is_array(), "Condition must be an array");
 
@@ -32,7 +33,7 @@ Condition::Condition(const json & j, CCBot & bot)
     // this is a condition unary value with 'self' or 'enemy' followed by a unit type
     else if (j.size() == 2)
     {
-        m_type  = ConditionTypes::Unary;
+        m_type  = ConditionTypes::UnaryUnitType;
 
         BOT_ASSERT(j[0].is_string(), "First element of size 2 condition must be a string");
         BOT_ASSERT(j[1].is_string(), "Second element of size 2 condition must be a string");
@@ -43,18 +44,22 @@ Condition::Condition(const json & j, CCBot & bot)
     // this is either an integer or a string denoting some fixed game value like time
     else if (j.size() == 1)
     {
-        m_type  = ConditionTypes::Unary;
 
         if (j[0].is_number_integer())
         {
+            m_type  = ConditionTypes::UnaryInt;
             m_intValue = j[0];
         }
         else if (j[0].is_string())
         {
+            m_type  = ConditionTypes::UnaryString;
             m_strValue = j[0].get<std::string>();
+            std::transform(m_strValue.begin(), m_strValue.end(), m_strValue.begin(), ::tolower);
         }
-        
-        BOT_ASSERT(false, "Size 1 Condition must be int or string");
+        else
+        {
+            BOT_ASSERT(false, "Size 1 Condition must be int or string");
+        }
     }
 }
 
@@ -69,11 +74,23 @@ int Condition::intEval() const
             case ConditionOperators::MULT:   { return m_lhs->intEval() * m_rhs->intEval(); }
             case ConditionOperators::DIV:    { return m_lhs->intEval() / m_rhs->intEval(); }
         }
-        
     }
-    else if (m_type == ConditionTypes::Unary)
+    else if (m_type == ConditionTypes::UnaryInt)
     {
-        
+        return m_intValue;
+    }
+    else if (m_type == ConditionTypes::UnaryUnitType)
+    {
+        return (int)m_bot->UnitInfo().getUnitTypeCount(m_player, UnitType::GetUnitTypeFromName(m_strValue, *m_bot));
+    }
+    else if (m_type == ConditionTypes::UnaryString)
+    {
+        if (m_strValue == "gameframe")
+        {
+            return m_bot->GetCurrentFrame();
+        }
+
+        BOT_ASSERT(false, "Unknown UnaryString value:", m_strValue.c_str());
     }
     
     BOT_ASSERT(false, "Can't int evaluate this Condition");
@@ -82,7 +99,7 @@ int Condition::intEval() const
 
 bool Condition::eval() const
 {
-    if (m_lhs->m_type == ConditionTypes::BinaryBool)
+    if (m_type == ConditionTypes::BinaryBool)
     {
         switch (m_op)
         {
@@ -90,7 +107,7 @@ bool Condition::eval() const
             case ConditionOperators::OR:     { return m_lhs->eval() || m_rhs->eval(); }    
         }
     }
-    else if (m_lhs->m_type == ConditionTypes::BinaryComp)
+    else if (m_type == ConditionTypes::BinaryComp)
     {
         switch (m_op)
         {

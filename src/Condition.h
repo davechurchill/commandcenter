@@ -6,7 +6,7 @@ class CCBot;
 
 namespace ConditionTypes
 {
-    enum { Unary, BinaryComp, BinaryBool, BinaryInt, Invalid };
+    enum { UnaryString, UnaryInt, UnaryUnitType, BinaryComp, BinaryBool, BinaryInt, Invalid };
 }
 
 namespace ConditionOperators
@@ -24,6 +24,7 @@ class Condition
     int         m_op;
     std::string m_strValue;
     int         m_intValue;
+    json        m_json;
         
     static int GetOperator(const std::string & op);
     static int GetPlayer(const std::string & op);

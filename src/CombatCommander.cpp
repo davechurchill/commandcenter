@@ -60,9 +60,7 @@ void CombatCommander::onFrame(const std::vector<Unit> & combatUnits)
 
 bool CombatCommander::shouldWeStartAttacking()
 {
-    // TODO: make this more clever
-    // For now: start attacking when we have more than 10 combat units
-    return (int)m_combatUnits.size() >= m_bot.Config().CombatUnitsForAttack;
+    return m_bot.Strategy().getCurrentStrategy().m_attackCondition.eval();
 }
 
 void CombatCommander::updateIdleSquad()

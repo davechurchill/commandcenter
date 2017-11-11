@@ -64,6 +64,7 @@ public:
     CCRace GetPlayerRace(int player) const;
     CCPosition GetStartLocation() const;
 
+    int GetCurrentFrame() const;
     int GetMinerals() const;
     int GetGas() const;
     Unit GetUnit(const CCUnitID & tag) const;
