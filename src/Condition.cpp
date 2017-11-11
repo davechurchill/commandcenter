@@ -126,12 +126,12 @@ bool Condition::eval() const
 
 int Condition::GetOperator(const std::string & op)
 {
-    if (op == "LT")     { return ConditionOperators::LT; }
-    if (op == "GT")     { return ConditionOperators::GT; }
-    if (op == "EQ")     { return ConditionOperators::EQ; }
-    if (op == "NEQ")    { return ConditionOperators::NEQ; }
-    if (op == "LTE")    { return ConditionOperators::LTE; }
-    if (op == "GTE")    { return ConditionOperators::GTE; }
+    if (op == "<")      { return ConditionOperators::LT; }
+    if (op == ">")      { return ConditionOperators::GT; }
+    if (op == "==")     { return ConditionOperators::EQ; }
+    if (op == "!=")     { return ConditionOperators::NEQ; }
+    if (op == "<=")     { return ConditionOperators::LTE; }
+    if (op == ">=")     { return ConditionOperators::GTE; }
     if (op == "AND")    { return ConditionOperators::AND; }
     if (op == "OR")     { return ConditionOperators::OR; }
     if (op == "+")      { return ConditionOperators::PLUS; }
@@ -145,12 +145,12 @@ int Condition::GetOperator(const std::string & op)
 
 int Condition::GetType(const std::string & op)
 {
-    if (op == "LT")     { return ConditionTypes::BinaryComp; }
-    if (op == "GT")     { return ConditionTypes::BinaryComp; }
-    if (op == "EQ")     { return ConditionTypes::BinaryComp; }
-    if (op == "NEQ")    { return ConditionTypes::BinaryComp; }
-    if (op == "LTE")    { return ConditionTypes::BinaryComp; }
-    if (op == "GTE")    { return ConditionTypes::BinaryComp; }
+    if (op == "<")      { return ConditionTypes::BinaryComp; }
+    if (op == ">")      { return ConditionTypes::BinaryComp; }
+    if (op == "==")     { return ConditionTypes::BinaryComp; }
+    if (op == "!=")     { return ConditionTypes::BinaryComp; }
+    if (op == "<=")     { return ConditionTypes::BinaryComp; }
+    if (op == ">=")     { return ConditionTypes::BinaryComp; }
     if (op == "AND")    { return ConditionTypes::BinaryBool; }
     if (op == "OR")     { return ConditionTypes::BinaryBool; }
     if (op == "+")      { return ConditionTypes::BinaryInt; }
