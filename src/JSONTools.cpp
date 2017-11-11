@@ -3,7 +3,7 @@
 
 namespace JSONTools
 {
-    void JSONTools::ReadBool(const char * key, const json & j, bool & dest)
+    void ReadBool(const char * key, const json & j, bool & dest)
     {
         if (j.count(key))
         {
@@ -12,7 +12,7 @@ namespace JSONTools
         }
     }
 
-    void JSONTools::ReadString(const char * key, const json & j, std::string & dest)
+    void ReadString(const char * key, const json & j, std::string & dest)
     {
         if (j.count(key))
         {
