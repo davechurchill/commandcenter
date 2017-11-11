@@ -9,9 +9,9 @@
     "Game Info" :
     {
         "BotRace"                   : "Terran",
-        "EnemyDifficulty"           : 8,
+        "EnemyDifficulty"           : 9,
         "EnemyRace"                 : "Zerg",
-        "MapFile"                   : "DefeatRoaches.SC2Map",
+        "MapFile"                   : "InterloperLE.SC2Map",
         "StepSize"                  : 1
     },
         
@@ -19,7 +19,7 @@
     {
         "KiteWithRangedUnits"       : true,
         "ScoutHarassEnemy"          : true,
-        "CombatUnitsForAttack"      : 1
+        "CombatUnitsForAttack"      : 10
     },
     
     "Macro" :

@@ -36,6 +36,7 @@ namespace Util
     float GetAttackRangeForTarget(const sc2::Unit * unit, const sc2::Unit * target, CCBot & bot);
     float GetMaxAttackRangeForTargets(const sc2::Unit * unit, const std::vector<const sc2::Unit *> & targets, CCBot & bot);
     float GetAttackDamageForTarget(const sc2::Unit * unit, const sc2::Unit * target, CCBot & bot);
+    float GetDpsForTarget(const sc2::Unit * unit, const sc2::Unit * target, CCBot & bot);
     
     bool UnitCanBuildTypeNow(const sc2::Unit * unit, const sc2::UnitTypeID & type, CCBot & m_bot);
     int GetUnitTypeWidth(const sc2::UnitTypeID type, const CCBot & bot);

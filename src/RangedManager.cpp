@@ -75,14 +75,12 @@ void RangedManager::assignTargets(const std::vector<const sc2::Unit *> & targets
 }
 
 // get a target for the ranged unit to attack
-// TODO: this is the melee targeting code, replace it with something better for ranged units
 const sc2::Unit * RangedManager::getTarget(const sc2::Unit * rangedUnit, const std::vector<const sc2::Unit *> & targets)
 {
     BOT_ASSERT(rangedUnit, "null ranged unit in getTarget");
 
-    int highPriority = 0;
-    double closestDist = std::numeric_limits<double>::max();
-    const sc2::Unit * closestTarget = nullptr;
+    float highestPriority = 0.f;
+    const sc2::Unit * bestTarget = nullptr;
 
     // for each target possiblity
     for (auto targetUnit : targets)
@@ -90,40 +88,29 @@ const sc2::Unit * RangedManager::getTarget(const sc2::Unit * rangedUnit, const s
         BOT_ASSERT(targetUnit, "null target unit in getTarget");
 
         float priority = getAttackPriority(rangedUnit, targetUnit);
-        float distance = 0;
-        if (isTargetRanged(targetUnit))
-            distance = Util::Dist(Util::CalcCenter(getUnits()), targetUnit->pos);
-        else
-            distance = Util::Dist(rangedUnit->pos, targetUnit->pos);
 
         // if it's a higher priority, or it's closer, set it
-        if (!closestTarget || (priority > highPriority) || (priority == highPriority && distance < closestDist))
+        if (!bestTarget || priority > highestPriority)
         {
-            closestDist = distance;
-            highPriority = priority;
-            closestTarget = targetUnit;
+            highestPriority = priority;
+            bestTarget = targetUnit;
         }
     }
 
-    return closestTarget;
+    return bestTarget;
 }
 
-// TODO: instead of returning an hardcoded int, calculate a threat score based on dps, distance and other factors
 float RangedManager::getAttackPriority(const sc2::Unit * attacker, const sc2::Unit * target)
 {
     BOT_ASSERT(target, "null unit in getAttackPriority");
 
     if (Util::IsCombatUnit(target, m_bot))
     {
-        float remainingHealth = 1 - ((target->health + target->shield) / target->health_max);
-        sc2::UnitTypeData unitTypeData = Util::GetUnitTypeDataFromUnitTypeId(target->unit_type, m_bot);
-        float dps = 0.f;
-        for (sc2::Weapon & weapon : unitTypeData.weapons)
-        {
-            float weaponDps = weapon.attacks * weapon.damage_ * (1 / weapon.speed);
-            dps = std::max(weaponDps, dps);
-        }
-        return 5 + (dps * remainingHealth);
+        float dps = Util::GetDpsForTarget(target, attacker, m_bot);
+        float healthValue = 1 / (target->health + target->shield);
+        float distanceValue = 1 / Util::Dist(attacker->pos, target->pos);
+        //TODO maybe give different weights to each variables
+        return 5 + dps * healthValue * distanceValue;
     }
 
     if (Util::IsWorker(target))

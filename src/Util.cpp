@@ -270,6 +270,31 @@ float Util::GetAttackDamageForTarget(const sc2::Unit * unit, const sc2::Unit * t
     return damage;
 }
 
+float Util::GetDpsForTarget(const sc2::Unit * unit, const sc2::Unit * target, CCBot & bot)
+{
+    sc2::UnitTypeData unitTypeData = GetUnitTypeDataFromUnitTypeId(unit->unit_type, bot);
+    sc2::UnitTypeData targetTypeData = GetUnitTypeDataFromUnitTypeId(target->unit_type, bot);
+    sc2::Weapon::TargetType expectedWeaponType = target->is_flying ? sc2::Weapon::TargetType::Air : sc2::Weapon::TargetType::Ground;
+    float dps = 0.f;
+    for (auto weapon : unitTypeData.weapons)
+    {
+        if (weapon.type == sc2::Weapon::TargetType::Any || weapon.type == expectedWeaponType)
+        {
+            float weaponDps = weapon.damage_;
+            for (auto damageBonus : weapon.damage_bonus)
+            {
+                if (std::find(targetTypeData.attributes.begin(), targetTypeData.attributes.end(), damageBonus.attribute) != targetTypeData.attributes.end())
+                    weaponDps += damageBonus.bonus;
+            }
+            weaponDps -= targetTypeData.armor;
+            weaponDps *= weapon.attacks / weapon.speed;
+            if (weaponDps > dps)
+                dps = weaponDps;
+        }
+    }
+    return dps;
+}
+
 bool Util::IsDetectorType(const sc2::UnitTypeID & type)
 {
     switch (type.ToType())
