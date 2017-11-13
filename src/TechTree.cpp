@@ -77,8 +77,8 @@ void TechTree::initUnitTypeData()
     m_unitTypeData[UnitType(sc2::UNIT_TYPEID::TERRAN_BUNKER, m_bot)] =                   { sc2::Race::Terran, 0, 0, 0, 0, true, true, false, false, false, false, false, sc2::ABILITY_ID::BUILD_BUNKER, 0, { UnitType(sc2::UNIT_TYPEID::TERRAN_SCV, m_bot) }, { UnitType(sc2::UNIT_TYPEID::TERRAN_BARRACKS, m_bot), UnitType(sc2::UNIT_TYPEID::TERRAN_BARRACKSFLYING, m_bot) }, {} };
     m_unitTypeData[UnitType(sc2::UNIT_TYPEID::TERRAN_ENGINEERINGBAY, m_bot)] =           { sc2::Race::Terran, 0, 0, 0, 0, true, true, false, false, false, false, false, sc2::ABILITY_ID::BUILD_ENGINEERINGBAY, 0, { UnitType(sc2::UNIT_TYPEID::TERRAN_SCV, m_bot) }, { UnitType(sc2::UNIT_TYPEID::TERRAN_COMMANDCENTER, m_bot), UnitType(sc2::UNIT_TYPEID::TERRAN_COMMANDCENTERFLYING, m_bot), UnitType(sc2::UNIT_TYPEID::TERRAN_PLANETARYFORTRESS, m_bot), UnitType(sc2::UNIT_TYPEID::TERRAN_ORBITALCOMMAND, m_bot), UnitType(sc2::UNIT_TYPEID::TERRAN_ORBITALCOMMANDFLYING, m_bot) }, {} }; 
     m_unitTypeData[UnitType(sc2::UNIT_TYPEID::TERRAN_MISSILETURRET, m_bot)] =            { sc2::Race::Terran, 0, 0, 0, 0, true, true, false, false, false, false, false, sc2::ABILITY_ID::BUILD_MISSILETURRET, 0, { UnitType(sc2::UNIT_TYPEID::TERRAN_SCV, m_bot) }, { UnitType(sc2::UNIT_TYPEID::TERRAN_ENGINEERINGBAY, m_bot) }, {} };
-    m_unitTypeData[UnitType(sc2::UNIT_TYPEID::TERRAN_ORBITALCOMMAND, m_bot)] =           { sc2::Race::Terran, 0, 0, 0, 0, true, true, false, false, false, false, false, sc2::ABILITY_ID::MORPH_ORBITALCOMMAND, 0, { UnitType(sc2::UNIT_TYPEID::TERRAN_COMMANDCENTER, m_bot) }, {}, {} }; 
-    m_unitTypeData[UnitType(sc2::UNIT_TYPEID::TERRAN_PLANETARYFORTRESS, m_bot)] =        { sc2::Race::Terran, 0, 0, 0, 0, true, true, false, false, false, false, false, sc2::ABILITY_ID::MORPH_PLANETARYFORTRESS, 0, { UnitType(sc2::UNIT_TYPEID::TERRAN_COMMANDCENTER, m_bot) }, {}, {} };
+    m_unitTypeData[UnitType(sc2::UNIT_TYPEID::TERRAN_ORBITALCOMMAND, m_bot)] =           { sc2::Race::Terran, 0, 0, 0, 0, true, true, false, false, false, false, false, sc2::ABILITY_ID::MORPH_ORBITALCOMMAND, 0, { UnitType(sc2::UNIT_TYPEID::TERRAN_COMMANDCENTER, m_bot) }, { UnitType(sc2::UNIT_TYPEID::TERRAN_BARRACKS, m_bot) }, {} }; 
+    m_unitTypeData[UnitType(sc2::UNIT_TYPEID::TERRAN_PLANETARYFORTRESS, m_bot)] =        { sc2::Race::Terran, 0, 0, 0, 0, true, true, false, false, false, false, false, sc2::ABILITY_ID::MORPH_PLANETARYFORTRESS, 0, { UnitType(sc2::UNIT_TYPEID::TERRAN_COMMANDCENTER, m_bot) }, { UnitType(sc2::UNIT_TYPEID::TERRAN_ENGINEERINGBAY, m_bot) }, {} };
 
     // Terran Addons                                                                         m  g  s  t  unit  bld   wrk    rfn    sup    hall   add
     m_unitTypeData[UnitType(sc2::UNIT_TYPEID::TERRAN_BARRACKSREACTOR, m_bot)] =          { sc2::Race::Terran, 0, 0, 0, 0, true, true, false, false, false, false, true, sc2::ABILITY_ID::BUILD_REACTOR_BARRACKS, 0, { UnitType(sc2::UNIT_TYPEID::TERRAN_BARRACKS, m_bot) }, {}, {} };
@@ -133,7 +133,7 @@ void TechTree::initUnitTypeData()
     m_unitTypeData[UnitType(sc2::UNIT_TYPEID::ZERG_SPORECRAWLER, m_bot)] =               { sc2::Race::Zerg, 0, 0, 0, 0, true, true, false, false, false, false, false, sc2::ABILITY_ID::BUILD_SPORECRAWLER, 0, { UnitType(sc2::UNIT_TYPEID::ZERG_DRONE, m_bot) }, { UnitType(sc2::UNIT_TYPEID::ZERG_SPAWNINGPOOL, m_bot) }, {} };
     m_unitTypeData[UnitType(sc2::UNIT_TYPEID::ZERG_ULTRALISKCAVERN, m_bot)] =            { sc2::Race::Zerg, 0, 0, 0, 0, true, true, false, false, false, false, false, sc2::ABILITY_ID::BUILD_ULTRALISKCAVERN, 0, { UnitType(sc2::UNIT_TYPEID::ZERG_DRONE, m_bot) }, { UnitType(sc2::UNIT_TYPEID::ZERG_HIVE, m_bot) }, {} };
     m_unitTypeData[UnitType(sc2::UNIT_TYPEID::ZERG_LAIR, m_bot)] =                       { sc2::Race::Zerg, 0, 0, 0, 0, true, true, false, false, false,  true, false, sc2::ABILITY_ID::MORPH_LAIR, 0, { UnitType(sc2::UNIT_TYPEID::ZERG_HATCHERY, m_bot) }, {}, {} };
-    m_unitTypeData[UnitType(sc2::UNIT_TYPEID::ZERG_HIVE, m_bot)] =                       { sc2::Race::Zerg, 0, 0, 0, 0, true, true, false, false, false,  true, false, sc2::ABILITY_ID::MORPH_HIVE, 0, { UnitType(sc2::UNIT_TYPEID::ZERG_LAIR, m_bot) }, {}, {} };  
+    m_unitTypeData[UnitType(sc2::UNIT_TYPEID::ZERG_HIVE, m_bot)] =                       { sc2::Race::Zerg, 0, 0, 0, 0, true, true, false, false, false,  true, false, sc2::ABILITY_ID::MORPH_HIVE, 0, { UnitType(sc2::UNIT_TYPEID::ZERG_LAIR, m_bot) }, { UnitType(sc2::UNIT_TYPEID::ZERG_INFESTATIONPIT, m_bot) }, {} };  
 
     // Zerg Units                                                                          m  g  s  t  unit  bld    wrk    rfn    sup    hall   add
     m_unitTypeData[UnitType(sc2::UNIT_TYPEID::ZERG_OVERLORD, m_bot)] =                   { sc2::Race::Zerg, 0, 0, 0, 0, true, false, false, false,  true, false, false, sc2::ABILITY_ID::TRAIN_OVERLORD, 0, { UnitType(sc2::UNIT_TYPEID::ZERG_LARVA, m_bot) }, {}, {} }; 
@@ -157,11 +157,18 @@ void TechTree::initUnitTypeData()
     {
         if (!kv.first.isValid()) { continue; }
         
-        auto & data = m_bot.Observation()->GetUnitTypeData();
-
-        kv.second.mineralCost = m_bot.Observation()->GetUnitTypeData()[kv.first.getAPIUnitType()].mineral_cost;
-        kv.second.gasCost     = m_bot.Observation()->GetUnitTypeData()[kv.first.getAPIUnitType()].vespene_cost;
+        auto & data = m_bot.Observation()->GetUnitTypeData()[kv.first.getAPIUnitType()];
+                
+        kv.second.mineralCost = data.mineral_cost;
+        kv.second.gasCost     = data.vespene_cost;
     }
+
+    // fix the cumulative prices of morphed buildings
+    m_unitTypeData[UnitType(sc2::UNIT_TYPEID::ZERG_HIVE, m_bot)].mineralCost -= getData(UnitType(sc2::UNIT_TYPEID::ZERG_LAIR, m_bot)).mineralCost;
+    m_unitTypeData[UnitType(sc2::UNIT_TYPEID::ZERG_LAIR, m_bot)].mineralCost -= getData(UnitType(sc2::UNIT_TYPEID::ZERG_HATCHERY, m_bot)).mineralCost;
+    m_unitTypeData[UnitType(sc2::UNIT_TYPEID::TERRAN_PLANETARYFORTRESS, m_bot)].mineralCost -= getData(UnitType(sc2::UNIT_TYPEID::TERRAN_COMMANDCENTER, m_bot)).mineralCost;
+    m_unitTypeData[UnitType(sc2::UNIT_TYPEID::TERRAN_ORBITALCOMMAND, m_bot)].mineralCost -= getData(UnitType(sc2::UNIT_TYPEID::TERRAN_COMMANDCENTER, m_bot)).mineralCost;
+    m_unitTypeData[UnitType(sc2::UNIT_TYPEID::ZERG_GREATERSPIRE, m_bot)].mineralCost -= getData(UnitType(sc2::UNIT_TYPEID::ZERG_SPIRE, m_bot)).mineralCost;
 }
 
 void TechTree::initUpgradeData()

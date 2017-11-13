@@ -374,3 +374,25 @@ bool UnitType::isTank() const
     return m_type == BWAPI::UnitTypes::Terran_Siege_Tank_Siege_Mode || m_type == BWAPI::UnitTypes::Terran_Siege_Tank_Tank_Mode;
 #endif
 }
+
+bool UnitType::isMorphedBuilding() const
+{
+#ifdef SC2API
+    
+    switch (m_type.ToType())
+    {
+        case sc2::UNIT_TYPEID::ZERG_LAIR:                   { return true;  }
+        case sc2::UNIT_TYPEID::ZERG_HIVE:                   { return true;  }
+        case sc2::UNIT_TYPEID::ZERG_GREATERSPIRE:           { return true;  }
+        case sc2::UNIT_TYPEID::TERRAN_PLANETARYFORTRESS:    { return true;  }
+        case sc2::UNIT_TYPEID::TERRAN_ORBITALCOMMAND:       { return true;  }
+        default:                                            { return false; }                                                            
+    }
+#else
+    return  m_type == BWAPI::UnitTypes::Zerg_Sunken_Colony ||
+            m_type == BWAPI::UnitTypes::Zerg_Spore_Colony ||
+            m_type == BWAPI::UnitTypes::Zerg_Lair ||
+            m_type == BWAPI::UnitTypes::Zerg_Hive ||
+            m_type == BWAPI::UnitTypes::Zerg_Greater_Spire;
+#endif
+}

@@ -126,6 +126,11 @@ MetaType::MetaType(const CCUpgrade & upgradeType, CCBot & bot)
 #endif
 }
 
+bool MetaType::isBuilding() const
+{
+    return isUnit() && getUnitType().isBuilding();
+}
+
 const size_t & MetaType::getMetaType() const
 {
     return m_type;

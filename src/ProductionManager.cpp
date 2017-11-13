@@ -159,12 +159,16 @@ void ProductionManager::create(const Unit & producer, BuildOrderItem & item)
     }
 
     // if we're dealing with a building
-    // TODO: deal with morphed buildings & addons
-    if (m_bot.Data(item.type).isBuilding)
+    if (item.type.isBuilding())
     {
-        // send the building task to the building manager
-
-        m_buildingManager.addBuildingTask(item.type.getUnitType(), Util::GetTilePosition(m_bot.GetStartLocation()));
+        if (item.type.getUnitType().isMorphedBuilding())
+        {
+            producer.morph(item.type.getUnitType());
+        }
+        else
+        {
+            m_buildingManager.addBuildingTask(item.type.getUnitType(), Util::GetTilePosition(m_bot.GetStartLocation()));
+        }
     }
     // if we're dealing with a non-building unit
     else if (item.type.isUnit())
@@ -253,6 +257,8 @@ int ProductionManager::getFreeGas()
 bool ProductionManager::meetsReservedResources(const MetaType & type)
 {
     // return whether or not we meet the resources
+    int minerals = m_bot.Data(type).mineralCost;
+    int gas = m_bot.Data(type).gasCost;
 
     return (m_bot.Data(type).mineralCost <= getFreeMinerals()) && (m_bot.Data(type).gasCost <= getFreeGas());
 }

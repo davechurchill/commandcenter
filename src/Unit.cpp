@@ -358,6 +358,16 @@ void Unit::train(const UnitType & type) const
 #endif
 }
 
+void Unit::morph(const UnitType & type) const
+{
+    BOT_ASSERT(isValid(), "Unit is not valid");
+#ifdef SC2API
+    m_bot->Actions()->UnitCommand(m_unit, m_bot->Data(type).buildAbility);
+#else
+    m_unit->morph(type.getAPIUnitType());
+#endif
+}
+
 bool Unit::isConstructing(const UnitType & type) const
 {
 #ifdef SC2API

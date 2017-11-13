@@ -44,6 +44,7 @@ public:
     bool isGeyser() const;
     bool isMineral() const;
     bool isWorker() const;
+    bool isMorphedBuilding() const;
     bool canAttack() const;
     bool canMove() const;
     bool isAddon() const;

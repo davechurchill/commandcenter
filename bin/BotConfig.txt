@@ -16,7 +16,7 @@
     
     "SC2API" :
     {
-        "BotRace"                   : "Zerg",
+        "BotRace"                   : "Terran",
         "EnemyDifficulty"           : 2,
         "EnemyRace"                 : "Random",
         "MapFile"                   : "InterloperLE.SC2Map",

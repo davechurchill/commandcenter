@@ -67,4 +67,5 @@ public:
     void build          (const UnitType & buildingType, CCTilePosition pos) const;
     void buildTarget    (const UnitType & buildingType, const Unit & target) const;
     void train          (const UnitType & buildingType) const;
+    void morph          (const UnitType & type) const;
 };
