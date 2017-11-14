@@ -171,6 +171,25 @@ sc2::Point2D Util::CalcCenter(const std::vector<const sc2::Unit *> & units)
     return sc2::Point2D(cx / units.size(), cy / units.size());
 }
 
+void Util::Normalize(sc2::Point2D& point)
+{
+    float norm = sqrt(pow(point.x, 2) + pow(point.y, 2));
+    point /= norm;
+}
+
+sc2::Point2D Util::Normalized(const sc2::Point2D& point)
+{
+    float norm = sqrt(pow(point.x, 2) + pow(point.y, 2));
+    return sc2::Point2D(point.x / norm, point.y / norm);
+}
+
+float Util::GetDotProduct(const sc2::Point2D& v1, const sc2::Point2D& v2)
+{
+    sc2::Point2D v1n = Normalized(v1);
+    sc2::Point2D v2n = Normalized(v2);
+    return v1n.x * v2n.x + v1n.y * v2n.y;
+}
+
 bool Util::IsDetector(const sc2::Unit * unit)
 {
     BOT_ASSERT(unit, "Unit pointer was null");
@@ -210,7 +229,45 @@ float Util::GetAttackRangeForTarget(const sc2::Unit * unit, const sc2::Unit * ta
 		if ((weapon.type == sc2::Weapon::TargetType::Any || weapon.type == expectedWeaponType))
 			maxRange = weapon.range;
 	}
-	return maxRange;
+    //for some strange reason, units are actually able to reach targets farther than their range
+	return maxRange + 2;
+}
+
+float Util::GetMaxAttackRangeForTargets(const sc2::Unit * unit, const std::vector<const sc2::Unit *> & targets, CCBot & bot)
+{
+    float maxRange = 0.f;
+    for (const sc2::Unit * target : targets)
+    {
+        float range = GetAttackRangeForTarget(unit, target, bot);
+        if (range > maxRange)
+            maxRange = range;
+    }
+    return maxRange;
+}
+
+float Util::GetAttackDamageForTarget(const sc2::Unit * unit, const sc2::Unit * target, CCBot & bot)
+{
+    sc2::UnitTypeData unitTypeData = GetUnitTypeDataFromUnitTypeId(unit->unit_type, bot);
+    sc2::UnitTypeData targetTypeData = GetUnitTypeDataFromUnitTypeId(target->unit_type, bot);
+    sc2::Weapon::TargetType expectedWeaponType = target->is_flying ? sc2::Weapon::TargetType::Air : sc2::Weapon::TargetType::Ground;
+    float damage = 0.f;
+    for (auto weapon : unitTypeData.weapons)
+    {
+        if (weapon.type == sc2::Weapon::TargetType::Any || weapon.type == expectedWeaponType)
+        {
+            float weaponDamage = weapon.damage_;
+            for (auto damageBonus : weapon.damage_bonus)
+            {
+                if (std::find(targetTypeData.attributes.begin(), targetTypeData.attributes.end(), damageBonus.attribute) != targetTypeData.attributes.end())
+                    weaponDamage += damageBonus.bonus;
+            }
+            weaponDamage -= targetTypeData.armor;
+            weaponDamage *= weapon.attacks;
+            if (weaponDamage > damage)
+                damage = weaponDamage;
+        }
+    }
+    return damage;
 }
 
 bool Util::IsDetectorType(const sc2::UnitTypeID & type)
@@ -298,6 +355,32 @@ float Util::DistSq(const sc2::Point2D & p1, const sc2::Point2D & p2)
     float dy = p1.y - p2.y;
 
     return dx*dx + dy*dy;
+}
+
+sc2::Point2D Util::CalcLinearRegression(const std::vector<const sc2::Unit *> & units)
+{
+    float sumX = 0, sumY = 0, sumXSqr = 0, sumXY = 0, avgX, avgY, numerator, denominator, slope;
+    int size = units.size();
+    for (auto unit : units)
+    {
+        sumX += unit->pos.x;
+        sumY += unit->pos.y;
+        sumXSqr += pow(unit->pos.x, 2);
+        sumXY += unit->pos.x * unit->pos.y;
+    }
+    avgX = sumX / size;
+    avgY = sumY / size;
+    denominator = size * sumXSqr - pow(sumX, 2);
+    if (denominator == 0.f)
+        return sc2::Point2D(0, 1);
+    numerator = size * sumXY - sumX * sumY;
+    slope = numerator / denominator;
+    return Util::Normalized(sc2::Point2D(1, slope));
+}
+
+sc2::Point2D Util::CalcPerpendicularVector(const sc2::Point2D & vector)
+{
+    return sc2::Point2D(vector.y, -vector.x);
 }
 
 bool Util::Pathable(const sc2::GameInfo & info, const sc2::Point2D & point) 
@@ -418,15 +501,7 @@ sc2::UnitTypeID Util::GetUnitTypeIDFromName(const std::string & name, CCBot & bo
 
 sc2::UnitTypeData Util::GetUnitTypeDataFromUnitTypeId(const sc2::UnitTypeID unitTypeId, CCBot & bot)
 {
-    for (const sc2::UnitTypeData & data : bot.Observation()->GetUnitTypeData())
-    {
-        if (data.unit_type_id == unitTypeId)
-        {
-            return data;
-        }
-    }
-
-    return sc2::UnitTypeData();
+    return bot.Observation()->GetUnitTypeData()[unitTypeId];
 }
 
 sc2::UpgradeID Util::GetUpgradeIDFromName(const std::string & name, CCBot & bot)

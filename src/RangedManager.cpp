@@ -6,8 +6,7 @@
 #include <algorithm>
 
 
-RangedManager::RangedManager(CCBot & bot)
-    : MicroManager(bot)
+RangedManager::RangedManager(CCBot & bot) : MicroManager(bot)
 { }
 
 void RangedManager::executeMicro(const std::vector<const sc2::Unit *> & targets)
@@ -34,7 +33,7 @@ void RangedManager::assignTargets(const std::vector<const sc2::Unit *> & targets
     for (auto rangedUnit : rangedUnits)
     {
         BOT_ASSERT(rangedUnit, "ranged unit is null");
-
+        
         const sc2::Unit * target = nullptr;
         const sc2::Unit * mineral = nullptr;
         sc2::Point2D mineralPos;
@@ -46,7 +45,7 @@ void RangedManager::assignTargets(const std::vector<const sc2::Unit *> & targets
         if (mineral == nullptr) mineralPos = sc2::Point2D(0, 0);
         else mineralPos = mineral->pos;
 
-        FocusFireAction focusFireAction(rangedUnit, target, &rangedUnitTargets, m_bot, m_focusFireStates, m_unitHealth);
+        FocusFireAction focusFireAction(rangedUnit, target, &rangedUnitTargets, m_bot, m_focusFireStates, &rangedUnits, m_unitHealth);
         KiteAction kiteAction(rangedUnit, target, m_bot, m_kittingStates);
         GoToMineralShardAction goToMineralShardAction(rangedUnit, mineralPos, m_bot);
         GoToObjectiveAction goToObjectiveAction(rangedUnit, order.getPosition(), m_bot);

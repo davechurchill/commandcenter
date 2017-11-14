@@ -34,6 +34,8 @@ namespace Util
     bool IsCompleted(const sc2::Unit * unit);
     float GetAttackRange(const sc2::UnitTypeID & type, CCBot & bot);
     float GetAttackRangeForTarget(const sc2::Unit * unit, const sc2::Unit * target, CCBot & bot);
+    float GetMaxAttackRangeForTargets(const sc2::Unit * unit, const std::vector<const sc2::Unit *> & targets, CCBot & bot);
+    float GetAttackDamageForTarget(const sc2::Unit * unit, const sc2::Unit * target, CCBot & bot);
     
     bool UnitCanBuildTypeNow(const sc2::Unit * unit, const sc2::UnitTypeID & type, CCBot & m_bot);
     int GetUnitTypeWidth(const sc2::UnitTypeID type, const CCBot & bot);
@@ -45,6 +47,9 @@ namespace Util
     std::string     GetStringFromRace(const sc2::Race & race);
     sc2::Race       GetRaceFromString(const std::string & race);
     sc2::Point2D    CalcCenter(const std::vector<const sc2::Unit *> & units);
+    void            Normalize(sc2::Point2D& point);
+    sc2::Point2D    Normalized(const sc2::Point2D& point);
+    float           GetDotProduct(const sc2::Point2D& v1, const sc2::Point2D& v2);
     sc2::UnitTypeData GetUnitTypeDataFromUnitTypeId(const sc2::UnitTypeID unitTypeId, CCBot & bot);
 
     sc2::UnitTypeID GetUnitTypeIDFromName(const std::string & name, CCBot & bot);
@@ -54,6 +59,9 @@ namespace Util
 
     float Dist(const sc2::Point2D & p1, const sc2::Point2D & p2);
     float DistSq(const sc2::Point2D & p1, const sc2::Point2D & p2);
+
+    sc2::Point2D CalcLinearRegression(const std::vector<const sc2::Unit *> & units);
+    sc2::Point2D CalcPerpendicularVector(const sc2::Point2D & vector);
     
     // Kevin-provided helper functions
     void    VisualizeGrids(const sc2::ObservationInterface* obs, sc2::DebugInterface* debug);

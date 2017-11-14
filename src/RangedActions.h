@@ -32,6 +32,7 @@ private:
     const std::vector<const sc2::Unit *> * targets;
     CCBot & bot;
     std::unordered_map<sc2::Tag, FocusFireFiniteStateMachine*> &states;
+    const std::vector<const sc2::Unit *> * units;
     std::unordered_map<sc2::Tag, float> &unitHealth;
 public:
     FocusFireAction(
@@ -40,6 +41,7 @@ public:
         const std::vector<const sc2::Unit *> * targets,
         CCBot & bot,
         std::unordered_map<sc2::Tag, FocusFireFiniteStateMachine*> &states,
+        const std::vector<const sc2::Unit *> * units,
         std::unordered_map<sc2::Tag, float> &unitHealth
     )
         : rangedUnit(rangedUnit),
@@ -47,10 +49,11 @@ public:
         targets(targets),
         bot(bot),
         states(states),
+        units(units),
         unitHealth(unitHealth) {}
 private:
     Status update() {
-        Micro::SmartFocusFire(rangedUnit, target, targets, bot, states, unitHealth);
+        Micro::SmartFocusFire(rangedUnit, target, targets, bot, states, units, unitHealth);
         return Status::BH_SUCCESS;
     }
 };
