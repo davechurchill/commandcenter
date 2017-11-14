@@ -89,7 +89,7 @@ const sc2::Unit * RangedManager::getTarget(const sc2::Unit * rangedUnit, const s
 
         float priority = getAttackPriority(rangedUnit, targetUnit);
 
-        // if it's a higher priority, or it's closer, set it
+        // if it's a higher priority, set it
         if (!bestTarget || priority > highestPriority)
         {
             highestPriority = priority;
