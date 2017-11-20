@@ -174,6 +174,24 @@ WorkerManager & CCBot::Workers()
     return m_workers;
 }
 
+int CCBot::GetCurrentSupply() const
+{
+#ifdef SC2API
+    return Observation()->GetFoodUsed();
+#else
+    return BWAPI::Broodwar->self()->supplyUsed();
+#endif
+}
+
+int CCBot::GetMaxSupply() const
+{
+#ifdef SC2API
+    return Observation()->GetFoodCap();
+#else
+    return BWAPI::Broodwar->self()->supplyTotal();
+#endif
+}
+
 int CCBot::GetMinerals() const
 {
 #ifdef SC2API

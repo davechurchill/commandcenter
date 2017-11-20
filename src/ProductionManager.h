@@ -24,6 +24,8 @@ class ProductionManager
     int     getFreeMinerals();
     int     getFreeGas();
 
+    void    fixBuildOrderDeadlock();
+
 public:
 
     ProductionManager(CCBot & bot);

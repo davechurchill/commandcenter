@@ -29,7 +29,7 @@ void ProductionManager::onStart()
 
 void ProductionManager::onFrame()
 {
-    // check the _queue for stuff we can build
+    fixBuildOrderDeadlock();
     manageBuildOrderQueue();
 
     // TODO: if nothing is currently building, get a new goal from the strategy manager
@@ -92,6 +92,62 @@ void ProductionManager::manageBuildOrderQueue()
             // so break out
             break;
         }
+    }
+}
+
+void ProductionManager::fixBuildOrderDeadlock()
+{
+    if (m_queue.isEmpty()) { return; }
+    BuildOrderItem & currentItem = m_queue.getHighestPriorityItem();
+
+    // check to see if we have the prerequisites for the topmost item
+    bool hasRequired = m_bot.Data(currentItem.type).requiredUnits.empty();
+    for (auto & required : m_bot.Data(currentItem.type).requiredUnits)
+    {
+        if (m_bot.UnitInfo().getUnitTypeCount(Players::Self, required, false) > 0 || m_buildingManager.isBeingBuilt(required))
+        {
+            hasRequired = true;
+            break;
+        }
+    }
+
+    if (!hasRequired)
+    {
+        std::cout << currentItem.type.getName() << " needs " << m_bot.Data(currentItem.type).requiredUnits[0].getName() << "\n";
+        m_queue.queueAsHighestPriority(MetaType(m_bot.Data(currentItem.type).requiredUnits[0], m_bot), true);
+        fixBuildOrderDeadlock();
+        return;
+    }
+
+    // build the producer of the unit if we don't have one
+    bool hasProducer = m_bot.Data(currentItem.type).whatBuilds.empty();
+    for (auto & producer : m_bot.Data(currentItem.type).whatBuilds)
+    {
+        if (m_bot.UnitInfo().getUnitTypeCount(Players::Self, producer, false) > 0 || m_buildingManager.isBeingBuilt(producer))
+        {
+            hasProducer = true;
+            break;
+        }
+    }
+
+    if (!hasProducer)
+    {
+        m_queue.queueAsHighestPriority(MetaType(m_bot.Data(currentItem.type).whatBuilds[0], m_bot), true);
+        fixBuildOrderDeadlock();
+    }
+
+    // build a refinery if we don't have one and the thing costs gas
+    auto refinery = Util::GetRefinery(m_bot.GetPlayerRace(Players::Self), m_bot);
+    if (m_bot.Data(currentItem.type).gasCost > 0 && m_bot.UnitInfo().getUnitTypeCount(Players::Self, refinery, false) == 0)
+    {
+        m_queue.queueAsHighestPriority(MetaType(refinery, m_bot), true);
+    } 
+
+    // build supply if we need some
+    auto supplyProvider = Util::GetSupplyProvider(m_bot.GetPlayerRace(Players::Self), m_bot);
+    if (m_bot.Data(currentItem.type).supplyCost > (m_bot.GetMaxSupply() - m_bot.GetCurrentSupply()) && !m_buildingManager.isBeingBuilt(supplyProvider))
+    {
+        m_queue.queueAsHighestPriority(MetaType(supplyProvider, m_bot), true);
     }
 }
 

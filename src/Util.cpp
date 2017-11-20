@@ -82,6 +82,21 @@ UnitType Util::GetTownHall(const CCRace & race, CCBot & bot)
 #endif
 }
 
+UnitType Util::GetRefinery(const CCRace & race, CCBot & bot)
+{
+#ifdef SC2API
+    switch (race) 
+    {
+        case sc2::Race::Terran: return UnitType(sc2::UNIT_TYPEID::TERRAN_REFINERY, bot);
+        case sc2::Race::Protoss: return UnitType(sc2::UNIT_TYPEID::PROTOSS_ASSIMILATOR, bot);
+        case sc2::Race::Zerg: return UnitType(sc2::UNIT_TYPEID::ZERG_EXTRACTOR, bot);
+        default: return UnitType();
+    }
+#else
+    return UnitType(race.getRefinery(), bot);
+#endif
+}
+
 CCPosition Util::CalcCenter(const std::vector<Unit> & units)
 {
     if (units.empty())

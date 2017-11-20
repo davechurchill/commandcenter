@@ -14,6 +14,7 @@ namespace Util
     std::string     GetStringFromRace(const CCRace & race);
     bool            UnitCanMetaTypeNow(const Unit & unit, const UnitType & type, CCBot & m_bot);
     UnitType        GetTownHall(const CCRace & race, CCBot & bot);
+    UnitType        GetRefinery(const CCRace & race, CCBot & bot);
     UnitType        GetSupplyProvider(const CCRace & race, CCBot & bot);
     CCPosition      CalcCenter(const std::vector<Unit> & units);
     bool            IsZerg(const CCRace & race);
