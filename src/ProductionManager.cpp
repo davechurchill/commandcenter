@@ -52,7 +52,12 @@ void ProductionManager::manageBuildOrderQueue()
     // if there is nothing in the queue, oh well
     if (m_queue.isEmpty())
     {
-        return;
+        if (m_bot.Config().AutoCompleteBuildOrder && m_bot.GetPlayerRace(Players::Self) == sc2::Race::Terran)
+        {
+            m_queue.queueItem(BuildOrderItem(BuildType("Marine", m_bot), 1, false));
+        }
+        else
+            return;
     }
 
     // the current item to be used
