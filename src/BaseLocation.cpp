@@ -70,7 +70,7 @@ BaseLocation::BaseLocation(CCBot & bot, int baseID, const std::vector<Unit> & re
         if (containsPosition(pos))
         {
             m_isStartLocation = true;
-            m_depotPosition = pos;
+            m_depotPosition = Util::GetTilePosition(pos);
         }
     }
     
@@ -89,18 +89,35 @@ BaseLocation::BaseLocation(CCBot & bot, int baseID, const std::vector<Unit> & re
     // if it's not a start location, we need to calculate the depot position
     if (!isStartLocation())
     {
+        UnitType depot = Util::GetTownHall(m_bot.GetPlayerRace(Players::Self), m_bot);
+#ifdef SC2API
+        int offsetX = 0;
+        int offsetY = 0;
+#else
+        int offsetX = 1;
+        int offsetY = 1;
+#endif
+        
         // the position of the depot will be the closest spot we can build one from the resource center
         for (auto & tile : getClosestTiles())
         {
-            // TODO: m_depotPosition = depot position for this base location
+            // the build position will be up-left of where this tile is
+            // this means we are positioning the center of the resouce depot
+            CCTilePosition buildTile(tile.x - offsetX, tile.y - offsetY);
+
+            if (m_bot.Map().canBuildTypeAtPosition(buildTile.x, buildTile.y, depot))
+            {
+                m_depotPosition = buildTile;
+                break;
+            }
         }
     }
 }
 
 // TODO: calculate the actual depot position
-const CCPosition & BaseLocation::getDepotPosition() const
+const CCTilePosition & BaseLocation::getDepotPosition() const
 {
-    return getPosition();
+    return m_depotPosition;
 }
 
 void BaseLocation::setPlayerOccupying(CCPlayer player, bool occupying)
@@ -163,7 +180,11 @@ const CCPosition & BaseLocation::getPosition() const
 
 int BaseLocation::getGroundDistance(const CCPosition & pos) const
 {
-    //return Util::Dist(pos, m_centerOfResources);
+    return m_distanceMap.getDistance(pos);
+}
+
+int BaseLocation::getGroundDistance(const CCTilePosition & pos) const
+{
     return m_distanceMap.getDistance(pos);
 }
 
@@ -208,12 +229,12 @@ void BaseLocation::draw()
 
     for (CCPositionType x=m_left; x < m_right; x += Util::TileToPosition(1.0f))
     {
-        m_bot.Map().drawLine(x, m_top, x, m_bottom, CCColor(160, 160, 160));
+        //m_bot.Map().drawLine(x, m_top, x, m_bottom, CCColor(160, 160, 160));
     }
 
     for (CCPositionType y=m_bottom; y<m_top; y += Util::TileToPosition(1.0f))
     {
-        m_bot.Map().drawLine(m_left, y, m_right, y, CCColor(160, 160, 160));
+        //m_bot.Map().drawLine(m_left, y, m_right, y, CCColor(160, 160, 160));
     }
 
     for (auto & mineralPos : m_mineralPositions)
@@ -228,8 +249,10 @@ void BaseLocation::draw()
 
     if (m_isStartLocation)
     {
-        m_bot.Map().drawCircle(m_depotPosition, radius, CCColor(255, 0, 0));
+        m_bot.Map().drawCircle(Util::GetPosition(m_depotPosition), radius, CCColor(255, 0, 0));
     }
+
+    m_bot.Map().drawTile(m_depotPosition.x, m_depotPosition.y, CCColor(0, 0, 255)); 
 
     //m_distanceMap.draw(m_bot);
 }

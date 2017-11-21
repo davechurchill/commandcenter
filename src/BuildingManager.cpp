@@ -419,8 +419,7 @@ CCTilePosition BuildingManager::getBuildingLocation(const Building & b)
 
     if (b.type.isResourceDepot())
     {
-        // TODO: fix this so we can actually expand
-        //return m_bot.Bases().getNextExpansion(Players::Self);
+        return m_bot.Bases().getNextExpansion(Players::Self);
     }
 
     // get a position within our region
@@ -429,6 +428,7 @@ CCTilePosition BuildingManager::getBuildingLocation(const Building & b)
 }
 
 void BuildingManager::removeBuildings(const std::vector<Building> & toRemove)
+
 {
     for (auto & b : toRemove)
     {

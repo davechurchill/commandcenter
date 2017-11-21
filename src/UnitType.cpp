@@ -244,7 +244,9 @@ CCPositionType UnitType::getAttackRange() const
 int UnitType::tileWidth() const
 {
 #ifdef SC2API
-    return (int)(2 * m_bot->Observation()->GetAbilityData()[m_bot->Data(*this).buildAbility].footprint_radius);
+    if (isMineral()) { return 2; }
+    if (isGeyser()) { return 3; }
+    else { return (int)(2 * m_bot->Observation()->GetAbilityData()[m_bot->Data(*this).buildAbility].footprint_radius); }
 #else
     return m_type.tileWidth();
 #endif
@@ -253,7 +255,9 @@ int UnitType::tileWidth() const
 int UnitType::tileHeight() const
 {
 #ifdef SC2API
-    return (int)(2 * m_bot->Observation()->GetAbilityData()[m_bot->Data(*this).buildAbility].footprint_radius);
+    if (isMineral()) { return 1; }
+    if (isGeyser()) { return 3; }
+    else { return (int)(2 * m_bot->Observation()->GetAbilityData()[m_bot->Data(*this).buildAbility].footprint_radius); }
 #else
     return m_type.tileHeight();
 #endif

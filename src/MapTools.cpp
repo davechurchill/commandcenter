@@ -57,7 +57,7 @@ void MapTools::onStart()
             m_buildable[x][y]       = canBuild(x, y);
             m_depotBuildable[x][y]  = canBuild(x, y);
             m_walkable[x][y]        = m_buildable[x][y] || canWalk(x, y);
-            m_terrainHeight[x][y]   = terainHeight(CCPosition((CCPositionType)x, (CCPositionType)y));
+            m_terrainHeight[x][y]   = terrainHeight(CCPosition((CCPositionType)x, (CCPositionType)y));
         }
     }
 
@@ -67,7 +67,46 @@ void MapTools::onStart()
         m_maxZ = std::max(unit->pos.z, m_maxZ);
     }
 
+    // set tiles that static resources are on as unbuildable
+    for (auto & resource : m_bot.GetUnits())
+    {
+        if (!resource.getType().isMineral() && !resource.getType().isGeyser())
+        {
+            continue;
+        }
+
+        int width = resource.getType().tileWidth();
+        int height = resource.getType().tileHeight();
+        int tileX = std::floor(resource.getPosition().x) - (width / 2);
+        int tileY = std::floor(resource.getPosition().y) - (height / 2);
+
+        if (!isVisible(resource.getTilePosition().x, resource.getTilePosition().y))
+        {
+        }
+
+        for (int x=tileX; x<tileX+width; ++x)
+        {
+            for (int y=tileY; y<tileY+height; ++y)
+            {
+                m_buildable[x][y] = false;
+
+                // depots can't be built within 3 tiles of any resource
+                for (int rx=-3; rx<=3; rx++)
+                {
+                    for (int ry=-3; ry<=3; ry++)
+                    {
+                        // sc2 doesn't fill out the corners of the mineral 3x3 boxes for some reason
+                        if (std::abs(rx) + std::abs(ry) == 6) { continue; }
+                        if (!isValidTile(CCTilePosition(x+rx, y+ry))) { continue; }
+
+                        m_depotBuildable[x+rx][y+ry] = false;
+                    }
+                }
+            }
+        }
+    }
 #else
+
     // set tiles that static resources are on as unbuildable
     for (auto & resource : BWAPI::Broodwar->getStaticNeutralUnits())
     {
@@ -290,7 +329,7 @@ bool MapTools::isValidPosition(const CCPosition & pos) const
 void MapTools::drawLine(CCPositionType x1, CCPositionType y1, CCPositionType x2, CCPositionType y2, const CCColor & color) const
 {
 #ifdef SC2API
-    m_bot.Debug()->DebugLineOut(sc2::Point3D(x1, y1, m_maxZ + 0.2f), sc2::Point3D(x2, y2, m_maxZ + 0.2f), color);
+    m_bot.Debug()->DebugLineOut(sc2::Point3D(x1, y1, terrainHeight(x1, y1) + 0.2f), sc2::Point3D(x2, y2, terrainHeight(x2, y2) + 0.2f), color);
 #else
     BWAPI::Broodwar->drawLineMap(BWAPI::Position(x1, y1), BWAPI::Position(x2, y2), color);
 #endif
@@ -299,7 +338,7 @@ void MapTools::drawLine(CCPositionType x1, CCPositionType y1, CCPositionType x2,
 void MapTools::drawLine(const CCPosition & p1, const CCPosition & p2, const CCColor & color) const
 {
 #ifdef SC2API
-    m_bot.Debug()->DebugLineOut(sc2::Point3D(p1.x, p1.y, m_maxZ + 0.2f), sc2::Point3D(p2.x, p2.y, m_maxZ + 0.2f), color);
+    drawLine(p1.x, p1.y, p2.x, p2.y, color);
 #else
     BWAPI::Broodwar->drawLineMap(p1, p2, color);
 #endif
@@ -550,7 +589,7 @@ bool MapTools::canBuild(int tileX, int tileY)
 #endif
 }
 
-float MapTools::terainHeight(const CCPosition & point) 
+float MapTools::terrainHeight(const CCPosition & point) const
 {
 #ifdef SC2API
     auto & info = m_bot.Observation()->GetGameInfo();
@@ -575,9 +614,9 @@ void MapTools::draw() const
 #ifdef SC2API
     CCPosition camera = m_bot.Observation()->GetCameraPos();
     int sx = (int)(camera.x - 12.0f);
-    int sy = (int)(camera.y - 8.0f);
+    int sy = (int)(camera.y - 8);
     int ex = sx + 24;
-    int ey = sy + 16;
+    int ey = sy + 20;
 
 #else
     BWAPI::TilePosition screen(BWAPI::Broodwar->getScreenPosition());

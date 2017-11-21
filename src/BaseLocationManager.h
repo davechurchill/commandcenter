@@ -30,6 +30,6 @@ public:
     const std::set<const BaseLocation *> & getOccupiedBaseLocations(int player) const;
     const BaseLocation * getPlayerStartingBaseLocation(int player) const;
     
-    CCPosition getNextExpansion(int player) const;
+    CCTilePosition getNextExpansion(int player) const;
 
 };

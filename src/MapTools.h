@@ -31,7 +31,7 @@ class MapTools
         
     void printMap();
 
-    float   terainHeight(const CCPosition & point);
+    float   terrainHeight(const CCPosition & point) const;
     bool    canBuild(int tileX, int tileY);
     bool    canWalk(int tileX, int tileY);
 
