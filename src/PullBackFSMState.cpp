@@ -35,6 +35,8 @@ void PullBackFSMState::onEnter(const std::vector<const sc2::Unit*> * targets, CC
     FocusFireFSMState* fireClosest = new FireClosestFSMState(m_unit);
     FocusFireFSMTransition* donePull = new DonePullBackTransition(m_unit, m_position, fireClosest);
     this->transitions = { donePull };
+
+    bot->Actions()->UnitCommand(m_unit, sc2::ABILITY_ID::MOVE, m_position);
 }
 
 void PullBackFSMState::onExit() {}
@@ -46,5 +48,5 @@ std::vector<FocusFireFSMTransition*> PullBackFSMState::getTransitions()
 
 void PullBackFSMState::onUpdate(const sc2::Unit * target, CCBot* bot)
 {
-    bot->Actions()->UnitCommand(m_unit, sc2::ABILITY_ID::MOVE, m_position);
+    //bot->Actions()->UnitCommand(m_unit, sc2::ABILITY_ID::MOVE, m_position);
 }
