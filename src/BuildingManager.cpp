@@ -418,7 +418,7 @@ CCTilePosition BuildingManager::getBuildingLocation(const Building & b)
         return m_bot.Bases().getNextExpansion(Players::Self);
     }
 
-	//In case of Protoss if there are no finished Plons only a Pylon can be build.
+	//In case of Protoss if there are no finished Pylons only a Pylon can be build.
 	if (m_bot.GetPlayerRace(Players::Self) == CCRace::Protoss)
 	{
 		size_t numPylons = m_bot.UnitInfo().getUnitTypeCount(Players::Self, Util::GetSupplyProvider(m_bot.GetPlayerRace(Players::Self), m_bot), true);
