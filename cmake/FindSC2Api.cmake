@@ -14,6 +14,7 @@
 find_path(SC2Api_INCLUDE_DIR
     NAMES
         "sc2api/sc2_api.h"
+        "sc2renderer/sc2_renderer.h"
         "sc2utils/sc2_manage_process.h"
     PATHS
         "/opt/local/include"
