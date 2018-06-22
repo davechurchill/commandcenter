@@ -10,7 +10,7 @@ include_directories(SYSTEM "${SC2Api_INCLUDE_DIRS}")
 if (MSVC)
     # FIXME: put Windows specific options here.
 else ()
-    set(CMAKE_CXX_FLAGS "-Wall -Wextra")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 endif ()
 
 # Create the executable.
