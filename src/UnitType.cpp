@@ -112,7 +112,7 @@ bool UnitType::isCombatUnit() const
 
 bool UnitType::isSupplyProvider() const
 {
-    return (supplyProvided() < 0) && !isResourceDepot();
+    return (supplyProvided() > 0) && !isResourceDepot();
 }
 
 bool UnitType::isResourceDepot() const

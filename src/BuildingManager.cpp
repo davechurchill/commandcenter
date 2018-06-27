@@ -408,10 +408,6 @@ std::vector<UnitType> BuildingManager::buildingsQueued() const
 
 CCTilePosition BuildingManager::getBuildingLocation(const Building & b)
 {
-    size_t numPylons = m_bot.UnitInfo().getUnitTypeCount(Players::Self, Util::GetSupplyProvider(m_bot.GetPlayerRace(Players::Self), m_bot), true);
-
-    // TODO: if requires psi and we have no pylons return 0
-
     if (b.type.isRefinery())
     {
         return m_buildingPlacer.getRefineryPosition();
@@ -421,6 +417,17 @@ CCTilePosition BuildingManager::getBuildingLocation(const Building & b)
     {
         return m_bot.Bases().getNextExpansion(Players::Self);
     }
+
+	//In case of Protoss if there are no finished Pylons only a Pylon can be build.
+	if (m_bot.GetPlayerRace(Players::Self) == CCRace::Protoss)
+	{
+		size_t numPylons = m_bot.UnitInfo().getUnitTypeCount(Players::Self, Util::GetSupplyProvider(m_bot.GetPlayerRace(Players::Self), m_bot), true);
+		if (numPylons == 0 && !b.type.isSupplyProvider())
+		{
+			return CCTilePosition(0, 0);
+		}
+	}
+	
 
     // get a position within our region
     // TODO: put back in special pylon / cannon spacing
