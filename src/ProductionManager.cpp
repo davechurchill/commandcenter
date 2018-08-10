@@ -20,7 +20,6 @@ void ProductionManager::setBuildOrder(const BuildOrder & buildOrder)
     }
 }
 
-
 void ProductionManager::onStart()
 {
     m_buildingManager.onStart();

@@ -16,7 +16,7 @@
     
     "SC2API" :
     {
-        "BotRace"                   : "Terran",
+        "BotRace"                   : "Protoss",
         "EnemyDifficulty"           : 2,
         "EnemyRace"                 : "Random",
         "MapFile"                   : "InterloperLE.SC2Map",
@@ -102,7 +102,7 @@
     
     "SC2API Strategy" :
     {
-        "Protoss"                   : "Protoss_ZealotRush",
+        "Protoss"                   : "Protoss_Stalkers_Blink",
         "Terran"                    : "Terran_MarineRush",
         "Zerg"                      : "Zerg_2HatchRoach",
         
@@ -116,6 +116,17 @@
                 "OpeningBuildOrder" : ["Probe", "Probe", "Pylon", "Probe", "Probe", "Gateway", "Pylon", "Probe", "Gateway", "Probe", "Gateway", "Pylon", "Probe", "Zealot", "Zealot", "Pylon", "Zealot", "Zealot", "Pylon", "Zealot", "Zealot", "Zealot", "Zealot", "Zealot", "Zealot", "Zealot", "Zealot", "Zealot", "Zealot"],
                 "ScoutCondition"    : [ ["Self", "Pylon"], ">", [ 0 ] ],
                 "AttackCondition"   : [ ["Self", "Zealot"], ">=", [ 8 ] ]
+            },
+             "Protoss_Stalkers_Blink"    : 
+            { 
+                "Race"              : "Protoss", 
+                "OpeningBuildOrder" : [ "2 Probe", "Probe", "Gateway",
+                                        "Assimilator", "3 Probe",
+                                        "Assimilator", "Pylon", "CyberneticsCore", 
+                                        "Gateway", "2 Probe", "BlinkTech",
+                                        "4 Stalker"],
+                "ScoutCondition"    : [ ["Self", "Pylon"], ">", [ 0 ] ],
+                "AttackCondition"   : [ ["Self", "Stalker"], ">=", [ 5 ] ]
             },
             "Terran_MarineRush"     : 
             { 

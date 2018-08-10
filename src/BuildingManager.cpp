@@ -51,7 +51,6 @@ bool BuildingManager::isBeingBuilt(UnitType type)
             return true;
         }
     }
-
     return false;
 }
 
@@ -167,6 +166,7 @@ void BuildingManager::constructAssignedBuildings()
             {
                 // TODO: in here is where we would check to see if the builder died on the way
                 //       or if things are taking too long, or the build location is no longer valid
+	
             }
             else
             {
@@ -179,14 +179,15 @@ void BuildingManager::constructAssignedBuildings()
                     {
                         if (unit.getType().isGeyser() && Util::Dist(Util::GetPosition(b.finalPosition), unit.getPosition()) < 3)
                         {
-                            geyser = unit;
-                            break;
+                            geyser = unit;			
+							break;
                         }
                     }
 
                     if (geyser.isValid())
                     {
                         b.builderUnit.buildTarget(b.type, geyser);
+						
                     }
                     else
                     {
@@ -428,14 +429,12 @@ CCTilePosition BuildingManager::getBuildingLocation(const Building & b)
 		}
 	}
 	
-
     // get a position within our region
     // TODO: put back in special pylon / cannon spacing
     return m_buildingPlacer.getBuildLocationNear(b, m_bot.Config().BuildingSpacing);
 }
 
 void BuildingManager::removeBuildings(const std::vector<Building> & toRemove)
-
 {
     for (auto & b : toRemove)
     {

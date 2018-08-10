@@ -3,6 +3,7 @@
 #include "Common.h"
 #include "MeleeManager.h"
 #include "RangedManager.h"
+#include "StalkerManager.h"
 #include "SquadOrder.h"
 
 class CCBot;
@@ -21,6 +22,7 @@ class Squad
     SquadOrder          m_order;
     MeleeManager        m_meleeManager;
     RangedManager       m_rangedManager;
+	StalkerManager		m_stalkerManager;
 
     std::map<Unit, bool> m_nearEnemy;
 
