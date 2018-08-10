@@ -131,39 +131,83 @@ void ProductionManager::fixBuildOrderDeadlock()
 
     if (!hasProducer)
     {
-        m_queue.queueAsHighestPriority(MetaType(m_bot.Data(currentItem.type).whatBuilds[0], m_bot), true);
-        fixBuildOrderDeadlock();
+		// ignores larva unit
+		std::string::size_type pos = m_bot.Data(currentItem.type).whatBuilds[0].getName().find("LARVA");
+		if (pos != std::string::npos)
+		{
+
+		}
+		else
+		{
+			m_queue.queueAsHighestPriority(MetaType(m_bot.Data(currentItem.type).whatBuilds[0], m_bot), true);
+			fixBuildOrderDeadlock();
+		}
     }
 
     // build a refinery if we don't have one and the thing costs gas
     auto refinery = Util::GetRefinery(m_bot.GetPlayerRace(Players::Self), m_bot);
-    if (m_bot.Data(currentItem.type).gasCost > 0 && m_bot.UnitInfo().getUnitTypeCount(Players::Self, refinery, false) == 0)
+    if (m_bot.Data(currentItem.type).gasCost > 0 && (m_bot.UnitInfo().getUnitTypeCount(Players::Self, refinery, false) == 0 && !m_buildingManager.isBeingBuilt(refinery)))
     {
         m_queue.queueAsHighestPriority(MetaType(refinery, m_bot), true);
     } 
 
     // build supply if we need some
     auto supplyProvider = Util::GetSupplyProvider(m_bot.GetPlayerRace(Players::Self), m_bot);
-    if (m_bot.Data(currentItem.type).supplyCost > (m_bot.GetMaxSupply() - m_bot.GetCurrentSupply()) && !m_buildingManager.isBeingBuilt(supplyProvider))
+    if (m_bot.Data(currentItem.type).supplyCost > (m_bot.GetMaxSupply() - m_bot.GetCurrentSupply()) && !supplyInProgress(supplyProvider))
+		
+		//!m_buildingManager.isBeingBuilt(supplyProvider))		
     {
-        m_queue.queueAsHighestPriority(MetaType(supplyProvider, m_bot), true);
+		m_queue.queueAsHighestPriority(MetaType(supplyProvider, m_bot), true);		
     }
+}
+
+bool ProductionManager::supplyInProgress(UnitType type)
+{
+	if (m_buildingManager.isBeingBuilt(type))
+	{
+		return true;
+	}
+
+	// zerg egg check for overlords in progress
+	for (auto & unit : m_bot.UnitInfo().getUnits(Players::Self))
+	{
+		if (unit.getType().isEgg())
+		{
+
+		// TODO: work with sc1 
+		#ifdef SC2API
+			if (unit.getUnitPtr()->orders.front().ability_id == sc2::ABILITY_ID::TRAIN_OVERLORD)
+			{
+				return true;
+			}
+		#endif 
+		}
+	}
+	return false;
 }
 
 Unit ProductionManager::getProducer(const MetaType & type, CCPosition closestTo)
 {
-    // get all the types of units that cna build this type
+    // get all the types of units that can build this type
     auto & producerTypes = m_bot.Data(type).whatBuilds;
 
     // make a set of all candidate producers
     std::vector<Unit> candidateProducers;
-    for (auto unit : m_bot.UnitInfo().getUnits(Players::Self))
+    for (auto & unit : m_bot.UnitInfo().getUnits(Players::Self))
     {
         // reasons a unit can not train the desired type
+
+		// this unit can not build the desired type
         if (std::find(producerTypes.begin(), producerTypes.end(), unit.getType()) == producerTypes.end()) { continue; }
+
+		// if the unit is not completed it cannot build anything
         if (!unit.isCompleted()) { continue; }
+
+		// if it's a building that's currently training something, it can't build
         if (m_bot.Data(unit).isBuilding && unit.isTraining()) { continue; }
-        if (unit.isFlying()) { continue; }
+
+		// flying buildings cannot build anything
+        if (m_bot.Data(unit).isBuilding && unit.isFlying()) { continue; }
 
         // TODO: if unit is not powered continue
         // TODO: if the type is an addon, some special cases
@@ -231,9 +275,8 @@ void ProductionManager::create(const Unit & producer, BuildOrderItem & item)
         producer.train(item.type.getUnitType());
     }
     else if (item.type.isUpgrade())
-    {
-        // TODO: UPGRADES
-        //Micro::SmartAbility(producer, m_bot.Data(item.type.getUpgradeID()).buildAbility, m_bot);
+    {		
+		producer.research(item.type.getUpgrade());
     }
 }
 

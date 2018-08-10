@@ -25,7 +25,7 @@ MetaType::MetaType(const std::string & name, CCBot & bot)
         return;
     }
 
-    for (const sc2::UpgradeData & data : bot.Observation()->GetUpgradeData())
+    for (const sc2::UpgradeData & data : bot.Observation()->GetUpgradeData(true))
     {
         if (name == data.name)
         {
