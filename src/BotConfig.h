@@ -52,6 +52,7 @@ public:
     
     bool KiteWithRangedUnits;    
     bool ScoutHarassEnemy;
+	bool OverlordScout;
     
     int WorkersPerRefinery;
     int BuildingSpacing;

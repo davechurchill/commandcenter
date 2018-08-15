@@ -26,7 +26,8 @@
     "Micro" :
     {
         "KiteWithRangedUnits"       : false,
-        "ScoutHarassEnemy"          : true
+        "ScoutHarassEnemy"          : true,
+        "OverlordScout"             : true
     },
     
     "Macro" :

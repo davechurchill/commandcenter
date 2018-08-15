@@ -88,17 +88,20 @@ void GameCommander::setScoutUnits()
             Unit workerScout = m_bot.Workers().getClosestMineralWorkerTo(m_bot.GetStartLocation());
 			
 			// if zerg, use overlord??
-			/*if (m_bot.GetPlayerRace(Players::Self) == CCRace::Zerg)
+			if (m_bot.Config().OverlordScout)
 			{
-				for (auto & unit : m_bot.UnitInfo().getUnits(Players::Self))
+				if (m_bot.GetPlayerRace(Players::Self) == CCRace::Zerg)
 				{
-					if (unit.getType().isOverlord())
+					for (auto & unit : m_bot.UnitInfo().getUnits(Players::Self))
 					{
-						workerScout = unit;
-						break;
+						if (unit.getType().isOverlord())
+						{
+							workerScout = unit;
+							break;
+						}
 					}
 				}
-			}*/
+			}
 
             // if we find a worker (which we should) add it to the scout units
             if (workerScout.isValid())

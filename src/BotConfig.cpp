@@ -39,6 +39,7 @@ BotConfig::BotConfig()
 
     KiteWithRangedUnits                 = true;
     ScoutHarassEnemy                    = true;
+	OverlordScout						= true;
 
     ColorLineTarget                     = CCColor(255, 255, 255);
     ColorLineMineral                    = CCColor(0, 128, 128);
@@ -94,6 +95,7 @@ void BotConfig::readConfigFile()
         const json & micro = j["Micro"];
         JSONTools::ReadBool("KiteWithRangedUnits", micro, KiteWithRangedUnits);
         JSONTools::ReadBool("ScoutHarassEnemy", micro, ScoutHarassEnemy);
+		JSONTools::ReadBool("OverlordScout", micro, OverlordScout);
     }
 
     // Parse the BWAPI Options
