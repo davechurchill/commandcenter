@@ -10,7 +10,6 @@ Squad::Squad(CCBot & bot)
     , m_name("Default")
     , m_meleeManager(bot)
     , m_rangedManager(bot)
-	, m_stalkerManager(bot)
 {
 
 }
@@ -24,7 +23,6 @@ Squad::Squad(const std::string & name, const SquadOrder & order, size_t priority
     , m_priority(priority)
     , m_meleeManager(bot)
     , m_rangedManager(bot)
-	, m_stalkerManager(bot)
 {
 }
 
@@ -45,13 +43,11 @@ void Squad::onFrame()
 
         m_meleeManager.regroup(regroupPosition);
         m_rangedManager.regroup(regroupPosition);
-		m_stalkerManager.regroup(regroupPosition);
     }
     else // otherwise, execute micro
     {
         m_meleeManager.execute(m_order);
         m_rangedManager.execute(m_order);
-		m_stalkerManager.execute(m_order);
 
         //_detectorManager.setUnitClosestToEnemy(unitClosestToEnemy());
         //_detectorManager.execute(_order);
@@ -111,7 +107,6 @@ void Squad::addUnitsToMicroManagers()
 {
     std::vector<Unit> meleeUnits;
     std::vector<Unit> rangedUnits;
-	std::vector<Unit> stalkerUnits;
     std::vector<Unit> detectorUnits;
     std::vector<Unit> transportUnits;
     std::vector<Unit> tankUnits;
@@ -130,12 +125,6 @@ void Squad::addUnitsToMicroManagers()
         {
             detectorUnits.push_back(unit);
         }
-
-		//select stalker _units
-		else if (unit.getType().getName() == "PROTOSS_STALKER")
-		{
-			stalkerUnits.push_back(unit);
-		}
         // select ranged _units
         else if (unit.getType().getAttackRange() >= 1.5f)
         {
@@ -150,7 +139,6 @@ void Squad::addUnitsToMicroManagers()
 
     m_meleeManager.setUnits(meleeUnits);
     m_rangedManager.setUnits(rangedUnits);
-	m_stalkerManager.setUnits(stalkerUnits);
     //m_detectorManager.setUnits(detectorUnits);
     //m_tankManager.setUnits(tankUnits);
 }
