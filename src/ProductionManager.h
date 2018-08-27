@@ -36,4 +36,5 @@ public:
     void    drawProductionInformation();
 
     Unit getProducer(const MetaType & type, CCPosition closestTo = CCPosition(0, 0));
+	bool supplyInProgress(UnitType type);
 };

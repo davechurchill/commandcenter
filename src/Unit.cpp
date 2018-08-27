@@ -338,6 +338,33 @@ void Unit::build(const UnitType & buildingType, CCTilePosition pos) const
 #endif
 }
 
+
+
+// these 2 functions are very similar, except being used for different ideas - maybe combine them with a function name that makes sense for both
+void Unit::research(const CCUpgrade & ability) const 
+{
+	BOT_ASSERT(isValid(), "Unit is not valid");
+#ifdef SC2API
+	m_bot->Actions()->UnitCommand(m_unit, m_bot->Data(ability).buildAbility);
+#else
+	// TODO: have not tested this
+	// m_unit->upgrade(ability);
+#endif
+}
+
+//TODO: update to not use sc2 api stuff - should work with both games
+void Unit::useAbility(const CCAbility & ability, const CCPosition & targetPosition) const 
+{
+	BOT_ASSERT(isValid(), "Unit is not valid");
+#ifdef SC2API
+	m_bot->Actions()->UnitCommand(m_unit, ability, targetPosition);
+#else
+	// TODO
+#endif
+}
+
+
+
 void Unit::buildTarget(const UnitType & buildingType, const Unit & target) const
 {
     BOT_ASSERT(isValid(), "Unit is not valid");

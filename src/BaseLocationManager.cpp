@@ -17,6 +17,8 @@ void BaseLocationManager::onStart()
     
     // a BaseLocation will be anything where there are minerals to mine
     // so we will first look over all minerals and cluster them based on some distance
+
+	// TODO: fix for minerals over ledges being included in base
     const CCPositionType clusterDistance = Util::TileToPosition(12);
     
     // stores each cluster of resources based on some ground distance
@@ -44,7 +46,7 @@ void BaseLocationManager::onStart()
             if (dist < clusterDistance)
             {
                 // now do a more expensive ground distance check
-                float groundDist = dist; //m_bot.Map().getGroundDistance(mineral.pos, Util::CalcCenter(cluster));
+                float groundDist = m_bot.Map().getGroundDistance(mineral.getPosition(), Util::CalcCenter(cluster)); //dist; 
                 if (groundDist >= 0 && groundDist < clusterDistance)
                 {
                     cluster.push_back(mineral);
