@@ -30,7 +30,7 @@ Building::Building(UnitType t, CCTilePosition desired)
 // equals operator
 bool Building::operator == (const Building & b) 
 {
-	// buildings are equal if their worker unit and building unit are equal
+    // buildings are equal if their worker unit and building unit are equal
     return      (b.buildingUnit == buildingUnit) 
              && (b.builderUnit  == builderUnit) 
              && (b.finalPosition.x == finalPosition.x)

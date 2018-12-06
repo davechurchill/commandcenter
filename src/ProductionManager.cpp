@@ -269,27 +269,27 @@ bool ProductionManager::canMakeNow(const Unit & producer, const MetaType & type)
     return false;
 #else
     bool canMake = meetsReservedResources(type);
-	if (canMake)
-	{
-		if (type.isUnit())
-		{
-			canMake = BWAPI::Broodwar->canMake(type.getUnitType().getAPIUnitType(), producer.getUnitPtr());
-		}
-		else if (type.isTech())
-		{
-			canMake = BWAPI::Broodwar->canResearch(type.getTechType(), producer.getUnitPtr());
-		}
-		else if (type.isUpgrade())
-		{
-			canMake = BWAPI::Broodwar->canUpgrade(type.getUpgrade(), producer.getUnitPtr());
-		}
-		else
-		{	
-			BOT_ASSERT(false, "Unknown type");
-		}
-	}
+    if (canMake)
+    {
+        if (type.isUnit())
+        {
+            canMake = BWAPI::Broodwar->canMake(type.getUnitType().getAPIUnitType(), producer.getUnitPtr());
+        }
+        else if (type.isTech())
+        {
+            canMake = BWAPI::Broodwar->canResearch(type.getTechType(), producer.getUnitPtr());
+        }
+        else if (type.isUpgrade())
+        {
+            canMake = BWAPI::Broodwar->canUpgrade(type.getUpgrade(), producer.getUnitPtr());
+        }
+        else
+        {	
+            BOT_ASSERT(false, "Unknown type");
+        }
+    }
 
-	return canMake;
+    return canMake;
 #endif
 }
 

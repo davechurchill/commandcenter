@@ -69,13 +69,13 @@ bool BuildingPlacer::canBuildHereWithSpace(int bx, int by, const Building & b, i
     // define the rectangle of the building spot
     int startx = bx - buildDist;
     int starty = by - buildDist;
-    int endx   = bx + width + buildDist;
-    int endy   = by + height + buildDist;
+    int endx   = bx + width + buildDist - 1;
+    int endy   = by + height + buildDist - 1;
 
     // TODO: recalculate start and end positions for addons
 
     // if this rectangle doesn't fit on the map we can't build here
-    if (startx < 0 || starty < 0 || endx > m_bot.Map().width() || endx < bx + width || endy > m_bot.Map().height())
+    if (startx < 0 || starty < 0 || endx > m_bot.Map().width() || endx < bx + width - 1 || endy > m_bot.Map().height() || endy < by + height - 1)
     {
         return false;
     }
@@ -233,14 +233,23 @@ CCTilePosition BuildingPlacer::getRefineryPosition()
     double minGeyserDistanceFromHome = std::numeric_limits<double>::max();
     CCPosition homePosition = m_bot.GetStartLocation();
 
+    UnitType & refinery = Util::GetRefinery(m_bot.GetPlayerRace(Players::Self), m_bot);
+
     for (auto & unit : m_bot.GetUnits())
-    {
+    { 
+        // unit must be a geyser
         if (!unit.getType().isGeyser())
         {
             continue;
         }
 
         CCPosition geyserPos(unit.getPosition());
+        
+        // can't build a refinery on top of another
+        if (!m_bot.Map().canBuildTypeAtPosition((int)geyserPos.x, (int)geyserPos.y, refinery))
+        {
+            continue;
+        }
 
         // check to see if it's next to one of our depots
         bool nearDepot = false;
