@@ -103,35 +103,35 @@ void UAlbertaBot_PlayGame()
     CCBot bot;
     
     // The main game loop, which continues while we are connected to BWAPI and in a game
-	while (BWAPI::BWAPIClient.isConnected() && BWAPI::Broodwar->isInGame()) 
+    while (BWAPI::BWAPIClient.isConnected() && BWAPI::Broodwar->isInGame()) 
     {
         // Handle each of the events that happened on this frame of the game
-		for (const BWAPI::Event & e : BWAPI::Broodwar->getEvents()) 
+        for (const BWAPI::Event & e : BWAPI::Broodwar->getEvents()) 
         {
-			switch (e.getType()) 
+            switch (e.getType()) 
             {
                 case BWAPI::EventType::MatchStart:      { bot.OnGameStart();                 break; }
-			    case BWAPI::EventType::MatchFrame:      { bot.OnStep();                      break; }
+                case BWAPI::EventType::MatchFrame:      { bot.OnStep();                      break; }
                                                         
                 /*case BWAPI::EventType::MatchEnd:        { m->onEnd(e.isWinner());            break; }
-			    case BWAPI::EventType::UnitShow:        { m->onUnitShow(e.getUnit());        break; }
-			    case BWAPI::EventType::UnitHide:        { m->onUnitHide(e.getUnit());        break; }
-			    case BWAPI::EventType::UnitCreate:      { m->onUnitCreate(e.getUnit());      break; }
-			    case BWAPI::EventType::UnitMorph:       { m->onUnitMorph(e.getUnit());       break; }
-			    case BWAPI::EventType::UnitDestroy:     { m->onUnitDestroy(e.getUnit());     break; }
-			    case BWAPI::EventType::UnitRenegade:    { m->onUnitRenegade(e.getUnit());    break; }
-			    case BWAPI::EventType::UnitComplete:    { m->onUnitComplete(e.getUnit());    break; }
-			    case BWAPI::EventType::SendText:        { m->onSendText(e.getText());        break; }*/
-			}
-		}
+                case BWAPI::EventType::UnitShow:        { m->onUnitShow(e.getUnit());        break; }
+                case BWAPI::EventType::UnitHide:        { m->onUnitHide(e.getUnit());        break; }
+                case BWAPI::EventType::UnitCreate:      { m->onUnitCreate(e.getUnit());      break; }
+                case BWAPI::EventType::UnitMorph:       { m->onUnitMorph(e.getUnit());       break; }
+                case BWAPI::EventType::UnitDestroy:     { m->onUnitDestroy(e.getUnit());     break; }
+                case BWAPI::EventType::UnitRenegade:    { m->onUnitRenegade(e.getUnit());    break; }
+                case BWAPI::EventType::UnitComplete:    { m->onUnitComplete(e.getUnit());    break; }
+                case BWAPI::EventType::SendText:        { m->onSendText(e.getText());        break; }*/
+            }
+        }
 
-		BWAPI::BWAPIClient.update();
-		if (!BWAPI::BWAPIClient.isConnected()) 
+        BWAPI::BWAPIClient.update();
+        if (!BWAPI::BWAPIClient.isConnected()) 
         {
-			std::cout << "Disconnected\n";
-			break;
-		}
-	}
+            std::cout << "Disconnected\n";
+            break;
+        }
+    }
 
     std::cout << "Game Over\n";
 }
@@ -141,7 +141,7 @@ int main(int argc, char * argv[])
     bool exitIfStarcraftShutdown = true;
 
     size_t gameCount = 0;
-	while (true)
+    while (true)
     {
         // if we are not currently connected to BWAPI, try to reconnect
         if (!BWAPI::BWAPIClient.isConnected())
@@ -154,10 +154,10 @@ int main(int argc, char * argv[])
         {
             // wait for the game to start until the game starts
             std::cout << "Waiting for game start\n";
-	        while (BWAPI::BWAPIClient.isConnected() && !BWAPI::Broodwar->isInGame()) 
+            while (BWAPI::BWAPIClient.isConnected() && !BWAPI::Broodwar->isInGame()) 
             {
-		        BWAPI::BWAPIClient.update();
-	        }
+                BWAPI::BWAPIClient.update();
+            }
 
             // Check to see if Starcraft shut down somehow
             if (BWAPI::BroodwarPtr == nullptr)
@@ -180,7 +180,7 @@ int main(int argc, char * argv[])
         }
     }
 
-	return 0;
+    return 0;
 }
 
 #endif

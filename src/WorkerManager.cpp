@@ -72,12 +72,12 @@ void WorkerManager::handleIdleWorkers()
 
         bool isIdle = worker.isIdle();
         if (worker.isIdle() && 
-			(m_workerData.getWorkerJob(worker) != WorkerJobs::Build) && 
-			(m_workerData.getWorkerJob(worker) != WorkerJobs::Move) &&
-			(m_workerData.getWorkerJob(worker) != WorkerJobs::Scout)) 
-		{
-			m_workerData.setWorkerJob(worker, WorkerJobs::Idle);
-		}
+            (m_workerData.getWorkerJob(worker) != WorkerJobs::Build) && 
+            (m_workerData.getWorkerJob(worker) != WorkerJobs::Move) &&
+            (m_workerData.getWorkerJob(worker) != WorkerJobs::Scout)) 
+        {
+            m_workerData.setWorkerJob(worker, WorkerJobs::Idle);
+        }
 
         // if it is idle
         if (m_workerData.getWorkerJob(worker) == WorkerJobs::Idle)
