@@ -86,6 +86,8 @@ void BuildingManager::validateWorkersAndBuildings()
 // STEP 2: ASSIGN WORKERS TO BUILDINGS WITHOUT THEM
 void BuildingManager::assignWorkersToUnassignedBuildings()
 {
+    std::vector<Building> toRemove;
+
     // for each building that doesn't have a builder, assign one
     for (Building & b : m_buildings)
     {
@@ -96,13 +98,24 @@ void BuildingManager::assignWorkersToUnassignedBuildings()
 
         BOT_ASSERT(!b.builderUnit.isValid(), "Error: Tried to assign a builder to a building that already had one ");
 
-        if (m_debugMode) { printf("Assigning Worker To: %s", b.type.getName().c_str()); }
+        if (m_debugMode) { printf("Assigning Worker To: %s\n", b.type.getName().c_str()); }
 
         // grab a worker unit from WorkerManager which is closest to this final position
         CCTilePosition testLocation = getBuildingLocation(b);
-        if (!m_bot.Map().isValidTile(testLocation) || (testLocation.x == 0 && testLocation.y == 0))
+        if (!m_bot.Map().isValidTile(testLocation))
         {
             continue;
+        }
+
+        // remove buildings that we can't find a location to place
+        if ((testLocation.x == 0 && testLocation.y == 0))
+        {
+            if (m_debugMode) { printf("Can't build %s, removing from queue\n", b.type.getName().c_str()); }
+            toRemove.push_back(b);
+
+            // unreserve the resources
+            m_reservedMinerals -= b.type.mineralPrice();
+            m_reservedGas -= b.type.gasPrice();
         }
 
         b.finalPosition = testLocation;
@@ -120,6 +133,8 @@ void BuildingManager::assignWorkersToUnassignedBuildings()
 
         b.status = BuildingStatus::Assigned;
     }
+
+    removeBuildings(toRemove);
 }
 
 // STEP 3: ISSUE CONSTRUCTION ORDERS TO ASSIGN BUILDINGS AS NEEDED
@@ -424,7 +439,7 @@ CCTilePosition BuildingManager::getBuildingLocation(const Building & b)
         size_t numPylons = m_bot.UnitInfo().getUnitTypeCount(Players::Self, Util::GetSupplyProvider(m_bot.GetPlayerRace(Players::Self), m_bot), true);
         if (numPylons == 0 && !b.type.isSupplyProvider())
         {
-            return CCTilePosition(0, 0);
+            return CCTilePosition(-1, -1);
         }
     }
     
