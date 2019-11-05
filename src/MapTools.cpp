@@ -7,6 +7,22 @@
 #include <fstream>
 #include <array>
 
+namespace {
+bool getBit(const sc2::ImageData& grid, int tileX, int tileY) {
+    assert(grid.bits_per_pixel == 1);
+
+    sc2::Point2DI pointI(tileX, tileY);
+    if (pointI.x < 0 || pointI.x >= grid.width || pointI.y < 0 || pointI.y >= grid.height)
+    {
+        return false;
+    }
+
+    div_t idx = div(pointI.x + pointI.y * grid.width, 8);
+    return (grid.data[idx.quot] >> (7 - idx.rem)) & 1;
+}
+
+}  // namespace
+
 const size_t LegalActions = 4;
 const int actionX[LegalActions] ={1, -1, 0, 0};
 const int actionY[LegalActions] ={0, 0, 1, -1};
@@ -543,17 +559,7 @@ CCTilePosition MapTools::getLeastRecentlySeenTile() const
 bool MapTools::canWalk(int tileX, int tileY) 
 {
 #ifdef SC2API
-    auto & info = m_bot.Observation()->GetGameInfo();
-    sc2::Point2DI pointI(tileX, tileY);
-    if (pointI.x < 0 || pointI.x >= info.width || pointI.y < 0 || pointI.y >= info.width)
-    {
-        return false;
-    }
-
-    assert(info.pathing_grid.data.size() == info.width * info.height);
-    unsigned char encodedPlacement = info.pathing_grid.data[pointI.x + ((info.height - 1) - pointI.y) * info.width];
-    bool decodedPlacement = encodedPlacement == 255 ? false : true;
-    return decodedPlacement;
+    return getBit(m_bot.Observation()->GetGameInfo().pathing_grid, tileX, tileY);
 #else
     for (int i=0; i<4; ++i)
     {
@@ -573,17 +579,7 @@ bool MapTools::canWalk(int tileX, int tileY)
 bool MapTools::canBuild(int tileX, int tileY) 
 {
 #ifdef SC2API
-    auto & info = m_bot.Observation()->GetGameInfo();
-    sc2::Point2DI pointI(tileX, tileY);
-    if (pointI.x < 0 || pointI.x >= info.width || pointI.y < 0 || pointI.y >= info.width)
-    {
-        return false;
-    }
-
-    assert(info.placement_grid.data.size() == info.width * info.height);
-    unsigned char encodedPlacement = info.placement_grid.data[pointI.x + ((info.height - 1) - pointI.y) * info.width];
-    bool decodedPlacement = encodedPlacement == 255 ? true : false;
-    return decodedPlacement;
+    return getBit(m_bot.Observation()->GetGameInfo().placement_grid, tileX, tileY);
 #else
     return BWAPI::Broodwar->isBuildable(BWAPI::TilePosition(tileX, tileY));
 #endif
@@ -592,17 +588,18 @@ bool MapTools::canBuild(int tileX, int tileY)
 float MapTools::terrainHeight(const CCPosition & point) const
 {
 #ifdef SC2API
-    auto & info = m_bot.Observation()->GetGameInfo();
-    sc2::Point2DI pointI((int)point.x, (int)point.y);
-    if (pointI.x < 0 || pointI.x >= info.width || pointI.y < 0 || pointI.y >= info.width)
+    auto & grid = m_bot.Observation()->GetGameInfo().terrain_height;
+    assert(grid.bits_per_pixel > 1);
+
+    sc2::Point2DI pointI(static_cast<int>(point.x), static_cast<int>(point.y));
+    if (pointI.x < 0 || pointI.x >= grid.width || pointI.y < 0 || pointI.y >= grid.height)
     {
         return 0.0f;
     }
 
-    assert(info.terrain_height.data.size() == info.width * info.height);
-    unsigned char encodedHeight = info.terrain_height.data[pointI.x + ((info.height - 1) - pointI.y) * info.width];
-    float decodedHeight = -100.0f + 200.0f * float(encodedHeight) / 255.0f;
-    return decodedHeight;
+    assert(grid.data.size() == static_cast<unsigned long>(grid.width * grid.height));
+    unsigned char value = grid.data[pointI.x + pointI.y * grid.width];
+    return (static_cast<float>(value) - 127.0f) / 8.f;
 #else
     return 0;
 #endif
