@@ -233,7 +233,7 @@ CCTilePosition BuildingPlacer::getRefineryPosition()
     double minGeyserDistanceFromHome = std::numeric_limits<double>::max();
     CCPosition homePosition = m_bot.GetStartLocation();
 
-    UnitType & refinery = Util::GetRefinery(m_bot.GetPlayerRace(Players::Self), m_bot);
+    UnitType refinery = Util::GetRefinery(m_bot.GetPlayerRace(Players::Self), m_bot);
 
     for (auto & unit : m_bot.GetUnits())
     { 
