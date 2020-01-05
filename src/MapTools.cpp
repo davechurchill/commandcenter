@@ -7,6 +7,7 @@
 #include <fstream>
 #include <array>
 
+#ifdef SC2API
 namespace {
 bool getBit(const sc2::ImageData& grid, int tileX, int tileY) {
     assert(grid.bits_per_pixel == 1);
@@ -22,6 +23,7 @@ bool getBit(const sc2::ImageData& grid, int tileX, int tileY) {
 }
 
 }  // namespace
+#endif
 
 const size_t LegalActions = 4;
 const int actionX[LegalActions] ={1, -1, 0, 0};
