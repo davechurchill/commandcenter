@@ -446,7 +446,7 @@ Unit CombatCommander::findClosestWorkerTo(std::vector<Unit> & unitsToAssign, con
             if (dist < closestDist)
             {
                 closestMineralWorker = unit;
-                dist = closestDist;
+                closestDist = dist;
             }
         }
     }
