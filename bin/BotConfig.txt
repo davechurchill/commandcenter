@@ -86,15 +86,15 @@
             "Terran_MarineRush"     : 
             { 
                 "Race"              : "Terran",  
-                "OpeningBuildOrder" : ["SCV", "SCV", "SCV", "SCV", "Barracks", "Barracks", "SCV", "Supply Depot", "SCV", "Marine", "Marine", "Marine", "Marine", "Supply Depot"], 
+                "OpeningBuildOrder" : ["SCV", "SCV", "SCV", "SCV", "Barracks", "Barracks", "SCV", "Supply_Depot", "SCV", "Marine", "Marine", "Marine", "Marine", "Supply_Depot"], 
                 "ScoutCondition"    : [ ["Self", "Supply Depot"], ">", [ 0 ] ],
                 "AttackCondition"   : [ ["Self", "Marine"], ">=", [ 4 ] ]
             },
             "Zerg_ZerglingRush"     : 
             { 
                 "Race"              : "Zerg",    
-                "OpeningBuildOrder" : ["Drone", "Spawning Pool", "Zergling", "Zergling", "Zergling", "Zergling"],
-                "ScoutCondition"    : [ ["Self", "Spawning Pool"], ">", [ 0 ] ],
+                "OpeningBuildOrder" : ["Drone", "Spawning_Pool", "Zergling", "Zergling", "Zergling", "Zergling"],
+                "ScoutCondition"    : [ ["Self", "Spawning_Pool"], ">", [ 0 ] ],
                 "AttackCondition"   : [ ["Self", "Zergling"], ">=", [ 0 ] ]
             }
         }
