@@ -110,7 +110,7 @@ Unit WorkerManager::getClosestMineralWorkerTo(const CCPosition & pos) const
             if (!closestMineralWorker.isValid() || dist < closestDist)
             {
                 closestMineralWorker = worker;
-                dist = closestDist;
+                closestDist = dist;
             }
         }
     }
